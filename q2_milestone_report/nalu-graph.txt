@@ -1,0 +1,73 @@
+digraph G {
+  labelloc = "b"
+  rankdir = "TB"
+  ranksep = “2”
+node[
+     fontname=Monaco,
+     penwidth=2,
+     fontsize=12,
+     margin=.1,
+     shape=box,
+     fillcolor=white,
+     style="rounded,filled"]
+
+  "ogf5c4cwjdulto33swelu2m7pwaldhqh" [label="nalu"]
+  "iiluwm2jjxhh75y72olua3gwkcij6dpi" [label="cmake"]
+  "jme7pr7oalst4lnxkea4zlrxzmzdmk33" [label="ncurses"]
+  "retkejgczaobkngzq5n3fxrhro25uw7i" [label="openssl"]
+  "j53khwhb3kk4nenbre4vr2parltqb6h5" [label="perl"]
+  "j64nsfuvggzom7bbbfxphsvaacelt4dh" [label="zlib"]
+  "vqhma2uwcz7xagrnnemanvoboiwqtayp" [label="trilinos"]
+  "txdvvvinzd4ipfmfamrrd5blyizfmryk" [label="boost"]
+  "5obsvuqroo2unp7wnxv7cxl7czoosbwv" [label="bzip2"]
+  "7t23rcnnwgzto62zdb3szh4mam4exkhj" [label="openmpi"]
+  "siovw5n6l6kbojrw7a6ls2jqavsl4lvg" [label="hwloc"]
+  "hflcfxr5jpis55gvgpf5yvjzb2e7qxds" [label="libpciaccess"]
+  "3ibqxanadfg764dejpbidwawvqvtiphl" [label="libtool"]
+  "vtd5ons7egn45niqhvt273kc7mtkjo6k" [label="m4"]
+  "w4iq2bjsxg4sua5aijgx3bu3z5zz5emd" [label="libsigsegv"]
+  "uqig7pjvaa3oddwogrpmjrpdnvtz6awf" [label="pkg-config"]
+  "gzk3jvxid42hbuioffito56rgyq6kka2" [label="util-macros"]
+  "ryigf72bi4wfg5g3inznzggw6tzd4rty" [label="hdf5"]
+  "roqf4ymhykpqak2hpwqnpkinymtp5fxp" [label="netcdf"]
+  "c4iwrl44n2iyhddo3fm7ccapr4vn6ifg" [label="parallel-netcdf"]
+  "sqlci7wobrkvicdftfx2kh4lwyqfn7tw" [label="superlu"]
+  "t4cjlgphfcfzdncu3m46kiled3olsuaz" [label="netlib-lapack"]
+  "bynt7wwqg4x63ixymfz2ol7cqnsne4qv" [label="yaml-cpp"]
+
+  "hflcfxr5jpis55gvgpf5yvjzb2e7qxds" -> "gzk3jvxid42hbuioffito56rgyq6kka2"
+  "7t23rcnnwgzto62zdb3szh4mam4exkhj" -> "siovw5n6l6kbojrw7a6ls2jqavsl4lvg"
+  "iiluwm2jjxhh75y72olua3gwkcij6dpi" -> "jme7pr7oalst4lnxkea4zlrxzmzdmk33"
+  "ryigf72bi4wfg5g3inznzggw6tzd4rty" -> "j64nsfuvggzom7bbbfxphsvaacelt4dh"
+  "vqhma2uwcz7xagrnnemanvoboiwqtayp" -> "txdvvvinzd4ipfmfamrrd5blyizfmryk"
+  "hflcfxr5jpis55gvgpf5yvjzb2e7qxds" -> "3ibqxanadfg764dejpbidwawvqvtiphl"
+  "siovw5n6l6kbojrw7a6ls2jqavsl4lvg" -> "hflcfxr5jpis55gvgpf5yvjzb2e7qxds"
+  "txdvvvinzd4ipfmfamrrd5blyizfmryk" -> "j64nsfuvggzom7bbbfxphsvaacelt4dh"
+  "vqhma2uwcz7xagrnnemanvoboiwqtayp" -> "roqf4ymhykpqak2hpwqnpkinymtp5fxp"
+  "ogf5c4cwjdulto33swelu2m7pwaldhqh" -> "iiluwm2jjxhh75y72olua3gwkcij6dpi"
+  "vqhma2uwcz7xagrnnemanvoboiwqtayp" -> "iiluwm2jjxhh75y72olua3gwkcij6dpi"
+  "3ibqxanadfg764dejpbidwawvqvtiphl" -> "vtd5ons7egn45niqhvt273kc7mtkjo6k"
+  "c4iwrl44n2iyhddo3fm7ccapr4vn6ifg" -> "7t23rcnnwgzto62zdb3szh4mam4exkhj"
+  "roqf4ymhykpqak2hpwqnpkinymtp5fxp" -> "vtd5ons7egn45niqhvt273kc7mtkjo6k"
+  "roqf4ymhykpqak2hpwqnpkinymtp5fxp" -> "j64nsfuvggzom7bbbfxphsvaacelt4dh"
+  "retkejgczaobkngzq5n3fxrhro25uw7i" -> "j64nsfuvggzom7bbbfxphsvaacelt4dh"
+  "bynt7wwqg4x63ixymfz2ol7cqnsne4qv" -> "iiluwm2jjxhh75y72olua3gwkcij6dpi"
+  "vqhma2uwcz7xagrnnemanvoboiwqtayp" -> "sqlci7wobrkvicdftfx2kh4lwyqfn7tw"
+  "ogf5c4cwjdulto33swelu2m7pwaldhqh" -> "vqhma2uwcz7xagrnnemanvoboiwqtayp"
+  "vqhma2uwcz7xagrnnemanvoboiwqtayp" -> "7t23rcnnwgzto62zdb3szh4mam4exkhj"
+  "txdvvvinzd4ipfmfamrrd5blyizfmryk" -> "5obsvuqroo2unp7wnxv7cxl7czoosbwv"
+  "vqhma2uwcz7xagrnnemanvoboiwqtayp" -> "j64nsfuvggzom7bbbfxphsvaacelt4dh"
+  "hflcfxr5jpis55gvgpf5yvjzb2e7qxds" -> "uqig7pjvaa3oddwogrpmjrpdnvtz6awf"
+  "ogf5c4cwjdulto33swelu2m7pwaldhqh" -> "bynt7wwqg4x63ixymfz2ol7cqnsne4qv"
+  "txdvvvinzd4ipfmfamrrd5blyizfmryk" -> "7t23rcnnwgzto62zdb3szh4mam4exkhj"
+  "roqf4ymhykpqak2hpwqnpkinymtp5fxp" -> "ryigf72bi4wfg5g3inznzggw6tzd4rty"
+  "sqlci7wobrkvicdftfx2kh4lwyqfn7tw" -> "t4cjlgphfcfzdncu3m46kiled3olsuaz"
+  "vqhma2uwcz7xagrnnemanvoboiwqtayp" -> "ryigf72bi4wfg5g3inznzggw6tzd4rty"
+  "vtd5ons7egn45niqhvt273kc7mtkjo6k" -> "w4iq2bjsxg4sua5aijgx3bu3z5zz5emd"
+  "bynt7wwqg4x63ixymfz2ol7cqnsne4qv" -> "txdvvvinzd4ipfmfamrrd5blyizfmryk"
+  "ryigf72bi4wfg5g3inznzggw6tzd4rty" -> "7t23rcnnwgzto62zdb3szh4mam4exkhj"
+  "retkejgczaobkngzq5n3fxrhro25uw7i" -> "j53khwhb3kk4nenbre4vr2parltqb6h5"
+  "roqf4ymhykpqak2hpwqnpkinymtp5fxp" -> "c4iwrl44n2iyhddo3fm7ccapr4vn6ifg"
+  "iiluwm2jjxhh75y72olua3gwkcij6dpi" -> "retkejgczaobkngzq5n3fxrhro25uw7i"
+  "c4iwrl44n2iyhddo3fm7ccapr4vn6ifg" -> "vtd5ons7egn45niqhvt273kc7mtkjo6k"
+}

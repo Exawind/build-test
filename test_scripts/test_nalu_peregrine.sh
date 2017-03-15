@@ -22,7 +22,7 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
   git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
 
   #Configure Spack for Peregrine
-  git clone https://github.com/jrood-nrel/NaluSpack.git ${NALU_TESTING_DIR}/NaluSpack
+  git clone https://github.com/NaluCFD/NaluSpack.git ${NALU_TESTING_DIR}/NaluSpack
   cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
   ./copy_config.sh
 

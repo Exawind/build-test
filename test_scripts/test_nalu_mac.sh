@@ -20,7 +20,7 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
   git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
 
   # Get some custom configurations for Spack and apply them
-  git clone https://github.com/jrood-nrel/NaluSpack.git ${NALU_TESTING_DIR}/NaluSpack
+  git clone https://github.com/NaluCFD/NaluSpack.git ${NALU_TESTING_DIR}/NaluSpack
   cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
   ./copy_config.sh
 

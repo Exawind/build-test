@@ -23,7 +23,7 @@ module load python/2.7.8
 export TMPDIR=/scratch/${USER}/.tmp
 # For different versions of trilinos add a '^nalu-trilinos+debug@develop'
 # for a debug version of the trilinos development branch for example
-spack install nalu %intel ^openmpi+tm@1.10.3 \
+spack install nalu %intel ^openmpi+verbs+psm+tm@1.10.3 \
                           ^boost@1.60.0 \
                           ^hdf5@1.8.16 \
                           ^parallel-netcdf@1.6.1 \

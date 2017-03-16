@@ -35,7 +35,6 @@ class Nalu(CMakePackage):
     variant('debug', default=False,
             description='Builds a RelWithDebInfo version')
 
-    #depends_on('libxml2')
     depends_on('yaml-cpp+fpic~shared')
     depends_on('nalu-trilinos')
 
@@ -50,8 +49,5 @@ class Nalu(CMakePackage):
             '-DCMAKE_BUILD_TYPE:STRING=%s' % 
                 ('RelWithDebInfo' if '+debug' in spec else 'RELEASE'),
         ])
-
-        if self.spec.satisfies('%intel'):
-            options.extend(['-DCMAKE_CXX_FLAGS=-restrict'])
 
         return options

@@ -22,15 +22,15 @@ class NaluTrilinos(CMakePackage):
     depends_on('netcdf+parallel-netcdf~shared')
     depends_on('superlu+fpic@4.3')
     depends_on('hdf5+mpi+cxx~shared@1.8.16')
-    #depends_on('blas')
-    #depends_on('lapack')
+    depends_on('blas')
+    depends_on('lapack')
     depends_on('zlib+pic')
 
     def cmake_args(self):
         spec = self.spec
         mpi_bin = spec['mpi'].prefix.bin
-        #blas = spec['blas'].libs
-        #lapack = spec['lapack'].libs
+        blas = spec['blas'].libs
+        lapack = spec['lapack'].libs
         options = []
         options.extend([
             '-DCMAKE_BUILD_TYPE:STRING=%s' % 
@@ -88,12 +88,12 @@ class NaluTrilinos(CMakePackage):
             '-DTPL_ENABLE_Boost:BOOL=ON',
             '-DBoost_ROOT:PATH=%s' % spec['boost'].prefix,
             '-DTrilinos_ASSERT_MISSING_PACKAGES=OFF',
-            #'-DTPL_ENABLE_BLAS=ON',
-            #'-DBLAS_LIBRARY_NAMES=%s' % ';'.join(blas.names),
-            #'-DBLAS_LIBRARY_DIRS=%s' % ';'.join(blas.directories),
-            #'-DTPL_ENABLE_LAPACK=ON',
-            #'-DLAPACK_LIBRARY_NAMES=%s' % ';'.join(lapack.names),
-            #'-DLAPACK_LIBRARY_DIRS=%s' % ';'.join(lapack.directories)
+            '-DTPL_ENABLE_BLAS=ON',
+            '-DBLAS_LIBRARY_NAMES=%s' % ';'.join(blas.names),
+            '-DBLAS_LIBRARY_DIRS=%s' % ';'.join(blas.directories),
+            '-DTPL_ENABLE_LAPACK=ON',
+            '-DLAPACK_LIBRARY_NAMES=%s' % ';'.join(lapack.names),
+            '-DLAPACK_LIBRARY_DIRS=%s' % ';'.join(lapack.directories)
         ])
             
         return options

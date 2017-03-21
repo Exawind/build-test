@@ -9,10 +9,17 @@ class NaluTrilinos(CMakePackage):
     A unique design feature of Trilinos is its focus on packages.
     """
     homepage = "https://trilinos.org/"
-    base_url = "https://github.com/trilinos/Trilinos"
+    base_url = "https://github.com/trilinos/Trilinos/archive"
 
-    version('master', git='https://github.com/trilinos/Trilinos.git', branch='master')
-    version('develop', git='https://github.com/trilinos/Trilinos.git', branch='develop')
+    version('develop',
+            git='https://github.com/trilinos/Trilinos.git', tag='develop')
+    version('master',
+            git='https://github.com/trilinos/Trilinos.git', tag='master')
+    version('12.10.1', '40f28628b63310f9bd17c26d9ebe32b1')
+
+    def url_for_version(self, version):
+        return '%s/trilinos-release-%s.tar.gz' % \
+            (Trilinos.base_url, version.dashed)
 
     variant('debug', default=False,
             description='Builds a RelWithDebInfo version of the libraries')

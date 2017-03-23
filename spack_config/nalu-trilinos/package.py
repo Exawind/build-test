@@ -19,7 +19,7 @@ class NaluTrilinos(CMakePackage):
 
     def url_for_version(self, version):
         return '%s/trilinos-release-%s.tar.gz' % \
-            (Trilinos.base_url, version.dashed)
+            (NaluTrilinos.base_url, version.dashed)
 
     variant('debug', default=False,
             description='Builds a RelWithDebInfo version of the libraries')

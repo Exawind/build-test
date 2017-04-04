@@ -2,7 +2,7 @@
 
 set -ex
 
-# A Trilinos do-config script that uses Spack-built TPLs
+# A Trilinos do-config script that uses Spack-built TPLs.
 # Make a directory in the trilinos directory for building,
 # cd to that directory and then run this script.
 
@@ -12,6 +12,11 @@ set -ex
 # the spack load commands in your .bash_profile
 # to achieve success using/developing with
 # a manual build of Trilinos and Nalu.
+
+# Also note this won't work on OSX.
+# Mostly due to your OSX machine not having
+# environment modules so the 'spack load'
+# won't add to your PATH (and LD_LIBRARY_PATH).
 
 # Change these to suit your needs:
 COMPILER=gcc

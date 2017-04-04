@@ -23,7 +23,7 @@ COMPILER=gcc
 INSTALL_PREFIX=`pwd`/install
 
 set +e
-find . -name "CMakeFiles" -exec rm -rf {} \;
+rm -rf CMakeFiles
 rm -f CMakeCache.txt
 set -e
 
@@ -91,6 +91,7 @@ cmake \
   -DPNetCDF_ROOT:PATH=`spack location -i parallel-netcdf %${COMPILER}` \
   -DTPL_ENABLE_HDF5:BOOL=ON \
   -DHDF5_ROOT:PATH=`spack location -i hdf5 %${COMPILER}` \
+  -DHDF5_NO_SYSTEM_PATHS:BOOL=ON \
   -DTPL_ENABLE_Zlib:BOOL=ON \
   -DZlib_ROOT:PATH=`spack location -i zlib %${COMPILER}` \
   ..

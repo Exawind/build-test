@@ -28,9 +28,6 @@ class NaluTrilinos(CMakePackage):
 
     def cmake_args(self):
         spec = self.spec
-        mpi_bin = spec['mpi'].prefix.bin
-        blas = spec['blas'].libs
-        lapack = spec['lapack'].libs
         options = []
         options.extend([
             '-DCMAKE_BUILD_TYPE:STRING=%s' % 
@@ -87,13 +84,7 @@ class NaluTrilinos(CMakePackage):
             '-DZlib_ROOT:PATH=%s' % spec['zlib'].prefix,
             '-DTPL_ENABLE_Boost:BOOL=ON',
             '-DBoost_ROOT:PATH=%s' % spec['boost'].prefix,
-            '-DTrilinos_ASSERT_MISSING_PACKAGES=OFF',
-            '-DTPL_ENABLE_BLAS=ON',
-            '-DBLAS_LIBRARY_NAMES=%s' % ';'.join(blas.names),
-            '-DBLAS_LIBRARY_DIRS=%s' % ';'.join(blas.directories),
-            '-DTPL_ENABLE_LAPACK=ON',
-            '-DLAPACK_LIBRARY_NAMES=%s' % ';'.join(lapack.names),
-            '-DLAPACK_LIBRARY_DIRS=%s' % ';'.join(lapack.directories)
+            '-DTrilinos_ASSERT_MISSING_PACKAGES=OFF'
         ])
             
         return options

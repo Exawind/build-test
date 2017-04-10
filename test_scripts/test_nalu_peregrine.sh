@@ -11,26 +11,12 @@
 
 set -e
 
-#Set nightly directory and Nalu checkout directory and SPACK_ROOT
+#Set nightly directory and Nalu checkout directory
 NALU_TESTING_DIR=/scratch/${USER}/TestNalu
 NALU_DIR=${NALU_TESTING_DIR}/Nalu
-export SPACK_ROOT=${NALU_TESTING_DIR}/spack
-
-#Create and set up nightly directory with Spack if it doesn't exist
-if [ ! -d "${NALU_TESTING_DIR}" ]; then
-  mkdir -p ${NALU_TESTING_DIR}
-  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
-
-  #Configure Spack for Peregrine
-  git clone https://github.com/NaluCFD/NaluSpack.git ${NALU_TESTING_DIR}/NaluSpack
-  cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
-  ./copy_config.sh
-
-  #Checkout Nalu outside of Spack so ctest can build it itself
-  git clone https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
-fi
 
 #Load Spack
+export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 
 #Test Nalu for trilinos master, develop

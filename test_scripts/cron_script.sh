@@ -20,8 +20,8 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
   cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
   ./copy_config.sh
 
-  #Checkout Nalu outside of Spack so ctest can build it itself
-  git clone https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
+  #Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
+  git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
 
   #Create a jobs directory
   mkdir -p ${NALU_TESTING_DIR}/jobs

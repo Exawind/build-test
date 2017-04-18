@@ -2,8 +2,6 @@
 
 #Script for running regression tests on a Mac using Spack and submitting results to CDash
 
-set -e
-
 # Set nightly directory where everything will go (will be created if it doesn't exist)
 NALU_TESTING_DIR=${HOME}/TestNalu
 
@@ -13,20 +11,6 @@ export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
 # Set TMPDIR for openmpi on the Mac
 export TMPDIR=/tmp
-
-# Create and set up nightly directory with Spack if it doesn't exist
-if [ ! -d "${NALU_TESTING_DIR}" ]; then
-  mkdir -p ${NALU_TESTING_DIR}
-  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
-
-  # Get some custom configurations for Spack and apply them
-  git clone https://github.com/NaluCFD/NaluSpack.git ${NALU_TESTING_DIR}/NaluSpack
-  cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
-  ./copy_config.sh
-
-  # Checkout Nalu outside of Spack so ctest can build it itself
-  git clone https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
-fi
 
 # Load Spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
@@ -46,7 +30,6 @@ do
     # Change to build directory
     cd ${NALU_DIR}/build
     # Uninstall Nalu and Trilinos; it's an error if they don't exist yet, but we skip it
-    set +e
     spack uninstall -y nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^nalu-trilinos@${TRILINOS_BRANCH}
     spack uninstall -y nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}
     # Install Nalu and Trilinos
@@ -58,11 +41,9 @@ do
     # Set the Trilinos and Yaml directories to pass to ctest
     TRILINOS_DIR=`spack location -i nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}`
     YAML_DIR=`spack location -i yaml-cpp %${COMPILER_NAME}@${COMPILER_VERSION}`
-    set -e
     # Clean the ctest build directory
     rm -r ${NALU_DIR}/build/*
     # Run ctest
-    set +e
     ctest \
       -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
       -DYAML_DIR=${YAML_DIR} \
@@ -70,6 +51,5 @@ do
       -DCOMPILER_NAME=${COMPILER_NAME} \
       -DTRILINOS_BRANCH=${TRILINOS_BRANCH} \
       -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake
-    set -e
   done
 done

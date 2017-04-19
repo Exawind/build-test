@@ -30,10 +30,10 @@ do
     module load gcc/5.2.0
     module load python/2.7.8
     } &> /dev/null
-    printf "Uninstalling Nalu and Trilinos...\n\n"
+    printf "\n\nUninstalling Nalu and Trilinos...\n\n"
     spack uninstall -y nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH}
     spack uninstall -y nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}
-    printf "Installing Nalu and Trilinos...\n\n"
+    printf "\n\nInstalling Nalu and Trilinos...\n\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       spack install binutils %${COMPILER_NAME}
       . ${SPACK_ROOT}/share/spack/setup-env.sh
@@ -50,7 +50,7 @@ do
     TRILINOS_DIR=`spack location -i nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}`
     YAML_DIR=`spack location -i yaml-cpp %${COMPILER_NAME}`
     rm -r ${NALU_DIR}/build/*
-    printf "Running CTest...\n\n"
+    printf "\n\nRunning CTest...\n\n"
     ctest \
       -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
       -DYAML_DIR=${YAML_DIR} \
@@ -58,7 +58,7 @@ do
       -DCOMPILER_NAME=${COMPILER_NAME} \
       -DTRILINOS_BRANCH=${TRILINOS_BRANCH} \
       -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake
-    printf "Returned from CTest...\n\n"
+    printf "\n\nReturned from CTest...\n\n"
     spack unload cmake %${COMPILER_NAME}
     spack unload openmpi %${COMPILER_NAME}
     if [ ${COMPILER_NAME} == 'gcc' ]; then

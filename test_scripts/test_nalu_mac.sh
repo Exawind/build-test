@@ -30,9 +30,11 @@ do
     # Change to build directory
     cd ${NALU_DIR}/build
     # Uninstall Nalu and Trilinos; it's an error if they don't exist yet, but we skip it
+    printf "\n\nUninstalling Nalu and Trilinos...\n\n"
     spack uninstall -y nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^nalu-trilinos@${TRILINOS_BRANCH}
     spack uninstall -y nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}
     # Install Nalu and Trilinos
+    printf "\n\nInstalling Nalu and Trilinos...\n\n"
     spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1
     # Manually adding cmake and openmpi to path; would prefer to use 'spack load', but
     # spack will not allow this until some time in the future on machines without environment modules
@@ -44,6 +46,7 @@ do
     # Clean the ctest build directory
     rm -r ${NALU_DIR}/build/*
     # Run ctest
+    printf "\n\nRunning CTest...\n\n"
     ctest \
       -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
       -DYAML_DIR=${YAML_DIR} \
@@ -51,5 +54,6 @@ do
       -DCOMPILER_NAME=${COMPILER_NAME} \
       -DTRILINOS_BRANCH=${TRILINOS_BRANCH} \
       -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake
+    printf "\n\nReturned from CTest...\n\n"
   done
 done

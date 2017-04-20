@@ -7,13 +7,32 @@ NALU_TESTING_DIR=${HOME}/TestNalu
 
 # Set Nalu checkout directory and SPACK_ROOT
 NALU_DIR=${NALU_TESTING_DIR}/Nalu
+
+# Set location for spack
 export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
 # Set TMPDIR for openmpi on the Mac
 export TMPDIR=/tmp
 
+#Create a test directory if it doesn't exist
+#if [ ! -d "${NALU_TESTING_DIR}" ]; then
+#  mkdir -p ${NALU_TESTING_DIR}
+#
+#  #Create and set up nightly directory with Spack installation
+#  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
+#
+#  #Configure Spack for OSX
+#  cd ${NALU_TESTING_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git
+#  cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
+#  ./copy_config.sh
+#
+#  #Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
+#  git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
+#fi
+
 # Load Spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
+
 # Make sure compilers are already loaded into Spack (this searches for all compilers in your path)
 spack compilers &> /dev/null
 
@@ -29,22 +48,28 @@ do
   do
     # Change to build directory
     cd ${NALU_DIR}/build
+
     # Uninstall Nalu and Trilinos; it's an error if they don't exist yet, but we skip it
     printf "\n\nUninstalling Nalu and Trilinos...\n\n"
     spack uninstall -y nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^nalu-trilinos@${TRILINOS_BRANCH}
     spack uninstall -y nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}
+
     # Install Nalu and Trilinos
     printf "\n\nInstalling Nalu and Trilinos...\n\n"
     spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1
+
     # Manually adding cmake and openmpi to path; would prefer to use 'spack load', but
     # spack will not allow this until some time in the future on machines without environment modules
     export PATH=`spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION}`/bin:${PATH}
     export PATH=`spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION}`/bin:${PATH}
+
     # Set the Trilinos and Yaml directories to pass to ctest
     TRILINOS_DIR=`spack location -i nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}`
     YAML_DIR=`spack location -i yaml-cpp %${COMPILER_NAME}@${COMPILER_VERSION}`
+
     # Clean the ctest build directory
     rm -r ${NALU_DIR}/build/*
+
     # Run ctest
     printf "\n\nRunning CTest...\n\n"
     ctest \

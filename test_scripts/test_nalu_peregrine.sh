@@ -62,11 +62,13 @@ do
     # Install Nalu and Trilinos
     printf "\n\nInstalling Nalu and Trilinos...\n\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
+      # Fix for Peregrine's broken linker
       spack install binutils %${COMPILER_NAME}
       . ${SPACK_ROOT}/share/spack/setup-env.sh
       spack load binutils %${COMPILER_NAME}
       spack install nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1
     elif [ ${COMPILER_NAME} == 'intel' ]; then
+      # Fix for Intel compiler failing when building trilinos with tmpdir set as a RAM disk by default
       export TMPDIR=/scratch/${USER}/.tmp
       spack install nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17
       module load compiler/intel/16.0.2
@@ -81,8 +83,9 @@ do
     TRILINOS_DIR=`spack location -i nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}`
     YAML_DIR=`spack location -i yaml-cpp %${COMPILER_NAME}`
 
-    # Clean the ctest build directory
-    rm -r ${NALU_DIR}/build/*
+    # Set the hostname and extra identifiers for CDash build description
+    HOST_NAME="peregrine.hpc.nrel.gov"
+    EXTRA_BUILD_NAME="-${COMPILER}-trlns_${TRILINOS_BRANCH}"
 
     # Run ctest
     printf "\n\nRunning CTest...\n\n"
@@ -90,8 +93,8 @@ do
       -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
       -DYAML_DIR=${YAML_DIR} \
       -DTRILINOS_DIR=${TRILINOS_DIR} \
-      -DCOMPILER_NAME=${COMPILER_NAME} \
-      -DTRILINOS_BRANCH=${TRILINOS_BRANCH} \
+      -DHOST_NAME=${HOST_NAME} \
+      -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
       -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake
     printf "\n\nReturned from CTest...\n\n"
 

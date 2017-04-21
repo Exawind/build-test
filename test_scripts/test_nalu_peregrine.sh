@@ -16,24 +16,33 @@ NALU_DIR=${NALU_TESTING_DIR}/Nalu
 # Set spack location
 export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
-#Create a test directory if it doesn't exist
-#if [ ! -d "${NALU_TESTING_DIR}" ]; then
-#  mkdir -p ${NALU_TESTING_DIR}
-#
-#  #Create and set up nightly directory with Spack installation
-#  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
-#
-#  #Configure Spack for Peregrine
-#  cd ${NALU_TESTING_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git
-#  cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
-#  ./copy_config.sh
-#
-#  #Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
-#  git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
-#
-#  #Create a jobs directory
-#  mkdir -p ${NALU_TESTING_DIR}/jobs
-#fi
+# Create a test directory if it doesn't exist
+if [ ! -d "${NALU_TESTING_DIR}" ]; then
+  mkdir -p ${NALU_TESTING_DIR}
+
+  # Create and set up nightly directory with Spack installation
+  printf "\n\nCloning Spack repo...\n\n"
+  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
+
+  # Configure Spack for Peregrine
+  printf "\n\nConfiguring Spack...\n\n"
+  cd ${NALU_TESTING_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git
+  cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
+  ./copy_config.sh
+
+  # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
+  printf "\n\nCloning Nalu repo...\n\n"
+  git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
+
+  # Checkout Nalu and Trilinos
+  printf "\n\nStaging Nalu and Trilinos...\n\n"
+  spack stage nalu-trilinos
+  spack stage nalu
+
+  # Create a jobs directory
+  printf "\n\nMaking job output directory...\n\n"
+  mkdir -p ${NALU_TESTING_DIR}/jobs
+fi
 
 # Load Spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
@@ -44,10 +53,8 @@ do
   # Test Nalu for intel, gcc
   for COMPILER_NAME in gcc intel
   do
-    # Change to build directory
-    cd ${NALU_DIR}/build
-
     # Load necessary modules
+    printf "\n\nLoading modules...\n\n"
     {
     module purge
     module load gcc/5.2.0
@@ -59,33 +66,43 @@ do
     spack uninstall -y nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH}
     spack uninstall -y nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}
 
+    # These should hopefully be staged already, so just do a git pull to update
+    printf "\n\nPulling updates for Nalu and Trilinos...\n\n"
+    spack stage nalu-trilinos && spack cd nalu-trilinos && git pull
+    spack stage nalu && spack cd nalu && git pull
+
+    # Change to Nalu build directory
+    cd ${NALU_DIR}/build
+
     # Install Nalu and Trilinos
-    printf "\n\nInstalling Nalu and Trilinos...\n\n"
+    printf "\n\nInstalling Nalu and Trilinos using ${COMPILER_NAME}...\n\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       # Fix for Peregrine's broken linker
       spack install binutils %${COMPILER_NAME}
       . ${SPACK_ROOT}/share/spack/setup-env.sh
       spack load binutils %${COMPILER_NAME}
-      spack install nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1
+      spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       # Fix for Intel compiler failing when building trilinos with tmpdir set as a RAM disk by default
       export TMPDIR=/scratch/${USER}/.tmp
-      spack install nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17
+      spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17
       module load compiler/intel/16.0.2
       unset TMPDIR
     fi
 
     # Load spack built cmake and openmpi into path
+    printf "\n\nLoading Spack modules into environment...\n\n"
     spack load cmake %${COMPILER_NAME}
     spack load openmpi %${COMPILER_NAME}
 
     # Set the Trilinos and Yaml directories to pass to ctest
+    printf "\n\nSetting variables to pass to CTest...\n\n"
     TRILINOS_DIR=`spack location -i nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}`
     YAML_DIR=`spack location -i yaml-cpp %${COMPILER_NAME}`
 
     # Set the hostname and extra identifiers for CDash build description
     HOST_NAME="peregrine.hpc.nrel.gov"
-    EXTRA_BUILD_NAME="-${COMPILER}-trlns_${TRILINOS_BRANCH}"
+    EXTRA_BUILD_NAME="-${COMPILER_NAME}-trlns_${TRILINOS_BRANCH}"
 
     # Run ctest
     printf "\n\nRunning CTest...\n\n"
@@ -99,6 +116,7 @@ do
     printf "\n\nReturned from CTest...\n\n"
 
     # Remove spack built cmake and openmpi from path
+    printf "\n\nUnloading Spack modules from environment...\n\n"
     spack unload cmake %${COMPILER_NAME}
     spack unload openmpi %${COMPILER_NAME}
     if [ ${COMPILER_NAME} == 'gcc' ]; then

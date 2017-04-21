@@ -49,6 +49,9 @@ do
   # Test Nalu for intel, gcc
   for COMPILER_NAME in gcc intel
   do
+    # Change to Nalu testing directory
+    cd ${NALU_TESTING_DIR}
+
     # Load necessary modules
     printf "\n\nLoading modules...\n\n"
     {
@@ -62,12 +65,10 @@ do
     spack uninstall -y nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH}
     spack uninstall -y nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}
 
-    # Change to Nalu build directory
-    cd ${NALU_DIR}/build
-
     # Update and install Nalu and Trilinos
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       # Fix for Peregrine's broken linker
+      printf "\n\nInstalling binutils...\n\n"
       spack install binutils %${COMPILER_NAME}
       . ${SPACK_ROOT}/share/spack/setup-env.sh
       spack load binutils %${COMPILER_NAME}
@@ -105,6 +106,9 @@ do
     # Set the hostname and extra identifiers for CDash build description
     HOST_NAME="peregrine.hpc.nrel.gov"
     EXTRA_BUILD_NAME="-${COMPILER_NAME}-trlns_${TRILINOS_BRANCH}"
+
+    # Change to Nalu build directory
+    cd ${NALU_DIR}/build
 
     # Clean build directory; checkout if NALU_DIR is not blank first
     printf "\n\nCleaning build directory...\n\n"

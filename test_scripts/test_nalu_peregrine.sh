@@ -16,33 +16,34 @@ NALU_DIR=${NALU_TESTING_DIR}/Nalu
 # Set spack location
 export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
-# Create a test directory if it doesn't exist
-if [ ! -d "${NALU_TESTING_DIR}" ]; then
-  mkdir -p ${NALU_TESTING_DIR}
-
-  # Create and set up nightly directory with Spack installation
-  printf "\n\nCloning Spack repo...\n\n"
-  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
-
-  # Configure Spack for Peregrine
-  printf "\n\nConfiguring Spack...\n\n"
-  cd ${NALU_TESTING_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git
-  cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
-  ./copy_config.sh
-
-  # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
-  printf "\n\nCloning Nalu repo...\n\n"
-  git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
-
-  # Checkout Nalu and Trilinos
-  printf "\n\nStaging Nalu and Trilinos...\n\n"
-  spack stage nalu-trilinos
-  spack stage nalu
-
-  # Create a jobs directory
-  printf "\n\nMaking job output directory...\n\n"
-  mkdir -p ${NALU_TESTING_DIR}/jobs
-fi
+# Uncomment this if statement to create and set up
+# a testing directory if it doesn't exist
+#if [ ! -d "${NALU_TESTING_DIR}" ]; then
+#  mkdir -p ${NALU_TESTING_DIR}
+#
+#  # Create and set up nightly directory with Spack installation
+#  printf "\n\nCloning Spack repo...\n\n"
+#  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
+#
+#  # Configure Spack for Peregrine
+#  printf "\n\nConfiguring Spack...\n\n"
+#  cd ${NALU_TESTING_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git
+#  cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
+#  ./copy_config.sh
+#
+#  # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
+#  printf "\n\nCloning Nalu repo...\n\n"
+#  git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
+#
+#  # Checkout Nalu and Trilinos
+#  printf "\n\nStaging Nalu and Trilinos...\n\n"
+#  spack stage nalu-trilinos
+#  spack stage nalu
+#
+#  # Create a jobs directory
+#  printf "\n\nMaking job output directory...\n\n"
+#  mkdir -p ${NALU_TESTING_DIR}/jobs
+#fi
 
 # Load Spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
@@ -103,6 +104,12 @@ do
     # Set the hostname and extra identifiers for CDash build description
     HOST_NAME="peregrine.hpc.nrel.gov"
     EXTRA_BUILD_NAME="-${COMPILER_NAME}-trlns_${TRILINOS_BRANCH}"
+
+    # Clean build directory; checkout if NALU_DIR is not blank first
+    printf "\n\nCleaning build directory...\n\n"
+    if [ ! -z "${NALU_DIR}" ]; then
+      rm -rf ${NALU_DIR}/build/*
+    fi
 
     # Run ctest
     printf "\n\nRunning CTest...\n\n"

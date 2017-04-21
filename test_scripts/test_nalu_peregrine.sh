@@ -13,6 +13,9 @@
 NALU_TESTING_DIR=/scratch/jrood/TestNalu
 NALU_DIR=${NALU_TESTING_DIR}/Nalu
 
+# Set host name to pass to CDash
+HOST_NAME="peregrine.hpc.nrel.gov"
+
 # Set spack location
 export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
@@ -105,8 +108,7 @@ do
     TRILINOS_DIR=`spack location -i nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}`
     YAML_DIR=`spack location -i yaml-cpp %${COMPILER_NAME}`
 
-    # Set the hostname and extra identifiers for CDash build description
-    HOST_NAME="peregrine.hpc.nrel.gov"
+    # Set the extra identifiers for CDash build description
     EXTRA_BUILD_NAME="-${COMPILER_NAME}-trlns_${TRILINOS_BRANCH}"
 
     # Change to Nalu build directory

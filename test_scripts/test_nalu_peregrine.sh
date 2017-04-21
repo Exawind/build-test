@@ -35,11 +35,6 @@ export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 #  printf "\n\nCloning Nalu repo...\n\n"
 #  git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
 #
-#  # Checkout Nalu and Trilinos
-#  printf "\n\nStaging Nalu and Trilinos...\n\n"
-#  spack stage nalu-trilinos
-#  spack stage nalu
-#
 #  # Create a jobs directory
 #  printf "\n\nMaking job output directory...\n\n"
 #  mkdir -p ${NALU_TESTING_DIR}/jobs
@@ -67,25 +62,31 @@ do
     spack uninstall -y nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH}
     spack uninstall -y nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}
 
-    # These should hopefully be staged already, so just do a git pull to update
-    printf "\n\nPulling updates for Nalu and Trilinos...\n\n"
-    spack stage nalu-trilinos && spack cd nalu-trilinos && git pull
-    spack stage nalu && spack cd nalu && git pull
-
     # Change to Nalu build directory
     cd ${NALU_DIR}/build
 
-    # Install Nalu and Trilinos
-    printf "\n\nInstalling Nalu and Trilinos using ${COMPILER_NAME}...\n\n"
+    # Update and install Nalu and Trilinos
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       # Fix for Peregrine's broken linker
       spack install binutils %${COMPILER_NAME}
       . ${SPACK_ROOT}/share/spack/setup-env.sh
       spack load binutils %${COMPILER_NAME}
+
+      printf "\n\nPulling Nalu and Trilinos updates...\n\n"
+      spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 && pwd && git pull
+      spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 && pwd && git pull
+
+      printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
       spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       # Fix for Intel compiler failing when building trilinos with tmpdir set as a RAM disk by default
       export TMPDIR=/scratch/${USER}/.tmp
+
+      printf "\n\nPulling Nalu and Trilinos updates...\n\n"
+      spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17 && pwd && git pull
+      spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17 && pwd && git pull
+
+      printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
       spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17
       module load compiler/intel/16.0.2
       unset TMPDIR

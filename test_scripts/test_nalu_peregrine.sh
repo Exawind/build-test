@@ -134,6 +134,8 @@ do
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       spack unload binutils %${COMPILER_NAME}
     fi 
+
+    printf "\n\nDone testing Nalu with ${COMPILER_NAME} and Trilinos ${TRILINOS_BRANCH}.\n\n"
   done
 done
 

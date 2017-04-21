@@ -49,6 +49,8 @@ do
   # Test Nalu for intel, gcc
   for COMPILER_NAME in gcc intel
   do
+    printf "\n\nTesting Nalu with ${COMPILER_NAME} and Trilinos ${TRILINOS_BRANCH}.\n\n"
+
     # Change to Nalu testing directory
     cd ${NALU_TESTING_DIR}
 

@@ -115,8 +115,8 @@ do
     cd ${NALU_DIR}/build
 
     # Clean build directory; checkout if NALU_DIR is not blank first
-    printf "\n\nCleaning build directory...\n\n"
     if [ ! -z "${NALU_DIR}" ]; then
+      printf "\n\nCleaning build directory...\n\n"
       rm -rf ${NALU_DIR}/build/*
     fi
 

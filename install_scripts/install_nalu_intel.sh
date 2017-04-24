@@ -29,4 +29,5 @@ spack install nalu %intel ^nalu-trilinos@master \
                           ^hdf5@1.8.16 \
                           ^parallel-netcdf@1.6.1 \
                           ^netcdf@4.3.3.1 \
-                          ^m4@1.4.17
+                          ^m4@1.4.17 \
+                          ^cmake@3.7.2

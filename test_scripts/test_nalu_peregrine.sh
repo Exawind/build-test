@@ -79,21 +79,21 @@ do
       spack load binutils %${COMPILER_NAME}
 
       printf "\n\nPulling Nalu and Trilinos updates...\n\n"
-      spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 && pwd && git pull
-      spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 && pwd && git pull
+      spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^cmake@3.7.2 && pwd && git pull
+      spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^cmake@3.7.2 && pwd && git pull
 
       printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
-      spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1
+      spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^cmake@3.7.2
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       # Fix for Intel compiler failing when building trilinos with tmpdir set as a RAM disk by default
       export TMPDIR=/scratch/${USER}/.tmp
 
       printf "\n\nPulling Nalu and Trilinos updates...\n\n"
-      spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17 && pwd && git pull
-      spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17 && pwd && git pull
+      spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17 ^cmake@3.7.2 && pwd && git pull
+      spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17 ^cmake@3.7.2 && pwd && git pull
 
       printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
-      spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17
+      spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ^boost@1.60.0 ^hdf5@1.8.16 ^parallel-netcdf@1.6.1 ^netcdf@4.3.3.1 ^m4@1.4.17 ^cmake@3.7.2
       module load compiler/intel/16.0.2
       unset TMPDIR
     fi

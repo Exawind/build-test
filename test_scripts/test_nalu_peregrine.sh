@@ -9,6 +9,25 @@
 
 # Script for running regression tests on Peregrine using Spack and submitting results to CDash
 
+echo `date`
+echo ------------------------------------------------------
+echo "Job is running on node ${HOSTNAME}"
+echo ------------------------------------------------------
+if [ ! -z "${PBS_JOBID}" ]; then
+  echo PBS: Qsub is running on ${PBS_O_HOST}
+  echo PBS: Originating queue is ${PBS_O_QUEUE}
+  echo PBS: Executing queue is ${PBS_QUEUE}
+  echo PBS: Working directory is ${PBS_O_WORKDIR}
+  echo PBS: Execution mode is ${PBS_ENVIRONMENT}
+  echo PBS: Job identifier is ${PBS_JOBID}
+  echo PBS: Job name is ${PBS_JOBNAME}
+  echo PBS: Node file is ${PBS_NODEFILE}
+  echo PBS: Current home directory is ${PBS_O_HOME}
+  echo PBS: PATH = ${PBS_O_PATH}
+  echo ------------------------------------------------------
+fi
+printf "\n\n"
+
 # Set nightly directory and Nalu checkout directory
 NALU_TESTING_DIR=/scratch/jrood/TestNalu
 NALU_DIR=${NALU_TESTING_DIR}/Nalu

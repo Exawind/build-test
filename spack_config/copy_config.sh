@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Script for copying the recommended configuration for Spack onto your system
-#for building Nalu, be it on Peregrine, or a Mac
+#for building Nalu, be it on Peregrine, Merlin, or a Mac
 
 if [ -z "${SPACK_ROOT}" ]; then
     echo "SPACK_ROOT must be set first"
@@ -14,17 +14,26 @@ OS=`uname -s`
 
 if [ ${OS} == 'Linux' ]; then
   MACHINE=`hostname -d`
+  if [ -z "${MACHINE}" ]; then
+    MACHINE=`hostname -f`
+  fi
 elif [ ${OS} == 'Darwin' ]; then
   MACHINE=`hostname -f`
 fi
 
 if [ ${MACHINE} == 'hpc.nrel.gov' ]; then
   # Copy Peregrine-specific configuration for Spack
-  cp config.yaml ${SPACK_ROOT}/etc/spack/
+  cp config.yaml.peregrine ${SPACK_ROOT}/etc/spack/config.yaml
   #sed -i "s|    #- USERSCRATCH.*|    - /scratch/${USER}|g" ${SPACK_ROOT}/etc/spack/config.yaml
-  cp packages.yaml ${SPACK_ROOT}/etc/spack/
-  cp compilers.yaml ${SPACK_ROOT}/etc/spack/
+  cp packages.yaml.peregrine ${SPACK_ROOT}/etc/spack/packages.yaml
+  cp compilers.yaml.peregrine ${SPACK_ROOT}/etc/spack/compilers.yaml
   cp -R openmpi ${SPACK_ROOT}/var/spack/repos/builtin/packages/
+elif [ ${MACHINE} == 'merlin' ]; then 
+  # Copy Merlin-specific configuration for Spack
+  cp config.yaml.merlin ${SPACK_ROOT}/etc/spack/config.yaml
+  #sed -i "s|    #- USERSCRATCH.*|    - /scratch/${USER}|g" ${SPACK_ROOT}/etc/spack/config.yaml
+  cp packages.yaml.merlin ${SPACK_ROOT}/etc/spack/packages.yaml
+  cp compilers.yaml.merlin ${SPACK_ROOT}/etc/spack/compilers.yaml
 fi
 
 # Copy Nalu-specific configuration for Spack

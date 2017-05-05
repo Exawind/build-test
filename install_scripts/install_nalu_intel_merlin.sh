@@ -30,6 +30,8 @@ TPLS="
 ^superlu@4.3
 "
 
+# For temporary intel compiler files
+mkdir -p /scratch/${USER}/.tmp
 export TMPDIR=/scratch/${USER}/.tmp
 # For different versions of trilinos add a '^nalu-trilinos+debug@develop'
 # for a debug version of the trilinos development branch for example

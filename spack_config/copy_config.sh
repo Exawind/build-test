@@ -34,6 +34,7 @@ elif [ ${MACHINE} == 'merlin' ]; then
   #sed -i "s|    #- USERSCRATCH.*|    - /scratch/${USER}|g" ${SPACK_ROOT}/etc/spack/config.yaml
   cp packages.yaml.merlin ${SPACK_ROOT}/etc/spack/packages.yaml
   cp compilers.yaml.merlin ${SPACK_ROOT}/etc/spack/compilers.yaml
+  cp intel.cfg.merlin ${SPACK_ROOT}/etc/spack/intel.cfg
 fi
 
 # Copy Nalu-specific configuration for Spack

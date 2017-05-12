@@ -4,7 +4,6 @@
 #PBS -l nodes=1:ppn=24,walltime=4:00:00
 #PBS -A windFlowModeling
 #PBS -q batch
-#PBS -o $PBS_JOBNAME.log
 #PBS -j oe
 #PBS -W umask=002
 
@@ -15,6 +14,13 @@ set -e
 cd ${HOME}
 
 module purge
+
+export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
+
+for i in ICCCFG ICPCCFG IFORTCFG
+do
+  export $i=${SPACK_ROOT}/etc/spack/intel.cfg
+done
 
 TPLS="
 ^boost@1.60.0 \
@@ -33,4 +39,4 @@ TPLS="
 # For different versions of trilinos add a '^nalu-trilinos+debug@develop'
 # for a debug version of the trilinos development branch for example
 export TMPDIR=/dev/shm
-spack install --jobs 4 nalu %intel ^nalu-trilinos@master ^openmpi@1.10.3 ${TPLS}
+spack install nalu %intel ^nalu-trilinos@master ^openmpi@1.10.3 ${TPLS}

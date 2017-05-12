@@ -13,12 +13,26 @@ set -ex
 OS=`uname -s`
 
 if [ ${OS} == 'Linux' ]; then
-  MACHINE=`hostname -d`
-  if [ -z "${MACHINE}" ]; then
-    MACHINE=`hostname -f`
+  MYHOSTNAME=`hostname -d`
+  if [ ${MYHOSTNAME} == 'localdomain' ]; then
+    MACHINE=merlin
+  elif [ ${MYHOSTNAME} == 'hpc.nrel.gov' ]; then
+    MACHINE=peregrine
+  elif [ -z "${MYHOSTNAME}" ]; then
+    MYHOSTNAME=`hostname -f`
+    if [ ${MYHOSTNAME} == 'merlin' ]; then
+      MACHINE=merlin
+    fi
   fi
 elif [ ${OS} == 'Darwin' ]; then
   MACHINE=`hostname -f`
+fi
+
+if [ -z "${MACHINE}" ]; then
+  echo "MACHINE name not found"
+else
+  echo "MYHOSTNAME is ${MYHOSTNAME}"
+  echo "MACHINE is ${MACHINE}"
 fi
 
 if [ ${MACHINE} == 'hpc.nrel.gov' ]; then

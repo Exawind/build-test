@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #PBS -N test_nalu_merlin
-#PBS -l nodes=1:ppn=24,walltime=4:00:00
+#PBS -l nodes=1:ppn=24,walltime=6:00:00
 #PBS -A windFlowModeling
 #PBS -q batch
 #PBS -j oe
@@ -69,7 +69,6 @@ TPLS="
 ^boost@1.60.0 \
 ^cmake@3.6.1 \
 ^parallel-netcdf@1.6.1 \
-^yaml-cpp@0.5.3 \
 ^hdf5@1.8.16 \
 ^netcdf@4.3.3.1 \
 ^pkg-config@0.29.2 \
@@ -117,6 +116,9 @@ do
 
     # Load spack built cmake and openmpi into path
     printf "\n\nLoading Spack modules into environment...\n\n"
+    # Refresh available modules (this is only really necessary on the first run of this script
+    # because cmake and openmpi will already have been built and module files registered in subsequent runs)
+    . ${SPACK_ROOT}/share/spack/setup-env.sh
     spack load cmake %${COMPILER_NAME}
     spack load openmpi %${COMPILER_NAME}
 

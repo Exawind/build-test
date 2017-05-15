@@ -35,7 +35,7 @@ else
   echo "MACHINE is ${MACHINE}"
 fi
 
-if [ ${MACHINE} == 'hpc.nrel.gov' ]; then
+if [ ${MACHINE} == 'peregrine' ]; then
   # Copy Peregrine-specific configuration for Spack
   cp config.yaml.peregrine ${SPACK_ROOT}/etc/spack/config.yaml
   #sed -i "s|    #- USERSCRATCH.*|    - /scratch/${USER}|g" ${SPACK_ROOT}/etc/spack/config.yaml

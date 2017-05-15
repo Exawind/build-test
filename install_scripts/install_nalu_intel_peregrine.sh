@@ -24,7 +24,6 @@ TPLS="
 ^boost@1.60.0 \
 ^cmake@3.6.1 \
 ^parallel-netcdf@1.6.1 \
-^yaml-cpp@0.5.3 \
 ^hdf5@1.8.16 \
 ^netcdf@4.3.3.1 \
 ^pkg-config@0.29.2 \

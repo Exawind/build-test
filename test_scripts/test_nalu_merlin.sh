@@ -155,7 +155,13 @@ do
     spack unload cmake %${COMPILER_NAME}
     spack unload openmpi %${COMPILER_NAME}
 
-    unset TMPDIR
+    # Clean TMPDIR before exiting
+    if [ ! -z "${TMPDIR}" ]; then
+      printf "\n\nCleaning TMPDIR directory...\n\n"
+      rm -rf ${TMPDIR}/*
+      unset TMPDIR
+    fi
+
     printf "\n\nDone testing Nalu with ${COMPILER_NAME} and Trilinos ${TRILINOS_BRANCH}.\n\n"
   done
 done

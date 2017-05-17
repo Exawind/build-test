@@ -29,7 +29,7 @@ fi
 printf "\n\n"
 
 # Set nightly directory and Nalu checkout directory
-NALU_TESTING_DIR=/scratch/jrood/TestNalu
+NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
 NALU_DIR=${NALU_TESTING_DIR}/Nalu
 
 # Set host name to pass to CDash

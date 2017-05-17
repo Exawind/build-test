@@ -66,6 +66,7 @@ export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 
 TPLS="
+^openmpi@1.10.3 \
 ^boost@1.60.0 \
 ^cmake@3.6.1 \
 ^parallel-netcdf@1.6.1 \
@@ -108,11 +109,11 @@ do
     # End for Intel compiler
 
     printf "\n\nPulling Nalu and Trilinos updates...\n\n"
-    spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi@1.10.3 ${TPLS} && pwd && git pull
-    spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ^openmpi@1.10.3 ${TPLS} && pwd && git pull
+    spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ${TPLS} && pwd && git pull
+    spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS} && pwd && git pull
 
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
-    spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi@1.10.3 ${TPLS}
+    spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ${TPLS}
 
     # Load spack built cmake and openmpi into path
     printf "\n\nLoading Spack modules into environment...\n\n"

@@ -15,6 +15,7 @@ set -e
 module purge
 
 TPLS="
+^openmpi@1.10.3 \
 ^boost@1.60.0 \
 ^cmake@3.6.1 \
 ^parallel-netcdf@1.6.1 \
@@ -29,5 +30,4 @@ TPLS="
 
 # For different versions of trilinos add a '^nalu-trilinos+debug@develop'
 # for a debug version of the trilinos development branch for example
-spack install nalu %gcc ^nalu-trilinos@master ^openmpi@1.10.3 ${TPLS}
-
+spack install nalu %gcc ^nalu-trilinos@master ${TPLS}

@@ -21,6 +21,7 @@ module load python/2.7.8
 } &> /dev/null
 
 TPLS="
+^openmpi@1.10.3 \
 ^boost@1.60.0 \
 ^cmake@3.6.1 \
 ^parallel-netcdf@1.6.1 \
@@ -38,4 +39,4 @@ mkdir -p /scratch/${USER}/.tmp
 export TMPDIR=/scratch/${USER}/.tmp
 # For different versions of trilinos add a '^nalu-trilinos+debug@develop'
 # for a debug version of the trilinos development branch for example
-spack install nalu %intel ^nalu-trilinos@master ^openmpi+verbs+psm+tm@1.10.3 ${TPLS}
+spack install nalu %intel ^nalu-trilinos@master ${TPLS}

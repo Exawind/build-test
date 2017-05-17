@@ -41,7 +41,6 @@ if [ ${MACHINE} == 'peregrine' ]; then
   #sed -i "s|    #- USERSCRATCH.*|    - /scratch/${USER}|g" ${SPACK_ROOT}/etc/spack/config.yaml
   cp packages.yaml.peregrine ${SPACK_ROOT}/etc/spack/packages.yaml
   cp compilers.yaml.peregrine ${SPACK_ROOT}/etc/spack/compilers.yaml
-  cp -R openmpi ${SPACK_ROOT}/var/spack/repos/builtin/packages/
 elif [ ${MACHINE} == 'merlin' ]; then 
   # Copy Merlin-specific configuration for Spack
   cp config.yaml.merlin ${SPACK_ROOT}/etc/spack/config.yaml

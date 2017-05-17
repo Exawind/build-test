@@ -66,6 +66,7 @@ export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 
 TPLS="
+^openmpi@1.10.3 \
 ^boost@1.60.0 \
 ^cmake@3.6.1 \
 ^parallel-netcdf@1.6.1 \
@@ -102,30 +103,28 @@ do
     spack uninstall -y nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH}
     spack uninstall -y nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}
 
-    # Update and install Nalu and Trilinos
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      # Fix for Peregrine's broken linker
+      # Fix for Peregrine's broken linker for gcc
       printf "\n\nInstalling binutils...\n\n"
       spack install binutils %${COMPILER_NAME}
       . ${SPACK_ROOT}/share/spack/setup-env.sh
       spack load binutils %${COMPILER_NAME}
-
-      printf "\n\nPulling Nalu and Trilinos updates...\n\n"
-      spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ${TPLS} && pwd && git pull
-      spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ^openmpi+verbs+psm+tm+mxm@1.10.3 ${TPLS} && pwd && git pull
-
-      printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
-      spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm+mxm@1.10.3 ${TPLS}
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       # Fix for Intel compiler failing when building trilinos with tmpdir set as a RAM disk by default
+      mkdir -p /scratch/${USER}/.tmp
       export TMPDIR=/scratch/${USER}/.tmp
+    fi
 
-      printf "\n\nPulling Nalu and Trilinos updates...\n\n"
-      spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ${TPLS} && pwd && git pull
-      spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ^openmpi+verbs+psm+tm@1.10.3 ${TPLS} && pwd && git pull
+    # Update Nalu and Trilinos
+    printf "\n\nPulling Nalu and Trilinos updates...\n\n"
+    spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ${TPLS} && pwd && git pull
+    spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS} && pwd && git pull
 
-      printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
-      spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ^openmpi+verbs+psm+tm@1.10.3 ${TPLS}
+    # Install Nalu and Trilinos
+    printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
+    spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ${TPLS}
+
+    if [ ${COMPILER_NAME} == 'intel' ]; then
       module load compiler/intel/16.0.2
       unset TMPDIR
     fi

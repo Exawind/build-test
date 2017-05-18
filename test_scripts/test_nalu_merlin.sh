@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #PBS -N test_nalu_merlin
-#PBS -l nodes=1:ppn=24,walltime=6:00:00
+#PBS -l nodes=1:ppn=24,walltime=8:00:00
 #PBS -A windFlowModeling
 #PBS -q batch
 #PBS -j oe

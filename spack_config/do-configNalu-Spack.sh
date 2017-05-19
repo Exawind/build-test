@@ -26,8 +26,11 @@ set -ex
 COMPILER=gcc #or intel
 # Using NREL communal spack installation by default
 SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedInstallation/spack
-
 SPACK=${SPACK_ROOT}/bin/spack #actual spack executable
+# Specify location of Trilinos
+TRILINOS_ROOT=${HOME}/Trilinos/mybuild/install
+# Use this line instead if you want to build against the communal Trilinos:
+#TRILINOS_ROOT=$(${SPACK} location -i nalu-trilinos %${COMPILER})
 
 # Load necessary modules created by spack
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK} arch)
@@ -41,10 +44,8 @@ rm -rf CMakeFiles
 rm -f CMakeCache.txt
 set -e
 
-# Use this line instead if you want to build against the communal Trilinos:
-#-DTrilinos_DIR:PATH=$(${SPACK} location -i nalu-trilinos %${COMPILER}) \
 cmake \
-  -DTrilinos_DIR:PATH=${HOME}/Trilinos/mybuild/install \
+  -DTrilinos_DIR:PATH=${TRILINOS_ROOT} \
   -DYAML_DIR:PATH=$(${SPACK} location -i yaml-cpp %${COMPILER}) \
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
   -DBUILD_DOCUMENTATION:BOOL=OFF \

@@ -33,17 +33,9 @@ SPACK=${SPACK_ROOT}/bin/spack #actual spack executable
 
 # Load necessary modules created by spack
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK} arch)
-# Only need these three if building against communal Trilinos
 module load $(${SPACK} module find binutils %${COMPILER})
 module load $(${SPACK} module find cmake %${COMPILER})
 module load $(${SPACK} module find openmpi %${COMPILER})
-# Load all of these too if building against your own Trilinos
-module load $(${SPACK} module find hdf5 %${COMPILER})
-module load $(${SPACK} module find netcdf %${COMPILER})
-module load $(${SPACK} module find parallel-netcdf %${COMPILER})
-module load $(${SPACK} module find zlib %${COMPILER})
-module load $(${SPACK} module find superlu %${COMPILER})
-module load $(${SPACK} module find boost %${COMPILER})
 
 # Clean before cmake configure
 set +e
@@ -61,7 +53,6 @@ cmake \
   -DENABLE_TESTS:BOOL=OFF \
   ..
 
-# Uncomment the next two lines after you make sure you are not on a login node
+# Uncomment the next line after you make sure you are not on a login node
 # and run this script to configure and build Nalu
 #make -j 24
-#make install

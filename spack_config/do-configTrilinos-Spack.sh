@@ -2,44 +2,57 @@
 
 set -ex
 
+# Instructions:
 # A Trilinos do-config script that uses Spack-built TPLs.
 # Make a directory in the trilinos directory for building,
-# cd to that directory and then run this script.
+# Copy this script to that directory and edit the three
+# options below to your own needs. Leave the SPACK_ROOT option
+# alone to build against the communal spack location at NREL.
+# Uncomment the last two lines and then run this script.
 
-# Note Spack uses rpath, but when we build manually
-# we will then need to have the TPLs loaded in 
+# Note Spack uses rpath so we don't need to worry so much
+# about setting our environment when running, but when we 
+# build manually we will then need to have the TPLs loaded in 
 # the environment, and you will likely need
-# the spack load commands in your .bash_profile
-# to achieve success using/developing with
-# a manual build of Trilinos and Nalu.
+# the module load commands in effect to both build and run
+# using a manual build of Trilinos and Nalu.
 
-# Also note this won't work on OSX.
+# Also note this script won't work on OSX.
 # Mostly due to your OSX machine not having
-# environment modules so the 'spack load'
+# environment modules so the 'module load'
 # won't add to your PATH (and LD_LIBRARY_PATH).
 
-# Change these to suit your needs:
-COMPILER=gcc
-INSTALL_PREFIX=`pwd`/install
+# Change these three options to suit your needs:
+COMPILER=gcc #or intel
+# Default to installing to 'install' directory in build directory
+INSTALL_PREFIX=$(pwd)/install
+# Using NREL communal spack installation by default
+SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedInstallation/spack
 
+SPACK=${SPACK_ROOT}/bin/spack #actual spack executable
+
+# Load necessary modules created by spack
+module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK} arch)
+module load $(${SPACK} module find binutils %${COMPILER})
+module load $(${SPACK} module find cmake %${COMPILER})
+module load $(${SPACK} module find openmpi %${COMPILER})
+module load $(${SPACK} module find hdf5 %${COMPILER})
+module load $(${SPACK} module find netcdf %${COMPILER})
+module load $(${SPACK} module find parallel-netcdf %${COMPILER})
+module load $(${SPACK} module find zlib %${COMPILER})
+module load $(${SPACK} module find superlu %${COMPILER})
+module load $(${SPACK} module find boost %${COMPILER})
+
+# Clean before cmake configure
 set +e
 rm -rf CMakeFiles
 rm -f CMakeCache.txt
 set -e
 
-spack load binutils %${COMPILER}
-spack load cmake %${COMPILER}
-spack load openmpi %${COMPILER}
-spack load hdf5 %${COMPILER}
-spack load netcdf %${COMPILER}
-spack load parallel-netcdf %${COMPILER}
-spack load zlib %${COMPILER}
-spack load superlu %${COMPILER}
-spack load boost %${COMPILER}
-
 cmake \
   -DCMAKE_INSTALL_PREFIX:PATH=${INSTALL_PREFIX} \
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
+  -DBUILD_SHARED_LIBS:BOOL=OFF \
   -DTrilinos_ENABLE_CXX11:BOOL=ON \
   -DTrilinos_ENABLE_EXPLICIT_INSTANTIATION:BOOL=ON \
   -DTpetra_INST_DOUBLE:BOOL=ON \
@@ -78,20 +91,25 @@ cmake \
   -DTrilinos_ENABLE_SEACASNemspread:BOOL=ON \
   -DTrilinos_ENABLE_SEACASNemslice:BOOL=ON \
   -DTPL_ENABLE_MPI:BOOL=ON \
-  -DMPI_BASE_DIR:PATH=`spack location -i openmpi %${COMPILER}` \
+  -DMPI_BASE_DIR:PATH=$(${SPACK} location -i openmpi %${COMPILER}) \
   -DTPL_ENABLE_Boost:BOOL=ON \
-  -DBoost_ROOT:PATH=`spack location -i boost %${COMPILER}` \
+  -DBoost_ROOT:PATH=$(${SPACK} location -i boost %${COMPILER}) \
   -DTPL_ENABLE_SuperLU:BOOL=ON \
-  -DSuperLU_ROOT:PATH=`spack location -i superlu %${COMPILER}` \
+  -DSuperLU_ROOT:PATH=$(${SPACK} location -i superlu %${COMPILER}) \
   -DTPL_ENABLE_Netcdf:BOOL=ON \
-  -DNetCDF_ROOT:PATH=`spack location -i netcdf %${COMPILER}` \
+  -DNetCDF_ROOT:PATH=$(${SPACK} location -i netcdf %${COMPILER}) \
   -DTPL_Netcdf_Enables_Netcdf4:BOOL=ON \
   -DTPL_Netcdf_PARALLEL:BOOL=ON \
   -DTPL_ENABLE_Pnetcdf:BOOL=ON \
-  -DPNetCDF_ROOT:PATH=`spack location -i parallel-netcdf %${COMPILER}` \
+  -DPNetCDF_ROOT:PATH=$(${SPACK} location -i parallel-netcdf %${COMPILER}) \
   -DTPL_ENABLE_HDF5:BOOL=ON \
-  -DHDF5_ROOT:PATH=`spack location -i hdf5 %${COMPILER}` \
+  -DHDF5_ROOT:PATH=$(${SPACK} location -i hdf5 %${COMPILER}) \
   -DHDF5_NO_SYSTEM_PATHS:BOOL=ON \
   -DTPL_ENABLE_Zlib:BOOL=ON \
-  -DZlib_ROOT:PATH=`spack location -i zlib %${COMPILER}` \
+  -DZlib_ROOT:PATH=$(${SPACK} location -i zlib %${COMPILER}) \
   ..
+
+# Uncomment the next two lines after you make sure you are not on a login node
+# and run this script to configure and build Trilinos
+#make -j 24
+#make install

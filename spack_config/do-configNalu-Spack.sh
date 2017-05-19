@@ -5,7 +5,7 @@ set -ex
 # Instructions:
 # A Nalu do-config script that uses Spack-built TPLs.
 # Make a directory in the trilinos directory for building,
-# Copy this script to that directory and edit the three
+# Copy this script to that directory and edit the
 # options below to your own needs. Leave the SPACK_ROOT option
 # alone to build against the communal spack location at NREL.
 # Uncomment the last two lines and then run this script.
@@ -24,8 +24,6 @@ set -ex
 
 # Change these three options to suit your needs:
 COMPILER=gcc #or intel
-# Default to installing to 'install' directory in build directory
-INSTALL_PREFIX=$(pwd)/install
 # Using NREL communal spack installation by default
 SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedInstallation/spack
 

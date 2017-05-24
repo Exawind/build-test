@@ -117,8 +117,8 @@ do
 
     # Update Nalu and Trilinos
     printf "\n\nUpdating Nalu and Trilinos...\n\n"
-    spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ${TPLS} && pwd && git fetch origin master && git reset --hard FETCH_HEAD && git clean -df && git pull && git status -uno
-    spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS} && pwd && git fetch origin ${TRILINOS_BRANCH} && git reset --hard FETCH_HEAD && git clean -df && git pull && git status -uno
+    spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ${TPLS} && pwd && git fetch origin/master && git reset --hard origin/master && git clean -df && git status -uno
+    spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS} && pwd && git fetch origin/${TRILINOS_BRANCH} && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno
 
     # Install Nalu and Trilinos
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"

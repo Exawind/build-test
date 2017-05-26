@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Script for copying the recommended configuration for Spack onto your system
-#for building Nalu, be it on Peregrine, Merlin, or a Mac
+#for building Nalu, be it on Peregrine, Merlin, Cori, or a Mac
 
 if [ -z "${SPACK_ROOT}" ]; then
     echo "SPACK_ROOT must be set first"
@@ -12,12 +12,15 @@ set -ex
 
 OS=`uname -s`
 
+# Find machine name
 if [ ${OS} == 'Linux' ]; then
   MYHOSTNAME=`hostname -d`
   if [ ${MYHOSTNAME} == 'localdomain' ]; then
     MACHINE=merlin
   elif [ ${MYHOSTNAME} == 'hpc.nrel.gov' ]; then
     MACHINE=peregrine
+  elif [[ ${MYHOSTNAME} == *"cori"* ]]; then
+    MACHINE=cori
   elif [ -z "${MYHOSTNAME}" ]; then
     MYHOSTNAME=`hostname -f`
     if [ ${MYHOSTNAME} == 'merlin' ]; then
@@ -25,29 +28,24 @@ if [ ${OS} == 'Linux' ]; then
     fi
   fi
 elif [ ${OS} == 'Darwin' ]; then
-  MACHINE=`hostname -f`
+  MACHINE=`hostname -s`
 fi
 
+# Copy machine-specific configuration for Spack if we recognize the machine
 if [ -z "${MACHINE}" ]; then
   echo "MACHINE name not found"
 else
   echo "MYHOSTNAME is ${MYHOSTNAME}"
   echo "MACHINE is ${MACHINE}"
-fi
-
-if [ ${MACHINE} == 'peregrine' ]; then
-  # Copy Peregrine-specific configuration for Spack
-  cp config.yaml.peregrine ${SPACK_ROOT}/etc/spack/config.yaml
-  #sed -i "s|    #- USERSCRATCH.*|    - /scratch/${USER}|g" ${SPACK_ROOT}/etc/spack/config.yaml
-  cp packages.yaml.peregrine ${SPACK_ROOT}/etc/spack/packages.yaml
-  cp compilers.yaml.peregrine ${SPACK_ROOT}/etc/spack/compilers.yaml
-elif [ ${MACHINE} == 'merlin' ]; then 
-  # Copy Merlin-specific configuration for Spack
-  cp config.yaml.merlin ${SPACK_ROOT}/etc/spack/config.yaml
-  #sed -i "s|    #- USERSCRATCH.*|    - /scratch/${USER}|g" ${SPACK_ROOT}/etc/spack/config.yaml
-  cp packages.yaml.merlin ${SPACK_ROOT}/etc/spack/packages.yaml
-  cp compilers.yaml.merlin ${SPACK_ROOT}/etc/spack/compilers.yaml
-  cp intel.cfg.merlin ${SPACK_ROOT}/etc/spack/intel.cfg
+  if [ ${MACHINE} == 'peregrine' ] || [ ${MACHINE} == 'merlin' ] || [ ${MACHINE} == 'cori' ]; then
+    cp config.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/config.yaml
+    cp packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/packages.yaml
+    cp compilers.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/compilers.yaml
+    #sed -i "s|    #- USERSCRATCH.*|    - /scratch/${USER}|g" ${SPACK_ROOT}/etc/spack/config.yaml
+    if [ ${MACHINE} == 'merlin' ]; then
+      cp intel.cfg.${MACHINE} ${SPACK_ROOT}/etc/spack/intel.cfg
+    fi
+  fi
 fi
 
 # Copy Nalu-specific configuration for Spack

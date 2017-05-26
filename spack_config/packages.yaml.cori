@@ -1,0 +1,86 @@
+packages:
+  all:
+    buildable: true
+    compiler:
+    - gcc
+    - intel
+    - pgi
+    - clang
+    - xl
+    - nag
+    modules: {}
+    paths: {}
+    providers:
+      awk:
+      - gawk
+      blas:
+      - netlib-lapack
+      daal:
+      - intel-parallel-studio+daal
+      elf:
+      - elfutils
+      golang:
+      - gcc
+      ipp:
+      - intel-parallel-studio+ipp
+      lapack:
+      - netlib-lapack
+      mkl:
+      - intel-parallel-studio+mkl
+      mpe:
+      - mpe2
+      mpi:
+      - mpich
+      opencl:
+      - pocl
+      openfoam:
+      - foam-extend
+      pil:
+      - py-pillow
+      scalapack:
+      - netlib-scalapack
+    version: []
+  mpich:
+    buildable: false
+    modules:
+        mpich@7.4.4: cray-mpich
+    paths: {}
+    providers: {}
+    version: []
+    compiler: []
+  hdf5:
+      buildable: false
+      modules:
+          hdf5@1.8.16: cray-hdf5-parallel/1.8.16
+  netcdf:
+      buildable: false
+      modules:
+          netcdf@4.3.3.1: cray-netcdf-hdf5parallel/4.3.3.1
+  parallel-netcdf:
+      buildable: false
+      modules:
+          parallel-netcdf@1.6.1: cray-parallel-netcdf/1.6.1
+  zlib:
+      buildable: false
+      modules:
+          zlib@1.2.8: zlib/1.2.8
+  intel-mkl:
+      buildable: false
+      paths:
+          intel-mkl@17.0.2.174: /opt/intel/compilers_and_libraries_2017.2.174/linux/mkl
+  netlib-lapack:
+      buildable: False
+      paths:
+          netlib-lapack@3.6.1: /usr
+  openssl:
+      buildable: False
+      paths:
+          openssl@1.0.1i: /usr
+  cmake:
+      buildable: False
+      paths:
+          cmake@3.5.2: /usr/common/software/cmake/3.5.2/carl
+  bzip2:
+      buildable: False
+      paths:
+          bzip2@1.0.6: /usr

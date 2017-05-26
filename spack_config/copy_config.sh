@@ -15,18 +15,24 @@ OS=`uname -s`
 # Find machine name
 if [ ${OS} == 'Linux' ]; then
   MYHOSTNAME=`hostname -d`
-  if [ ${MYHOSTNAME} == 'localdomain' ]; then
-    MACHINE=merlin
-  elif [ ${MYHOSTNAME} == 'hpc.nrel.gov' ]; then
-    MACHINE=peregrine
-  elif [[ ${MYHOSTNAME} == *"cori"* ]]; then
-    MACHINE=cori
-  elif [ -z "${MYHOSTNAME}" ]; then
-    MYHOSTNAME=`hostname -f`
-    if [ ${MYHOSTNAME} == 'merlin' ]; then
+  case "${MYHOSTNAME}" in
+    localdomain)
       MACHINE=merlin
-    fi
-  fi
+    ;;
+    hpc.nrel.gov)
+      MACHINE=peregrine
+    ;;
+    "")
+      MYHOSTNAME=`hostname -f`
+      case "${MYHOSTNAME}" in
+        merlin)
+          MACHINE=merlin
+        ;;
+        *cori*)
+          MACHINE=cori
+        ;;
+      esac
+  esac
 elif [ ${OS} == 'Darwin' ]; then
   MACHINE=`hostname -s`
 fi

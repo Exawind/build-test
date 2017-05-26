@@ -17,17 +17,20 @@ class NaluTrilinos(CMakePackage):
     variant('debug', default=False,
             description='Builds a RelWithDebInfo version of the libraries')
 
-    depends_on('boost+mpi~shared')
+    depends_on('boost')
     depends_on('mpi')
-    depends_on('netcdf+parallel-netcdf~shared')
+    depends_on('netcdf')
+    depends_on('parallel-netcdf')
     depends_on('superlu+fpic@4.3')
-    depends_on('hdf5+mpi+cxx~shared@1.8.16')
+    depends_on('hdf5+mpi')
     depends_on('blas')
     depends_on('lapack')
-    depends_on('zlib+pic')
+    depends_on('zlib')
 
     def cmake_args(self):
         spec = self.spec
+        blas = spec['blas'].libs
+        lapack = spec['lapack'].libs
         options = []
         options.extend([
             '-DCMAKE_BUILD_TYPE:STRING=%s' % 
@@ -79,12 +82,19 @@ class NaluTrilinos(CMakePackage):
             '-DTPL_ENABLE_Pnetcdf:BOOL=ON',
             '-DPNetCDF_ROOT:PATH=%s' % spec['parallel-netcdf'].prefix,
             '-DTPL_ENABLE_HDF5:BOOL=ON',
-            '-DHDF5_ROOT:PATH=%s' % spec['hdf5'].prefix,
+            '-DHDF5_INCLUDE_DIRS:PATH=%s' % spec['hdf5'].prefix.include,
+            '-DHDF5_LIBRARY_DIRS:PATH=%s' % spec['hdf5'].prefix.lib,
             '-DTPL_ENABLE_Zlib:STRING=ON',
             '-DZlib_ROOT:PATH=%s' % spec['zlib'].prefix,
             '-DTPL_ENABLE_Boost:BOOL=ON',
             '-DBoost_ROOT:PATH=%s' % spec['boost'].prefix,
-            '-DTrilinos_ASSERT_MISSING_PACKAGES=OFF'
+            '-DTrilinos_ASSERT_MISSING_PACKAGES=OFF',
+            '-DTPL_ENABLE_BLAS=ON',
+            '-DBLAS_LIBRARY_NAMES=%s' % ';'.join(blas.names),
+            '-DBLAS_LIBRARY_DIRS=%s' % ';'.join(blas.directories),
+            '-DTPL_ENABLE_LAPACK=ON',
+            '-DLAPACK_LIBRARY_NAMES=%s' % ';'.join(lapack.names),
+            '-DLAPACK_LIBRARY_DIRS=%s' % ';'.join(lapack.directories)
         ])
             
         return options

@@ -28,9 +28,9 @@ COMPILER=gcc #or intel
 SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedInstallation/spack
 SPACK=${SPACK_ROOT}/bin/spack #actual spack executable
 # Specify location of Trilinos
-TRILINOS_ROOT=${HOME}/Trilinos/mybuild/install
-# Use this line instead if you want to build against the communal Trilinos:
-#TRILINOS_ROOT=$(${SPACK} location -i nalu-trilinos %${COMPILER})
+TRILINOS_ROOT=$(${SPACK} location -i nalu-trilinos %${COMPILER})
+# Use this line instead if you want to build against your own Trilinos:
+#TRILINOS_ROOT=${HOME}/Trilinos/mybuild/install
 
 # Load necessary modules created by spack
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK} arch)
@@ -49,7 +49,7 @@ cmake \
   -DYAML_DIR:PATH=$(${SPACK} location -i yaml-cpp %${COMPILER}) \
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
   -DBUILD_DOCUMENTATION:BOOL=OFF \
-  -DENABLE_TESTS:BOOL=OFF \
+  -DENABLE_TESTS:BOOL=ON \
   ..
 
 # Uncomment the next line after you make sure you are not on a login node

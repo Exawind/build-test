@@ -115,6 +115,11 @@ do
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
     spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ${TPLS}
 
+    # Set permissions after install
+    chmod -R go-w `spack location -i nalu %${COMPILER_NAME}`
+    chmod -R go-w `spack location -i nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}`
+    #chmod -R go-w ${NALU_TESTING_DIR}/spack/opt
+
     # Load spack built cmake and openmpi into path
     printf "\n\nLoading Spack modules into environment...\n\n"
     # Refresh available modules (this is only really necessary on the first run of this script

@@ -4,7 +4,7 @@ set -ex
 
 # Instructions:
 # A Nalu do-config script that uses Spack-built TPLs.
-# Make a directory in the trilinos directory for building,
+# Make a directory in the Nalu directory for building,
 # Copy this script to that directory and edit the
 # options below to your own needs. Leave the SPACK_ROOT option
 # alone to build against the communal spack location at NREL.
@@ -12,10 +12,8 @@ set -ex
 
 # Note Spack uses rpath so we don't need to worry so much
 # about setting our environment when running, but when we 
-# build manually we will then need to have the TPLs loaded in 
-# the environment, and you will likely need
-# the module load commands in effect to both build and run
-# using a manual build of Trilinos and Nalu.
+# build manually we will then need to have some TPLs loaded in 
+# the environment, namely binutils, cmake, and openmpi.
 
 # Also note this script won't work on OSX.
 # Mostly due to your OSX machine not having

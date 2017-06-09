@@ -65,6 +65,10 @@ export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 # Load Spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 
+TRILINOS="
+^trilinos~alloptpkgs~xsdkflags~metis~mumps~superlu-dist+superlu~hypre+hdf5~suite-sparse~python~shared~debug+boost+tpetra~epetra~epetraext+exodus+pnetcdf+zlib+stk~teuchos+belos+zoltan+zoltan2~amesos+amesos2~ifpack+ifpack2+muelu~fortran~ml+gtest~aztec~sacado~x11+instantiate~instantiate_cmplx~dtk@master
+"
+
 TPLS="
 ^openmpi@1.10.3 \
 ^boost@1.60.0 \
@@ -100,8 +104,8 @@ do
  
     # Uninstall Nalu and Trilinos; it's an error if they don't exist yet, but we skip it
     printf "\n\nUninstalling Nalu and Trilinos...\n\n"
-    spack uninstall -y nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH}
-    spack uninstall -y nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}
+    spack uninstall -y nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}
+    spack uninstall -y trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       # Fix for Peregrine's broken linker for gcc
@@ -117,16 +121,16 @@ do
 
     # Update Nalu and Trilinos
     printf "\n\nUpdating Nalu and Trilinos...\n\n"
-    spack cd nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ${TPLS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno
-    spack cd nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno
+    spack cd nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno
+    spack cd trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno
 
     # Install Nalu and Trilinos
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
-    spack install --keep-stage nalu %${COMPILER_NAME} ^nalu-trilinos@${TRILINOS_BRANCH} ${TPLS}
+    spack install --keep-stage nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}
 
     # Set permissions after install
-    chmod -R go-w `spack location -i nalu %${COMPILER_NAME}`
-    chmod -R go-w `spack location -i nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}`
+    chmod -R go-w `spack location -i nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}`
+    chmod -R go-w `spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
     #chmod -R go-w ${NALU_TESTING_DIR}/spack/opt
 
     if [ ${COMPILER_NAME} == 'intel' ]; then
@@ -144,7 +148,7 @@ do
 
     # Set the Trilinos and Yaml directories to pass to ctest
     printf "\n\nSetting variables to pass to CTest...\n\n"
-    TRILINOS_DIR=`spack location -i nalu-trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}`
+    TRILINOS_DIR=`spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
     YAML_DIR=`spack location -i yaml-cpp %${COMPILER_NAME}`
 
     # Set the extra identifiers for CDash build description

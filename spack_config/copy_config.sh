@@ -12,50 +12,55 @@ set -ex
 
 OS=`uname -s`
 
-# Find machine name
-if [ ${OS} == 'Linux' ]; then
-  MYHOSTNAME=`hostname -d`
-  case "${MYHOSTNAME}" in
-    localdomain)
-      MACHINE=merlin
+# Find machine
+if [ ${OS} == 'Darwin' ]; then
+  MACHINE=mac
+  OSX=`sw_vers -productVersion`
+  case "${OSX}" in
+    10.12*)
+      MACHINE=mac_sierra
     ;;
-    hpc.nrel.gov)
-      MACHINE=peregrine
+  esac
+elif [ ${OS} == 'Linux' ]; then
+  case "${NERSC_HOST}" in
+    cori)
+      MACHINE=cori
     ;;
     "")
-      MYHOSTNAME=`hostname -f`
+      MYHOSTNAME=`grep merlin /etc/nrel`
       case "${MYHOSTNAME}" in
-        merlin)
+        *merlin)
           MACHINE=merlin
         ;;
-        *cori*)
-          MACHINE=cori
+        "")
+          MYHOSTNAME=`hostname -d`
+          case "${MYHOSTNAME}" in
+            hpc.nrel.gov)
+              MACHINE=peregrine
+            ;;
+          esac
         ;;
       esac
+    ;;
   esac
-elif [ ${OS} == 'Darwin' ]; then
-  MACHINE=`hostname -s`
 fi
 
 # Copy machine-specific configuration for Spack if we recognize the machine
-if [ -z "${MACHINE}" ]; then
-  echo "MACHINE name not found"
-else
-  echo "MYHOSTNAME is ${MYHOSTNAME}"
-  echo "MACHINE is ${MACHINE}"
-  if [ ${MACHINE} == 'peregrine' ] || [ ${MACHINE} == 'merlin' ] || [ ${MACHINE} == 'cori' ]; then
-    cp config.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/config.yaml
-    cp packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/packages.yaml
-    cp compilers.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/compilers.yaml
-    #sed -i "s|    #- USERSCRATCH.*|    - /scratch/${USER}|g" ${SPACK_ROOT}/etc/spack/config.yaml
-    if [ ${MACHINE} == 'merlin' ]; then
-      cp intel.cfg.${MACHINE} ${SPACK_ROOT}/etc/spack/intel.cfg
-    fi
+if [ ${MACHINE} == 'peregrine' ] || [ ${MACHINE} == 'merlin' ] || [ ${MACHINE} == 'cori' ]; then
+  cp config.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/config.yaml
+  cp packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/packages.yaml
+  cp compilers.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/compilers.yaml
+  if [ ${MACHINE} == 'merlin' ]; then
+    cp intel.cfg.${MACHINE} ${SPACK_ROOT}/etc/spack/intel.cfg
   fi
+  # Use branch instead of tag so spack will checkout 
+  # a real git repo instead of cache a tar.gz of a branch
+  sed -i "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py
+elif [ ${MACHINE} == 'mac' ]; then
+  cp packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/packages.yaml
+  # Use branch instead of tag so spack will checkout 
+  # a real git repo instead of cache a tar.gz of a branch
+  sed -i "" -e "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py
+else
+  echo "Machine name not found"
 fi
-
-# Copy Nalu-specific configuration for Spack
-cp -R nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/
-cp -R nalu-trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/
-cp -R openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/
-cp -R tioga ${SPACK_ROOT}/var/spack/repos/builtin/packages/

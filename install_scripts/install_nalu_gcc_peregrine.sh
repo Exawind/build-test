@@ -29,10 +29,6 @@ TPLS="
 ^parallel-netcdf@1.6.1 \
 ^hdf5@1.8.16 \
 ^netcdf@4.3.3.1 \
-^pkg-config@0.29.2 \
-^zlib@1.2.11 \
-^hwloc@1.11.6 \
-^m4@1.4.17 \
 ^superlu@4.3
 "
 

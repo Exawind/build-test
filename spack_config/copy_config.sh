@@ -64,3 +64,6 @@ elif [ ${MACHINE} == 'mac' ]; then
 else
   echo "Machine name not found"
 fi
+
+cp -R openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/
+cp -R tioga ${SPACK_ROOT}/var/spack/repos/builtin/packages/

@@ -42,14 +42,18 @@ class Tioga(CMakePackage):
 
     depends_on('mpi')
 
+    def build_type(self):
+        if '+debug' in self.spec:
+            return 'RelWithDebInfo'
+        else:
+            return 'Release'
+
     def cmake_args(self):
         spec = self.spec
 
         options = [
             '-DBUILD_SHARED_LIBS:BOOL=%s' % (
                 'ON' if '+shared' in spec else 'OFF'),
-            '-DCMAKE_BUILD_TYPE=%s' %(
-                'RelWithDebInfo' if '+debug' in spec else 'Release'),
         ]
 
         return options

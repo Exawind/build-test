@@ -31,14 +31,15 @@ class Openfast(CMakePackage):
     homepage = "http://openfast.readthedocs.io/en/latest/"
     url      = "https://github.com/OpenFAST/openfast.git"
 
-    version('master', 
-            git='https://github.com/OpenFAST/openfast.git',
-            branch='master')
     version('develop', 
             git='https://github.com/OpenFAST/openfast.git',
             branch='dev')
+    version('master', 
+            git='https://github.com/OpenFAST/openfast.git',
+            branch='master')
 
-    variant('shared', default=False, description="Build shared libraries")
+    variant('shared', default=False,
+            description="Build shared libraries")
     variant('double-precision', default=True,
             description="Treat REAL as double precision")
     variant('dll-interface', default=True,
@@ -60,13 +61,16 @@ class Openfast(CMakePackage):
     # Disable parallel builds because of OpenFOAM Types modules dependencies
     parallel = False
 
+    def build_type(self):
+        if '+debug' in self.spec:
+            return 'RelWithDebInfo'
+        else:
+            return 'Release'
+
     def cmake_args(self):
         spec = self.spec
 
         options = []
-
-        blas = spec['blas'].libs
-        lapack = spec['lapack'].libs
 
         options.extend([
             '-DBUILD_SHARED_LIBS:BOOL=%s' % (
@@ -77,14 +81,12 @@ class Openfast(CMakePackage):
                 'ON' if '+dll-interface' in spec else 'OFF'),
             '-DBUILD_FAST_CPP_API:BOOL=%s' % (
                 'ON' if '+cxx' in spec else 'OFF'),
-            '-DCMAKE_BUILD_TYPE=%s' %(
-                'RelWithDebInfo' if '+debug' in spec else 'Release'),
         ])
 
         if '+cxx' in spec:
             options.extend([
                 '-DHDF5_ROOT:PATH=%s' % spec['hdf5'].prefix,
                 '-DYAML_ROOT:PATH=%s' % spec['yaml-cpp'].prefix,
-                ])
+            ])
 
         return options

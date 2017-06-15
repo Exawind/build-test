@@ -31,10 +31,10 @@ class Openfast(CMakePackage):
     homepage = "http://openfast.readthedocs.io/en/latest/"
     url      = "https://github.com/OpenFAST/openfast.git"
 
-    version('develop', 
+    version('develop',
             git='https://github.com/OpenFAST/openfast.git',
             branch='dev')
-    version('master', 
+    version('master',
             git='https://github.com/OpenFAST/openfast.git',
             branch='master')
 
@@ -55,8 +55,8 @@ class Openfast(CMakePackage):
 
     # Additional dependencies when compiling C++ library
     depends_on('mpi', when='+cxx')
-    depends_on('yaml-cpp+fpic~shared', when='+cxx')
-    depends_on('hdf5+mpi+cxx~shared@1.8.16', when='+cxx')
+    depends_on('yaml-cpp', when='+cxx')
+    depends_on('hdf5+mpi+cxx', when='+cxx')
 
     # Disable parallel builds because of OpenFOAM Types modules dependencies
     parallel = False

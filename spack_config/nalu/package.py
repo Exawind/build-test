@@ -25,35 +25,40 @@
 from spack import *
 
 
-class Tioga(CMakePackage):
-    """Topology Independent Overset Grid Assembly (TIOGA)"""
+class Nalu(CMakePackage):
+    """Nalu: a generalized unstructured massively parallel low Mach flow code
+       designed to support a variety of energy applications of interest (most
+       notably Wind ECP) built on the Sierra Toolkit and Trilinos solver
+       Tpetra/Epetra stack
+    """
 
-    homepage = "https://github.com/jsitaraman/tioga"
-    url      = "https://github.com/jsitaraman/tioga.git"
+    homepage = "https://github.com/NaluCFD/Nalu"
+    url      = "https://github.com/NaluCFD/Nalu.git"
 
-    # The master branch doesn't support CMake development
-    version('nalu-api', git="https://github.com/jsitaraman/tioga",
-            branch='nalu-api')
+    version('master',
+            git='https://github.com/NaluCFD/Nalu.git', branch='master')
 
     variant('debug', default=False,
-            description="Enable debugging symbols with RelWithDebInfo")
-    variant('shared', default=False,
-            description="Enable building shared libraries")
+            description='Builds a debug version')
 
-    depends_on('mpi')
+    # Currently Nalu only builds static libraries; To be fixed soon
+    depends_on('yaml-cpp+fpic~shared')
+    depends_on('trilinos~alloptpkgs~xsdkflags~metis~mumps~superlu-dist+superlu~hypre+hdf5~suite-sparse~python~shared~debug+boost+tpetra~epetra~epetraext+exodus+pnetcdf+zlib+stk+teuchos+belos+zoltan+zoltan2~amesos+amesos2~ifpack+ifpack2+muelu~fortran~ml+gtest~aztec~sacado~x11+instantiate~instantiate_cmplx~dtk@master')
 
     def build_type(self):
         if '+debug' in self.spec:
-            return 'RelWithDebInfo'
+            return 'Debug'
         else:
             return 'Release'
 
     def cmake_args(self):
         spec = self.spec
+        options = []
 
-        options = [
-            '-DBUILD_SHARED_LIBS:BOOL=%s' % (
-                'ON' if '+shared' in spec else 'OFF'),
-        ]
+        options.extend([
+            '-DTrilinos_DIR:PATH=%s' % spec['trilinos'].prefix,
+            '-DYAML_DIR:PATH=%s' % spec['yaml-cpp'].prefix,
+            '-DENABLE_INSTALL:BOOL=ON'
+        ])
 
         return options

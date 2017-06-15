@@ -38,8 +38,7 @@ HOST_NAME="peregrine.hpc.nrel.gov"
 # Set spack location
 export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
-# Uncomment this if statement to create and set up
-# a testing directory if it doesn't exist
+# Create and set up a testing directory if it doesn't exist
 if [ ! -d "${NALU_TESTING_DIR}" ]; then
   mkdir -p ${NALU_TESTING_DIR}
 

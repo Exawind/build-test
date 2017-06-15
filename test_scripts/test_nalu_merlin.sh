@@ -38,29 +38,28 @@ HOST_NAME="merlin.hpc.nrel.gov"
 # Set spack location
 export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
-# Uncomment this if statement to create and set up
-# a testing directory if it doesn't exist
-#if [ ! -d "${NALU_TESTING_DIR}" ]; then
-#  mkdir -p ${NALU_TESTING_DIR}
-#
-#  # Create and set up nightly directory with Spack installation
-#  printf "\n\nCloning Spack repo...\n\n"
-#  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
-#
-#  # Configure Spack for Merlin
-#  printf "\n\nConfiguring Spack...\n\n"
-#  cd ${NALU_TESTING_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git
-#  cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
-#  ./copy_config.sh
-#
-#  # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
-#  printf "\n\nCloning Nalu repo...\n\n"
-#  git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
-#
-#  # Create a jobs directory
-#  printf "\n\nMaking job output directory...\n\n"
-#  mkdir -p ${NALU_TESTING_DIR}/jobs
-#fi
+# Create and set up a testing directory if it doesn't exist
+if [ ! -d "${NALU_TESTING_DIR}" ]; then
+  mkdir -p ${NALU_TESTING_DIR}
+
+  # Create and set up nightly directory with Spack installation
+  printf "\n\nCloning Spack repo...\n\n"
+  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
+
+  # Configure Spack for Merlin
+  printf "\n\nConfiguring Spack...\n\n"
+  cd ${NALU_TESTING_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git
+  cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
+  ./copy_config.sh
+
+  # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
+  printf "\n\nCloning Nalu repo...\n\n"
+  git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
+
+  # Create a jobs directory
+  printf "\n\nMaking job output directory...\n\n"
+  mkdir -p ${NALU_TESTING_DIR}/jobs
+fi
 
 # Load Spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
@@ -80,7 +79,7 @@ TPLS="
 "
 
 # Test Nalu for trilinos master, develop
-for TRILINOS_BRANCH in master #develop
+for TRILINOS_BRANCH in master develop
 do
   # Test Nalu for intel, gcc
   for COMPILER_NAME in gcc intel
@@ -116,9 +115,9 @@ do
     spack install --keep-stage nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}
 
     # Set permissions after install
-    chmod -R go-w `spack location -i nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}`
-    chmod -R go-w `spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
-    #chmod -R go-w ${NALU_TESTING_DIR}/spack/opt
+    chmod -R a+rX go-w `spack location -i nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}`
+    chmod -R a+rX go-w `spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
+    #chmod -R a+rX go-w ${NALU_TESTING_DIR}/spack/opt
 
     # Load spack built cmake and openmpi into path
     printf "\n\nLoading Spack modules into environment...\n\n"

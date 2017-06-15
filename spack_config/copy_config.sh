@@ -27,7 +27,9 @@ elif [ ${OS} == 'Linux' ]; then
       MACHINE=cori
     ;;
     "")
-      MYHOSTNAME=`grep merlin /etc/nrel`
+      if [ -d "/etc/nrel" ]; then 
+        MYHOSTNAME=`grep merlin /etc/nrel`
+      fi
       case "${MYHOSTNAME}" in
         *merlin)
           MACHINE=merlin

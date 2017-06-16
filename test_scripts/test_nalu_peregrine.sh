@@ -124,9 +124,9 @@ do
     spack install --keep-stage nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}
 
     # Set permissions after install
-    chmod -R a+rX go-w `spack location -i nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}`
-    chmod -R a+rX go-w `spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
-    #chmod -R a+rX go-w ${NALU_TESTING_DIR}/spack/opt
+    chmod -R a+rX,go-w `spack location -i nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}`
+    chmod -R a+rX,go-w `spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
+    #chmod -R a+rX,go-w ${NALU_TESTING_DIR}/spack/opt
 
     if [ ${COMPILER_NAME} == 'intel' ]; then
       module load compiler/intel/16.0.2

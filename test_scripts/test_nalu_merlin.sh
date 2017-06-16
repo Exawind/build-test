@@ -115,9 +115,9 @@ do
     spack install --keep-stage nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}
 
     # Set permissions after install
-    chmod -R a+rX go-w `spack location -i nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}`
-    chmod -R a+rX go-w `spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
-    #chmod -R a+rX go-w ${NALU_TESTING_DIR}/spack/opt
+    chmod -R a+rX,go-w `spack location -i nalu %${COMPILER_NAME} ${TRILINOS} ${TPLS}`
+    chmod -R a+rX,go-w `spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
+    #chmod -R a+rX,go-w ${NALU_TESTING_DIR}/spack/opt
 
     # Load spack built cmake and openmpi into path
     printf "\n\nLoading Spack modules into environment...\n\n"

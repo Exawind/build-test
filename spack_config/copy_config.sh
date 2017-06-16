@@ -27,7 +27,7 @@ elif [ ${OS} == 'Linux' ]; then
       MACHINE=cori
     ;;
     "")
-      if [ -d "/etc/nrel" ]; then 
+      if [ -f "/etc/nrel" ]; then 
         MYHOSTNAME=`grep merlin /etc/nrel`
       fi
       case "${MYHOSTNAME}" in
@@ -48,7 +48,7 @@ elif [ ${OS} == 'Linux' ]; then
 fi
 
 # Copy machine-specific configuration for Spack if we recognize the machine
-if [ ${MACHINE} == 'peregrine' ] || [ ${MACHINE} == 'merlin' ] || [ ${MACHINE} == 'cori' ]; then
+if [ "${MACHINE}" == 'peregrine' ] || [ "${MACHINE}" == 'merlin' ] || [ "${MACHINE}" == 'cori' ]; then
   cp config.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/config.yaml
   cp packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/packages.yaml
   cp compilers.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/compilers.yaml
@@ -60,7 +60,7 @@ if [ ${MACHINE} == 'peregrine' ] || [ ${MACHINE} == 'merlin' ] || [ ${MACHINE} =
   sed -i "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py
   # A hopefully temporary thing that isn't worth explaining here
   sed -i "s/@master/@develop/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/nalu/package.py
-elif [ ${MACHINE} == 'mac' ]; then
+elif [ "${MACHINE}" == 'mac' ]; then
   cp packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/packages.yaml
   # Use branch instead of tag so spack will checkout 
   # a real git repo instead of cache a tar.gz of a branch

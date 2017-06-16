@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-# Script for running regression tests on a Mac using Spack and submitting results to CDash
+# This script is pretty far out-of-date at the moment
 
 # Set nightly directory and Nalu checkout directory
 NALU_TESTING_DIR=${HOME}/TestNalu

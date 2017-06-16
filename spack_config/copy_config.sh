@@ -58,11 +58,15 @@ if [ ${MACHINE} == 'peregrine' ] || [ ${MACHINE} == 'merlin' ] || [ ${MACHINE} =
   # Use branch instead of tag so spack will checkout 
   # a real git repo instead of cache a tar.gz of a branch
   sed -i "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py
+  # A hopefully temporary thing that isn't worth explaining here
+  sed -i "s/@master/@develop/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/nalu/package.py
 elif [ ${MACHINE} == 'mac' ]; then
   cp packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/packages.yaml
   # Use branch instead of tag so spack will checkout 
   # a real git repo instead of cache a tar.gz of a branch
   sed -i "" -e "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py
+  # A hopefully temporary thing that isn't worth explaining here
+  sed -i "" -e "s/@master/@develop/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/nalu/package.py
 else
   echo "Machine name not found"
 fi

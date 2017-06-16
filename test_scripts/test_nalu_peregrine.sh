@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N test_nalu_peregrine
-#PBS -l nodes=1:ppn=24,walltime=8:00:00,feature=64GB
+#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=64GB
 #PBS -A windFlowModeling
-#PBS -q batch-h
+#PBS -q short
 #PBS -j oe
 #PBS -W umask=002
 

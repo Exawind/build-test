@@ -75,6 +75,7 @@ cmake \
   -DTrilinos_ENABLE_Amesos:BOOL=OFF \
   -DTrilinos_ENABLE_Zoltan:BOOL=ON \
   -DTrilinos_ENABLE_STKMesh:BOOL=ON \
+  -DTrilinos_ENABLE_STKSimd:BOOL=ON \
   -DTrilinos_ENABLE_STKIO:BOOL=ON \
   -DTrilinos_ENABLE_STKTransfer:BOOL=ON \
   -DTrilinos_ENABLE_STKSearch:BOOL=ON \
@@ -89,6 +90,7 @@ cmake \
   -DTrilinos_ENABLE_SEACASExodiff:BOOL=ON \
   -DTrilinos_ENABLE_SEACASNemspread:BOOL=ON \
   -DTrilinos_ENABLE_SEACASNemslice:BOOL=ON \
+  -DTrilinos_ENABLE_SEACASIoss:BOOL=ON \
   -DTPL_ENABLE_MPI:BOOL=ON \
   -DMPI_BASE_DIR:PATH=$(${SPACK} location -i openmpi %${COMPILER}) \
   -DTPL_ENABLE_Boost:BOOL=ON \

@@ -322,7 +322,8 @@ class Trilinos(CMakePackage):
                 '-DTrilinos_ENABLE_SEACASEpu:BOOL=ON',
                 '-DTrilinos_ENABLE_SEACASExodiff:BOOL=ON',
                 '-DTrilinos_ENABLE_SEACASNemspread:BOOL=ON',
-                '-DTrilinos_ENABLE_SEACASNemslice:BOOL=ON'
+                '-DTrilinos_ENABLE_SEACASNemslice:BOOL=ON',
+                '-DTrilinos_ENABLE_SEACASIoss:BOOL=ON'
             ])
         else:
             options.extend([

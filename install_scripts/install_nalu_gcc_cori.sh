@@ -8,18 +8,9 @@
 
 set -e
 
-TRILINOS="
-^trilinos~alloptpkgs~xsdkflags~metis~mumps~superlu-dist+superlu~hypre+hdf5~suite-sparse~python~shared~debug+boost+tpetra~epetra~epetraext+exodus+pnetcdf+zlib+stk+teuchos+belos+zoltan+zoltan2~amesos+amesos2~ifpack+ifpack2+muelu~fortran~ml+gtest~aztec~sacado~x11+instantiate~instantiate_cmplx~dtk@master
-"
-
-TPLS="
-^boost@1.60.0 \
-^cmake@3.5.2 \
-^parallel-netcdf@1.6.1 \
-^hdf5@1.8.16 \
-^netcdf@4.3.3.1 \
-^zlib@1.2.8 \
-^superlu@4.3
-"
+# Get TPL preferences from a single location
+NALUSPACK_ROOT=`pwd`
+source ${NALUSPACK_ROOT}/spack_config/tpls.sh
+TPLS="${TPLS} ^cmake@3.5.2 ^zlib@1.2.8"
 
 spack install -j 4 nalu %gcc@4.9.3 ${TRILINOS} ${TPLS}

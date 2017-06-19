@@ -66,7 +66,7 @@ fi
 
 # Get TPL preferences from a single location
 source ${NALU_TESTING_DIR}/NaluSpack/spack_config/tpls.sh
-TPLS="${TPLS} ^cmake@3.6.1"
+TPLS="${TPLS} ^cmake@3.6.1 ^m4@1.4.17"
 
 # Test Nalu for trilinos master, develop
 for TRILINOS_BRANCH in develop #master

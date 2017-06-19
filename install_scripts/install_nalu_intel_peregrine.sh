@@ -21,7 +21,7 @@ module load python/2.7.8
 # Get TPL preferences from a single location
 NALUSPACK_ROOT=`pwd`
 source ${NALUSPACK_ROOT}/spack_config/tpls.sh
-TPLS="${TPLS} ^cmake@3.6.1"
+TPLS="${TPLS} ^cmake@3.6.1 ^m4@1.4.17"
 
 # For temporary intel compiler files
 mkdir -p /scratch/${USER}/.tmp

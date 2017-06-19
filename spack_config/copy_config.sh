@@ -74,4 +74,5 @@ fi
 #cp -R openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/
 #cp -R tioga ${SPACK_ROOT}/var/spack/repos/builtin/packages/
 #cp -R nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/
+#cp -R nalu-trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/
 cp -R trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/

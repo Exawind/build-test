@@ -43,7 +43,7 @@ class Nalu(CMakePackage):
 
     # Currently Nalu only builds static libraries; To be fixed soon
     depends_on('yaml-cpp+fpic~shared')
-    depends_on('trilinos~alloptpkgs~xsdkflags~metis~mumps~superlu-dist+superlu~hypre+hdf5~suite-sparse~python~shared~debug+boost+tpetra~epetra~epetraext+exodus+pnetcdf+zlib+stk+teuchos+belos+zoltan+zoltan2~amesos+amesos2~ifpack+ifpack2+muelu~fortran~ml+gtest~aztec~sacado~x11+instantiate~instantiate_cmplx~dtk@master')
+    depends_on('nalu-trilinos@develop')
 
     def build_type(self):
         if '+debug' in self.spec:
@@ -56,7 +56,7 @@ class Nalu(CMakePackage):
         options = []
 
         options.extend([
-            '-DTrilinos_DIR:PATH=%s' % spec['trilinos'].prefix,
+            '-DTrilinos_DIR:PATH=%s' % spec['nalu-trilinos'].prefix,
             '-DYAML_DIR:PATH=%s' % spec['yaml-cpp'].prefix,
             '-DENABLE_INSTALL:BOOL=ON'
         ])

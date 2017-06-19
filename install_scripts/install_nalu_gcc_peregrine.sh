@@ -20,7 +20,7 @@ module load python/2.7.8
 
 # Get TPL preferences from a single location
 NALUSPACK_ROOT=`pwd`
-source ${NALUSPACK_ROOT}/spack_config/tpls.sh
+source ${NALUSPACK_ROOT}/../spack_config/tpls.sh
 TPLS="${TPLS} ^cmake@3.6.1"
 
 spack install binutils %gcc

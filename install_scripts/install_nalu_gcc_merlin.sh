@@ -19,4 +19,4 @@ NALUSPACK_ROOT=`pwd`
 source ${NALUSPACK_ROOT}/../spack_config/tpls.sh
 TPLS="${TPLS} ^cmake@3.6.1 ^netlib-lapack"
 
-spack install nalu %gcc@4.8.5 ${TRILINOS} ${TPLS}
+spack install nalu %gcc@4.8.5 ^${TRILINOS}@develop ${TPLS}

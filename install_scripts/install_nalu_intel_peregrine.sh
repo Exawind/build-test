@@ -26,4 +26,4 @@ TPLS="${TPLS} ^cmake@3.6.1 ^m4@1.4.17"
 # For temporary intel compiler files
 mkdir -p /scratch/${USER}/.tmp
 export TMPDIR=/scratch/${USER}/.tmp
-spack install nalu %intel@16.0.2 ${TRILINOS} ${TPLS}
+spack install nalu %intel@16.0.2 ^${TRILINOS}@develop ${TPLS}

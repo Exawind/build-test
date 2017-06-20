@@ -26,4 +26,4 @@ TPLS="${TPLS} ^cmake@3.6.1"
 spack install binutils %gcc
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 spack load binutils
-spack install nalu %gcc@5.2.0 ${TRILINOS} ${TPLS}
+spack install nalu %gcc@5.2.0 ^${TRILINOS}@develop ${TPLS}

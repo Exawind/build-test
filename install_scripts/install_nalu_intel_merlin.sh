@@ -23,7 +23,7 @@ done
 # Get TPL preferences from a single location
 NALUSPACK_ROOT=`pwd`
 source ${NALUSPACK_ROOT}/../spack_config/tpls.sh
-TPLS="${TPLS} ^cmake@3.6.1"
+TPLS="${TPLS} ^cmake@3.6.1 ^netlib-lapack"
 
 export TMPDIR=/dev/shm
 spack install nalu %intel@17.0.2 ${TRILINOS} ${TPLS}

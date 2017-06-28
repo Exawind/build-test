@@ -28,21 +28,15 @@ elif [ ${OS} == 'Linux' ]; then
     ;;
     "")
       if [ -f "/etc/nrel" ]; then 
-        MYHOSTNAME=`grep merlin /etc/nrel`
+        MACHINE=merlin
+      else
+        MYHOSTNAME=`hostname -d`
+        case "${MYHOSTNAME}" in
+          hpc.nrel.gov)
+            MACHINE=peregrine
+          ;;
+        esac
       fi
-      case "${MYHOSTNAME}" in
-        *merlin)
-          MACHINE=merlin
-        ;;
-        "")
-          MYHOSTNAME=`hostname -d`
-          case "${MYHOSTNAME}" in
-            hpc.nrel.gov)
-              MACHINE=peregrine
-            ;;
-          esac
-        ;;
-      esac
     ;;
   esac
 fi

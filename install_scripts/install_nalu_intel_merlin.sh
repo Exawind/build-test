@@ -12,6 +12,7 @@
 set -e
 
 module purge
+module load GCC/4.8.5
 
 export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
 

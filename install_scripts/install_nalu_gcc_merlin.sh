@@ -13,6 +13,7 @@
 set -e
 
 module purge
+module load GCC/4.8.5
 
 # Get TPL preferences from a single location
 NALUSPACK_ROOT=`pwd`

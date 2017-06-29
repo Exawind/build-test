@@ -82,6 +82,7 @@ do
     # Load necessary modules
     printf "\n\nLoading modules...\n\n"
     module purge
+    module load GCC/4.8.5
  
     # Uninstall Nalu and Trilinos; it's an error if they don't exist yet, but we skip it
     printf "\n\nUninstalling Nalu and Trilinos...\n\n"

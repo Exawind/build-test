@@ -6,10 +6,10 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc: /usr/bin/gcc
-      cxx: /usr/bin/g++
-      f77: /usr/bin/gfortran
-      fc: /usr/bin/gfortran
+      cc: /opt/ohpc/pub/nrel/eb/software/GCC/4.8.5/bin/gcc
+      cxx: /opt/ohpc/pub/nrel/eb/software/GCC/4.8.5/bin/g++
+      f77: /opt/ohpc/pub/nrel/eb/software/GCC/4.8.5/bin/gfortran
+      fc: /opt/ohpc/pub/nrel/eb/software/GCC/4.8.5/bin/gfortran
     spec: gcc@4.8.5
     target: x86_64
 - compiler:

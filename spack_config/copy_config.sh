@@ -41,6 +41,12 @@ elif [ ${OS} == 'Linux' ]; then
   esac
 fi
 
+#cp -R openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/
+#cp -R tioga ${SPACK_ROOT}/var/spack/repos/builtin/packages/
+#cp -R nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/
+#cp -R nalu-trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/
+cp -R trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/
+
 # Copy machine-specific configuration for Spack if we recognize the machine
 if [ "${MACHINE}" == 'peregrine' ] || [ "${MACHINE}" == 'merlin' ] || [ "${MACHINE}" == 'cori' ]; then
   cp config.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/config.yaml
@@ -65,8 +71,3 @@ else
   echo "Machine name not found"
 fi
 
-#cp -R openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/
-#cp -R tioga ${SPACK_ROOT}/var/spack/repos/builtin/packages/
-#cp -R nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/
-#cp -R nalu-trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/
-#cp -R trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/

@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-#PBS -N nalu_build_gcc
+#PBS -N nalu_shared_build
 #PBS -l nodes=1:ppn=24,walltime=6:00:00
 #PBS -A windFlowModeling
 #PBS -q batch-h

@@ -3,7 +3,7 @@
 set -ex
 
 # Instructions:
-# A Nalu do-config script that uses Spack-built TPLs.
+# A Nalu do-config script that uses Spack-built TPLs on Peregrine.
 # Make a directory in the Nalu directory for building,
 # Copy this script to that directory and edit the
 # options below to your own needs. Leave the SPACK_ROOT option
@@ -26,7 +26,7 @@ COMPILER=gcc #or intel
 SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedInstallation/spack
 SPACK=${SPACK_ROOT}/bin/spack #actual spack executable
 # Specify location of Trilinos
-TRILINOS_ROOT=$(${SPACK} location -i nalu-trilinos %${COMPILER})
+TRILINOS_ROOT=$(${SPACK} location -i trilinos %${COMPILER})
 # Use this line instead if you want to build against your own Trilinos:
 #TRILINOS_ROOT=${HOME}/Trilinos/mybuild/install
 
@@ -35,6 +35,10 @@ module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK} arch)
 module load $(${SPACK} module find binutils %${COMPILER})
 module load $(${SPACK} module find cmake %${COMPILER})
 module load $(${SPACK} module find openmpi %${COMPILER})
+
+# Uncomment these two lines if using Intel
+#module load compiler/intel/16.0.2
+#export TMPDIR=/scratch/${USER}/.tmp
 
 # Clean before cmake configure
 set +e

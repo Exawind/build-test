@@ -43,6 +43,10 @@ module load $(${SPACK} module find zlib %${COMPILER})
 module load $(${SPACK} module find superlu %${COMPILER})
 module load $(${SPACK} module find boost %${COMPILER})
 
+# Uncomment these two lines if using Intel
+#module load compiler/intel/16.0.2
+#export TMPDIR=/scratch/${USER}/.tmp
+
 # Clean before cmake configure
 set +e
 rm -rf CMakeFiles

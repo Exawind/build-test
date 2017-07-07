@@ -95,5 +95,6 @@ do
   done
 done
 
-# Set permissions after install
+printf "\n\nSetting permissions...\n\n"
 chmod -R a+rX,go-w ${ROOT_DIR}
+printf "\n\nDone!\n\n"

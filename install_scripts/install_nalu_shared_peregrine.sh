@@ -15,7 +15,7 @@ echo `date`
 printf "\n\n"
 
 # Set root install directory
-ROOT_DIR=/projects/windFlowModeling/ExaWind/NaluSharedInstallation
+ROOT_DIR=/projects/windFlowModeling/ExaWind/NaluSharedInstallationA
 
 # Set spack location
 export SPACK_ROOT=${ROOT_DIR}/spack

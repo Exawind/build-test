@@ -27,7 +27,7 @@ COMPILER=gcc #or intel
 # Default to installing to 'install' directory in build directory
 INSTALL_PREFIX=$(pwd)/install
 # Using NREL communal spack installation by default
-SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedInstallation/spack
+SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedSoftware/spack
 
 SPACK=${SPACK_ROOT}/bin/spack #actual spack executable
 

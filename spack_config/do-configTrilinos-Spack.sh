@@ -33,7 +33,6 @@ SPACK=${SPACK_ROOT}/bin/spack #actual spack executable
 
 # Load necessary modules created by spack
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK} arch)
-module load $(${SPACK} module find binutils %${COMPILER})
 module load $(${SPACK} module find cmake %${COMPILER})
 module load $(${SPACK} module find openmpi %${COMPILER})
 module load $(${SPACK} module find hdf5 %${COMPILER})
@@ -43,6 +42,8 @@ module load $(${SPACK} module find zlib %${COMPILER})
 module load $(${SPACK} module find superlu %${COMPILER})
 module load $(${SPACK} module find boost %${COMPILER})
 
+# Comment this one line if using Intel
+module load $(${SPACK} module find binutils %${COMPILER})
 # Uncomment these two lines if using Intel
 #module load compiler/intel/16.0.2
 #export TMPDIR=/scratch/${USER}/.tmp

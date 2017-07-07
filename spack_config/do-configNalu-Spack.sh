@@ -32,10 +32,11 @@ TRILINOS_ROOT=$(${SPACK} location -i trilinos %${COMPILER})
 
 # Load necessary modules created by spack
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK} arch)
-module load $(${SPACK} module find binutils %${COMPILER})
 module load $(${SPACK} module find cmake %${COMPILER})
 module load $(${SPACK} module find openmpi %${COMPILER})
 
+# Comment this one line if using Intel
+module load $(${SPACK} module find binutils %${COMPILER})
 # Uncomment these two lines if using Intel
 #module load compiler/intel/16.0.2
 #export TMPDIR=/scratch/${USER}/.tmp

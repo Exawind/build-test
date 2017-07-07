@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N nalu_shared_build
-#PBS -l nodes=1:ppn=24,walltime=6:00:00
+#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=64GB
 #PBS -A windFlowModeling
-#PBS -q batch-h
+#PBS -q short
 #PBS -j oe
 #PBS -W umask=002
 
@@ -83,7 +83,7 @@ do
     # Install Nalu and Trilinos
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
     spack install nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPLS}
-    spack install netcdf-fortran@4.4.3 %${COMPILER_NAME} ^/$(spack find -L netcdf %${COMPILER_NAME} | grep netcdf | awk -F" " '{print $1}') ^m4@1.4.17
+    spack install netcdf-fortran@4.4.3 %${COMPILER_NAME} ^/$(spack find -L netcdf %${COMPILER_NAME} | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g") ^m4@1.4.17
 
     # Remove spack built cmake and openmpi from path
     printf "\n\nUnloading Spack modules from environment...\n\n"

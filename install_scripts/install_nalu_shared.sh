@@ -12,35 +12,19 @@
 set -e
 
 echo `date`
-echo ------------------------------------------------------
-echo "Job is running on node ${HOSTNAME}"
-echo ------------------------------------------------------
-if [ ! -z "${PBS_JOBID}" ]; then
-  echo PBS: Qsub is running on ${PBS_O_HOST}
-  echo PBS: Originating queue is ${PBS_O_QUEUE}
-  echo PBS: Executing queue is ${PBS_QUEUE}
-  echo PBS: Working directory is ${PBS_O_WORKDIR}
-  echo PBS: Execution mode is ${PBS_ENVIRONMENT}
-  echo PBS: Job identifier is ${PBS_JOBID}
-  echo PBS: Job name is ${PBS_JOBNAME}
-  echo PBS: Node file is ${PBS_NODEFILE}
-  echo PBS: Current home directory is ${PBS_O_HOME}
-  echo PBS: PATH = ${PBS_O_PATH}
-  echo ------------------------------------------------------
-fi
 printf "\n\n"
 
-# Set nightly directory and Nalu checkout directory
+# Set root install directory
 ROOT_DIR=/projects/windFlowModeling/ExaWind/NaluSharedInstallation
 
 # Set spack location
 export SPACK_ROOT=${ROOT_DIR}/spack
 
-# Create and set up a testing directory if it doesn't exist
+# Create and set up a directory if it doesn't exist
 if [ ! -d "${ROOT_DIR}" ]; then
   mkdir -p ${ROOT_DIR}
 
-  # Create and set up nightly directory with Spack installation
+  # Create and set up directory with Spack installation
   printf "\n\nCloning Spack repo...\n\n"
   git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
 
@@ -103,8 +87,6 @@ do
 
     # Remove spack built cmake and openmpi from path
     printf "\n\nUnloading Spack modules from environment...\n\n"
-    spack unload cmake %${COMPILER_NAME}
-    spack unload openmpi %${COMPILER_NAME}
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       spack unload binutils %${COMPILER_NAME}
     fi 

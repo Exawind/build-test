@@ -66,7 +66,7 @@ fi
 
 # Define TRILINOS and TPLS from a single location for all scripts
 source ${NALU_TESTING_DIR}/NaluSpack/spack_config/tpls.sh
-TPLS="${TPLS} ^cmake@3.6.1 ^m4@1.4.17"
+TPLS="${TPLS} ^openmpi@1.10.3 fabrics=verbs,mxm schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
 
 # Test Nalu for trilinos master, develop
 for TRILINOS_BRANCH in develop #master

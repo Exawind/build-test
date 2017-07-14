@@ -18,6 +18,6 @@ module load GCC/4.8.5
 # Get TPL preferences from a single location
 NALUSPACK_ROOT=`pwd`
 source ${NALUSPACK_ROOT}/../spack_config/tpls.sh
-TPLS="${TPLS} ^cmake@3.6.1 ^netlib-lapack"
+TPLS="${TPLS} ^openmpi@1.10.3 ^cmake@3.6.1 ^netlib-lapack"
 
 spack install nalu %gcc@4.8.5 ^${TRILINOS}@develop ${TPLS}

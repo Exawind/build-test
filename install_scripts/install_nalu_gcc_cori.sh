@@ -11,6 +11,6 @@ set -e
 # Get TPL preferences from a single location
 NALUSPACK_ROOT=`pwd`
 source ${NALUSPACK_ROOT}/../spack_config/tpls.sh
-TPLS="${TPLS} ^cmake@3.5.2 ^zlib@1.2.8"
+TPLS="${TPLS} ^mpich@7.4.4 ^cmake@3.5.2 ^zlib@1.2.8"
 
 spack install -j 4 nalu %gcc@4.9.3 ^${TRILINOS}@develop ${TPLS}

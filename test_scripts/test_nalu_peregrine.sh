@@ -64,10 +64,6 @@ fi
 # Load Spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 
-# Define TRILINOS and TPLS from a single location for all scripts
-source ${NALU_TESTING_DIR}/NaluSpack/spack_config/tpls.sh
-TPLS="${TPLS} ^openmpi@1.10.3 fabrics=verbs,mxm schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
-
 # Test Nalu for trilinos master, develop
 for TRILINOS_BRANCH in develop #master
 do
@@ -75,6 +71,16 @@ do
   for COMPILER_NAME in gcc intel
   do
     printf "\n\nTesting Nalu with ${COMPILER_NAME} and Trilinos ${TRILINOS_BRANCH}.\n\n"
+
+    # Define TRILINOS and TPLS from a single location for all scripts
+    unset TPLS
+    source ${NALU_TESTING_DIR}/NaluSpack/spack_config/tpls.sh
+    # Only use Mellanox MXM with GCC because Intel can't use it
+    if [ ${COMPILER_NAME} == 'gcc' ]; then
+      TPLS="${TPLS} ^openmpi@1.10.3 fabrics=verbs,mxm schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
+    elif [ ${COMPILER_NAME} == 'intel' ]; then
+      TPLS="${TPLS} ^openmpi@1.10.3 fabrics=verbs schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
+    fi
 
     # Change to Nalu testing directory
     cd ${NALU_TESTING_DIR}

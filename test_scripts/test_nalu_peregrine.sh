@@ -154,24 +154,35 @@ do
     # Set the extra identifiers for CDash build description
     EXTRA_BUILD_NAME="-${COMPILER_NAME}-trlns_${TRILINOS_BRANCH}"
 
-    # Clean build directory; checkout if NALU_DIR is not blank first
-    if [ ! -z "${NALU_DIR}" ]; then
-      printf "\n\nCleaning build directory...\n\n"
-      (set -x; rm -rf ${NALU_DIR}/build/*)
-    fi
+    for RELEASE_OR_DEBUG in RELEASE # DEBUG
+    do
+      # Set the extra identifiers for CDash build description
+      if [ ${RELEASE_OR_DEBUG} == 'RELEASE' ]; then
+        EXTRA_BUILD_NAME="${EXTRA_BUILD_NAME}-release"
+      elif [ ${RELEASE_OR_DEBUG} == 'DEBUG' ]; then
+        EXTRA_BUILD_NAME="${EXTRA_BUILD_NAME}-debug"
+      fi
 
-    # Run ctest
-    printf "\n\nRunning CTest...\n\n"
-    # Change to Nalu build directory
-    cd ${NALU_DIR}/build
-    (set -x; ctest \
-      -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
-      -DYAML_DIR=${YAML_DIR} \
-      -DTRILINOS_DIR=${TRILINOS_DIR} \
-      -DHOST_NAME=${HOST_NAME} \
-      -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
-      -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
-    printf "\n\nReturned from CTest...\n\n"
+      # Clean build directory; check if NALU_DIR is blank first
+      if [ ! -z "${NALU_DIR}" ]; then
+        printf "\n\nCleaning build directory...\n\n"
+        (set -x; rm -rf ${NALU_DIR}/build/*)
+      fi
+
+      # Run ctest
+      printf "\n\nRunning CTest...\n\n"
+      # Change to Nalu build directory
+      cd ${NALU_DIR}/build
+      (set -x; ctest \
+        -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
+        -DYAML_DIR=${YAML_DIR} \
+        -DTRILINOS_DIR=${TRILINOS_DIR} \
+        -DHOST_NAME=${HOST_NAME} \
+        -DRELEASE_OR_DEBUG=${RELEASE_OR_DEBUG} \
+        -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
+        -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
+      printf "\n\nReturned from CTest...\n\n"
+    done
 
     # Remove spack built cmake and openmpi from path
     printf "\n\nUnloading Spack modules from environment...\n\n"

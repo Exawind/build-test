@@ -39,8 +39,12 @@ NALUSPACK_DIR=${NALU_TESTING_DIR}/NaluSpack
 # Set spack location
 export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
-# Create and set up a testing directory if it doesn't exist
+# Create and set up the entire testing directory if it doesn't exist
 if [ ! -d "${NALU_TESTING_DIR}" ]; then
+  printf "\n\nTop level testing directory doesn't exist. Creating everything from scratch...\n\n"
+
+  # Make top level testing directory
+  printf "\n\nCreating top level testing directory...\n\n"
   (set -x; mkdir -p ${NALU_TESTING_DIR})
 
   # Create and set up nightly directory with Spack installation
@@ -62,6 +66,7 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
 fi
 
 # Load Spack
+printf "\n\nLoading Spack...\n\n"
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 
 # Test Nalu for trilinos master, develop

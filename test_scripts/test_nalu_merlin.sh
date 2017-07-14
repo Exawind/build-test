@@ -162,3 +162,11 @@ do
   done
 done
 
+printf "\n\nSetting permissions...\n\n"
+#chmod -R a+rX,go-w ${NALU_TESTING_DIR}
+chmod g+w ${NALU_TESTING_DIR}
+chmod g+w ${NALU_TESTING_DIR}/spack
+chmod g+w ${NALU_TESTING_DIR}/spack/opt
+chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack
+chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db
+printf "\n\nDone!\n\n"

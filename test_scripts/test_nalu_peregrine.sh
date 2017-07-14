@@ -116,7 +116,6 @@ do
     # Set permissions after install
     chmod -R a+rX,go-w `spack location -i nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPLS}`
     chmod -R a+rX,go-w `spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
-    #chmod -R a+rX,go-w ${NALU_TESTING_DIR}/spack/opt
 
     if [ ${COMPILER_NAME} == 'intel' ]; then
       module load compiler/intel/16.0.2
@@ -171,3 +170,11 @@ do
   done
 done
 
+printf "\n\nSetting permissions...\n\n"
+#chmod -R a+rX,go-w ${NALU_TESTING_DIR}
+chmod g+w ${NALU_TESTING_DIR}
+chmod g+w ${NALU_TESTING_DIR}/spack
+chmod g+w ${NALU_TESTING_DIR}/spack/opt
+chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack
+chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db
+printf "\n\nDone!\n\n"

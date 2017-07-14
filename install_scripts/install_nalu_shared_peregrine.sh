@@ -97,4 +97,8 @@ done
 
 printf "\n\nSetting permissions...\n\n"
 chmod -R a+rX,go-w ${ROOT_DIR}
+chmod g+w ${ROOT_DIR}/spack
+chmod g+w ${ROOT_DIR}/spack/opt
+chmod g+w ${ROOT_DIR}/spack/opt/spack
+chmod -R g+w ${ROOT_DIR}/spack/opt/spack/.spack-db
 printf "\n\nDone!\n\n"

@@ -31,6 +31,7 @@ printf "\n\n"
 # Set nightly directory and Nalu checkout directory
 NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
 NALU_DIR=${NALU_TESTING_DIR}/Nalu
+NALUSPACK_DIR=${NALU_TESTING_DIR}/NaluSpack
 
 # Set host name to pass to CDash
 HOST_NAME="merlin.hpc.nrel.gov"
@@ -40,6 +41,10 @@ export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
 # Create and set up a testing directory if it doesn't exist
 if [ ! -d "${NALU_TESTING_DIR}" ]; then
+  printf "\n\nTop level testing directory doesn't exist. Creating everything from scratch...\n\n"
+
+  # Make top level testing directory
+  printf "\n\nCreating top level testing directory...\n\n"
   (set -x; mkdir -p ${NALU_TESTING_DIR})
 
   # Create and set up nightly directory with Spack installation
@@ -48,8 +53,8 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
 
   # Configure Spack for Merlin
   printf "\n\nConfiguring Spack...\n\n"
-  (set -x; cd ${NALU_TESTING_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git)
-  (set -x; cd ${NALU_TESTING_DIR}/NaluSpack/spack_config && ./copy_config.sh)
+  (set -x; git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR})
+  (set -x; cd ${NALUSPACK_DIR}/spack_config && ./copy_config.sh)
 
   # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
   printf "\n\nCloning Nalu repo...\n\n"
@@ -61,6 +66,7 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
 fi
 
 # Load Spack
+printf "\n\nLoading Spack...\n\n"
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 
 # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
@@ -75,6 +81,13 @@ do
   for COMPILER_NAME in gcc intel
   do
     printf "\n\nTesting Nalu with ${COMPILER_NAME} and Trilinos ${TRILINOS_BRANCH}.\n\n"
+
+    # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
+    unset GENERAL_CONSTRAINTS
+    source ${NALU_TESTING_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
+    MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 ^cmake@3.6.1 ^netlib-lapack"
+    ALL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MACHINE_SPECIFIC_CONSTRAINTS}"
+    printf "\n\nUsing constraints: ${ALL_CONSTRAINTS}\n\n"
 
     # Change to Nalu testing directory
     cd ${NALU_TESTING_DIR}
@@ -125,23 +138,35 @@ do
     # Set the extra identifiers for CDash build description
     EXTRA_BUILD_NAME="-${COMPILER_NAME}-trlns_${TRILINOS_BRANCH}"
 
-    # Clean build directory; checkout if NALU_DIR is not blank first
-    if [ ! -z "${NALU_DIR}" ]; then
-      printf "\n\nCleaning build directory...\n\n"
-      (set -x; rm -rf ${NALU_DIR}/build/*)
-    fi
+    for RELEASE_OR_DEBUG in RELEASE # DEBUG
+    do
+      # Set the extra identifiers for CDash build description
+      if [ ${RELEASE_OR_DEBUG} == 'RELEASE' ]; then
+        EXTRA_BUILD_NAME="${EXTRA_BUILD_NAME}-release"
+      elif [ ${RELEASE_OR_DEBUG} == 'DEBUG' ]; then
+        EXTRA_BUILD_NAME="${EXTRA_BUILD_NAME}-debug"
+      fi
 
-    # Run ctest
-    printf "\n\nRunning CTest...\n\n"
-    cd ${NALU_DIR}/build
-    (set -x; ctest \
-      -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
-      -DYAML_DIR=${YAML_DIR} \
-      -DTRILINOS_DIR=${TRILINOS_DIR} \
-      -DHOST_NAME=${HOST_NAME} \
-      -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
-      -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
-    printf "\n\nReturned from CTest...\n\n"
+      # Clean build directory; check if NALU_DIR is blank first
+      if [ ! -z "${NALU_DIR}" ]; then
+        printf "\n\nCleaning build directory...\n\n"
+        (set -x; rm -rf ${NALU_DIR}/build/*)
+      fi
+
+      # Run ctest
+      printf "\n\nRunning CTest...\n\n"
+      # Change to Nalu build directory
+      cd ${NALU_DIR}/build
+      (set -x; ctest \
+        -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
+        -DYAML_DIR=${YAML_DIR} \
+        -DTRILINOS_DIR=${TRILINOS_DIR} \
+        -DHOST_NAME=${HOST_NAME} \
+        -DRELEASE_OR_DEBUG=${RELEASE_OR_DEBUG} \
+        -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
+        -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
+      printf "\n\nReturned from CTest...\n\n"
+    done
 
     # Remove spack built cmake and openmpi from path
     printf "\n\nUnloading Spack modules from environment...\n\n"

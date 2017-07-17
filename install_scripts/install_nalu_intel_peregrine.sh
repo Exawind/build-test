@@ -18,12 +18,17 @@ module load gcc/5.2.0
 module load python/2.7.8
 } &> /dev/null
 
-# Get TPL preferences from a single location
 NALUSPACK_ROOT=`pwd`
-source ${NALUSPACK_ROOT}/../spack_config/tpls.sh
-TPLS="${TPLS} ^openmpi@1.10.3 fabrics=verbs schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
 
-# For temporary intel compiler files
+# Get general preferred Nalu constraints from a single location
+source ${NALUSPACK_ROOT}/../spack_config/general_preferred_nalu_constraints.sh
+
+MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 fabrics=verbs schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
+
+ALL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MACHINE_SPECIFIC_CONSTRAINTS}"
+
+# Using a disk instead of RAM for the tmp directory for intermediate Intel compiler files
 mkdir -p /scratch/${USER}/.tmp
 export TMPDIR=/scratch/${USER}/.tmp
-spack install nalu %intel@16.0.2 ^${TRILINOS}@develop ${TPLS}
+
+(set -x; spack install nalu %intel@16.0.2 ^${TRILINOS}@develop ${ALL_CONSTRAINTS})

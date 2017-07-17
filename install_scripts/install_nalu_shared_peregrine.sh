@@ -20,27 +20,26 @@ ROOT_DIR=/projects/windFlowModeling/ExaWind/NaluSharedInstallationB
 # Set spack location
 export SPACK_ROOT=${ROOT_DIR}/spack
 
-# Create and set up a directory if it doesn't exist
+# Create and set up the entire root directory if it doesn't exist
 if [ ! -d "${ROOT_DIR}" ]; then
-  mkdir -p ${ROOT_DIR}
+  (set -x; mkdir -p ${ROOT_DIR})
 
-  # Create and set up directory with Spack installation
   printf "\n\nCloning Spack repo...\n\n"
-  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
+  (set -x; git clone https://github.com/LLNL/spack.git ${SPACK_ROOT})
 
-  # Configure Spack for Peregrine
-  printf "\n\nConfiguring Spack...\n\n"
-  cd ${ROOT_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git
-  cd ${ROOT_DIR}/NaluSpack/spack_config
-  ./copy_config.sh
+  printf "\n\nConfiguring Spack for Peregrine...\n\n"
+  (set -x; cd ${ROOT_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git)
+  (set -x; cd ${ROOT_DIR}/NaluSpack/spack_config && ./copy_config.sh)
 fi
 
 # Load Spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 
-# Define TRILINOS and TPLS from a single location for all scripts
-source ${ROOT_DIR}/NaluSpack/spack_config/tpls.sh
-TPLS="${TPLS} ^openmpi@1.10.3 fabrics=verbs,mxm schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
+# Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
+printf "\n\nConstructing Spack constraints...\n\n"
+source ${ROOT_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
+MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 fabrics=verbs,mxm schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
+ALL_CONSTRAINTS="${MACHINE_SPECIFIC_CONSTRAINTS} ${GENERAL_CONSTRAINTS}"
 
 # Install Nalu for trilinos develop
 for TRILINOS_BRANCH in develop
@@ -51,7 +50,7 @@ do
     printf "\n\nInstalling Nalu with ${COMPILER_NAME} and Trilinos ${TRILINOS_BRANCH}.\n\n"
 
     # Change to Nalu testing directory
-    cd ${ROOT_DIR}
+    (set -x; cd ${ROOT_DIR})
 
     # Load necessary modules
     printf "\n\nLoading modules...\n\n"
@@ -64,26 +63,27 @@ do
     # Uninstall Nalu and Trilinos; it's an error if they don't exist yet, but we skip it
     printf "\n\nUninstalling Nalu and Trilinos...\n\n"
     set +e
-    spack uninstall -y nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPLS}
-    spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}
+    (set -x; spack uninstall -y nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
+    (set -x; spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS})
     set -e
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       # Fix for Peregrine's broken linker for gcc
       printf "\n\nInstalling binutils...\n\n"
-      spack install binutils %${COMPILER_NAME}
+      (set -x; spack install binutils %${COMPILER_NAME})
       . ${SPACK_ROOT}/share/spack/setup-env.sh
+      printf "\n\nLoading binutils...\n\n"
       spack load binutils %${COMPILER_NAME}
     elif [ ${COMPILER_NAME} == 'intel' ]; then
-      # Fix for Intel compiler failing when building trilinos with tmpdir set as a RAM disk by default
-      mkdir -p /scratch/${USER}/.tmp
+      printf "\n\nChanging TMPDIR to disk for Intel compiler...\n\n"
+      (set -x; mkdir -p /scratch/${USER}/.tmp)
       export TMPDIR=/scratch/${USER}/.tmp
     fi
 
     # Install Nalu and Trilinos
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
-    spack install nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPLS}
-    spack install netcdf-fortran@4.4.3 %${COMPILER_NAME} ^/$(spack find -L netcdf %${COMPILER_NAME} | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g") ^m4@1.4.17
+    (set -x; spack install nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
+    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME} ^/$(spack find -L netcdf %${COMPILER_NAME} | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g") ^m4@1.4.17)
 
     # Remove spack built cmake and openmpi from path
     printf "\n\nUnloading Spack modules from environment...\n\n"
@@ -96,10 +96,10 @@ do
 done
 
 printf "\n\nSetting permissions...\n\n"
-chmod -R a+rX,go-w ${ROOT_DIR}
-chmod g+w ${ROOT_DIR}
-chmod g+w ${ROOT_DIR}/spack
-chmod g+w ${ROOT_DIR}/spack/opt
-chmod g+w ${ROOT_DIR}/spack/opt/spack
-chmod -R g+w ${ROOT_DIR}/spack/opt/spack/.spack-db
+(set -x; chmod -R a+rX,go-w ${ROOT_DIR})
+(set -x; chmod g+w ${ROOT_DIR})
+(set -x; chmod g+w ${ROOT_DIR}/spack)
+(set -x; chmod g+w ${ROOT_DIR}/spack/opt)
+(set -x; chmod g+w ${ROOT_DIR}/spack/opt/spack)
+(set -x; chmod -R g+w ${ROOT_DIR}/spack/opt/spack/.spack-db)
 printf "\n\nDone!\n\n"

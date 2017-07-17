@@ -40,33 +40,33 @@ export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
 # Create and set up a testing directory if it doesn't exist
 if [ ! -d "${NALU_TESTING_DIR}" ]; then
-  mkdir -p ${NALU_TESTING_DIR}
+  (set -x; mkdir -p ${NALU_TESTING_DIR})
 
   # Create and set up nightly directory with Spack installation
   printf "\n\nCloning Spack repo...\n\n"
-  git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
+  (set -x; git clone https://github.com/LLNL/spack.git ${SPACK_ROOT})
 
   # Configure Spack for Merlin
   printf "\n\nConfiguring Spack...\n\n"
-  cd ${NALU_TESTING_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git
-  cd ${NALU_TESTING_DIR}/NaluSpack/spack_config
-  ./copy_config.sh
+  (set -x; cd ${NALU_TESTING_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git)
+  (set -x; cd ${NALU_TESTING_DIR}/NaluSpack/spack_config && ./copy_config.sh)
 
   # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
   printf "\n\nCloning Nalu repo...\n\n"
-  git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
+  (set -x; git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR})
 
   # Create a jobs directory
   printf "\n\nMaking job output directory...\n\n"
-  mkdir -p ${NALU_TESTING_DIR}/jobs
+  (set -x; mkdir -p ${NALU_TESTING_DIR}/jobs)
 fi
 
 # Load Spack
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 
-# Define TRILINOS and TPLS from a single location for all scripts
-source ${NALU_TESTING_DIR}/NaluSpack/spack_config/tpls.sh
-TPLS="${TPLS} ^openmpi@1.10.3 ^cmake@3.6.1 ^netlib-lapack"
+# Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
+source ${NALU_TESTING_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
+MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 ^cmake@3.6.1 ^netlib-lapack"
+ALL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MACHINE_SPECIFIC_CONSTRAINTS}"
 
 # Test Nalu for trilinos master, develop
 for TRILINOS_BRANCH in develop #master
@@ -86,8 +86,8 @@ do
  
     # Uninstall Nalu and Trilinos; it's an error if they don't exist yet, but we skip it
     printf "\n\nUninstalling Nalu and Trilinos...\n\n"
-    spack uninstall -y nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPLS}
-    spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}
+    (set -x; spack uninstall -y nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
+    (set -x; spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS})
 
     # For Intel compiler
     export TMPDIR=/dev/shm
@@ -99,16 +99,15 @@ do
     # End for Intel compiler
 
     printf "\n\nUpdating Nalu and Trilinos...\n\n"
-    spack cd nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPLS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno
-    spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno
+    (set -x; spack cd nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno)
+    (set -x; spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno)
 
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
-    spack install --keep-stage nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPLS}
+    (set -x; spack install --keep-stage nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
 
     # Set permissions after install
-    chmod -R a+rX,go-w `spack location -i nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPLS}`
-    chmod -R a+rX,go-w `spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
-    #chmod -R a+rX,go-w ${NALU_TESTING_DIR}/spack/opt
+    (set -x; chmod -R a+rX,go-w $(spack location -i nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS}))
+    (set -x; chmod -R a+rX,go-w $(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS}))
 
     # Load spack built cmake and openmpi into path
     printf "\n\nLoading Spack modules into environment...\n\n"
@@ -120,30 +119,28 @@ do
 
     # Set the Trilinos and Yaml directories to pass to ctest
     printf "\n\nSetting variables to pass to CTest...\n\n"
-    TRILINOS_DIR=`spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${TPLS}`
-    YAML_DIR=`spack location -i yaml-cpp %${COMPILER_NAME}`
+    TRILINOS_DIR=$(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS})
+    YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_NAME})
 
     # Set the extra identifiers for CDash build description
     EXTRA_BUILD_NAME="-${COMPILER_NAME}-trlns_${TRILINOS_BRANCH}"
 
-    # Change to Nalu build directory
-    cd ${NALU_DIR}/build
-
     # Clean build directory; checkout if NALU_DIR is not blank first
     if [ ! -z "${NALU_DIR}" ]; then
       printf "\n\nCleaning build directory...\n\n"
-      rm -rf ${NALU_DIR}/build/*
+      (set -x; rm -rf ${NALU_DIR}/build/*)
     fi
 
     # Run ctest
     printf "\n\nRunning CTest...\n\n"
-    ctest \
+    cd ${NALU_DIR}/build
+    (set -x; ctest \
       -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
       -DYAML_DIR=${YAML_DIR} \
       -DTRILINOS_DIR=${TRILINOS_DIR} \
       -DHOST_NAME=${HOST_NAME} \
       -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
-      -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake
+      -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
     printf "\n\nReturned from CTest...\n\n"
 
     # Remove spack built cmake and openmpi from path
@@ -154,7 +151,7 @@ do
     # Clean TMPDIR before exiting
     if [ ! -z "${TMPDIR}" ]; then
       printf "\n\nCleaning TMPDIR directory...\n\n"
-      rm -rf ${TMPDIR}/*
+      (set -x; rm -rf ${TMPDIR}/*)
       unset TMPDIR
     fi
 
@@ -163,10 +160,10 @@ do
 done
 
 printf "\n\nSetting permissions...\n\n"
-#chmod -R a+rX,go-w ${NALU_TESTING_DIR}
-chmod g+w ${NALU_TESTING_DIR}
-chmod g+w ${NALU_TESTING_DIR}/spack
-chmod g+w ${NALU_TESTING_DIR}/spack/opt
-chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack
-chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db
+#(set -x; chmod -R a+rX,go-w ${NALU_TESTING_DIR})
+(set -x; chmod g+w ${NALU_TESTING_DIR})
+(set -x; chmod g+w ${NALU_TESTING_DIR}/spack)
+(set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt)
+(set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack)
+(set -x; chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db)
 printf "\n\nDone!\n\n"

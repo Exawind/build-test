@@ -29,21 +29,21 @@ INSTALL_PREFIX=$(pwd)/install
 # Using NREL communal spack installation by default
 SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedSoftware/spack
 
-SPACK=${SPACK_ROOT}/bin/spack #actual spack executable
+SPACK_EXE=${SPACK_ROOT}/bin/spack #actual spack executable
 
 # Load necessary modules created by spack
-module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK} arch)
-module load $(${SPACK} module find cmake %${COMPILER})
-module load $(${SPACK} module find openmpi %${COMPILER})
-module load $(${SPACK} module find hdf5 %${COMPILER})
-module load $(${SPACK} module find netcdf %${COMPILER})
-module load $(${SPACK} module find parallel-netcdf %${COMPILER})
-module load $(${SPACK} module find zlib %${COMPILER})
-module load $(${SPACK} module find superlu %${COMPILER})
-module load $(${SPACK} module find boost %${COMPILER})
+module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
+module load $(${SPACK_EXE} module find cmake %${COMPILER})
+module load $(${SPACK_EXE} module find openmpi %${COMPILER})
+module load $(${SPACK_EXE} module find hdf5 %${COMPILER})
+module load $(${SPACK_EXE} module find netcdf %${COMPILER})
+module load $(${SPACK_EXE} module find parallel-netcdf %${COMPILER})
+module load $(${SPACK_EXE} module find zlib %${COMPILER})
+module load $(${SPACK_EXE} module find superlu %${COMPILER})
+module load $(${SPACK_EXE} module find boost %${COMPILER})
 
 # Comment this one line if using Intel
-module load $(${SPACK} module find binutils %${COMPILER})
+module load $(${SPACK_EXE} module find binutils %${COMPILER})
 # Uncomment these two lines if using Intel
 #module load compiler/intel/16.0.2
 #export TMPDIR=/scratch/${USER}/.tmp
@@ -97,22 +97,22 @@ cmake \
   -DTrilinos_ENABLE_SEACASNemslice:BOOL=ON \
   -DTrilinos_ENABLE_SEACASIoss:BOOL=ON \
   -DTPL_ENABLE_MPI:BOOL=ON \
-  -DMPI_BASE_DIR:PATH=$(${SPACK} location -i openmpi %${COMPILER}) \
+  -DMPI_BASE_DIR:PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER}) \
   -DTPL_ENABLE_Boost:BOOL=ON \
-  -DBoost_ROOT:PATH=$(${SPACK} location -i boost %${COMPILER}) \
+  -DBoost_ROOT:PATH=$(${SPACK_EXE} location -i boost %${COMPILER}) \
   -DTPL_ENABLE_SuperLU:BOOL=ON \
-  -DSuperLU_ROOT:PATH=$(${SPACK} location -i superlu %${COMPILER}) \
+  -DSuperLU_ROOT:PATH=$(${SPACK_EXE} location -i superlu %${COMPILER}) \
   -DTPL_ENABLE_Netcdf:BOOL=ON \
-  -DNetCDF_ROOT:PATH=$(${SPACK} location -i netcdf %${COMPILER}) \
+  -DNetCDF_ROOT:PATH=$(${SPACK_EXE} location -i netcdf %${COMPILER}) \
   -DTPL_Netcdf_Enables_Netcdf4:BOOL=ON \
   -DTPL_Netcdf_PARALLEL:BOOL=ON \
   -DTPL_ENABLE_Pnetcdf:BOOL=ON \
-  -DPNetCDF_ROOT:PATH=$(${SPACK} location -i parallel-netcdf %${COMPILER}) \
+  -DPNetCDF_ROOT:PATH=$(${SPACK_EXE} location -i parallel-netcdf %${COMPILER}) \
   -DTPL_ENABLE_HDF5:BOOL=ON \
-  -DHDF5_ROOT:PATH=$(${SPACK} location -i hdf5 %${COMPILER}) \
+  -DHDF5_ROOT:PATH=$(${SPACK_EXE} location -i hdf5 %${COMPILER}) \
   -DHDF5_NO_SYSTEM_PATHS:BOOL=ON \
   -DTPL_ENABLE_Zlib:BOOL=ON \
-  -DZlib_ROOT:PATH=$(${SPACK} location -i zlib %${COMPILER}) \
+  -DZlib_ROOT:PATH=$(${SPACK_EXE} location -i zlib %${COMPILER}) \
   ..
 
 # Uncomment the next two lines after you make sure you are not on a login node

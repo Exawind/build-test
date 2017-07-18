@@ -45,7 +45,7 @@ fi
 #cp -R tioga ${SPACK_ROOT}/var/spack/repos/builtin/packages/
 #cp -R nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/
 #cp -R nalu-trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/
-cp -R openmpi/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/openmpi/package.py
+#cp -R openmpi/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/openmpi/package.py
 
 # Copy machine-specific configuration for Spack if we recognize the machine
 if [ "${MACHINE}" == 'peregrine' ] || [ "${MACHINE}" == 'merlin' ] || [ "${MACHINE}" == 'cori' ]; then

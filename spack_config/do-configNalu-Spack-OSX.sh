@@ -7,9 +7,9 @@ set -e
 COMPILER=gcc
 SPACK_EXE=${HOME}/spack/bin/spack
 TRILINOS_ROOT=$(${SPACK_EXE} location -i trilinos %${COMPILER})
-export PATH=$(spack location -i cmake %${COMPILER_NAME})/bin:${PATH}
-export PATH=$(spack location -i openmpi %${COMPILER_NAME})/bin:${PATH}
-export LD_LIBRARY_PATH=$(spack location -i openmpi %${COMPILER_NAME})/lib:${PATH}
+export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}
+export PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER})/bin:${PATH}
+export LD_LIBRARY_PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER})/lib:${PATH}
 
 # Clean before cmake configure
 set +e

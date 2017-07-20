@@ -69,11 +69,6 @@ fi
 printf "\n\nLoading Spack...\n\n"
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 
-# Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
-source ${NALU_TESTING_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
-MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 ^cmake@3.6.1 ^netlib-lapack"
-ALL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MACHINE_SPECIFIC_CONSTRAINTS}"
-
 # Test Nalu for trilinos master, develop
 for TRILINOS_BRANCH in develop #master
 do

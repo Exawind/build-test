@@ -6,7 +6,6 @@ set -e
 
 COMPILER=gcc
 SPACK_EXE=${HOME}/spack/bin/spack
-TRILINOS_ROOT=$(${SPACK_EXE} location -i trilinos %${COMPILER})
 export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}
 export PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER})/bin:${PATH}
 export LD_LIBRARY_PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER})/lib:${PATH}
@@ -18,7 +17,7 @@ rm -f CMakeCache.txt
 set -e
 
 (set -x; cmake \
-  -DTrilinos_DIR:PATH=${TRILINOS_ROOT} \
+  -DTrilinos_DIR:PATH=$(${SPACK_EXE} location -i trilinos %${COMPILER}) \
   -DYAML_DIR:PATH=$(${SPACK_EXE} location -i yaml-cpp %${COMPILER}) \
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
   -DBUILD_DOCUMENTATION:BOOL=OFF \

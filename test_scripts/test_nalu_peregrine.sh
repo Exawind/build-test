@@ -157,12 +157,8 @@ do
 
     for RELEASE_OR_DEBUG in RELEASE DEBUG
     do
-      # Set the extra identifiers for CDash build description
-      if [ ${RELEASE_OR_DEBUG} == 'RELEASE' ]; then
-        EXTRA_BUILD_NAME="${EXTRA_BUILD_NAME}-release"
-      elif [ ${RELEASE_OR_DEBUG} == 'DEBUG' ]; then
-        EXTRA_BUILD_NAME="${EXTRA_BUILD_NAME}-debug"
-      fi
+      # Make build type lowercase
+      BUILD_TYPE="$(tr [A-Z] [a-z] <<< "${RELEASE_OR_DEBUG}")"
 
       # Clean build directory; check if NALU_DIR is blank first
       if [ ! -z "${NALU_DIR}" ]; then
@@ -180,7 +176,7 @@ do
         -DTRILINOS_DIR=${TRILINOS_DIR} \
         -DHOST_NAME=${HOST_NAME} \
         -DRELEASE_OR_DEBUG=${RELEASE_OR_DEBUG} \
-        -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
+        -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME}-${BUILD_TYPE} \
         -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
       printf "\n\nReturned from CTest...\n\n"
     done

@@ -138,7 +138,7 @@ do
     # Set the extra identifiers for CDash build description
     EXTRA_BUILD_NAME="-${COMPILER_NAME}-trlns_${TRILINOS_BRANCH}"
 
-    for RELEASE_OR_DEBUG in RELEASE # DEBUG
+    for RELEASE_OR_DEBUG in RELEASE DEBUG
     do
       # Set the extra identifiers for CDash build description
       if [ ${RELEASE_OR_DEBUG} == 'RELEASE' ]; then

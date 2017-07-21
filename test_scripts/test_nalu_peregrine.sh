@@ -136,7 +136,6 @@ do
     if [ ${COMPILER_NAME} == 'intel' ]; then
       printf "\n\nLoading Intel compiler module for CTest...\n\n"
       module load compiler/intel/16.0.2
-      unset TMPDIR
     fi
 
     # Load spack built cmake and openmpi into path
@@ -157,6 +156,7 @@ do
 
     for RELEASE_OR_DEBUG in RELEASE DEBUG
     do
+      #if [[ ! (${COMPILER_NAME} == 'intel' && ${RELEASE_OR_DEBUG} == 'DEBUG') ]]; then
       # Make build type lowercase
       BUILD_TYPE="$(tr [A-Z] [a-z] <<< "${RELEASE_OR_DEBUG}")"
 
@@ -179,6 +179,7 @@ do
         -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME}-${BUILD_TYPE} \
         -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
       printf "\n\nReturned from CTest...\n\n"
+      #fi
     done
 
     # Remove spack built cmake and openmpi from path
@@ -187,6 +188,8 @@ do
     spack unload openmpi %${COMPILER_NAME}
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       spack unload binutils %${COMPILER_NAME}
+    elif [ ${COMPILER_NAME} == 'intel' ]; then
+      unset TMPDIR
     fi 
 
     printf "\n\nDone testing Nalu with ${COMPILER_NAME} and Trilinos ${TRILINOS_BRANCH}.\n\n"

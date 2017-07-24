@@ -80,7 +80,7 @@ do
     # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
     unset GENERAL_CONSTRAINTS
     source ${NALU_TESTING_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
-    MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 ^cmake@3.6.1 ^netlib-lapack"
+    MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 fabrics=psm2 ^cmake@3.6.1 ^netlib-lapack"
     ALL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MACHINE_SPECIFIC_CONSTRAINTS}"
     printf "\n\nUsing constraints: ${ALL_CONSTRAINTS}\n\n"
 

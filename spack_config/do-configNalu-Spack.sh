@@ -8,7 +8,7 @@ set -ex
 # Copy this script to that directory and edit the
 # options below to your own needs. Leave the SPACK_ROOT option
 # alone to build against the communal spack location at NREL.
-# Uncomment the last two lines and then run this script.
+# Uncomment the last line and then run this script.
 
 # Note Spack uses rpath so we don't need to worry so much
 # about setting our environment when running, but when we 

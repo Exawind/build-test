@@ -1,9 +1,9 @@
 packages:
-  netlib-lapack:
-      paths:
-          netlib-lapack@system: /usr/lib64
-      version: [system]
-      buildable: False
+#  netlib-lapack:
+#      paths:
+#          netlib-lapack@system: /usr/lib64
+#      version: [system]
+#      buildable: False
   all:
     compiler: [gcc@5.2.0, intel@16.0.2]
     providers:

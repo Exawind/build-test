@@ -57,6 +57,8 @@ class Openfast(CMakePackage):
     depends_on('mpi', when='+cxx')
     depends_on('yaml-cpp', when='+cxx')
     depends_on('hdf5+mpi+cxx', when='+cxx')
+    depends_on('zlib', when='+cxx')
+    depends_on('libxml2', when='+cxx')
 
     # Disable parallel builds because of OpenFOAM Types modules dependencies
     parallel = False
@@ -88,5 +90,10 @@ class Openfast(CMakePackage):
                 '-DHDF5_ROOT:PATH=%s' % spec['hdf5'].prefix,
                 '-DYAML_ROOT:PATH=%s' % spec['yaml-cpp'].prefix,
             ])
+
+            if not '+shared' in spec:
+                options.extend([
+                    '-DHDF5_USE_STATIC_LIBRARIES=ON',
+                ])
 
         return options

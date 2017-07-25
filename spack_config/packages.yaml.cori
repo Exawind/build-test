@@ -55,7 +55,7 @@ packages:
   netcdf:
       buildable: false
       modules:
-          netcdf@4.3.3.1: cray-netcdf-hdf5parallel/4.3.3.1
+          netcdf@4.3.3.1+mpi+parallel-netcdf: cray-netcdf-hdf5parallel/4.3.3.1
   parallel-netcdf:
       buildable: false
       modules:

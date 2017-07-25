@@ -55,6 +55,9 @@ if [ "${MACHINE}" == 'peregrine' ] || [ "${MACHINE}" == 'merlin' ] || [ "${MACHI
   if [ ${MACHINE} == 'merlin' ]; then
     cp intel.cfg.${MACHINE} ${SPACK_ROOT}/etc/spack/intel.cfg
   fi
+  if [ ${MACHINE} == 'cori' ]; then
+    cp trilinos/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py
+  fi
   # Use branch instead of tag so spack will checkout 
   # a real git repo instead of cache a tar.gz of a branch
   sed -i "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py

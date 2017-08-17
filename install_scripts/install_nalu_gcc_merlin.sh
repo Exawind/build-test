@@ -4,7 +4,6 @@
 #PBS -l nodes=1:ppn=24,walltime=4:00:00
 #PBS -A windFlowModeling
 #PBS -q batch
-#PBS -o $PBS_JOBNAME.log
 #PBS -j oe
 #PBS -W umask=002
 

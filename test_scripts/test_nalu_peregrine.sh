@@ -73,7 +73,7 @@ printf "\n\nLoading Spack...\n\n"
 for TRILINOS_BRANCH in develop #master
 do
   # Test Nalu for intel, gcc
-  for COMPILER_NAME in gcc intel
+  for COMPILER_NAME in gcc #intel
   do
     printf "\n\nTesting Nalu with ${COMPILER_NAME} and Trilinos ${TRILINOS_BRANCH}.\n\n"
 
@@ -82,9 +82,9 @@ do
     source ${NALU_TESTING_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
     # Only use Mellanox MXM with GCC because Intel can't use it
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 fabrics=verbs,mxm schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
+      MACHINE_SPECIFIC_CONSTRAINTS="^yaml-cpp@develop ^openmpi@1.10.3 fabrics=verbs,mxm schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
-      MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 fabrics=verbs schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
+      MACHINE_SPECIFIC_CONSTRAINTS="^yaml-cpp@develop ^openmpi@1.10.3 fabrics=verbs schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
     fi
     ALL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MACHINE_SPECIFIC_CONSTRAINTS}"
     printf "\n\nUsing constraints: ${ALL_CONSTRAINTS}\n\n"
@@ -152,9 +152,14 @@ do
     YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_NAME})
 
     # Set the extra identifiers for CDash build description
-    EXTRA_BUILD_NAME="-${COMPILER_NAME}-trlns_${TRILINOS_BRANCH}"
+    if [ ${COMPILER_NAME} == 'gcc' ]; then
+      COMPILER_VERSION="5.2.0"
+    elif [ ${COMPILER_NAME} == 'intel' ]; then
+      COMPILER_VERSION="17.0.2"
+    fi
+    EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}"
 
-    for RELEASE_OR_DEBUG in RELEASE DEBUG
+    for RELEASE_OR_DEBUG in RELEASE #DEBUG
     do
       #if [[ ! (${COMPILER_NAME} == 'intel' && ${RELEASE_OR_DEBUG} == 'DEBUG') ]]; then
       # Make build type lowercase
@@ -166,6 +171,12 @@ do
         (set -x; rm -rf ${NALU_DIR}/build/*)
       fi
 
+      # Set warning flags for build
+      WARNINGS="-Wall"
+      export CXXFLAGS="${WARNINGS}"
+      export CFLAGS="${WARNINGS}"
+      export FFLAGS="${WARNINGS}"
+
       # Run ctest
       printf "\n\nRunning CTest...\n\n"
       # Change to Nalu build directory
@@ -176,7 +187,7 @@ do
         -DTRILINOS_DIR=${TRILINOS_DIR} \
         -DHOST_NAME=${HOST_NAME} \
         -DRELEASE_OR_DEBUG=${RELEASE_OR_DEBUG} \
-        -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME}-${BUILD_TYPE} \
+        -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
         -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
       printf "\n\nReturned from CTest...\n\n"
       #fi

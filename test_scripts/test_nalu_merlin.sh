@@ -80,7 +80,7 @@ do
     # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
     unset GENERAL_CONSTRAINTS
     source ${NALU_TESTING_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
-    MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 fabrics=psm2 schedulers=tm ^cmake@3.6.1 ^netlib-lapack"
+    MACHINE_SPECIFIC_CONSTRAINTS="^yaml-cpp@develop ^openmpi@1.10.3 fabrics=psm2 schedulers=tm ^cmake@3.6.1 ^netlib-lapack"
     ALL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MACHINE_SPECIFIC_CONSTRAINTS}"
     printf "\n\nUsing constraints: ${ALL_CONSTRAINTS}\n\n"
 
@@ -128,12 +128,17 @@ do
     # Set the Trilinos and Yaml directories to pass to ctest
     printf "\n\nSetting variables to pass to CTest...\n\n"
     TRILINOS_DIR=$(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS})
-    YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_NAME})
+    YAML_DIR=$(spack location -i yaml-cpp@develop %${COMPILER_NAME})
 
     # Set the extra identifiers for CDash build description
-    EXTRA_BUILD_NAME="-${COMPILER_NAME}-trlns_${TRILINOS_BRANCH}"
+    if [ ${COMPILER_NAME} == 'gcc' ]; then
+      COMPILER_VERSION="4.8.5"
+    elif [ ${COMPILER_NAME} == 'intel' ]; then
+      COMPILER_VERSION="17.0.2"
+    fi
+    EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}"
 
-    for RELEASE_OR_DEBUG in RELEASE DEBUG
+    for RELEASE_OR_DEBUG in RELEASE #DEBUG
     do
       # Make build type lowercase
       BUILD_TYPE="$(tr [A-Z] [a-z] <<< "${RELEASE_OR_DEBUG}")"
@@ -143,6 +148,12 @@ do
         printf "\n\nCleaning build directory...\n\n"
         (set -x; rm -rf ${NALU_DIR}/build/*)
       fi
+
+      # Set warning flags for build
+      WARNINGS="-Wall"
+      export CXXFLAGS="${WARNINGS}"
+      export CFLAGS="${WARNINGS}"
+      export FFLAGS="${WARNINGS}"
 
       # Run ctest
       printf "\n\nRunning CTest...\n\n"
@@ -154,7 +165,7 @@ do
         -DTRILINOS_DIR=${TRILINOS_DIR} \
         -DHOST_NAME=${HOST_NAME} \
         -DRELEASE_OR_DEBUG=${RELEASE_OR_DEBUG} \
-        -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME}-${BUILD_TYPE} \
+        -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
         -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
       printf "\n\nReturned from CTest...\n\n"
     done

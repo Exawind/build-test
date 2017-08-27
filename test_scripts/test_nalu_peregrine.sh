@@ -149,7 +149,7 @@ do
     # Set the Trilinos and Yaml directories to pass to ctest
     printf "\n\nSetting variables to pass to CTest...\n\n"
     TRILINOS_DIR=$(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS})
-    YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_NAME})
+    YAML_DIR=$(spack location -i yaml-cpp@develop %${COMPILER_NAME})
 
     # Set the extra identifiers for CDash build description
     if [ ${COMPILER_NAME} == 'gcc' ]; then

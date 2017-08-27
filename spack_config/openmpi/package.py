@@ -51,16 +51,18 @@ def _verbs_dir():
     except ProcessError:
         return None
 
+
 def _mxm_dir():
     """Look for default directory where the Mellanox package is
     installed. Return None if not found.
     """
-    # This should be made more flexible in the future
+    # Only using default directory; make this more flexible in the future
     path = "/opt/mellanox/mxm"
     if os.path.isdir(path):
         return path
     else:
         return None
+
 
 class Openmpi(AutotoolsPackage):
     """The Open MPI Project is an open source Message Passing Interface
@@ -198,8 +200,9 @@ class Openmpi(AutotoolsPackage):
     provides('mpi@:3.1', when='@2.0.0:')
 
     depends_on('hwloc')
+    depends_on('openssl')
     depends_on('hwloc +cuda', when='+cuda')
-    depends_on('jdk', when='+java')
+    depends_on('java', when='+java')
     depends_on('sqlite', when='+sqlite3@:1.11')
 
     conflicts('+cuda', when='@:1.6')  # CUDA support was added in 1.7
@@ -263,8 +266,7 @@ class Openmpi(AutotoolsPackage):
 
     def with_or_without_mxm(self, activated):
         opt = 'mxm'
-        # If the option has not been activated return
-        # --without-mxm
+        # If the option has not been activated return --without-mxm
         if not activated:
             return '--without-{0}'.format(opt)
         line = '--with-{0}'.format(opt)
@@ -307,7 +309,7 @@ class Openmpi(AutotoolsPackage):
                 config_args.extend([
                     '--enable-java',
                     '--enable-mpi-java',
-                    '--with-jdk-dir={0}'.format(spec['jdk'].prefix)
+                    '--with-jdk-dir={0}'.format(spec['java'].prefix)
                 ])
             else:
                 config_args.extend([

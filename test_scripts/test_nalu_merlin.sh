@@ -94,7 +94,7 @@ do
  
     # Uninstall Nalu and Trilinos; it's an error if they don't exist yet, but we skip it
     printf "\n\nUninstalling Nalu and Trilinos...\n\n"
-    (set -x; spack uninstall -y nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
+    (set -x; spack uninstall -y nalu %${COMPILER_NAME} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
     (set -x; spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS})
 
     # For Intel compiler
@@ -107,14 +107,14 @@ do
     # End for Intel compiler
 
     printf "\n\nUpdating Nalu and Trilinos...\n\n"
-    (set -x; spack cd nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno)
+    (set -x; spack cd nalu %${COMPILER_NAME} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno)
     (set -x; spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno)
 
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
-    (set -x; spack install --keep-stage nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
+    (set -x; spack install --keep-stage nalu %${COMPILER_NAME} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
 
     # Set permissions after install
-    (set -x; chmod -R a+rX,go-w $(spack location -i nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS}))
+    (set -x; chmod -R a+rX,go-w $(spack location -i nalu %${COMPILER_NAME} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS}))
     (set -x; chmod -R a+rX,go-w $(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS}))
 
     # Load spack built cmake and openmpi into path

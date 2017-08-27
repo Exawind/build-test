@@ -82,9 +82,9 @@ do
     source ${NALU_TESTING_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
     # Only use Mellanox MXM with GCC because Intel can't use it
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      MACHINE_SPECIFIC_CONSTRAINTS="^yaml-cpp@develop ^openmpi@1.10.3 fabrics=verbs,mxm schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
+      MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 fabrics=verbs,mxm schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
-      MACHINE_SPECIFIC_CONSTRAINTS="^yaml-cpp@develop ^openmpi@1.10.3 fabrics=verbs schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
+      MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 fabrics=verbs schedulers=tm ^cmake@3.6.1 ^m4@1.4.17"
     fi
     ALL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MACHINE_SPECIFIC_CONSTRAINTS}"
     printf "\n\nUsing constraints: ${ALL_CONSTRAINTS}\n\n"
@@ -102,7 +102,7 @@ do
  
     # Uninstall Nalu and Trilinos; it's an error if they don't exist yet, but we skip it
     printf "\n\nUninstalling Nalu and Trilinos...\n\n"
-    (set -x; spack uninstall -y nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
+    (set -x; spack uninstall -y nalu %${COMPILER_NAME} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
     (set -x; spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS})
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
@@ -122,15 +122,15 @@ do
 
     # Update Nalu and Trilinos
     printf "\n\nUpdating Nalu and Trilinos...\n\n"
-    (set -x; spack cd nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno)
+    (set -x; spack cd nalu %${COMPILER_NAME} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno)
     (set -x; spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno)
 
     # Install Nalu and Trilinos
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}...\n\n"
-    (set -x; spack install --keep-stage nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
+    (set -x; spack install --keep-stage nalu %${COMPILER_NAME} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
 
     # Set permissions after install
-    (set -x; chmod -R a+rX,go-w $(spack location -i nalu %${COMPILER_NAME} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS}))
+    (set -x; chmod -R a+rX,go-w $(spack location -i nalu %${COMPILER_NAME} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS}))
     (set -x; chmod -R a+rX,go-w $(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME} ${ALL_CONSTRAINTS}))
 
     if [ ${COMPILER_NAME} == 'intel' ]; then

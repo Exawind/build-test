@@ -35,8 +35,11 @@ NALUSPACK_DIR=${NALU_TESTING_DIR}/NaluSpack
 
 # Set host name to pass to CDash
 HOST_NAME="merlin.hpc.nrel.gov"
+
+# Set some version numbers
 GCC_COMPILER_VERSION="4.8.5"
 INTEL_COMPILER_VERSION="17.0.2"
+YAML_VERSION="develop"
 
 # Set spack location
 export SPACK_ROOT=${NALU_TESTING_DIR}/spack
@@ -87,9 +90,9 @@ do
     # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
     unset GENERAL_CONSTRAINTS
     source ${NALU_TESTING_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
-    MACHINE_SPECIFIC_CONSTRAINTS="^yaml-cpp@develop ^openmpi@1.10.3 fabrics=psm2 schedulers=tm ^cmake@3.6.1 ^netlib-lapack"
+    MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 fabrics=psm2 schedulers=tm ^cmake@3.6.1 ^netlib-lapack"
     ALL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MACHINE_SPECIFIC_CONSTRAINTS}"
-    printf "\n\nUsing constraints: ${ALL_CONSTRAINTS}\n\n"
+    printf "\n\nUsing constraints: ^yaml_cpp@${YAML_VERSION} ${ALL_CONSTRAINTS}\n\n"
 
     # Change to Nalu testing directory
     cd ${NALU_TESTING_DIR}
@@ -101,7 +104,7 @@ do
  
     # Uninstall Nalu and Trilinos; it's an error if they don't exist yet, but we skip it
     printf "\n\nUninstalling Nalu and Trilinos...\n\n"
-    (set -x; spack uninstall -y nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
+    (set -x; spack uninstall -y nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@${YAML_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
     (set -x; spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${ALL_CONSTRAINTS})
 
     # For Intel compiler
@@ -114,14 +117,14 @@ do
     # End for Intel compiler
 
     printf "\n\nUpdating Nalu and Trilinos...\n\n"
-    (set -x; spack cd nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno)
+    (set -x; spack cd nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@${YAML_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno)
     (set -x; spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${ALL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno)
 
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
-    (set -x; spack install --keep-stage nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
+    (set -x; spack install --keep-stage nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@${YAML_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS})
 
     # Set permissions after install
-    (set -x; chmod -R a+rX,go-w $(spack location -i nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@develop ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS}))
+    (set -x; chmod -R a+rX,go-w $(spack location -i nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@${YAML_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${ALL_CONSTRAINTS}))
     (set -x; chmod -R a+rX,go-w $(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${ALL_CONSTRAINTS}))
 
     # Load spack built cmake and openmpi into path
@@ -135,7 +138,7 @@ do
     # Set the Trilinos and Yaml directories to pass to ctest
     printf "\n\nSetting variables to pass to CTest...\n\n"
     TRILINOS_DIR=$(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${ALL_CONSTRAINTS})
-    YAML_DIR=$(spack location -i yaml-cpp@develop %${COMPILER_NAME}@${COMPILER_VERSION})
+    YAML_DIR=$(spack location -i yaml-cpp@${YAML_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION})
 
     # Set the extra identifiers for CDash build description
     EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}"

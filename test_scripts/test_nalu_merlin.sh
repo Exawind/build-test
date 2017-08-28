@@ -92,7 +92,7 @@ do
     source ${NALU_TESTING_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
     MACHINE_SPECIFIC_CONSTRAINTS="^openmpi@1.10.3 fabrics=psm2 schedulers=tm ^cmake@3.6.1 ^netlib-lapack"
     ALL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MACHINE_SPECIFIC_CONSTRAINTS}"
-    printf "\n\nUsing constraints: ^yaml_cpp@${YAML_VERSION} ${ALL_CONSTRAINTS}\n\n"
+    printf "\n\nUsing constraints: ^yaml-cpp@${YAML_VERSION} ${ALL_CONSTRAINTS}\n\n"
 
     # Change to Nalu testing directory
     cd ${NALU_TESTING_DIR}

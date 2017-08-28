@@ -1,12 +1,14 @@
 packages:
-#  netlib-lapack:
-#      paths:
-#          netlib-lapack@system: /usr/lib64
-#      version: [system]
-#      buildable: False
+  m4:
+    version: [1.4.17]
+  cmake:
+    version: [3.6.1]
+  openmpi:
+    version: [1.10.7]
+    variants: fabrics=verbs schedulers=tm
   all:
     compiler: [gcc@5.2.0, intel@16.0.2]
     providers:
-      mpi: [openmpi]
+      mpi: [openmpi@1.10.7]
       blas: [netlib-lapack]
       lapack: [netlib-lapack]

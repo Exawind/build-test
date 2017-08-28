@@ -1,7 +1,12 @@
 packages:
+  cmake:
+    version: [3.6.1]
+  openmpi:
+    version: [1.10.7]
+    variants: fabrics=psm2 schedulers=tm
   all:
     compiler: [gcc@4.9.2, intel@17.0.2]
     providers:
-      mpi: [openmpi]
+      mpi: [openmpi@1.10.7]
       blas: [netlib-lapack]
       lapack: [netlib-lapack]

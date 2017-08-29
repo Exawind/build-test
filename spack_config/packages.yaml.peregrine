@@ -4,11 +4,11 @@ packages:
   cmake:
     version: [3.6.1]
   openmpi:
-    version: [1.10.7]
+    version: [1.10.3]
     variants: fabrics=verbs schedulers=tm
   all:
     compiler: [gcc@5.2.0, intel@16.0.2]
     providers:
-      mpi: [openmpi@1.10.7]
+      mpi: [openmpi@1.10.3]
       blas: [netlib-lapack]
       lapack: [netlib-lapack]

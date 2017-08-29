@@ -1,7 +1,13 @@
 compilers:
 - compiler:
-    environment: {}
-    extra_rpaths: []
+    environment:
+      set:
+        LD_LIBRARY_PATH: /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16:/nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0:/nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0:/nopt/nrel/apps/gcc/5.2.0/lib64
+    extra_rpaths:
+     - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
+     - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
+     - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
+     - /nopt/nrel/apps/gcc/5.2.0/lib64
     flags: {}
     modules: []
     operating_system: centos6
@@ -11,9 +17,16 @@ compilers:
       f77: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
       fc: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
     spec: gcc@5.2.0
+    target: x86_64
 - compiler:
-    environment: {}
-    extra_rpaths: []
+    environment:
+      set:
+        LD_LIBRARY_PATH: /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16:/nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0:/nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0:/nopt/nrel/apps/gcc/5.2.0/lib64
+    extra_rpaths:
+     - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
+     - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
+     - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
+     - /nopt/nrel/apps/gcc/5.2.0/lib64
     flags: {}
     modules: []
     operating_system: rhel6
@@ -23,6 +36,7 @@ compilers:
       f77: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
       fc: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
     spec: gcc@5.2.0
+    target: x86_64
 - compiler:
     environment: {}
     extra_rpaths: []
@@ -35,6 +49,7 @@ compilers:
       f77: /nopt/intel/16.0/compilers_and_libraries_2016/linux/bin/intel64/ifort
       fc: /nopt/intel/16.0/compilers_and_libraries_2016/linux/bin/intel64/ifort
     spec: intel@16.0.2
+    target: x86_64
 - compiler:
     environment: {}
     extra_rpaths: []
@@ -47,3 +62,4 @@ compilers:
       f77: /nopt/intel/16.0/compilers_and_libraries_2016/linux/bin/intel64/ifort
       fc: /nopt/intel/16.0/compilers_and_libraries_2016/linux/bin/intel64/ifort
     spec: intel@16.0.2
+    target: x86_64

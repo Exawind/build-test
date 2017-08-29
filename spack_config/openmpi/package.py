@@ -289,7 +289,8 @@ class Openmpi(AutotoolsPackage):
         spec = self.spec
         config_args = [
             '--enable-shared',
-            '--enable-static'
+            '--enable-static',
+            '--enable-mpirun-prefix-by-default'
         ]
         if self.spec.satisfies('@2.0:'):
             # for Open-MPI 2.0:, C++ bindings are disabled by default.

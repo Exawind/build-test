@@ -52,6 +52,9 @@ if [ "${MACHINE}" == 'peregrine' ] || [ "${MACHINE}" == 'merlin' ] || [ "${MACHI
   cp config.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/config.yaml
   cp packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/packages.yaml
   cp compilers.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/compilers.yaml
+  if [ ${MACHINE} == 'peregrine' ]; then
+    cp intel.cfg.${MACHINE} ${SPACK_ROOT}/etc/spack/intel.cfg
+  fi
   if [ ${MACHINE} == 'merlin' ]; then
     cp openmpi/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/openmpi/package.py
     cp intel.cfg.${MACHINE} ${SPACK_ROOT}/etc/spack/intel.cfg

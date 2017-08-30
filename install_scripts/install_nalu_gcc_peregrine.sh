@@ -27,4 +27,8 @@ source ${NALUSPACK_ROOT}/../spack_config/general_preferred_nalu_constraints.sh
 . ${SPACK_ROOT}/share/spack/setup-env.sh
 spack load binutils
 
+# Sometimes /tmp runs out of space for some reason so set TMPDIR to /scratch
+mkdir -p /scratch/${USER}/.tmp
+export TMPDIR=/scratch/${USER}/.tmp
+
 (set -x; spack install nalu %gcc@5.2.0 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS})

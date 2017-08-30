@@ -79,7 +79,7 @@ printf "\n\nLoading Spack...\n\n"
 for TRILINOS_BRANCH in develop #master
 do
   # Test Nalu for intel, gcc
-  for COMPILER_NAME in gcc #intel
+  for COMPILER_NAME in gcc intel
   do
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       COMPILER_VERSION="${GCC_COMPILER_VERSION}"

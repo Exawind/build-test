@@ -106,13 +106,13 @@ do
     (set -x; spack uninstall -y nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@${YAML_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS})
     (set -x; spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS})
 
-    # For Intel compiler
-    export TMPDIR=/dev/shm
-    export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
+    # For Intel compiler to include rpath to its own libraries
     for i in ICCCFG ICPCCFG IFORTCFG
     do
       export $i=${SPACK_ROOT}/etc/spack/intel.cfg
     done
+    #export TMPDIR=/dev/shm
+    #export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
     # End for Intel compiler
 
     printf "\n\nUpdating Nalu and Trilinos...\n\n"
@@ -180,11 +180,12 @@ do
     spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}
 
     # Clean TMPDIR before exiting
-    if [ ! -z "${TMPDIR}" ]; then
+    #if [ ! -z "${TMPDIR}" ]; then
       printf "\n\nCleaning TMPDIR directory...\n\n"
-      (set -x; rm -rf ${TMPDIR}/*)
-      unset TMPDIR
-    fi
+      (set -x; rm -r /dev/shm/*)
+      #(set -x; rm -r ${TMPDIR}/*)
+      #unset TMPDIR
+    #fi
 
     printf "\n\nDone testing Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH}.\n\n"
   done

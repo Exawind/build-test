@@ -14,8 +14,7 @@ set -e
 module purge
 module load GCCcore/4.9.2
 
-export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
-
+# The intel.cfg sets up the -xlinker rpath for the intel compiler's own libraries
 for i in ICCCFG ICPCCFG IFORTCFG
 do
   export $i=${SPACK_ROOT}/etc/spack/intel.cfg
@@ -25,9 +24,6 @@ NALUSPACK_ROOT=`pwd`
 
 # Get general preferred Nalu constraints from a single location
 source ${NALUSPACK_ROOT}/../spack_config/general_preferred_nalu_constraints.sh
-
-# Merlin has enough RAM to set TMPDIR to use a RAM disk
-export TMPDIR=/dev/shm
 
 (set -x; spack install nalu %intel@17.0.2 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS})
 

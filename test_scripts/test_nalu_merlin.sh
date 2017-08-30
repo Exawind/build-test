@@ -55,7 +55,7 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
   # Create and set up nightly directory with Spack installation
   printf "\n\nCloning Spack repo...\n\n"
   (set -x; git clone https://github.com/LLNL/spack.git ${SPACK_ROOT})
-  (set -x; cd ${SPACK_ROOT} && git checkout 78762628263015a901eccbcfd0b36626adf6aa91)
+  #(set -x; cd ${SPACK_ROOT} && git checkout 78762628263015a901eccbcfd0b36626adf6aa91)
 
   # Configure Spack for Merlin
   printf "\n\nConfiguring Spack...\n\n"
@@ -111,8 +111,6 @@ do
     do
       export $i=${SPACK_ROOT}/etc/spack/intel.cfg
     done
-    #export TMPDIR=/dev/shm
-    #export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
     # End for Intel compiler
 
     printf "\n\nUpdating Nalu and Trilinos...\n\n"

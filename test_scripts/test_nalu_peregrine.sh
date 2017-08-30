@@ -55,6 +55,7 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
   # Create and set up nightly directory with Spack installation
   printf "\n\nCloning Spack repo...\n\n"
   (set -x; git clone https://github.com/LLNL/spack.git ${SPACK_ROOT})
+  #(set -x; cd ${SPACK_ROOT} && git checkout 78762628263015a901eccbcfd0b36626adf6aa91)
 
   # Configure Spack for Peregrine
   printf "\n\nConfiguring Spack...\n\n"
@@ -117,7 +118,13 @@ do
       printf "\n\nLoading binutils...\n\n"
       spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}
     elif [ ${COMPILER_NAME} == 'intel' ]; then
-      printf "\n\nMaking TMPDIR for Intel compiler...\n\n"
+      printf "\n\nSetting up rpath for Intel and making TMPDIR for Intel compiler...\n\n"
+      # For Intel compiler to include rpath to its own libraries
+      for i in ICCCFG ICPCCFG IFORTCFG
+      do
+        export $i=${SPACK_ROOT}/etc/spack/intel.cfg
+      done
+
       # Fix for Intel compiler failing when building trilinos with tmpdir set as a RAM disk by default
       mkdir -p /scratch/${USER}/.tmp
       export TMPDIR=/scratch/${USER}/.tmp
@@ -138,7 +145,7 @@ do
 
     if [ ${COMPILER_NAME} == 'intel' ]; then
       printf "\n\nLoading Intel compiler module for CTest...\n\n"
-      module load compiler/intel/16.0.2
+      module load comp-intel/2017.0.2
     fi
 
     # Load spack built cmake and openmpi into path

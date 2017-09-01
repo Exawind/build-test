@@ -118,7 +118,7 @@ do
       printf "\n\nLoading binutils...\n\n"
       spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}
     elif [ ${COMPILER_NAME} == 'intel' ]; then
-      printf "\n\nSetting up rpath for Intel and making TMPDIR for Intel compiler...\n\n"
+      printf "\n\nSetting up rpath for Intel...\n\n"
       # For Intel compiler to include rpath to its own libraries
       for i in ICCCFG ICPCCFG IFORTCFG
       do
@@ -127,6 +127,7 @@ do
     fi
 
     # Set the TMPDIR to disk so it doesn't run out of space
+    printf "\n\nMaking and setting TMPDIR to disk...\n\n"
     mkdir -p /scratch/${USER}/.tmp
     export TMPDIR=/scratch/${USER}/.tmp
 
@@ -207,9 +208,9 @@ do
     spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}
-    elif [ ${COMPILER_NAME} == 'intel' ]; then
-      unset TMPDIR
-    fi 
+    fi
+
+    unset TMPDIR
 
     printf "\n\nDone testing Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH}.\n\n"
   done

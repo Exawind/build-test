@@ -124,11 +124,11 @@ do
       do
         export $i=${SPACK_ROOT}/etc/spack/intel.cfg
       done
-
-      # Fix for Intel compiler failing when building trilinos with tmpdir set as a RAM disk by default
-      mkdir -p /scratch/${USER}/.tmp
-      export TMPDIR=/scratch/${USER}/.tmp
     fi
+
+    # Set the TMPDIR to disk so it doesn't run out of space
+    mkdir -p /scratch/${USER}/.tmp
+    export TMPDIR=/scratch/${USER}/.tmp
 
     # Update Nalu and Trilinos
     printf "\n\nUpdating Nalu and Trilinos...\n\n"

@@ -186,7 +186,10 @@ do
       printf "\n\nRunning CTest...\n\n"
       # Change to Nalu build directory
       cd ${NALU_DIR}/build
-      (set -x; export OMP_NUM_THREADS=1; ctest \
+      (set -x; \
+        export OMP_NUM_THREADS=1; \
+        export OMP_PROC_BIND=false; \
+        ctest \
         -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
         -DYAML_DIR=${YAML_DIR} \
         -DTRILINOS_DIR=${TRILINOS_DIR} \

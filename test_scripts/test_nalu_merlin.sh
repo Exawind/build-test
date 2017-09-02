@@ -107,6 +107,7 @@ do
     (set -x; spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS})
 
     # For Intel compiler to include rpath to its own libraries
+    export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
     for i in ICCCFG ICPCCFG IFORTCFG
     do
       export $i=${SPACK_ROOT}/etc/spack/intel.cfg

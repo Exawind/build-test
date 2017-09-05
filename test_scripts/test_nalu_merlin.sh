@@ -106,6 +106,9 @@ do
     (set -x; spack uninstall -y nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@${YAML_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS})
     (set -x; spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS})
 
+    # For temp compiler files
+    export TMPDIR=/dev/shm
+
     # For Intel compiler to include rpath to its own libraries
     export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
     for i in ICCCFG ICPCCFG IFORTCFG
@@ -186,7 +189,7 @@ do
       printf "\n\nCleaning TMPDIR directory...\n\n"
       (set -x; rm -r /dev/shm/*)
       #(set -x; rm -r ${TMPDIR}/*)
-      #unset TMPDIR
+      unset TMPDIR
     #fi
 
     printf "\n\nDone testing Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH}.\n\n"

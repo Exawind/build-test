@@ -187,7 +187,7 @@ do
     # Clean TMPDIR before exiting
     #if [ ! -z "${TMPDIR}" ]; then
       printf "\n\nCleaning TMPDIR directory...\n\n"
-      (set -x; rm -r /dev/shm/*)
+      (set -x; rm -rf /dev/shm/*)
       #(set -x; rm -r ${TMPDIR}/*)
       unset TMPDIR
     #fi

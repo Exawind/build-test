@@ -29,4 +29,4 @@ source ${NALUSPACK_ROOT}/../spack_config/general_preferred_nalu_constraints.sh
 
 (set -x; spack install nalu %intel@17.0.2 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS})
 
-(set +e; set -x; rm -r /dev/shm/*)
+(set +e; set -x; rm -rf /dev/shm/*)

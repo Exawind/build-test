@@ -3,10 +3,18 @@
 set -ex
 
 module purge
-module load GCCcore/4.9.2
+unset LD_LIBRARY_PATH
+unset MIC_LD_LIBRARY_PATH
+unset LIBRARY_PATH
+unset MIC_LIBRARY_PATH
 source /opt/ohpc/pub/nrel/eb/software/ifort/2017.2.174-GCC-6.3.0-2.27/compilers_and_libraries/linux/bin/compilervars.sh intel64
+module load GCCcore/4.9.2
 
 export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
+for i in ICCCFG ICPCCFG IFORTCFG
+do
+  export $i=${SPACK_ROOT}/etc/spack/intel.cfg
+done
 export TMPDIR=/dev/shm
 
 COMPILER=intel

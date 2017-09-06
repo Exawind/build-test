@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #PBS -N run_nalu_merlin
-#PBS -l nodes=2:ppn=64,walltime=4:00:00
+#PBS -l nodes=8:ppn=64,walltime=4:00:00
 #PBS -A windFlowModeling
 #PBS -q knl
 #PBS -j oe
@@ -45,8 +45,21 @@ module load $(${SPACK} module find openmpi %${COMPILER})
 
 ln -sf /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib64/libstdc++.so.6 libstdc++.so.6
 
+export OMP_NUM_THREADS=1
+export OMP_PROC_BIND=spread
+export OMP_PLACES=threads
+
 # Run the simulation
 (set -x; which mpirun)
-(set -x; mpirun -report-bindings --hostfile ${PBS_NODEFILE} -np 120 --map-by ppr:1:core --bind-to core ${HOME}/Nalu/build/naluX -i abl_3km_256.i -o abl_3km_256.log)
+(set -x; mpirun \
+         -report-bindings \
+         -x OMP_NUM_THREADS \
+         -x OMP_PROC_BIND \
+         -x OMP_PLACES \
+         --hostfile ${PBS_NODEFILE} \
+         -np 504 \
+         --map-by ppr:1:core \
+         --bind-to core \
+         ${HOME}/Nalu/build/naluX -i abl_3km_256.i -o abl_3km_256.log)
 
 unlink libstdc++.so.6

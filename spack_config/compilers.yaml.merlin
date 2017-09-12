@@ -56,7 +56,7 @@ compilers:
       cxxflags: -O2
       cppflags: -O2
       fflags: -O2
-    modules: [GCCcore/4.9.2]
+    modules: []
     operating_system: centos7
     paths:
       cc: /opt/ohpc/pub/nrel/eb/software/ifort/2017.2.174-GCC-6.3.0-2.27/compilers_and_libraries_2017.2.174/linux/bin/intel64/icc

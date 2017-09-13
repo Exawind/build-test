@@ -184,7 +184,7 @@ do
       export FFLAGS="${WARNINGS}"
 
       # Run ctest
-      printf "\n\nRunning CTest...\n\n"
+      printf "\n\nRunning CTest at $(date)...\n\n"
       # Change to Nalu build directory
       cd ${NALU_DIR}/build
       (set -x; \
@@ -198,7 +198,7 @@ do
         -DRELEASE_OR_DEBUG=${RELEASE_OR_DEBUG} \
         -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
         -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
-      printf "\n\nReturned from CTest...\n\n"
+      printf "\n\nReturned from CTest at $(date)...\n\n"
       #fi
     done
 
@@ -223,4 +223,5 @@ printf "\n\nSetting permissions...\n\n"
 (set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt)
 (set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack)
 (set -x; chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db)
+echo `date`
 printf "\n\nDone!\n\n"

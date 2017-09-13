@@ -9,10 +9,11 @@ compilers:
      - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
      - /nopt/nrel/apps/gcc/5.2.0/lib64
     flags:
-      cflags: -O2
-      cxxflags: -O2
-      cppflags: -O2
-      fflags: -O2
+      cflags: -O3
+      cxxflags: -O3
+      cppflags: -O3
+      fflags: -O3
+      fcflags: -O3
     modules: []
     operating_system: centos6
     paths:
@@ -32,10 +33,11 @@ compilers:
      - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
      - /nopt/nrel/apps/gcc/5.2.0/lib64
     flags:
-      cflags: -O2
-      cxxflags: -O2
-      cppflags: -O2
-      fflags: -O2
+      cflags: -O3
+      cxxflags: -O3
+      cppflags: -O3
+      fflags: -O3
+      fcflags: -O3
     modules: []
     operating_system: rhel6
     paths:
@@ -55,10 +57,11 @@ compilers:
      - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
      - /nopt/nrel/apps/gcc/5.2.0/lib64
     flags:
-      cflags: -O2
-      cxxflags: -O2
-      cppflags: -O2
-      fflags: -O2
+      cflags: -O3
+      cxxflags: -O3
+      cppflags: -O3
+      fflags: -O3
+      fcflags: -O3
     modules: [gcc/5.2.0]
     operating_system: centos6
     paths:
@@ -78,10 +81,11 @@ compilers:
      - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
      - /nopt/nrel/apps/gcc/5.2.0/lib64
     flags:
-      cflags: -O2
-      cxxflags: -O2
-      cppflags: -O2
-      fflags: -O2
+      cflags: -O3
+      cxxflags: -O3
+      cppflags: -O3
+      fflags: -O3
+      fcflags: -O3
     modules: [gcc/5.2.0]
     operating_system: rhel6
     paths:

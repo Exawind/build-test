@@ -51,9 +51,13 @@ module load $(${SPACK_EXE} module find netlib-lapack %${COMPILER})
 
 if [ ${COMPILER} == 'gcc' ]; then
   module load $(${SPACK_EXE} module find binutils %${COMPILER})
-elif [ ${COMPILER_NAME} == 'intel' ]; then
+elif [ ${COMPILER} == 'intel' ]; then
   module load comp-intel/2017.0.2
   export TMPDIR=/scratch/${USER}/.tmp
+  #for i in ICCCFG ICPCCFG IFORTCFG
+  #do
+  #  export $i=${SPACK_ROOT}/etc/spack/intel.cfg
+  #done
 fi
 
 # Clean before cmake configure

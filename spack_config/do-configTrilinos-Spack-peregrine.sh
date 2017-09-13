@@ -29,9 +29,15 @@ INSTALL_PREFIX=$(pwd)/install
 # Using NREL communal spack installation by default
 SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedSoftware/spack
 
-SPACK_EXE=${SPACK_ROOT}/bin/spack #actual spack executable
+SPACK_EXE=${SPACK_ROOT}/bin/spack
 
-# Load necessary modules created by spack
+{
+module purge
+module load gcc/5.2.0
+module load python/2.7.8
+module unload mkl
+} &> /dev/null
+
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
 module load $(${SPACK_EXE} module find cmake %${COMPILER})
 module load $(${SPACK_EXE} module find openmpi %${COMPILER})
@@ -41,18 +47,23 @@ module load $(${SPACK_EXE} module find parallel-netcdf %${COMPILER})
 module load $(${SPACK_EXE} module find zlib %${COMPILER})
 module load $(${SPACK_EXE} module find superlu %${COMPILER})
 module load $(${SPACK_EXE} module find boost %${COMPILER})
+module load $(${SPACK_EXE} module find netlib-lapack %${COMPILER})
 
-# Comment this one line if using Intel
-module load $(${SPACK_EXE} module find binutils %${COMPILER})
-# Uncomment these two lines if using Intel
-#module load compiler/intel/16.0.2
-#export TMPDIR=/scratch/${USER}/.tmp
+if [ ${COMPILER} == 'gcc' ]; then
+  module load $(${SPACK_EXE} module find binutils %${COMPILER})
+elif [ ${COMPILER_NAME} == 'intel' ]; then
+  module load comp-intel/2017.0.2
+  export TMPDIR=/scratch/${USER}/.tmp
+fi
 
 # Clean before cmake configure
 set +e
 rm -rf CMakeFiles
 rm -f CMakeCache.txt
 set -e
+
+(set -x; which cmake)
+(set -x; which mpirun)
 
 cmake \
   -DCMAKE_INSTALL_PREFIX:PATH=${INSTALL_PREFIX} \
@@ -99,20 +110,24 @@ cmake \
   -DTPL_ENABLE_MPI:BOOL=ON \
   -DMPI_BASE_DIR:PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER}) \
   -DTPL_ENABLE_Boost:BOOL=ON \
-  -DBoost_ROOT:PATH=$(${SPACK_EXE} location -i boost %${COMPILER}) \
+  -DBoostLib_INCLUDE_DIRS:PATH=$(${SPACK_EXE} location -i boost %${COMPILER})/include \
+  -DBoostLib_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i boost %${COMPILER})/lib \
   -DTPL_ENABLE_SuperLU:BOOL=ON \
-  -DSuperLU_ROOT:PATH=$(${SPACK_EXE} location -i superlu %${COMPILER}) \
+  -DSuperLU_INCLUDE_DIRS:PATH=$(${SPACK_EXE} location -i superlu %${COMPILER})/include \
+  -DSuperLU_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i superlu %${COMPILER})/lib \
   -DTPL_ENABLE_Netcdf:BOOL=ON \
   -DNetCDF_ROOT:PATH=$(${SPACK_EXE} location -i netcdf %${COMPILER}) \
-  -DTPL_Netcdf_Enables_Netcdf4:BOOL=ON \
-  -DTPL_Netcdf_PARALLEL:BOOL=ON \
   -DTPL_ENABLE_Pnetcdf:BOOL=ON \
   -DPNetCDF_ROOT:PATH=$(${SPACK_EXE} location -i parallel-netcdf %${COMPILER}) \
   -DTPL_ENABLE_HDF5:BOOL=ON \
   -DHDF5_ROOT:PATH=$(${SPACK_EXE} location -i hdf5 %${COMPILER}) \
   -DHDF5_NO_SYSTEM_PATHS:BOOL=ON \
   -DTPL_ENABLE_Zlib:BOOL=ON \
-  -DZlib_ROOT:PATH=$(${SPACK_EXE} location -i zlib %${COMPILER}) \
+  -DZlib_INCLUDE_DIRS:PATH=$(${SPACK_EXE} location -i zlib %${COMPILER})/include \
+  -DZlib_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i zlib %${COMPILER})/lib \
+  -DTPL_ENABLE_BLAS:BOOL=ON \
+  -DBLAS_INCLUDE_DIRS:PATH=$(${SPACK_EXE} location -i netlib-lapack %${COMPILER})/include \
+  -DBLAS_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i netlib-lapack %${COMPILER})/lib \
   ..
 
 # Uncomment the next two lines after you make sure you are not on a login node

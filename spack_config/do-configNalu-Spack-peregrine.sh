@@ -26,26 +26,38 @@ COMPILER=gcc #or intel
 SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedSoftware/spack
 SPACK_EXE=${SPACK_ROOT}/bin/spack #actual spack executable
 # Specify location of Trilinos
-TRILINOS_ROOT=$(${SPACK_EXE} location -i trilinos %${COMPILER})
+#TRILINOS_ROOT=$(${SPACK_EXE} location -i trilinos %${COMPILER})
 # Use this line instead if you want to build against your own Trilinos:
-#TRILINOS_ROOT=${HOME}/Trilinos/mybuild/install
+TRILINOS_ROOT=${HOME}/Trilinos/build/install
+
+# Set up environment on Peregrine
+{
+module purge
+module load gcc/5.2.0
+module load python/2.7.8
+module unload mkl
+} &> /dev/null
 
 # Load necessary modules created by spack
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
 module load $(${SPACK_EXE} module find cmake %${COMPILER})
 module load $(${SPACK_EXE} module find openmpi %${COMPILER})
 
-# Comment this one line if using Intel
-module load $(${SPACK_EXE} module find binutils %${COMPILER})
-# Uncomment these two lines if using Intel
-#module load compiler/intel/16.0.2
-#export TMPDIR=/scratch/${USER}/.tmp
+if [ ${COMPILER} == 'gcc' ]; then
+  module load $(${SPACK_EXE} module find binutils %${COMPILER})
+elif [ ${COMPILER_NAME} == 'intel' ]; then
+  module load comp-intel/2017.0.2
+  export TMPDIR=/scratch/${USER}/.tmp
+fi
 
 # Clean before cmake configure
 set +e
 rm -rf CMakeFiles
 rm -f CMakeCache.txt
 set -e
+
+(set -x; which cmake)
+(set -x; which mpirun)
 
 cmake \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT} \

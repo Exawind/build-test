@@ -2,6 +2,24 @@
 
 set -ex
 
+# Instructions:
+# A Nalu do-config script that uses Spack-built TPLs on Merlin.
+# Make a directory in the Nalu directory for building,
+# Copy this script to that directory and edit the
+# options below to your own needs.
+# Uncomment the last line and then run this script.
+
+# Note Spack uses rpath so we don't need to worry so much
+# about setting our environment when running, but when we 
+# build manually we will then need to have some TPLs loaded in 
+# the environment, namely binutils, cmake, and openmpi.
+
+# Also note this script won't work on OSX.
+# Mostly due to your OSX machine not having
+# environment modules so the 'module load'
+# won't add to your PATH (and LD_LIBRARY_PATH).
+
+# Set up environment on Merlin
 module purge
 unset LD_LIBRARY_PATH
 unset MIC_LD_LIBRARY_PATH
@@ -9,7 +27,6 @@ unset LIBRARY_PATH
 unset MIC_LIBRARY_PATH
 source /opt/ohpc/pub/nrel/eb/software/ifort/2017.2.174-GCC-6.3.0-2.27/compilers_and_libraries/linux/bin/compilervars.sh intel64
 module load GCCcore/4.9.2
-
 export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
 for i in ICCCFG ICPCCFG IFORTCFG
 do
@@ -17,11 +34,13 @@ do
 done
 export TMPDIR=/dev/shm
 
-COMPILER=intel
+# Change these three options to suit your needs:
+COMPILER=gcc # or intel
 INSTALL_PREFIX=$(pwd)/install
 SPACK_ROOT=${HOME}/spack
 SPACK_EXE=${SPACK_ROOT}/bin/spack
 
+# Load necessary modules created by spack
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
 module load $(${SPACK_EXE} module find cmake %${COMPILER})
 module load $(${SPACK_EXE} module find openmpi %${COMPILER})
@@ -33,6 +52,7 @@ module load $(${SPACK_EXE} module find superlu %${COMPILER})
 module load $(${SPACK_EXE} module find boost %${COMPILER})
 module load $(${SPACK_EXE} module find netlib-lapack %${COMPILER})
 
+# Clean before cmake configure
 set +e
 rm -rf CMakeFiles
 rm -f CMakeCache.txt
@@ -88,7 +108,6 @@ cmake \
   -DTPL_ENABLE_Boost:BOOL=ON \
   -DBoostLib_INCLUDE_DIRS:PATH=$(${SPACK_EXE} location -i boost %${COMPILER})/include \
   -DBoostLib_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i boost %${COMPILER})/lib \
-  -DBoost_ROOT:PATH=$(${SPACK_EXE} location -i boost %${COMPILER}) \
   -DTPL_ENABLE_SuperLU:BOOL=ON \
   -DSuperLU_INCLUDE_DIRS:PATH=$(${SPACK_EXE} location -i superlu %${COMPILER})/include \
   -DSuperLU_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i superlu %${COMPILER})/lib \
@@ -107,7 +126,9 @@ cmake \
   -DBLAS_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i netlib-lapack %${COMPILER})/lib \
   ..
 
-make -j 24
-make install
+# Uncomment the next line after you make sure you are not on a login node
+# and run this script to configure and build Nalu
+#make -j 24
+#make install
 
 rm -rf /dev/shm/*

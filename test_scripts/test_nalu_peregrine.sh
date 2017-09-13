@@ -86,7 +86,7 @@ do
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       COMPILER_VERSION="${INTEL_COMPILER_VERSION}"
     fi
-    printf "\n\nTesting Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH}.\n\n"
+    printf "\n\nTesting Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH} at $(date).\n\n"
 
     # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
     unset GENERAL_CONSTRAINTS
@@ -212,7 +212,7 @@ do
 
     unset TMPDIR
 
-    printf "\n\nDone testing Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH}.\n\n"
+    printf "\n\nDone testing Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH} at $(date).\n\n"
   done
 done
 

@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N install_nalu_shared_peregrine
-#PBS -l nodes=1:ppn=24,walltime=6:00:00
+#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=64GB
 #PBS -A windFlowModeling
-#PBS -q batch-h
+#PBS -q short
 #PBS -j oe
 #PBS -W umask=002
 
@@ -74,7 +74,7 @@ do
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       COMPILER_VERSION="${INTEL_COMPILER_VERSION}"
     fi
-    printf "\n\nInstalling Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH}.\n\n"
+    printf "\n\nInstalling Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH} at $(date).\n\n"
 
     # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
     unset GENERAL_CONSTRAINTS
@@ -122,7 +122,7 @@ do
 
     unset TMPDIR
 
-    printf "\n\nDone installing Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH}.\n\n"
+    printf "\n\nDone installing Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH} at $(date).\n\n"
   done
 done
 
@@ -133,4 +133,5 @@ printf "\n\nSetting permissions...\n\n"
 (set -x; chmod g+w ${INSTALL_DIR}/spack/opt)
 (set -x; chmod g+w ${INSTALL_DIR}/spack/opt/spack)
 (set -x; chmod -R g+w ${INSTALL_DIR}/spack/opt/spack/.spack-db)
+echo `date`
 printf "\n\nDone!\n\n"

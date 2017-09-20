@@ -23,10 +23,8 @@ do
   export $i=${SPACK_ROOT}/etc/spack/intel.cfg
 done
 
-NALUSPACK_ROOT=`pwd`
-
 # Get general preferred Nalu constraints from a single location
-source ${NALUSPACK_ROOT}/../spack_config/general_preferred_nalu_constraints.sh
+source ../spack_config/shared_constraints.sh
 
 # Using a disk instead of RAM for the tmp directory for intermediate Intel compiler files
 mkdir -p /scratch/${USER}/.tmp

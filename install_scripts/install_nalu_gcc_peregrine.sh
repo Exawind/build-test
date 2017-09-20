@@ -17,10 +17,8 @@ module load gcc/5.2.0
 module load python/2.7.8
 } &> /dev/null
 
-NALUSPACK_ROOT=`pwd`
-
 # Get general preferred Nalu constraints from a single location
-source ${NALUSPACK_ROOT}/../spack_config/general_preferred_nalu_constraints.sh
+source ../spack_config/shared_constraints.sh
 
 # Fix for Peregrine's broken linker
 (set -x; spack install binutils %gcc@5.2.0)

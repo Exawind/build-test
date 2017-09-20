@@ -56,7 +56,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   # Configure Spack for Peregrine
   printf "\n\nConfiguring Spack...\n\n"
   (set -x; cd ${INSTALL_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git)
-  (set -x; cd ${INSTALL_DIR}/NaluSpack/spack_config && ./copy_config.sh)
+  (set -x; cd ${INSTALL_DIR}/NaluSpack/spack_config && ./setup_spack.sh)
 fi
 
 # Load Spack
@@ -78,7 +78,7 @@ do
 
     # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
     unset GENERAL_CONSTRAINTS
-    source ${INSTALL_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
+    source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh
     printf "\n\nUsing constraints: ^yaml-cpp@${YAML_VERSION} ${GENERAL_CONSTRAINTS}\n\n"
 
     # Change to Nalu testing directory

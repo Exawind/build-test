@@ -60,7 +60,7 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
   # Configure Spack for Merlin
   printf "\n\nConfiguring Spack...\n\n"
   (set -x; git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR})
-  (set -x; cd ${NALUSPACK_DIR}/spack_config && ./copy_config.sh)
+  (set -x; cd ${NALUSPACK_DIR}/spack_config && ./setup_spack.sh)
 
   # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
   printf "\n\nCloning Nalu repo...\n\n"
@@ -90,7 +90,7 @@ do
 
     # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
     unset GENERAL_CONSTRAINTS
-    source ${NALU_TESTING_DIR}/NaluSpack/spack_config/general_preferred_nalu_constraints.sh
+    source ${NALU_TESTING_DIR}/NaluSpack/spack_config/shared_constraints.sh
     printf "\n\nUsing constraints: ^yaml-cpp@${YAML_VERSION} ${GENERAL_CONSTRAINTS}\n\n"
 
     # Change to Nalu testing directory

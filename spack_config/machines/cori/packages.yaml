@@ -84,3 +84,5 @@ packages:
       buildable: False
       paths:
           bzip2@1.0.6: /usr
+  yaml-cpp:
+      version: [develop]

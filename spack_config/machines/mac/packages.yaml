@@ -1,3 +1,12 @@
 packages:
   cmake:
     version: [3.6.1]
+  openmpi:
+    version: [1.10.4]
+  yaml-cpp:
+    version: [develop]
+  all:
+    providers:
+      mpi: [openmpi@1.10.4]
+      blas: [netlib-lapack]
+      lapack: [netlib-lapack]

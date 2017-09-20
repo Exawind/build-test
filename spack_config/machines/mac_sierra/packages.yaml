@@ -7,3 +7,12 @@ packages:
     paths:
       pkg-config@0.29.1%gcc@6.3.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/pkg-config/0.29.1
     buildable: False
+  openmpi:
+    version: [1.10.4]
+  yaml-cpp:
+    version: [develop]
+  all:
+    providers:
+      mpi: [openmpi@1.10.4]
+      blas: [netlib-lapack]
+      lapack: [netlib-lapack]

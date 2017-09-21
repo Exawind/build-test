@@ -49,11 +49,15 @@ module load $(${SPACK_EXE} module find superlu %${COMPILER})
 module load $(${SPACK_EXE} module find boost %${COMPILER})
 module load $(${SPACK_EXE} module find netlib-lapack %${COMPILER})
 
+# Set tmpdir to scratch filesystem so it doesn't run out of space
+mkdir -p /scratch/${USER}/.tmp
+export TMPDIR=/scratch/${USER}/.tmp
+
+# Load correct modules per compiler
 if [ ${COMPILER} == 'gcc' ]; then
   module load $(${SPACK_EXE} module find binutils %${COMPILER})
 elif [ ${COMPILER} == 'intel' ]; then
   module load comp-intel/2017.0.2
-  export TMPDIR=/scratch/${USER}/.tmp
   #for i in ICCCFG ICPCCFG IFORTCFG
   #do
   #  export $i=${SPACK_ROOT}/etc/spack/intel.cfg

@@ -43,11 +43,15 @@ module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
 module load $(${SPACK_EXE} module find cmake %${COMPILER})
 module load $(${SPACK_EXE} module find openmpi %${COMPILER})
 
+# Set tmpdir to the scratch filesystem so it doesn't run out of space
+mkdir -p /scratch/${USER}/.tmp
+export TMPDIR=/scratch/${USER}/.tmp
+
+# Load correct modules per compiler
 if [ ${COMPILER} == 'gcc' ]; then
   module load $(${SPACK_EXE} module find binutils %${COMPILER})
 elif [ ${COMPILER_NAME} == 'intel' ]; then
   module load comp-intel/2017.0.2
-  export TMPDIR=/scratch/${USER}/.tmp
 fi
 
 # Clean before cmake configure

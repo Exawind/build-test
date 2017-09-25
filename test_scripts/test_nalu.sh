@@ -37,6 +37,7 @@ if [ ${MACHINE_NAME} == 'peregrine' ]; then
   declare -a LIST_OF_GCC_COMPILERS=("5.2.0")
   declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
   NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
+  HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 elif [ ${MACHINE_NAME} == 'merlin' ]; then
   declare -a LIST_OF_BUILD_TYPES=("release" "debug")
   declare -a LIST_OF_TRILINOS_BRANCHES=("develop" "master")
@@ -44,6 +45,7 @@ elif [ ${MACHINE_NAME} == 'merlin' ]; then
   declare -a LIST_OF_GCC_COMPILERS=("4.9.2")
   declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
+  HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 elif [ ${MACHINE_NAME} == 'mac' ]; then
   declare -a LIST_OF_BUILD_TYPES=("release" "debug")
   declare -a LIST_OF_TRILINOS_BRANCHES=("develop" "master")
@@ -51,11 +53,11 @@ elif [ ${MACHINE_NAME} == 'mac' ]; then
   declare -a LIST_OF_GCC_COMPILERS=("7.2.0")
   declare -a LIST_OF_CLANG_COMPILERS=("5.0.0")
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
+  HOST_NAME="nalu-dev-osx.hpc.nrel.gov"
 else
   printf "\nMachine name not recognized.\n\n"
 fi
 
-HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 NALU_DIR=${NALU_TESTING_DIR}/Nalu
 NALUSPACK_DIR=${NALU_TESTING_DIR}/NaluSpack
 export SPACK_ROOT=${NALU_TESTING_DIR}/spack

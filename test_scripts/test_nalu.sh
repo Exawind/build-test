@@ -29,6 +29,8 @@ else
   MACHINE_NAME="$1"
 fi
 
+HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
+
 # Set nightly directory and Nalu checkout directory
 if [ ${MACHINE_NAME} == 'peregrine' ]; then
   declare -a LIST_OF_BUILD_TYPES=("release" "debug")
@@ -37,7 +39,6 @@ if [ ${MACHINE_NAME} == 'peregrine' ]; then
   declare -a LIST_OF_GCC_COMPILERS=("5.2.0")
   declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
   NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
-  HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 elif [ ${MACHINE_NAME} == 'merlin' ]; then
   declare -a LIST_OF_BUILD_TYPES=("release" "debug")
   declare -a LIST_OF_TRILINOS_BRANCHES=("develop" "master")
@@ -45,15 +46,13 @@ elif [ ${MACHINE_NAME} == 'merlin' ]; then
   declare -a LIST_OF_GCC_COMPILERS=("4.9.2")
   declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
-  HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 elif [ ${MACHINE_NAME} == 'mac' ]; then
-  declare -a LIST_OF_BUILD_TYPES=("release" "debug")
-  declare -a LIST_OF_TRILINOS_BRANCHES=("develop" "master")
-  declare -a LIST_OF_COMPILERS=("gcc" "clang")
+  declare -a LIST_OF_BUILD_TYPES=("release")
+  declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
+  declare -a LIST_OF_COMPILERS=("gcc")
   declare -a LIST_OF_GCC_COMPILERS=("7.2.0")
   declare -a LIST_OF_CLANG_COMPILERS=("5.0.0")
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
-  HOST_NAME="nalu-dev-osx.hpc.nrel.gov"
 else
   printf "\nMachine name not recognized.\n\n"
 fi
@@ -196,8 +195,13 @@ do
       # Refresh available modules (this is only really necessary on the first run of this script
       # because cmake and openmpi will already have been built and module files registered in subsequent runs)
       source ${SPACK_ROOT}/share/spack/setup-env.sh
-      spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}
-      spack load openmpi %${COMPILER_NAME}@${COMPILER_VERSION}
+      if [ ${MACHINE_NAME} == 'mac' ]; then
+        export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}
+        export PATH=$(spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}
+      else
+        spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}
+        spack load openmpi %${COMPILER_NAME}@${COMPILER_VERSION}
+      fi
 
       # Set the Trilinos and Yaml directories to pass to ctest
       printf "\n\nSetting variables to pass to CTest...\n\n"
@@ -244,8 +248,10 @@ do
 
       # Remove spack built cmake and openmpi from path
       printf "\n\nUnloading Spack modules from environment...\n\n"
-      spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}
-      spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}
+      if [ ${MACHINE_NAME} != 'mac' ]; then
+        spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}
+        spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}
+      fi
       if [ ${MACHINE_NAME} == 'peregrine' ]; then
         if [ ${COMPILER_NAME} == 'gcc' ]; then
           spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}

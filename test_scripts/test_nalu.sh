@@ -92,11 +92,11 @@ printf "\n\nLoading Spack...\n\n"
 source ${SPACK_ROOT}/share/spack/setup-env.sh
 
 # Test Nalu for the list of trilinos branches
-for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"
-do
+for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
   # Test Nalu for the list of compilers
-  for COMPILER_NAME in "${LIST_OF_COMPILERS[@]}"
-  do
+  for COMPILER_NAME in "${LIST_OF_COMPILERS[@]}"; do
+
+    # Move specific compiler version to generic compiler version
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       declare -a COMPILER_VERSIONS=("${LIST_OF_GCC_COMPILERS[@]}")
     elif [ ${COMPILER_NAME} == 'intel' ]; then
@@ -104,9 +104,10 @@ do
     elif [ ${COMPILER_NAME} == 'clang' ]; then
       declare -a COMPILER_VERSIONS=("${LIST_OF_CLANG_COMPILERS[@]}")
     fi
+
     # Test Nalu for the list of compiler versions
-    for COMPILER_VERSION in "${COMPILER_VERSIONS[@]}"
-    do
+    for COMPILER_VERSION in "${COMPILER_VERSIONS[@]}"; do
+
       printf "\n\nTesting Nalu with:\n"
       printf "${COMPILER_NAME}@${COMPILER_VERSION}\n"
       printf "trilinos@${TRILINOS_BRANCH}\n"
@@ -129,7 +130,7 @@ do
         module load python/2.7.8
         module unload mkl
         } &> /dev/null
-      if [ ${MACHINE_NAME} == 'merlin' ]; then
+      elif [ ${MACHINE_NAME} == 'merlin' ]; then
         module purge
         module load GCCcore/4.9.2
       fi
@@ -155,7 +156,7 @@ do
             export $i=${SPACK_ROOT}/etc/spack/intel.cfg
           done
         fi
-      if [ ${MACHINE_NAME} == 'merlin' ]; then
+      elif [ ${MACHINE_NAME} == 'merlin' ]; then
         if [ ${COMPILER_NAME} == 'intel' ]; then
           # For Intel compiler to include rpath to its own libraries
           export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
@@ -208,8 +209,7 @@ do
       TRILINOS_DIR=$(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS})
       YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_NAME}@${COMPILER_VERSION})
 
-      for BUILD_TYPE in "${LIST_OF_BUILD_TYPES[@]}"
-      do
+      for BUILD_TYPE in "${LIST_OF_BUILD_TYPES[@]}"; do
         #Make built_type uppercase
         #RELEASE_OR_DEBUG="$(tr [a-z] [A-Z] <<< "${BUILD_TYPE}")"
 
@@ -251,8 +251,7 @@ do
       if [ ${MACHINE_NAME} != 'mac' ]; then
         spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}
         spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}
-      fi
-      if [ ${MACHINE_NAME} == 'peregrine' ]; then
+      elif [ ${MACHINE_NAME} == 'peregrine' ]; then
         if [ ${COMPILER_NAME} == 'gcc' ]; then
           spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}
         fi
@@ -263,6 +262,7 @@ do
       printf "${COMPILER_NAME}@${COMPILER_VERSION}\n"
       printf "trilinos@${TRILINOS_BRANCH}\n"
       printf "at $(date).\n\n"
+
     done
   done
 done
@@ -277,12 +277,15 @@ if [ ${MACHINE_NAME} == 'merlin' ]; then
   fi
 fi
 
-printf "\n\nSetting permissions...\n\n"
-(set -x; chmod -R a+rX,go-w ${NALU_TESTING_DIR})
-(set -x; chmod g+w ${NALU_TESTING_DIR})
-(set -x; chmod g+w ${NALU_TESTING_DIR}/spack)
-(set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt)
-(set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack)
-(set -x; chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db)
+if [ ${MACHINE_NAME} != 'mac' ]; then
+  printf "\n\nSetting permissions...\n\n"
+  (set -x; chmod -R a+rX,go-w ${NALU_TESTING_DIR})
+  (set -x; chmod g+w ${NALU_TESTING_DIR})
+  (set -x; chmod g+w ${NALU_TESTING_DIR}/spack)
+  (set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt)
+  (set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack)
+  (set -x; chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db)
+fi
+
 printf "\n$(date)\n"
 printf "\n\nDone!\n\n"

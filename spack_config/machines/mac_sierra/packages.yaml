@@ -1,11 +1,11 @@
 packages:
   cmake:
     paths:
-      cmake@3.7.2%gcc@6.3.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/cmake/3.7.2
+      cmake@3.9.3%gcc@7.2.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/cmake/3.9.3_1
     buildable: False
   pkg-config:
     paths:
-      pkg-config@0.29.1%gcc@6.3.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/pkg-config/0.29.1
+      pkg-config@0.29.2%gcc@7.2.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/pkg-config/0.29.2
     buildable: False
   openmpi:
     version: [1.10.4]

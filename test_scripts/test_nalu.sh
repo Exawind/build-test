@@ -184,6 +184,12 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       printf "\n\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
       (set -x; spack install --keep-stage --only dependencies nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS})
 
+      # Delete all the staged files except Trilinos
+      STAGE_DIR=$(spack location -S)
+      if [ ! -z "${STAGE_DIR}" ]; then
+        find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;
+      fi
+
       if [ ${MACHINE_NAME} == 'peregrine' ]; then
         if [ ${COMPILER_NAME} == 'intel' ]; then
           printf "\n\nLoading Intel compiler module for CTest...\n\n"

@@ -10,6 +10,5 @@ qsub \
 -q short \
 -j oe \
 -W umask=002 \
--F "peregrine" \
-/projects/windFlowModeling/ExaWind/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu.sh
+/projects/windFlowModeling/ExaWind/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu_peregrine.sh
 

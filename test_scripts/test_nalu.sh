@@ -33,21 +33,21 @@ HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 
 # Set nightly directory and Nalu checkout directory
 if [ ${MACHINE_NAME} == 'peregrine' ]; then
-  declare -a LIST_OF_BUILD_TYPES=("release" "debug")
+  declare -a LIST_OF_BUILD_TYPES=("Release" "Debug")
   declare -a LIST_OF_TRILINOS_BRANCHES=("develop" "master")
   declare -a LIST_OF_COMPILERS=("gcc" "intel")
   declare -a LIST_OF_GCC_COMPILERS=("5.2.0")
   declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
   NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
 elif [ ${MACHINE_NAME} == 'merlin' ]; then
-  declare -a LIST_OF_BUILD_TYPES=("release" "debug")
+  declare -a LIST_OF_BUILD_TYPES=("Release" "Debug")
   declare -a LIST_OF_TRILINOS_BRANCHES=("develop" "master")
   declare -a LIST_OF_COMPILERS=("gcc" "intel")
   declare -a LIST_OF_GCC_COMPILERS=("4.9.2")
   declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 elif [ ${MACHINE_NAME} == 'mac' ]; then
-  declare -a LIST_OF_BUILD_TYPES=("release")
+  declare -a LIST_OF_BUILD_TYPES=("Release")
   declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
   declare -a LIST_OF_COMPILERS=("gcc")
   declare -a LIST_OF_GCC_COMPILERS=("7.2.0")
@@ -210,11 +210,11 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_NAME}@${COMPILER_VERSION})
 
       for BUILD_TYPE in "${LIST_OF_BUILD_TYPES[@]}"; do
-        #Make built_type uppercase
-        #RELEASE_OR_DEBUG="$(tr [a-z] [A-Z] <<< "${BUILD_TYPE}")"
 
         # Set the extra identifiers for CDash build description
-        EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}-${BUILD_TYPE}"
+        #BUILD_TYPE_LOWERCASE="$(tr [A-Z] [a-z] <<< "${BUILD_TYPE}")"
+        #EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}-${BUILD_TYPE_LOWERCASE}"
+        EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}"
 
         # Clean build directory; check if NALU_DIR is blank first
         if [ ! -z "${NALU_DIR}" ]; then
@@ -240,7 +240,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
           -DYAML_DIR=${YAML_DIR} \
           -DTRILINOS_DIR=${TRILINOS_DIR} \
           -DHOST_NAME=${HOST_NAME} \
-          -DRELEASE_OR_DEBUG=${BUILD_TYPE} \
+          -DBUILD_TYPE=${BUILD_TYPE} \
           -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
           -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake)
         printf "\n\nReturned from CTest at $(date)...\n\n"

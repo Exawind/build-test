@@ -33,15 +33,15 @@ HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 
 # Set nightly directory and Nalu checkout directory
 if [ ${MACHINE_NAME} == 'peregrine' ]; then
-  declare -a LIST_OF_BUILD_TYPES=("Release" "Debug")
-  declare -a LIST_OF_TRILINOS_BRANCHES=("develop" "master")
+  declare -a LIST_OF_BUILD_TYPES=("Release")
+  declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
   declare -a LIST_OF_COMPILERS=("gcc" "intel")
   declare -a LIST_OF_GCC_COMPILERS=("5.2.0")
   declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
   NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
 elif [ ${MACHINE_NAME} == 'merlin' ]; then
-  declare -a LIST_OF_BUILD_TYPES=("Release" "Debug")
-  declare -a LIST_OF_TRILINOS_BRANCHES=("develop" "master")
+  declare -a LIST_OF_BUILD_TYPES=("Release")
+  declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
   declare -a LIST_OF_COMPILERS=("gcc" "intel")
   declare -a LIST_OF_GCC_COMPILERS=("4.9.2")
   declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")

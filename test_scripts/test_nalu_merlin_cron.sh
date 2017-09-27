@@ -10,5 +10,4 @@ qsub \
 -q batch \
 -j oe \
 -W umask=002 \
--F "merlin" \
-/home/jrood/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu.sh
+-- /home/jrood/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu.sh merlin

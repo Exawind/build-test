@@ -5,7 +5,7 @@
 
 printf "$(date)\n"
 printf "======================================================\n"
-printf "Job is running on node ${HOSTNAME}\n"
+printf "Job is running on ${HOSTNAME}\n"
 printf "======================================================\n"
 if [ ! -z "${PBS_JOBID}" ]; then
   printf "PBS: Qsub is running on ${PBS_O_HOST}\n"
@@ -31,7 +31,7 @@ fi
 
 HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 
-# Set nightly directory and Nalu checkout directory
+# Set configurations to test for each machine
 if [ ${MACHINE_NAME} == 'peregrine' ]; then
   declare -a LIST_OF_BUILD_TYPES=("Release")
   declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
@@ -170,7 +170,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       # Set the TMPDIR to disk so it doesn't run out of space
       if [ ${MACHINE_NAME} == 'peregrine' ]; then
         printf "\n\nMaking and setting TMPDIR to disk...\n\n"
-        mkdir -p /scratch/${USER}/.tmp
+        (set -x; mkdir -p /scratch/${USER}/.tmp)
         export TMPDIR=/scratch/${USER}/.tmp
       elif [ ${MACHINE_NAME} == 'merlin' ]; then
         export TMPDIR=/dev/shm

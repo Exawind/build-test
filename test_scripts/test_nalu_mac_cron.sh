@@ -4,5 +4,5 @@
 
 set -e
 
-cd /Users/jrood/NaluNightlyTests/jobs && \
+cd /Users/jrood/NaluNightlyTesting/jobs && \
 /Users/jrood/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu.sh mac &> "TestNalu-$(date +%Y-%m-%d).log"

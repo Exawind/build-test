@@ -283,15 +283,15 @@ if [ ${MACHINE_NAME} == 'merlin' ]; then
   fi
 fi
 
-if [ ${MACHINE_NAME} != 'mac' ]; then
-  printf "\n\nSetting permissions...\n\n"
-  (set -x; chmod -R a+rX,go-w ${NALU_TESTING_DIR})
-  (set -x; chmod g+w ${NALU_TESTING_DIR})
-  (set -x; chmod g+w ${NALU_TESTING_DIR}/spack)
-  (set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt)
-  (set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack)
-  (set -x; chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db)
-fi
+#if [ ${MACHINE_NAME} != 'mac' ]; then
+#  printf "\n\nSetting permissions...\n\n"
+#  (set -x; chmod -R a+rX,go-w ${NALU_TESTING_DIR})
+#  (set -x; chmod g+w ${NALU_TESTING_DIR})
+#  (set -x; chmod g+w ${NALU_TESTING_DIR}/spack)
+#  (set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt)
+#  (set -x; chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack)
+#  (set -x; chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db)
+#fi
 
 printf "\n$(date)\n"
 printf "\n\nDone!\n\n"

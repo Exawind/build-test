@@ -3,7 +3,7 @@ packages:
     version: [3.6.1]
   openmpi:
     version: [1.10.4]
-    variants: fabrics=psm2 schedulers=tm
+    variants: fabrics=psm2
   yaml-cpp:
     version: [develop]
   all:

@@ -61,13 +61,12 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #Extra stuff for merlin
   if [ ${MACHINE} == 'merlin' ]; then
     (set -x; cp machines/${MACHINE}/intel.cfg ${SPACK_ROOT}/etc/spack/intel.cfg)
-    (set -x; cp custom_package_files/openmpi/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/openmpi/package.py)
   fi
 
   #Extra stuff for cori
-  if [ ${MACHINE} == 'cori' ]; then
-    (set -x; cp custom_package_files/trilinos/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py)
-  fi
+  #if [ ${MACHINE} == 'cori' ]; then
+    #nothing at the moment
+  #fi
 
   #Extra stuff for macs
   #if [ ${MACHINE} == 'mac' ] || [ "${MACHINE}" == 'mac_sierra' ]; then

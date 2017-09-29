@@ -185,10 +185,12 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       (set -x; spack install --keep-stage --only dependencies nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS})
 
       # Delete all the staged files except Trilinos
-      #STAGE_DIR=$(spack location -S)
-      #if [ ! -z "${STAGE_DIR}" ]; then
-      #  find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;
-      #fi
+      STAGE_DIR=$(spack location -S)
+      if [ ! -z "${STAGE_DIR}" ]; then
+        #Haven't been able to find another robust way to rm with exclude
+        (set -x; cd ${STAGE_DIR} && rm -rf a* b* c* d* e* f* g* h* i* j* k* l* m* n* o* p* q* r* s* u* v* w* x* y* z*)
+        #find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;
+      fi
 
       if [ ${MACHINE_NAME} == 'peregrine' ]; then
         if [ ${COMPILER_NAME} == 'intel' ]; then

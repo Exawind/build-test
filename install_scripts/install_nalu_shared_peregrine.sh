@@ -52,14 +52,10 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   # Create and set up install directory with Spack installation
   printf "\n\nCloning Spack repo...\n\n"
   (set -x; git clone https://github.com/LLNL/spack.git ${SPACK_ROOT})
-  # Spack sha-1 matching the v1.2.0 Nalu tag
-  (set -x; git checkout d3e4e88bae2b3ddf71bf56da18fe510e74e020b2)
 
   # Configure Spack for Peregrine
   printf "\n\nConfiguring Spack...\n\n"
   (set -x; cd ${INSTALL_DIR} && git clone https://github.com/NaluCFD/NaluSpack.git)
-  # NaluSpack tag matching the v1.2.0 Nalu tag
-  (set -x; cd ${INSTALL_DIR} && git checkout v1.2.0)
   (set -x; cd ${INSTALL_DIR}/NaluSpack/spack_config && ./setup_spack.sh)
 fi
 

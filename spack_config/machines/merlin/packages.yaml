@@ -5,7 +5,7 @@ packages:
     version: [1.10.4]
     variants: fabrics=psm2
   yaml-cpp:
-    version: [0.5.3]
+    version: [develop]
   all:
     compiler: [gcc@4.9.2, intel@17.0.2]
     providers:

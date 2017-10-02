@@ -34,21 +34,21 @@ HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 # Set configurations to test for each machine
 if [ ${MACHINE_NAME} == 'peregrine' ]; then
   declare -a LIST_OF_BUILD_TYPES=("Release")
-  declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
+  declare -a LIST_OF_TRILINOS_BRANCHES=("trilinos-release-12-12-1")
   declare -a LIST_OF_COMPILERS=("gcc" "intel")
   declare -a LIST_OF_GCC_COMPILERS=("5.2.0")
   declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
   NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
 elif [ ${MACHINE_NAME} == 'merlin' ]; then
   declare -a LIST_OF_BUILD_TYPES=("Release")
-  declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
+  declare -a LIST_OF_TRILINOS_BRANCHES=("trilinos-release-12-12-1")
   declare -a LIST_OF_COMPILERS=("gcc" "intel")
   declare -a LIST_OF_GCC_COMPILERS=("4.9.2")
   declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 elif [ ${MACHINE_NAME} == 'mac' ]; then
   declare -a LIST_OF_BUILD_TYPES=("Release")
-  declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
+  declare -a LIST_OF_TRILINOS_BRANCHES=("trilinos-release-12-12-1")
   declare -a LIST_OF_COMPILERS=("gcc")
   declare -a LIST_OF_GCC_COMPILERS=("7.2.0")
   declare -a LIST_OF_CLANG_COMPILERS=("5.0.0")
@@ -72,15 +72,21 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
   # Create and set up nightly directory with Spack installation
   printf "\n\nCloning Spack repo...\n\n"
   (set -x; git clone https://github.com/LLNL/spack.git ${SPACK_ROOT})
+  # Nalu v1.2.0 matching sha-1 for Spack
+  (set -x; cd ${SPACK_ROOT} && git checkout d3e4e88bae2b3ddf71bf56da18fe510e74e020b2)
 
   # Configure Spack for Peregrine
   printf "\n\nConfiguring Spack...\n\n"
   (set -x; git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR})
+  # Nalu v1.2.0 matching tag for NaluSpack
+  (cd ${NALUSPACK_DIR} && git checkout v1.2.0)
   (cd ${NALUSPACK_DIR}/spack_config && ./setup_spack.sh)
 
   # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
   printf "\n\nCloning Nalu repo...\n\n"
   (set -x; git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR})
+  # Nalu v1.2.0 tag
+  (set -x; cd ${NALU_DIR} && git checkout v1.2.0)
 
   # Create a jobs directory
   printf "\n\nMaking job output directory...\n\n"

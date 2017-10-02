@@ -10,7 +10,7 @@ packages:
   openmpi:
     version: [1.10.4]
   yaml-cpp:
-    version: [develop]
+    version: [0.5.3]
   all:
     providers:
       mpi: [openmpi@1.10.4]

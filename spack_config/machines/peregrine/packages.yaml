@@ -7,7 +7,7 @@ packages:
     version: [1.10.4]
     variants: fabrics=verbs schedulers=tm
   yaml-cpp:
-    version: [develop]
+    version: [0.5.3]
   all:
     compiler: [gcc@5.2.0, intel@16.0.2]
     providers:

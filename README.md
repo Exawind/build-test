@@ -1,8 +1,10 @@
 Please refer to the official [Nalu documentation](http://nalu.readthedocs.io/en/latest) regarding building and testing Nalu.
 
-### Nalu v1.2.0 Release Notes
+### NaluSpack v1.2.0 Release Notes
 
-This release coincides with the release of Trilinos 12.12.1 and the completion of the FY17 Q4 milestone.
+Note the testing script in this release has been modified to snapshot Nalu v1.2.0 along with Spack, and the TPLs used at the time of the v1.2.0 release, giving an entire snapshot of how Nalu v1.2.0 was being built at the time of release. Therefore checking out this release of NaluSpack should give a clear way to build Nalu as it existed at the time of the v1.2.0 release by use of the `test_nalu.sh` script.
+
+This release coincides with the release of Trilinos 12.12.1 and the beginning of the second year of work in the ECP.
 
 Major TPLs typically used for Nalu v1.2.0 are:
 * Trilinos v12.12.1
@@ -22,6 +24,6 @@ Compilers typically used for Nalu v1.2.0 are:
 * GCC 5.2.0
 * Intel 17.0.2
 
-Notable matching tags useful for Nalu v1.2.0 are:
-* NaluSpack v1.2.0
+Notable matching tags useful for NaluSpack v1.2.0 are:
+* Nalu v1.2.0
 * Spack commit d3e4e88bae2b3ddf71bf56da18fe510e74e020b2

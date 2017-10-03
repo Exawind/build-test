@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.test.nalu.nightly</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/jrood/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu_mac_cron.sh</string>
+  </array>
+
+  <key>UserName</key>
+  <string>jrood</string>
+
+  <key>Nice</key>
+  <integer>1</integer>
+
+  <key>StartCalendarInterval</key>
+  <dict>
+      <key>Hour</key>
+      <integer>1</integer>
+      <key>Minute</key>
+      <integer>0</integer>
+  </dict>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/jrood/NaluNightlyTesting/jobs/last_cron.err</string>
+
+  <key>StandardOutPath</key>
+  <string>/Users/jrood/NaluNightlyTesting/jobs/last_cron.out</string>
+</dict>
+</plist>

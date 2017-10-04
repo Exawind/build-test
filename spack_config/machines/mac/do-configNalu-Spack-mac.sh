@@ -20,6 +20,6 @@ set -e
   -DTrilinos_DIR:PATH=$(${SPACK_EXE} location -i trilinos %${COMPILER}) \
   -DYAML_DIR:PATH=$(${SPACK_EXE} location -i yaml-cpp %${COMPILER}) \
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
-  -DBUILD_DOCUMENTATION:BOOL=OFF \
+  -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \
   .. && make -j 4)

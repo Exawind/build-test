@@ -48,10 +48,10 @@ elif [ ${MACHINE_NAME} == 'merlin' ]; then
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 elif [ ${MACHINE_NAME} == 'mac' ]; then
   declare -a LIST_OF_BUILD_TYPES=("Release")
-  declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
-  declare -a LIST_OF_COMPILERS=("gcc")
+  declare -a LIST_OF_TRILINOS_BRANCHES=("develop" "master")
+  declare -a LIST_OF_COMPILERS=("gcc" "clang")
   declare -a LIST_OF_GCC_COMPILERS=("7.2.0")
-  declare -a LIST_OF_CLANG_COMPILERS=("5.0.0")
+  declare -a LIST_OF_CLANG_COMPILERS=("9.0.0-apple")
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 else
   printf "\nMachine name not recognized.\n\n"
@@ -139,6 +139,11 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       elif [ ${MACHINE_NAME} == 'merlin' ]; then
         module purge
         module load GCCcore/4.9.2
+      fi
+
+      # Turn off OpenMP if using clang
+      if [ ${COMPILER_NAME} == 'clang' ]; then
+        TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
       fi
  
       # Uninstall Trilinos; it's an error if it doesn't exist yet, but we skip it

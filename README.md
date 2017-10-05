@@ -21,5 +21,5 @@ SHELL=/bin/bash
 #Nalu update NaluSpack
 0 0 * * * /bin/bash -c "cd /whereever/NaluNightlyTesting/NaluSpack && ./test_scripts/update_naluspack.sh > /whereever/NaluNightlyTesting/jobs/last_naluspack_update.txt 2>&1"
 #Nalu tests
-0 1 * * * /whereever/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu_peregrine_cron.sh > /whereever/NaluNightlyTesting/jobs/last_cron.txt 2>&1
+0 1 * * * /whereever/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu_peregrine_cron.sh > /whereever/NaluNightlyTesting/jobs/last_nalu_test_job.txt 2>&1
 ```

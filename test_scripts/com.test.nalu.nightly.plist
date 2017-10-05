@@ -25,9 +25,9 @@
   </dict>
 
   <key>StandardErrorPath</key>
-  <string>/Users/jrood/NaluNightlyTesting/jobs/last_cron.err</string>
+  <string>/Users/jrood/NaluNightlyTesting/jobs/last_nalu_test_job.err</string>
 
   <key>StandardOutPath</key>
-  <string>/Users/jrood/NaluNightlyTesting/jobs/last_cron.out</string>
+  <string>/Users/jrood/NaluNightlyTesting/jobs/last_nalu_test_job.out</string>
 </dict>
 </plist>

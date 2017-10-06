@@ -9,7 +9,7 @@
   <array>
     <string>/bin/bash</string>
     <string>-c</string>
-    <string>cd /Users/jrood/NaluNightlyTesting/NaluSpack &amp&amp ./test_scripts/update_naluspack.sh</string>
+    <string>cd /Users/jrood/NaluNightlyTesting/NaluSpack && ./test_scripts/update_naluspack.sh</string>
   </array>
 
   <key>UserName</key>

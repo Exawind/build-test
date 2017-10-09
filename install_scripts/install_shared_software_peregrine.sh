@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
-#PBS -N install_nalu_shared_peregrine
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=64GB
+#PBS -N install_shared_software_peregrine
+#PBS -l nodes=1:ppn=24,walltime=10:00:00
 #PBS -A windFlowModeling
-#PBS -q short
+#PBS -q batch-h
 #PBS -j oe
 #PBS -W umask=002
 
@@ -31,10 +31,9 @@ printf "\n\n"
 # Set some version numbers
 GCC_COMPILER_VERSION="5.2.0"
 INTEL_COMPILER_VERSION="17.0.2"
-YAML_VERSION="develop"
 
-# Set nightly directory and Nalu checkout directory
-INSTALL_DIR=/projects/windFlowModeling/ExaWind/NaluSharedInstallationA
+# Set installation directory
+INSTALL_DIR=/projects/windFlowModeling/ExaWind/NaluSharedInstallationC
 NALU_DIR=${INSTALL_DIR}/Nalu
 NALUSPACK_DIR=${INSTALL_DIR}/NaluSpack
 
@@ -67,7 +66,7 @@ printf "\n\nLoading Spack...\n\n"
 for TRILINOS_BRANCH in develop #master
 do
   # Test Nalu for intel, gcc
-  for COMPILER_NAME in gcc intel
+  for COMPILER_NAME in gcc #intel
   do
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -79,7 +78,7 @@ do
     # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
     unset GENERAL_CONSTRAINTS
     source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh
-    printf "\n\nUsing constraints: ^yaml-cpp@${YAML_VERSION} ${GENERAL_CONSTRAINTS}\n\n"
+    printf "\n\nUsing constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
     # Change to Nalu testing directory
     cd ${INSTALL_DIR}
@@ -117,8 +116,13 @@ do
 
     # Install Nalu and Trilinos
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
-    (set -x; spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^yaml-cpp@${YAML_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS})
+    (set -x; spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS})
+    printf "\n\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
     (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g") ^m4@1.4.17)
+    if [ ${COMPILER_NAME} == 'gcc' ]; then
+      printf "\n\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
+      (set -x; spack install paraview+mpi+python+qt@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION})
+    fi
 
     unset TMPDIR
 
@@ -133,5 +137,5 @@ printf "\n\nSetting permissions...\n\n"
 (set -x; chmod g+w ${INSTALL_DIR}/spack/opt)
 (set -x; chmod g+w ${INSTALL_DIR}/spack/opt/spack)
 (set -x; chmod -R g+w ${INSTALL_DIR}/spack/opt/spack/.spack-db)
-echo `date`
+printf "$(date)\n"
 printf "\n\nDone!\n\n"

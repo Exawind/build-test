@@ -15,6 +15,7 @@ set -e
 module purge
 module load gcc/5.2.0
 module load python/2.7.8
+module unload mkl
 } &> /dev/null
 
 # Get general preferred Nalu constraints from a single location

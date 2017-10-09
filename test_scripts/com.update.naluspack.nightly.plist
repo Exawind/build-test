@@ -3,11 +3,13 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.test.nalu.nightly</string>
+  <string>com.update.naluspack.nightly</string>
 
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/jrood/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu_mac_cron.sh</string>
+    <string>/bin/bash</string>
+    <string>-c</string>
+    <string>cd /Users/jrood/NaluNightlyTesting/NaluSpack && ./test_scripts/update_naluspack.sh</string>
   </array>
 
   <key>UserName</key>
@@ -19,15 +21,15 @@
   <key>StartCalendarInterval</key>
   <dict>
       <key>Hour</key>
-      <integer>1</integer>
+      <integer>0</integer>
       <key>Minute</key>
       <integer>0</integer>
   </dict>
 
   <key>StandardErrorPath</key>
-  <string>/Users/jrood/NaluNightlyTesting/jobs/last_nalu_test_job.err</string>
+  <string>/Users/jrood/NaluNightlyTesting/jobs/last_naluspack_update.err</string>
 
   <key>StandardOutPath</key>
-  <string>/Users/jrood/NaluNightlyTesting/jobs/last_nalu_test_job.out</string>
+  <string>/Users/jrood/NaluNightlyTesting/jobs/last_naluspack_update.out</string>
 </dict>
 </plist>

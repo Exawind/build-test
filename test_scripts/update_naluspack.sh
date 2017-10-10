@@ -24,5 +24,5 @@ fi
 
 # Update NaluSpack
 printf "\n\nUpdating NaluSpack...\n\n"
-(set -x; pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno 2>&1)
+(set -x; pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno) 2>&1
 printf "======================================================\n\n"

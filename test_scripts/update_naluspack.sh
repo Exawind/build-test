@@ -21,8 +21,8 @@ if [ ! -z "${PBS_JOBID}" ]; then
   printf "PBS: PATH = ${PBS_O_PATH}\n"
   printf "======================================================\n"
 fi
-printf "\n"
 
 # Update NaluSpack
 printf "\n\nUpdating NaluSpack...\n\n"
 (set -x; pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno 2>&1)
+printf "======================================================\n\n"

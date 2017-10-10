@@ -56,11 +56,13 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #Extra stuff for peregrine
   if [ ${MACHINE} == 'peregrine' ]; then
     (set -x; cp machines/${MACHINE}/intel.cfg ${SPACK_ROOT}/etc/spack/intel.cfg)
+    (set -x; cp machines/${MACHINE}/glib/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/glib/package.py)
   fi
 
   #Extra stuff for merlin
   if [ ${MACHINE} == 'merlin' ]; then
     (set -x; cp machines/${MACHINE}/intel.cfg ${SPACK_ROOT}/etc/spack/intel.cfg)
+    (set -x; cp machines/${MACHINE}/glib/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/glib/package.py)
     #(set -x; cp machines/${MACHINE}/openmpi/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/openmpi/package.py)
   fi
 

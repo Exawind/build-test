@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #PBS -N install_shared_software_peregrine
-#PBS -l nodes=1:ppn=24,walltime=8:00:00
+#PBS -l nodes=1:ppn=24,walltime=10:00:00
 #PBS -A windFlowModeling
 #PBS -q batch
 #PBS -j oe
@@ -73,7 +73,7 @@ do
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       COMPILER_VERSION="${INTEL_COMPILER_VERSION}"
     fi
-    printf "\n\nInstalling Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH} at $(date).\n\n"
+    printf "\n\nInstalling software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n\n"
 
     # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
     unset GENERAL_CONSTRAINTS
@@ -115,11 +115,11 @@ do
     export TMPDIR=/scratch/${USER}/.tmp
 
     # Install and load our own python for glib to build later
-    #printf "\n\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
-    #(set -x; spack install python %${COMPILER_NAME}@${COMPILER_VERSION})
-    #module unload python/2.7.8
-    #unset PYTHONHOME
-    #spack load python ${COMPILER_NAME}@${COMPILER_VERSION}
+    printf "\n\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
+    (set -x; spack install python %${COMPILER_NAME}@${COMPILER_VERSION})
+    module unload python/2.7.8
+    unset PYTHONHOME
+    spack load python ${COMPILER_NAME}@${COMPILER_VERSION}
 
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
     (set -x; spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS})
@@ -129,7 +129,7 @@ do
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\n\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
-      (set -x; spack install paraview+mpi+python@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION})
+      (set -x; spack install paraview+mpi+python+osmesa~opengl2@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION})
     fi
 
     unset TMPDIR

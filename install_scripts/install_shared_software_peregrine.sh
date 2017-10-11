@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N install_shared_software_peregrine
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=64GB
+#PBS -l nodes=1:ppn=24,walltime=8:00:00
 #PBS -A windFlowModeling
-#PBS -q short
+#PBS -q batch
 #PBS -j oe
 #PBS -W umask=002
 
@@ -66,7 +66,7 @@ printf "\n\nLoading Spack...\n\n"
 for TRILINOS_BRANCH in develop #master
 do
   # Test Nalu for intel, gcc
-  for COMPILER_NAME in gcc #intel
+  for COMPILER_NAME in gcc intel
   do
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -115,11 +115,11 @@ do
     export TMPDIR=/scratch/${USER}/.tmp
 
     # Install and load our own python for glib to build later
-    printf "\n\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
-    (set -x; spack install python %${COMPILER_NAME}@${COMPILER_VERSION})
-    module unload python/2.7.8
-    unset PYTHONHOME
-    spack load python ${COMPILER_NAME}@${COMPILER_VERSION}
+    #printf "\n\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
+    #(set -x; spack install python %${COMPILER_NAME}@${COMPILER_VERSION})
+    #module unload python/2.7.8
+    #unset PYTHONHOME
+    #spack load python ${COMPILER_NAME}@${COMPILER_VERSION}
 
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
     (set -x; spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS})
@@ -129,12 +129,12 @@ do
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\n\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
-      (set -x; spack install paraview+mpi+python+qt@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION})
+      (set -x; spack install paraview+mpi+python@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION})
     fi
 
     unset TMPDIR
 
-    printf "\n\nDone installing Nalu with ${COMPILER_NAME}@${COMPILER_VERSION} and Trilinos ${TRILINOS_BRANCH} at $(date).\n\n"
+    printf "\n\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n\n"
   done
 done
 

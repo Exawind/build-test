@@ -3,7 +3,7 @@
 #PBS -N install_shared_software_peregrine
 #PBS -l nodes=1:ppn=24,walltime=10:00:00
 #PBS -A windFlowModeling
-#PBS -q batch
+#PBS -q batch-h
 #PBS -j oe
 #PBS -W umask=002
 
@@ -123,12 +123,15 @@ do
 
     printf "\n\nInstalling Nalu using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
     (set -x; spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS})
+    (set -x; spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ${GENERAL_CONSTRAINTS})
 
     printf "\n\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
+    # This is currently broken for an unknown reason
     (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g") ^m4@1.4.17)
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\n\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
+      # Need to modify the paraview module to point to libraries in lib/paraview-5.4 after install
       (set -x; spack install paraview+mpi+python+osmesa~opengl2@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION})
     fi
 

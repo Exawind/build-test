@@ -114,7 +114,7 @@ do
     mkdir -p /scratch/${USER}/.tmp
     export TMPDIR=/scratch/${USER}/.tmp
 
-    # Install and load our own python for glib to build later
+    # Install and load our own python for glib because it doesn't like the system python
     printf "\n\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
     (set -x; spack install python %${COMPILER_NAME}@${COMPILER_VERSION})
     module unload python/2.7.8

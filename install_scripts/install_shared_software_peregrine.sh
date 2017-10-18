@@ -132,7 +132,7 @@ do
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\n\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
       # Need to modify the paraview module to point to libraries in lib/paraview-5.4 after install
-      (set -x; spack install paraview+mpi+python+osmesa~opengl2@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION})
+      (set -x; spack install paraview+mpi+python+osmesa@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION})
     fi
 
     unset TMPDIR

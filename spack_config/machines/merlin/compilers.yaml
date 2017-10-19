@@ -8,11 +8,11 @@ compilers:
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib64
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib 
     flags:
-      cflags: -O3
-      cxxflags: -O3
-      cppflags: -O3
-      fflags: -O3
-      fcflags: -O3
+      cflags: -O2
+      cxxflags: -O2
+      cppflags: -O2
+      fflags: -O2
+      fcflags: -O2
     modules: []
     operating_system: centos7
     paths:
@@ -26,11 +26,11 @@ compilers:
     environment: {}
     extra_rpaths: []
     flags:
-      cflags: -O3
-      cxxflags: -O3
-      cppflags: -O3
-      fflags: -O3
-      fcflags: -O3
+      cflags: -O2
+      cxxflags: -O2
+      cppflags: -O2
+      fflags: -O2
+      fcflags: -O2
     modules: []
     operating_system: centos7
     paths:
@@ -54,11 +54,11 @@ compilers:
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib64
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib 
     flags:
-      cflags: -O3
-      cxxflags: -O3
-      cppflags: -O3
-      fflags: -O3
-      fcflags: -O3
+      cflags: -O2
+      cxxflags: -O2
+      cppflags: -O2
+      fflags: -O2
+      fcflags: -O2
     modules: []
     operating_system: centos7
     paths:

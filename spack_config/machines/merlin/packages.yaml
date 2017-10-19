@@ -8,6 +8,7 @@ packages:
     version: [develop]
   all:
     compiler: [gcc@4.9.2, intel@17.0.2]
+    variants: build_type=Release
     providers:
       mpi: [openmpi@1.10.4]
       blas: [netlib-lapack]

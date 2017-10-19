@@ -2,22 +2,23 @@ packages:
   cmake:
     paths:
       cmake@3.9.3%gcc@7.2.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/cmake/3.9.3_1
-      cmake@3.9.3%gcc@6.4.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/cmake/3.9.3_1
-      cmake@3.9.3%gcc@5.4.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/cmake/3.9.3_1
       cmake@3.9.3%clang@9.0.0-apple arch=darwin-sierra-x86_64: /usr/local/Cellar/cmake/3.9.3_1
+      #cmake@3.9.3%gcc@6.4.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/cmake/3.9.3_1
+      #cmake@3.9.3%gcc@5.4.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/cmake/3.9.3_1
     buildable: False
   pkg-config:
     paths:
       pkg-config@0.29.2%gcc@7.2.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/pkg-config/0.29.2
-      pkg-config@0.29.2%gcc@6.4.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/pkg-config/0.29.2
-      pkg-config@0.29.2%gcc@5.4.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/pkg-config/0.29.2
       pkg-config@0.29.2%clang@9.0.0-apple arch=darwin-sierra-x86_64: /usr/local/Cellar/pkg-config/0.29.2
+      #pkg-config@0.29.2%gcc@6.4.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/pkg-config/0.29.2
+      #pkg-config@0.29.2%gcc@5.4.0 arch=darwin-sierra-x86_64: /usr/local/Cellar/pkg-config/0.29.2
     buildable: False
   openmpi:
     version: [1.10.4]
   yaml-cpp:
     version: [develop]
   all:
+    variants: build_type=Release
     providers:
       mpi: [openmpi@1.10.4]
       blas: [netlib-lapack]

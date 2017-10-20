@@ -39,15 +39,15 @@ module unload mkl
 } &> /dev/null
 
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
-module load $(${SPACK_EXE} module find cmake %${COMPILER})
-module load $(${SPACK_EXE} module find openmpi %${COMPILER})
-module load $(${SPACK_EXE} module find hdf5 %${COMPILER})
-module load $(${SPACK_EXE} module find netcdf %${COMPILER})
-module load $(${SPACK_EXE} module find parallel-netcdf %${COMPILER})
-module load $(${SPACK_EXE} module find zlib %${COMPILER})
-module load $(${SPACK_EXE} module find superlu %${COMPILER})
-module load $(${SPACK_EXE} module find boost %${COMPILER})
-module load $(${SPACK_EXE} module find netlib-lapack %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl cmake %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl openmpi %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl hdf5 %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl netcdf %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl parallel-netcdf %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl zlib %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl superlu %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl boost %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl netlib-lapack %${COMPILER})
 
 # Set tmpdir to scratch filesystem so it doesn't run out of space
 mkdir -p /scratch/${USER}/.tmp
@@ -55,7 +55,7 @@ export TMPDIR=/scratch/${USER}/.tmp
 
 # Load correct modules per compiler
 if [ ${COMPILER} == 'gcc' ]; then
-  module load $(${SPACK_EXE} module find binutils %${COMPILER})
+  module load $(${SPACK_EXE} module find -m tcl binutils %${COMPILER})
 elif [ ${COMPILER} == 'intel' ]; then
   module load comp-intel/2017.0.2
   #for i in ICCCFG ICPCCFG IFORTCFG

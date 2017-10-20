@@ -43,8 +43,8 @@ SPACK_EXE=${SPACK_ROOT}/bin/spack
 
 # Load necessary modules created by spack
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
-module load $(${SPACK_EXE} module find cmake %${COMPILER})
-module load $(${SPACK_EXE} module find openmpi %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl cmake %${COMPILER})
+module load $(${SPACK_EXE} module find -m tcl openmpi %${COMPILER})
 
 # Clean before cmake configure
 set +e

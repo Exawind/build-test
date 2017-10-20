@@ -7,7 +7,6 @@ verbose=true
 execute=false
 
 doCmd() {
-  #if $verbose; then echo "\$ ${@/eval/}"; fi
   #if $verbose; then echo "+ $@"; fi
   if $verbose; then echo "+ ${@/eval/}"; fi
   #if $execute; then "$@"; fi
@@ -67,22 +66,26 @@ elif [ ${MACHINE_NAME} == 'mac' ]; then
   declare -a LIST_OF_TPLS=("openfast")
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 else
-  printf "\nMachine name not recognized.\n\n"
+  printf "\nMachine name not recognized.\n"
 fi
 
 NALU_DIR=${NALU_TESTING_DIR}/Nalu
 NALUSPACK_DIR=${NALU_TESTING_DIR}/NaluSpack
 export SPACK_ROOT=${NALU_TESTING_DIR}/spack
 
-printf "\nNALU_TESTING_DIR: ${NALU_TESTING_DIR}\n"
-printf "\nHOST_NAME: ${HOST_NAME}\n"
-printf "\nNALU_DIR: ${NALU_DIR}\n"
-printf "\nNALUSPACK_DIR: ${NALU_DIR}\n"
-printf "\nSPACK_ROOT: ${SPACK_ROOT}\n"
+printf "\n======================================================\n"
+printf "NALU_TESTING_DIR: ${NALU_TESTING_DIR}\n"
+printf "HOST_NAME: ${HOST_NAME}\n"
+printf "NALU_DIR: ${NALU_DIR}\n"
+printf "NALUSPACK_DIR: ${NALU_DIR}\n"
+printf "SPACK_ROOT: ${SPACK_ROOT}\n"
+printf "======================================================\n"
 
 # Create and set up the entire testing directory if it doesn't exist
 if [ ! -d "${NALU_TESTING_DIR}" ]; then
-  printf "\n\nTop level testing directory doesn't exist. Creating everything from scratch...\n\n"
+  printf "\n======================================================\n"
+  printf "Top level testing directory doesn't exist.\n"
+  printf "Creating everything from scratch...\n"
 
   # Make top level testing directory
   printf "\n\nCreating top level testing directory...\n\n"
@@ -110,14 +113,18 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
   # Create a jobs directory
   printf "\n\nMaking job output directory...\n\n"
   doCmd mkdir -p ${NALU_TESTING_DIR}/jobs
+
+  printf "\nDone setting up testing directory.\n"
+  printf "\n======================================================\n"
 fi
 
 # Load Spack
 printf "\n\nLoading Spack...\n\n"
 doCmd source ${SPACK_ROOT}/share/spack/setup-env.sh
 
-printf "\n\nStarting testing loops...\n\n"
 printf "\n============================================================\n"
+printf "Starting testing loops...\n"
+printf "============================================================\n"
 doCmd source ${SPACK_ROOT}/share/spack/setup-env.sh
 # Test Nalu for the list of trilinos branches
 for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
@@ -313,6 +320,14 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
   done
 done
 
+printf "\n======================================================\n"
+printf "Done with testing loops.\n"
+printf "======================================================\n\n"
+
+printf "\n======================================================\n"
+printf "Final Steps.\n"
+printf "======================================================\n"
+
 # Clean TMPDIR before exiting
 if [ ${MACHINE_NAME} == 'merlin' ]; then
   if [ ! -z "${TMPDIR}" ]; then
@@ -333,5 +348,6 @@ fi
 #  doCmd chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db
 #fi
 
-printf "\n$(date)\n"
-printf "\n\nDone!\n\n"
+printf "\n\n$(date)\n"
+printf "Done!\n"
+printf "======================================================\n"

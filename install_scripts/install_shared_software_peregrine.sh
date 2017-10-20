@@ -33,7 +33,7 @@ GCC_COMPILER_VERSION="5.2.0"
 INTEL_COMPILER_VERSION="17.0.2"
 
 # Set installation directory
-INSTALL_DIR=/projects/windFlowModeling/ExaWind/NaluSharedInstallationB
+INSTALL_DIR=/projects/windFlowModeling/ExaWind/SharedSoftwareA
 NALU_DIR=${INSTALL_DIR}/Nalu
 NALUSPACK_DIR=${INSTALL_DIR}/NaluSpack
 

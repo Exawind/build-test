@@ -1,8 +1,5 @@
 compilers:
 - compiler:
-    environment:
-      set:
-        LD_LIBRARY_PATH: /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib/gcc/x86_64-unknown-linux-gnu/4.9.2:/opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib64:/opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib
     extra_rpaths:
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib/gcc/x86_64-unknown-linux-gnu/4.9.2
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib64
@@ -10,7 +7,6 @@ compilers:
     flags:
       cflags: -O2
       cxxflags: -O2
-      cppflags: -O2
       fflags: -O2
       fcflags: -O2
     modules: []
@@ -28,7 +24,6 @@ compilers:
     flags:
       cflags: -O2
       cxxflags: -O2
-      cppflags: -O2
       fflags: -O2
       fcflags: -O2
     modules: []

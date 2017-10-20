@@ -1,8 +1,5 @@
 compilers:
 - compiler:
-    environment:
-      set:
-        LD_LIBRARY_PATH: /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16:/nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0:/nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0:/nopt/nrel/apps/gcc/5.2.0/lib64
     extra_rpaths:
      - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
      - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
@@ -24,9 +21,6 @@ compilers:
     spec: gcc@5.2.0
     target: x86_64
 - compiler:
-    environment:
-      set:
-        LD_LIBRARY_PATH: /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16:/nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0:/nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0:/nopt/nrel/apps/gcc/5.2.0/lib64
     extra_rpaths:
      - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
      - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
@@ -62,7 +56,7 @@ compilers:
       cppflags: -O2
       fflags: -O2
       fcflags: -O2
-    modules: [gcc/5.2.0]
+    modules: []
     operating_system: centos6
     paths:
       cc: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/bin/intel64/icc
@@ -86,7 +80,7 @@ compilers:
       cppflags: -O2
       fflags: -O2
       fcflags: -O2
-    modules: [gcc/5.2.0]
+    modules: []
     operating_system: rhel6
     paths:
       cc: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/bin/intel64/icc

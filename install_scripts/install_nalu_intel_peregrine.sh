@@ -15,6 +15,7 @@ set -e
 module purge
 module load gcc/5.2.0
 module load python/2.7.8
+module unload mkl
 } &> /dev/null
 
 # The intel.cfg sets up the -xlinker rpath for the intel compiler's own libraries

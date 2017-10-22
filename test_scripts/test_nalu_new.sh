@@ -7,14 +7,10 @@
 print_cmds=true
 execute_cmds=false
 
-# Functions for printing and executing commands
+# Function for printing and executing commands
 cmd() {
   if ${print_cmds}; then echo "+ $@"; fi
-  if ${execute_cmds}; then "$@"; fi
-}
-cmdEval() {
-  if ${print_cmds}; then echo "+${@/eval/}"; fi
-  if ${execute_cmds}; then "$@"; fi
+  if ${execute_cmds}; then eval "$@"; fi
 }
 
 printf "============================================================\n"
@@ -48,28 +44,28 @@ HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 
 # Set configurations to test for each machine
 if [ ${MACHINE_NAME} == 'peregrine' ]; then
-  declare -a LIST_OF_BUILD_TYPES=("Release")
-  declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
-  declare -a LIST_OF_COMPILERS=("gcc" "intel")
-  declare -a LIST_OF_GCC_COMPILERS=("5.2.0")
-  declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
-  declare -a LIST_OF_TPLS=("openfast")
+  declare -a LIST_OF_BUILD_TYPES=('Release')
+  declare -a LIST_OF_TRILINOS_BRANCHES=('develop')
+  declare -a LIST_OF_COMPILERS=('gcc' 'intel')
+  declare -a LIST_OF_GCC_COMPILERS=('5.2.0')
+  declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
+  declare -a LIST_OF_TPLS=('openfast')
   NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
 elif [ ${MACHINE_NAME} == 'merlin' ]; then
-  declare -a LIST_OF_BUILD_TYPES=("Release")
-  declare -a LIST_OF_TRILINOS_BRANCHES=("develop")
-  declare -a LIST_OF_COMPILERS=("gcc" "intel")
-  declare -a LIST_OF_GCC_COMPILERS=("4.9.2")
-  declare -a LIST_OF_INTEL_COMPILERS=("17.0.2")
-  declare -a LIST_OF_TPLS=("openfast")
+  declare -a LIST_OF_BUILD_TYPES=('Release')
+  declare -a LIST_OF_TRILINOS_BRANCHES=('develop')
+  declare -a LIST_OF_COMPILERS=('gcc' 'intel')
+  declare -a LIST_OF_GCC_COMPILERS=('4.9.2')
+  declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
+  declare -a LIST_OF_TPLS=('openfast')
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 elif [ ${MACHINE_NAME} == 'mac' ]; then
-  declare -a LIST_OF_BUILD_TYPES=("Release")
-  declare -a LIST_OF_TRILINOS_BRANCHES=("develop" "master")
-  declare -a LIST_OF_COMPILERS=("gcc" "clang")
-  declare -a LIST_OF_GCC_COMPILERS=("7.2.0")
-  declare -a LIST_OF_CLANG_COMPILERS=("9.0.0-apple")
-  declare -a LIST_OF_TPLS=("openfast")
+  declare -a LIST_OF_BUILD_TYPES=('Release')
+  declare -a LIST_OF_TRILINOS_BRANCHES=('develop' 'master')
+  declare -a LIST_OF_COMPILERS=('gcc' 'clang')
+  declare -a LIST_OF_GCC_COMPILERS=('7.2.0')
+  declare -a LIST_OF_CLANG_COMPILERS=('9.0.0-apple')
+  declare -a LIST_OF_TPLS=('openfast')
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 else
   printf "\nMachine name not recognized.\n"
@@ -77,7 +73,7 @@ fi
 
 NALU_DIR=${NALU_TESTING_DIR}/Nalu
 NALUSPACK_DIR=${NALU_TESTING_DIR}/NaluSpack
-export SPACK_ROOT=${NALU_TESTING_DIR}/spack
+cmd "eval export SPACK_ROOT=${NALU_TESTING_DIR}/spack"
 
 printf "\n======================================================\n"
 printf "HOST_NAME: ${HOST_NAME}\n"
@@ -96,30 +92,30 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
 
   # Make top level testing directory
   printf "\n\nCreating top level testing directory...\n\n"
-  cmd mkdir -p ${NALU_TESTING_DIR}
+  cmd "mkdir -p ${NALU_TESTING_DIR}"
 
   # Create and set up nightly directory with Spack installation
   printf "\n\nCloning Spack repo...\n\n"
-  cmd git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}
+  cmd "git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}"
   # Nalu v1.2.0 matching sha-1 for Spack
-  # cmdEval eval "cd ${SPACK_ROOT} && git checkout d3e4e88bae2b3ddf71bf56da18fe510e74e020b2"
+  # cmd "cd ${SPACK_ROOT} && git checkout d3e4e88bae2b3ddf71bf56da18fe510e74e020b2"
 
   # Configure Spack for Peregrine
   printf "\n\nConfiguring Spack...\n\n"
-  cmd git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR}
+  cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR}"
   # Nalu v1.2.0 matching tag for NaluSpack
-  #cmdEval eval "cd ${NALUSPACK_DIR} && git checkout v1.2.0"
-  cmdEval eval "cd ${NALUSPACK_DIR}/spack_config && ./setup_spack.sh"
+  #cmd "cd ${NALUSPACK_DIR} && git checkout v1.2.0"
+  cmd "cd ${NALUSPACK_DIR}/spack_config && ./setup_spack.sh"
 
   # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
   printf "\n\nCloning Nalu repo...\n\n"
-  cmd git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}
+  cmd "git clone --recursive https://github.com/NaluCFD/Nalu.git ${NALU_DIR}"
   # Nalu v1.2.0 tag
-  #cmdEval eval "cd ${NALU_DIR} && git checkout v1.2.0"
+  #cmd "cd ${NALU_DIR} && git checkout v1.2.0"
 
   # Create a jobs directory
   printf "\n\nMaking job output directory...\n\n"
-  cmd mkdir -p ${NALU_TESTING_DIR}/jobs
+  cmd "mkdir -p ${NALU_TESTING_DIR}/jobs"
 
   printf "\n============================================================\n"
   printf "Done setting up testing directory.\n"
@@ -128,7 +124,7 @@ fi
 
 # Load Spack
 printf "\n\nLoading Spack...\n\n"
-cmd source ${SPACK_ROOT}/share/spack/setup-env.sh
+cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
 printf "\n\n\n============================================================\n"
 printf "Starting testing loops...\n"
@@ -159,23 +155,25 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       printf "************************************************************\n\n"
 
       # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
-      cmd unset GENERAL_CONSTRAINTS
-      cmd source ${NALU_TESTING_DIR}/NaluSpack/spack_config/shared_constraints.sh
+      cmd "unset GENERAL_CONSTRAINTS"
+      cmd "source ${NALU_TESTING_DIR}/NaluSpack/spack_config/shared_constraints.sh"
       printf "\n\nUsing constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
       # Change to Nalu testing directory
-      cmd cd ${NALU_TESTING_DIR}
+      cmd "cd ${NALU_TESTING_DIR}"
 
       # Load necessary modules
       printf "\n\nLoading modules...\n\n"
       if [ ${MACHINE_NAME} == 'peregrine' ]; then
-        cmd module purge
-        cmd module load gcc/5.2.0
-        cmdEval eval "module load python/2.7.8 &> /dev/null"
-        cmd module unload mkl
+        cmd "module purge"
+        cmd "module load gcc/5.2.0"
+        cmd "module load python/2.7.8 &> /dev/null"
+        cmd "module unload mkl"
+        cmd "module list"
       elif [ ${MACHINE_NAME} == 'merlin' ]; then
-        cmd module purge
-        cmd module load GCCcore/4.9.2
+        cmd "module purge"
+        cmd "module load GCCcore/4.9.2"
+        cmd "module list"
       fi
 
       # Turn off OpenMP if using clang
@@ -185,32 +183,32 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
  
       # Uninstall Trilinos; it's an error if it doesn't exist yet, but we skip it
       printf "\n\nUninstalling Trilinos...\n\n"
-      cmd spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS}
+      cmd "spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS}"
 
       if [ ${MACHINE_NAME} == 'peregrine' ]; then
         if [ ${COMPILER_NAME} == 'gcc' ]; then
           # Fix for Peregrine's broken linker for gcc
           printf "\n\nInstalling binutils...\n\n"
-          cmd spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}
+          cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
           printf "\n\nReloading Spack...\n\n"
-          cmd source ${SPACK_ROOT}/share/spack/setup-env.sh
+          cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
           printf "\n\nLoading binutils...\n\n"
-          cmd spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}
+          cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
         elif [ ${COMPILER_NAME} == 'intel' ]; then
           printf "\n\nSetting up rpath for Intel...\n\n"
           # For Intel compiler to include rpath to its own libraries
           for i in ICCCFG ICPCCFG IFORTCFG
           do
-            cmd export $i=${SPACK_ROOT}/etc/spack/intel.cfg
+            cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
           done
         fi
       elif [ ${MACHINE_NAME} == 'merlin' ]; then
         if [ ${COMPILER_NAME} == 'intel' ]; then
           # For Intel compiler to include rpath to its own libraries
-          cmd export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
+          cmd "eval export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov"
           for i in ICCCFG ICPCCFG IFORTCFG
           do
-            cmd export $i=${SPACK_ROOT}/etc/spack/intel.cfg
+            cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
           done
         fi
       fi
@@ -218,15 +216,15 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       # Set the TMPDIR to disk so it doesn't run out of space
       if [ ${MACHINE_NAME} == 'peregrine' ]; then
         printf "\n\nMaking and setting TMPDIR to disk...\n\n"
-        cmd mkdir -p /scratch/${USER}/.tmp
-        cmd export TMPDIR=/scratch/${USER}/.tmp
+        cmd "mkdir -p /scratch/${USER}/.tmp"
+        cmd "eval export TMPDIR=/scratch/${USER}/.tmp"
       elif [ ${MACHINE_NAME} == 'merlin' ]; then
-        cmd export TMPDIR=/dev/shm
+        cmd "eval export TMPDIR=/dev/shm"
       fi
 
       # Update Trilinos
       printf "\n\nUpdating Trilinos...\n\n"
-      cmdEval eval "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
+      cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
 
       # Install all Nalu dependencies
       printf "\n\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n\n"
@@ -234,20 +232,21 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       for TPL in "${LIST_OF_TPLS[@]}"; do
         TPL_VARIANTS+="+${TPL}"
       done
-      cmd spack install --keep-stage --only dependencies nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}
+      cmd "spack install --keep-stage --only dependencies nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
 
       # Delete all the staged files except Trilinos
       STAGE_DIR=$(spack location -S)
       if [ ! -z "${STAGE_DIR}" ]; then
         #Haven't been able to find another robust way to rm with exclude
-        cmdEval eval "cd ${STAGE_DIR} && rm -rf a* b* c* d* e* f* g* h* i* j* k* l* m* n* o* p* q* r* s* tar* u* v* w* x* y* z*"
+        cmd "cd ${STAGE_DIR} && rm -rf a* b* c* d* e* f* g* h* i* j* k* l* m* n* o* p* q* r* s* tar* u* v* w* x* y* z*"
         #find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;
       fi
 
       if [ ${MACHINE_NAME} == 'peregrine' ]; then
         if [ ${COMPILER_NAME} == 'intel' ]; then
           printf "\n\nLoading Intel compiler module for CTest...\n\n"
-          cmd module load comp-intel/2017.0.2
+          cmd "module load comp-intel/2017.0.2"
+          cmd "module list"
         fi
       fi
 
@@ -255,13 +254,13 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       printf "\n\nLoading Spack modules into environment...\n\n"
       # Refresh available modules (this is only really necessary on the first run of this script
       # because cmake and openmpi will already have been built and module files registered in subsequent runs)
-      cmd source ${SPACK_ROOT}/share/spack/setup-env.sh
+      cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
       if [ ${MACHINE_NAME} == 'mac' ]; then
-        cmd export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}
-        cmd export PATH=$(spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}
+        cmd "eval export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
+        cmd "eval export PATH=$(spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
       else
-        cmd spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}
-        cmd spack load openmpi %${COMPILER_NAME}@${COMPILER_VERSION}
+        cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+        cmd "spack load openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
       fi
 
       # Set the Trilinos and Yaml directories to pass to ctest
@@ -279,41 +278,43 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         # Clean build directory; check if NALU_DIR is blank first
         if [ ! -z "${NALU_DIR}" ]; then
           printf "\n\nCleaning build directory...\n\n"
-          cmdEval eval "cd ${NALU_DIR}/build && rm -rf ${NALU_DIR}/build/*"
+          cmd "cd ${NALU_DIR}/build && rm -rf ${NALU_DIR}/build/*"
         fi
 
         # Set warning flags for build
         printf "\n\nSetting warning flags...\n\n"
         WARNINGS="-Wall"
-        cmd export CXXFLAGS="${WARNINGS}"
-        cmd export CFLAGS="${WARNINGS}"
-        cmd export FFLAGS="${WARNINGS}"
+        cmd "eval export CXXFLAGS=\'"${WARNINGS}"\'"
+        cmd "eval export CFLAGS=\'"${WARNINGS}"\'"
+        cmd "eval export FFLAGS=\'"${WARNINGS}"\'"
 
         # Run ctest
         printf "\n\nRunning CTest at $(date)...\n\n"
         # Change to Nalu build directory
-        cmd cd ${NALU_DIR}/build
-        cmd export OMP_NUM_THREADS=1
-        cmd export OMP_PROC_BIND=false
-        cmd ctest \
+        cmd "cd ${NALU_DIR}/build"
+        cmd "eval export OMP_NUM_THREADS=1"
+        cmd "eval export OMP_PROC_BIND=false"
+        cmd "ctest \
           -DNIGHTLY_DIR=${NALU_TESTING_DIR} \
           -DYAML_DIR=${YAML_DIR} \
           -DTRILINOS_DIR=${TRILINOS_DIR} \
           -DHOST_NAME=${HOST_NAME} \
           -DBUILD_TYPE=${BUILD_TYPE} \
           -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} \
-          -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake
+          -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
         printf "\nReturned from CTest at $(date)...\n\n"
       done
 
       # Remove spack built cmake and openmpi from path
       printf "\n\nUnloading Spack modules from environment...\n\n"
       if [ ${MACHINE_NAME} != 'mac' ]; then
-        cmd spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}
-        cmd spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}
+        cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+        cmd "spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+        cmd "module list"
       elif [ ${MACHINE_NAME} == 'peregrine' ]; then
         if [ ${COMPILER_NAME} == 'gcc' ]; then
-          cmd spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}
+          cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+          cmd "module list"
         fi
         #unset TMPDIR
       fi
@@ -341,20 +342,20 @@ printf "============================================================\n"
 if [ ${MACHINE_NAME} == 'merlin' ]; then
   if [ ! -z "${TMPDIR}" ]; then
     printf "\n\nCleaning TMPDIR directory...\n\n"
-    cmdEval eval "cd /dev/shm && rm -rf /dev/shm/* &> /dev/null"
+    cmd "cd /dev/shm && rm -rf /dev/shm/* &> /dev/null"
     #cmdEval eval "cd ${TMPDIR} && rm -r ${TMPDIR}/* &> /dev/null"
-    cmd unset TMPDIR
+    cmd "unset TMPDIR"
   fi
 fi
 
 #if [ ${MACHINE_NAME} != 'mac' ]; then
 #  printf "\n\nSetting permissions...\n\n"
-#  cmd chmod -R a+rX,go-w ${NALU_TESTING_DIR}
-#  cmd chmod g+w ${NALU_TESTING_DIR}
-#  cmd chmod g+w ${NALU_TESTING_DIR}/spack
-#  cmd chmod g+w ${NALU_TESTING_DIR}/spack/opt
-#  cmd chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack
-#  cmd chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db
+#  cmd "chmod -R a+rX,go-w ${NALU_TESTING_DIR}"
+#  cmd "chmod g+w ${NALU_TESTING_DIR}"
+#  cmd "chmod g+w ${NALU_TESTING_DIR}/spack"
+#  cmd "chmod g+w ${NALU_TESTING_DIR}/spack/opt"
+#  cmd "chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack"
+#  cmd "chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db"
 #fi
 
 printf "============================================================\n"

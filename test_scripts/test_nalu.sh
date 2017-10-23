@@ -9,8 +9,8 @@ execute_cmds=true
 
 # Function for printing and executing commands
 cmd() {
-  if ${print_cmds}; then printf "\n"; echo "+ $@"; printf "\n"; fi
-  if ${execute_cmds}; then eval "$@"; printf "\n"; fi
+  if ${print_cmds}; then echo "+ $@"; fi
+  if ${execute_cmds}; then eval "$@"; fi
 }
 
 printf "============================================================\n"
@@ -31,7 +31,6 @@ if [ ! -z "${PBS_JOBID}" ]; then
   printf "PBS: PATH = ${PBS_O_PATH}\n"
   printf "============================================================\n"
 fi
-printf "\n"
 
 if [ $# -ne 1 ]; then
     printf "$0: usage: $0 <machine>\n"
@@ -75,31 +74,30 @@ NALU_DIR=${NALU_TESTING_DIR}/Nalu
 NALUSPACK_DIR=${NALU_TESTING_DIR}/NaluSpack
 cmd "eval export SPACK_ROOT=${NALU_TESTING_DIR}/spack"
 
-printf "======================================================\n"
+printf "============================================================\n"
 printf "HOST_NAME: ${HOST_NAME}\n"
 printf "NALU_TESTING_DIR: ${NALU_TESTING_DIR}\n"
 printf "NALU_DIR: ${NALU_DIR}\n"
 printf "NALUSPACK_DIR: ${NALU_DIR}\n"
 printf "SPACK_ROOT: ${SPACK_ROOT}\n"
-printf "\nTesting configurations:\n"
+printf "Testing configurations:\n"
 printf "LIST_OF_BUILD_TYPES: ${LIST_OF_BUILD_TYPES[*]}\n"
 printf "LIST_OF_TRILINOS_BRANCHES: ${LIST_OF_TRILINOS_BRANCHES[*]}\n"
 printf "LIST_OF_COMPILERS: ${LIST_OF_COMPILERS[*]}\n"
 printf "LIST_OF_GCC_COMPILERS: ${LIST_OF_GCC_COMPILERS[*]}\n"
 printf "LIST_OF_INTEL_COMPILERS: ${LIST_OF_INTEL_COMPILERS[*]}\n"
 printf "LIST_OF_TPLS: ${LIST_OF_TPLS[*]}\n"
-printf "======================================================\n"
+printf "============================================================\n"
 
 # Create and set up the entire testing directory if it doesn't exist
 if [ ! -d "${NALU_TESTING_DIR}" ]; then
-  printf "\n\n\n"
-  printf "======================================================\n"
+  printf "============================================================\n"
   printf "Top level testing directory doesn't exist.\n"
   printf "Creating everything from scratch...\n"
-  printf "======================================================\n"
+  printf "============================================================\n"
 
   # Make top level testing directory
-  printf "\nCreating top level testing directory...\n"
+  printf "Creating top level testing directory...\n"
   cmd "mkdir -p ${NALU_TESTING_DIR}"
 
   # Create and set up nightly directory with Spack installation
@@ -134,7 +132,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-printf "\n\n\n"
+printf "\n"
 printf "============================================================\n"
 printf "Starting testing loops...\n"
 printf "============================================================\n"
@@ -156,19 +154,18 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
     # Test Nalu for the list of compiler versions
     for COMPILER_VERSION in "${COMPILER_VERSIONS[@]}"; do
 
-      printf "\n\n"
       printf "************************************************************\n"
       printf "Testing Nalu with:\n"
       printf "${COMPILER_NAME}@${COMPILER_VERSION}\n"
       printf "trilinos@${TRILINOS_BRANCH}\n"
       printf "at $(date).\n"
       printf "************************************************************\n"
-      printf "\n\n"
+      printf "\n"
 
       # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
       cmd "unset GENERAL_CONSTRAINTS"
       cmd "source ${NALU_TESTING_DIR}/NaluSpack/spack_config/shared_constraints.sh"
-      printf "\nUsing constraints: ${GENERAL_CONSTRAINTS}\n"
+      printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
       # Change to Nalu testing directory
       cmd "cd ${NALU_TESTING_DIR}"
@@ -303,14 +300,15 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         cmd "eval export FFLAGS=\'"${WARNINGS}"\'"
 
         # Change to Nalu build directory and setup OpenMP
-        cmd "cd ${NALU_DIR}/build"
+        printf "\nSetting OpenMP stuff...\n"
         cmd "eval export OMP_NUM_THREADS=1"
         cmd "eval export OMP_PROC_BIND=false"
 
         # Run ctest
         printf "\nRunning CTest at $(date)...\n"
+        cmd "cd ${NALU_DIR}/build"
         cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
-        printf "\nReturned from CTest at $(date)...\n"
+        printf "Returned from CTest at $(date)...\n"
       done
 
       # Remove spack built cmake and openmpi from path
@@ -327,25 +325,20 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         #unset TMPDIR
       fi
 
-      printf "\n\n"
+      printf "\n"
       printf "************************************************************\n"
       printf "Done testing Nalu with:\n"
       printf "${COMPILER_NAME}@${COMPILER_VERSION}\n"
       printf "trilinos@${TRILINOS_BRANCH}\n"
       printf "at $(date).\n"
       printf "************************************************************\n"
-      printf "\n\n"
     done
   done
 done
 
-printf "\n\n"
 printf "============================================================\n"
 printf "Done with testing loops.\n"
 printf "============================================================\n"
-printf "\n\n"
-
-printf "\n\n"
 printf "============================================================\n"
 printf "Final Steps.\n"
 printf "============================================================\n"

@@ -247,6 +247,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       STAGE_DIR=$(spack location -S)
       if [ ! -z "${STAGE_DIR}" ]; then
         #Haven't been able to find another robust way to rm with exclude
+        printf "\nRemoving all staged directories except Trilinos...\n"
         cmd "cd ${STAGE_DIR} && rm -rf a* b* c* d* e* f* g* h* i* j* k* l* m* n* o* p* q* r* s* tar* u* v* w* x* y* z*"
         #find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;
       fi

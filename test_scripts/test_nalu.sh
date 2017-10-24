@@ -89,24 +89,20 @@ printf "LIST_OF_INTEL_COMPILERS: ${LIST_OF_INTEL_COMPILERS[*]}\n"
 printf "LIST_OF_TPLS: ${LIST_OF_TPLS[*]}\n"
 printf "============================================================\n"
 
-# Create and set up the entire testing directory if it doesn't exist
 if [ ! -d "${NALU_TESTING_DIR}" ]; then
   printf "============================================================\n"
   printf "Top level testing directory doesn't exist.\n"
   printf "Creating everything from scratch...\n"
   printf "============================================================\n"
 
-  # Make top level testing directory
   printf "Creating top level testing directory...\n"
   cmd "mkdir -p ${NALU_TESTING_DIR}"
 
-  # Create and set up nightly directory with Spack installation
   printf "\nCloning Spack repo...\n"
   cmd "git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}"
   # Nalu v1.2.0 matching sha-1 for Spack
   # cmd "cd ${SPACK_ROOT} && git checkout d3e4e88bae2b3ddf71bf56da18fe510e74e020b2"
 
-  # Configure Spack for Peregrine
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR}"
   # Nalu v1.2.0 matching tag for NaluSpack
@@ -119,7 +115,6 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
   # Nalu v1.2.0 tag
   #cmd "cd ${NALU_DIR} && git checkout v1.2.0"
 
-  # Create a jobs directory
   printf "\nMaking job output directory...\n"
   cmd "mkdir -p ${NALU_TESTING_DIR}/jobs"
 
@@ -128,7 +123,6 @@ if [ ! -d "${NALU_TESTING_DIR}" ]; then
   printf "============================================================\n"
 fi
 
-# Load Spack
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
@@ -167,10 +161,8 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       cmd "source ${NALU_TESTING_DIR}/NaluSpack/spack_config/shared_constraints.sh"
       printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
-      # Change to Nalu testing directory
       cmd "cd ${NALU_TESTING_DIR}"
 
-      # Load necessary modules
       printf "\nLoading modules...\n"
       if [ ${MACHINE_NAME} == 'peregrine' ]; then
         cmd "module purge"
@@ -184,7 +176,6 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         cmd "module list"
       fi
 
-      # Turn off OpenMP if using clang
       if [ ${COMPILER_NAME} == 'clang' ]; then
         printf "\nTurning off OpenMP in Trilinos...\n"
         TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
@@ -231,11 +222,9 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         cmd "eval export TMPDIR=/dev/shm"
       fi
 
-      # Update Trilinos
       printf "\nUpdating Trilinos...\n"
       cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
 
-      # Install all Nalu dependencies
       printf "\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       TPL_VARIANTS=''
       for TPL in "${LIST_OF_TPLS[@]}"; do
@@ -243,7 +232,6 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       done
       cmd "spack install --keep-stage --only dependencies nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
 
-      # Delete all the staged files except Trilinos
       STAGE_DIR=$(spack location -S)
       if [ ! -z "${STAGE_DIR}" ]; then
         #Haven't been able to find another robust way to rm with exclude
@@ -260,7 +248,6 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         fi
       fi
 
-      # Load spack built cmake and openmpi into path
       printf "\nLoading Spack modules into environment...\n"
       # Refresh available modules (this is only really necessary on the first run of this script
       # because cmake and openmpi will already have been built and module files registered in subsequent runs)
@@ -273,7 +260,6 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         cmd "spack load openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
       fi
 
-      # Set the Trilinos and Yaml directories to pass to ctest
       printf "\nSetting variables to pass to CTest...\n"
       TRILINOS_DIR=$(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS})
       YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_NAME}@${COMPILER_VERSION})
@@ -287,32 +273,27 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         #EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}-${BUILD_TYPE_LOWERCASE}"
         EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}"
 
-        # Clean build directory; check if NALU_DIR is blank first
         if [ ! -z "${NALU_DIR}" ]; then
           printf "\nCleaning build directory...\n"
           cmd "cd ${NALU_DIR}/build && rm -rf ${NALU_DIR}/build/*"
         fi
 
-        # Set warning flags for build
         printf "\nSetting warning flags...\n"
         WARNINGS="-Wall"
         cmd "eval export CXXFLAGS=\'"${WARNINGS}"\'"
         cmd "eval export CFLAGS=\'"${WARNINGS}"\'"
         cmd "eval export FFLAGS=\'"${WARNINGS}"\'"
 
-        # Change to Nalu build directory and setup OpenMP
         printf "\nSetting OpenMP stuff...\n"
         cmd "eval export OMP_NUM_THREADS=1"
         cmd "eval export OMP_PROC_BIND=false"
 
-        # Run ctest
         printf "\nRunning CTest at $(date)...\n"
         cmd "cd ${NALU_DIR}/build"
         cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
         printf "Returned from CTest at $(date)...\n"
       done
 
-      # Remove spack built cmake and openmpi from path
       printf "\nUnloading Spack modules from environment...\n"
       if [ ${MACHINE_NAME} != 'mac' ]; then
         cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -344,7 +325,6 @@ printf "============================================================\n"
 printf "Final Steps.\n"
 printf "============================================================\n"
 
-# Clean TMPDIR before exiting
 if [ ${MACHINE_NAME} == 'merlin' ]; then
   if [ ! -z "${TMPDIR}" ]; then
     printf "\nCleaning TMPDIR directory...\n"

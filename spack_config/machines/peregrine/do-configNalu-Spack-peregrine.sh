@@ -27,6 +27,7 @@ SPACK_ROOT=/projects/windFlowModeling/ExaWind/SharedSoftware/spack
 SPACK_EXE=${SPACK_ROOT}/bin/spack #actual spack executable
 # Specify location of Trilinos
 #TRILINOS_ROOT=$(${SPACK_EXE} location -i trilinos build_type=Release %${COMPILER})
+#TRILINOS_ROOT=$(${SPACK_EXE} location -i trilinos build_type=Debug %${COMPILER})
 # Use this line instead if you want to build against your own Trilinos:
 TRILINOS_ROOT=${HOME}/Trilinos/build/install
 

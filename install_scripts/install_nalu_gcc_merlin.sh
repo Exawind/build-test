@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash
 
 #PBS -N nalu_build_gcc
 #PBS -l nodes=1:ppn=24,walltime=4:00:00
@@ -9,12 +9,19 @@
 
 #Script for installing Nalu on Merlin using Spack with GCC compiler
 
+# Control over printing and executing commands
+print_cmds=true
+execute_cmds=true
+
+# Function for printing and executing commands
+cmd() {
+  if ${print_cmds}; then echo "+ $@"; fi
+  if ${execute_cmds}; then eval "$@"; fi
+}
+
 set -e
 
-module purge
-module load GCCcore/4.9.2
-
-# Get general preferred Nalu constraints from a single location
-source ../spack_config/shared_constraints.sh
-
-(set -x; spack install nalu %gcc@4.9.2 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS})
+cmd "module purge"
+cmd "module load GCCcore/4.9.2"
+cmd "source ../spack_config/shared_constraints.sh"
+cmd "spack install nalu %gcc@4.9.2 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS}"

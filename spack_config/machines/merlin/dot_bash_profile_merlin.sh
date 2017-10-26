@@ -10,9 +10,10 @@ fi
 # User specific environment and startup programs
 
 module purge
+module load GCCcore/4.9.2
 
 export SPACK_ROOT=${HOME}/spack
-. ${SPACK_ROOT}/share/spack/setup-env.sh
+source ${SPACK_ROOT}/share/spack/setup-env.sh
 
 export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov
 

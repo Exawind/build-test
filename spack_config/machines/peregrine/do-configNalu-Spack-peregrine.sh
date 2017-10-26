@@ -23,10 +23,10 @@ set -ex
 # Change these three options to suit your needs:
 COMPILER=gcc #or intel
 # Using NREL communal spack installation by default
-SPACK_ROOT=/projects/windFlowModeling/ExaWind/NaluSharedSoftware/spack
+SPACK_ROOT=/projects/windFlowModeling/ExaWind/SharedSoftware/spack
 SPACK_EXE=${SPACK_ROOT}/bin/spack #actual spack executable
 # Specify location of Trilinos
-#TRILINOS_ROOT=$(${SPACK_EXE} location -i trilinos %${COMPILER})
+#TRILINOS_ROOT=$(${SPACK_EXE} location -i trilinos build_type=Release %${COMPILER})
 # Use this line instead if you want to build against your own Trilinos:
 TRILINOS_ROOT=${HOME}/Trilinos/build/install
 

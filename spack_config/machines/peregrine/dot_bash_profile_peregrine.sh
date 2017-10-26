@@ -13,6 +13,7 @@ fi
 module purge
 module load gcc/5.2.0
 module load python/2.7.8
+module unload mkl
 } &> /dev/null
 
 export SPACK_ROOT=${HOME}/spack

@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash
 
 #PBS -N nalu_build_gcc
 #PBS -l nodes=1:ppn=24,walltime=4:00:00
@@ -9,25 +9,33 @@
 
 #Script for installing Nalu on Peregrine using Spack with GCC compiler
 
+# Control over printing and executing commands
+print_cmds=true
+execute_cmds=true
+
+# Function for printing and executing commands
+cmd() {
+  if ${print_cmds}; then echo "+ $@"; fi
+  if ${execute_cmds}; then eval "$@"; fi
+}
+
 set -e
 
-{
-module purge
-module load gcc/5.2.0
-module load python/2.7.8
-module unload mkl
-} &> /dev/null
+cmd "module purge"
+cmd "module load gcc/5.2.0"
+cmd "module load python/2.7.8 &> /dev/null"
+cmd "module unload mkl"
 
 # Get general preferred Nalu constraints from a single location
-source ../spack_config/shared_constraints.sh
+cmd "source ../spack_config/shared_constraints.sh"
 
 # Fix for Peregrine's broken linker
-(set -x; spack install binutils %gcc@5.2.0)
-. ${SPACK_ROOT}/share/spack/setup-env.sh
-spack load binutils
+cmd "spack install binutils %gcc@5.2.0"
+cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+cmd "spack load binutils"
 
 # Sometimes /tmp runs out of space for some reason so set TMPDIR to /scratch
-mkdir -p /scratch/${USER}/.tmp
-export TMPDIR=/scratch/${USER}/.tmp
+cmd "mkdir -p /scratch/${USER}/.tmp"
+cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
-(set -x; spack install nalu %gcc@5.2.0 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS})
+cmd "spack install nalu %gcc@5.2.0 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS}"

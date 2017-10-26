@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash
 
 #PBS -N nalu_build_intel
 #PBS -l nodes=1:ppn=24,walltime=4:00:00
@@ -9,22 +9,32 @@
 
 #Script for installing Nalu on Merlin using Spack with Intel compiler
 
+# Control over printing and executing commands
+print_cmds=true
+execute_cmds=true
+
+# Function for printing and executing commands
+cmd() {
+  if ${print_cmds}; then echo "+ $@"; fi
+  if ${execute_cmds}; then eval "$@"; fi
+}
+
 set -e
 
-module purge
-module load GCCcore/4.9.2
+cmd "module purge"
+cmd "module load GCCcore/4.9.2"
 
-export TMPDIR=/dev/shm
+cmd "export TMPDIR=/dev/shm"
 
 # The intel.cfg sets up the -xlinker rpath for the intel compiler's own libraries
 for i in ICCCFG ICPCCFG IFORTCFG
 do
-  export $i=${SPACK_ROOT}/etc/spack/intel.cfg
+  cmd "export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
 done
 
 # Get general preferred Nalu constraints from a single location
-source ../spack_config/shared_constraints.sh
+cmd "source ../spack_config/shared_constraints.sh"
 
-(set -x; spack install nalu %intel@17.0.2 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS})
+cmd "spack install nalu %intel@17.0.2 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS}"
 
-(set +e; set -x; rm -rf /dev/shm/*)
+cmd "rm -rf /dev/shm/*"

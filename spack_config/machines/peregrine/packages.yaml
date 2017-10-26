@@ -9,7 +9,7 @@ packages:
   yaml-cpp:
     version: [develop]
   all:
-    compiler: [gcc@5.2.0, intel@16.0.2]
+    compiler: [gcc@5.2.0, intel@17.0.2]
     variants: build_type=Release
     providers:
       mpi: [openmpi@1.10.4]

@@ -42,7 +42,7 @@ fi
 HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
 
 # Set configurations to test for each machine
-if [ ${MACHINE_NAME} == 'peregrine' ]; then
+if [ "${MACHINE_NAME}" == 'peregrine' ]; then
   declare -a LIST_OF_BUILD_TYPES=('Release')
   declare -a LIST_OF_TRILINOS_BRANCHES=('develop')
   declare -a LIST_OF_COMPILERS=('gcc' 'intel')
@@ -51,7 +51,7 @@ if [ ${MACHINE_NAME} == 'peregrine' ]; then
   declare -a LIST_OF_TPLS=('openfast')
   OPENFAST_BRANCH=master
   NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
-elif [ ${MACHINE_NAME} == 'merlin' ]; then
+elif [ "${MACHINE_NAME}" == 'merlin' ]; then
   declare -a LIST_OF_BUILD_TYPES=('Release')
   declare -a LIST_OF_TRILINOS_BRANCHES=('develop')
   declare -a LIST_OF_COMPILERS=('gcc' 'intel')
@@ -60,7 +60,7 @@ elif [ ${MACHINE_NAME} == 'merlin' ]; then
   declare -a LIST_OF_TPLS=('openfast')
   OPENFAST_BRANCH=master
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
-elif [ ${MACHINE_NAME} == 'mac' ]; then
+elif [ "${MACHINE_NAME}" == 'mac' ]; then
   declare -a LIST_OF_BUILD_TYPES=('Release')
   declare -a LIST_OF_TRILINOS_BRANCHES=('develop' 'master')
   declare -a LIST_OF_COMPILERS=('gcc' 'clang')
@@ -141,11 +141,11 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
   for COMPILER_NAME in "${LIST_OF_COMPILERS[@]}"; do
 
     # Move specific compiler version to generic compiler version
-    if [ ${COMPILER_NAME} == 'gcc' ]; then
+    if [ "${COMPILER_NAME}" == 'gcc' ]; then
       declare -a COMPILER_VERSIONS=("${LIST_OF_GCC_COMPILERS[@]}")
-    elif [ ${COMPILER_NAME} == 'intel' ]; then
+    elif [ "${COMPILER_NAME}" == 'intel' ]; then
       declare -a COMPILER_VERSIONS=("${LIST_OF_INTEL_COMPILERS[@]}")
-    elif [ ${COMPILER_NAME} == 'clang' ]; then
+    elif [ "${COMPILER_NAME}" == 'clang' ]; then
       declare -a COMPILER_VERSIONS=("${LIST_OF_CLANG_COMPILERS[@]}")
     fi
 
@@ -168,19 +168,19 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       cmd "cd ${NALU_TESTING_DIR}"
 
       printf "\nLoading modules...\n"
-      if [ ${MACHINE_NAME} == 'peregrine' ]; then
+      if [ "${MACHINE_NAME}" == 'peregrine' ]; then
         cmd "module purge"
         cmd "module load gcc/5.2.0"
         cmd "module load python/2.7.8 &> /dev/null"
         cmd "module unload mkl"
         cmd "module list"
-      elif [ ${MACHINE_NAME} == 'merlin' ]; then
+      elif [ "${MACHINE_NAME}" == 'merlin' ]; then
         cmd "module purge"
         cmd "module load GCCcore/4.9.2"
         cmd "module list"
       fi
 
-      if [ ${COMPILER_NAME} == 'clang' ]; then
+      if [ "${COMPILER_NAME}" == 'clang' ]; then
         printf "\nTurning off OpenMP in Trilinos...\n"
         TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
       fi
@@ -191,8 +191,8 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       #printf "\nUninstalling OpenFAST...\n"
       #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
 
-      if [ ${MACHINE_NAME} == 'peregrine' ]; then
-        if [ ${COMPILER_NAME} == 'gcc' ]; then
+      if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+        if [ "${COMPILER_NAME}" == 'gcc' ]; then
           # Fix for Peregrine's broken linker for gcc
           printf "\nInstalling binutils...\n"
           cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -200,7 +200,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
           cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
           printf "\nLoading binutils...\n"
           cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-        elif [ ${COMPILER_NAME} == 'intel' ]; then
+        elif [ "${COMPILER_NAME}" == 'intel' ]; then
           printf "\nSetting up rpath for Intel...\n"
           # For Intel compiler to include rpath to its own libraries
           for i in ICCCFG ICPCCFG IFORTCFG
@@ -208,8 +208,8 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
             cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
           done
         fi
-      elif [ ${MACHINE_NAME} == 'merlin' ]; then
-        if [ ${COMPILER_NAME} == 'intel' ]; then
+      elif [ "${MACHINE_NAME}" == 'merlin' ]; then
+        if [ "${COMPILER_NAME}" == 'intel' ]; then
           # For Intel compiler to include rpath to its own libraries
           cmd "eval export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov"
           for i in ICCCFG ICPCCFG IFORTCFG
@@ -220,11 +220,11 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       fi
 
       # Set the TMPDIR to disk so it doesn't run out of space
-      if [ ${MACHINE_NAME} == 'peregrine' ]; then
+      if [ "${MACHINE_NAME}" == 'peregrine' ]; then
         printf "\nMaking and setting TMPDIR to disk...\n"
         cmd "mkdir -p /scratch/${USER}/.tmp"
         cmd "eval export TMPDIR=/scratch/${USER}/.tmp"
-      elif [ ${MACHINE_NAME} == 'merlin' ]; then
+      elif [ "${MACHINE_NAME}" == 'merlin' ]; then
         cmd "eval export TMPDIR=/dev/shm"
       fi
 
@@ -238,7 +238,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       TPL_CONSTRAINTS=''
       for TPL in "${LIST_OF_TPLS[@]}"; do
         TPL_VARIANTS+="+${TPL}"
-        if "${TPL}" == 'openfast'; then
+        if [ "${TPL}" == 'openfast'] ; then
           TPL_CONSTRAINTS="^openfast@${OPENFAST_BRANCH} ${TPL_CONSTRAINTS}"
         fi
       done
@@ -254,8 +254,8 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         #find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;
       fi
 
-      if [ ${MACHINE_NAME} == 'peregrine' ]; then
-        if [ ${COMPILER_NAME} == 'intel' ]; then
+      if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+        if [ "${COMPILER_NAME}" == 'intel' ]; then
           printf "\nLoading Intel compiler module for CTest...\n"
           cmd "module load comp-intel/2017.0.2"
           cmd "module list"
@@ -266,7 +266,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       # Refresh available modules (this is only really necessary on the first run of this script
       # because cmake and openmpi will already have been built and module files registered in subsequent runs)
       cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-      if [ ${MACHINE_NAME} == 'mac' ]; then
+      if [ "${MACHINE_NAME}" == 'mac' ]; then
         cmd "eval export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
         cmd "eval export PATH=$(spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
       else
@@ -281,7 +281,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       printf "YAML_DIR=${YAML_DIR}\n"
       TPL_TEST_ARGS=''
       for TPL in "${LIST_OF_TPLS[@]}"; do
-        if "${TPL}" == 'openfast'; then
+        if [ "${TPL}" == 'openfast' ]; then
           OPENFAST_DIR=$(spack location -i openfast %${COMPILER_NAME}@${COMPILER_VERSION})
           TPL_TEST_ARGS="-DENABLE_OPENFAST=ON -DOpenFAST_DIR=${OPENFAST_DIR} ${TPL_TEST_ARGS}"
           printf "OPENFAST_DIR=${OPENFAST_DIR}\n"
@@ -317,12 +317,12 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       done
 
       printf "\nUnloading Spack modules from environment...\n"
-      if [ ${MACHINE_NAME} != 'mac' ]; then
+      if [ "${MACHINE_NAME}" != 'mac' ]; then
         cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
         cmd "spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
         cmd "module list"
-      elif [ ${MACHINE_NAME} == 'peregrine' ]; then
-        if [ ${COMPILER_NAME} == 'gcc' ]; then
+      elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
+        if [ "${COMPILER_NAME}" == 'gcc' ]; then
           cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
           cmd "module list"
         fi
@@ -347,7 +347,7 @@ printf "============================================================\n"
 printf "Final Steps.\n"
 printf "============================================================\n"
 
-if [ ${MACHINE_NAME} == 'merlin' ]; then
+if [ "${MACHINE_NAME}" == 'merlin' ]; then
   if [ ! -z "${TMPDIR}" ]; then
     printf "\nCleaning TMPDIR directory...\n"
     cmd "cd /dev/shm && rm -rf /dev/shm/* &> /dev/null"
@@ -356,7 +356,7 @@ if [ ${MACHINE_NAME} == 'merlin' ]; then
   fi
 fi
 
-#if [ ${MACHINE_NAME} != 'mac' ]; then
+#if [ "${MACHINE_NAME}" != 'mac' ]; then
 #  printf "\nSetting permissions...\n"
 #  cmd "chmod -R a+rX,go-w ${NALU_TESTING_DIR}"
 #  cmd "chmod g+w ${NALU_TESTING_DIR}"

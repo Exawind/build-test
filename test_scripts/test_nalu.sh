@@ -238,7 +238,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       TPL_CONSTRAINTS=''
       for TPL in "${LIST_OF_TPLS[@]}"; do
         TPL_VARIANTS+="+${TPL}"
-        if [ "${TPL}" == 'openfast'] ; then
+        if [ "${TPL}" == 'openfast' ] ; then
           TPL_CONSTRAINTS="^openfast@${OPENFAST_BRANCH} ${TPL_CONSTRAINTS}"
         fi
       done

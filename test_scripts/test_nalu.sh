@@ -283,7 +283,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       for TPL in "${LIST_OF_TPLS[@]}"; do
         if [ "${TPL}" == 'openfast' ]; then
           OPENFAST_DIR=$(spack location -i openfast %${COMPILER_NAME}@${COMPILER_VERSION})
-          TPL_TEST_ARGS="-DENABLE_OPENFAST=ON -DOpenFAST_DIR=${OPENFAST_DIR} ${TPL_TEST_ARGS}"
+          TPL_TEST_ARGS="\"-DENABLE_OPENFAST=ON -DOpenFAST_DIR=${OPENFAST_DIR} ${TPL_TEST_ARGS}\""
           printf "OPENFAST_DIR=${OPENFAST_DIR}\n"
         fi
       done

@@ -49,6 +49,7 @@ if [ ${MACHINE_NAME} == 'peregrine' ]; then
   declare -a LIST_OF_GCC_COMPILERS=('5.2.0')
   declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
   declare -a LIST_OF_TPLS=('openfast')
+  OPENFAST_BRANCH=master
   NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
 elif [ ${MACHINE_NAME} == 'merlin' ]; then
   declare -a LIST_OF_BUILD_TYPES=('Release')
@@ -57,6 +58,7 @@ elif [ ${MACHINE_NAME} == 'merlin' ]; then
   declare -a LIST_OF_GCC_COMPILERS=('4.9.2')
   declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
   declare -a LIST_OF_TPLS=('openfast')
+  OPENFAST_BRANCH=master
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 elif [ ${MACHINE_NAME} == 'mac' ]; then
   declare -a LIST_OF_BUILD_TYPES=('Release')
@@ -65,6 +67,7 @@ elif [ ${MACHINE_NAME} == 'mac' ]; then
   declare -a LIST_OF_GCC_COMPILERS=('7.2.0')
   declare -a LIST_OF_CLANG_COMPILERS=('9.0.0-apple')
   declare -a LIST_OF_TPLS=('openfast')
+  OPENFAST_BRANCH=master
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 else
   printf "\nMachine name not recognized.\n"
@@ -87,6 +90,7 @@ printf "LIST_OF_COMPILERS: ${LIST_OF_COMPILERS[*]}\n"
 printf "LIST_OF_GCC_COMPILERS: ${LIST_OF_GCC_COMPILERS[*]}\n"
 printf "LIST_OF_INTEL_COMPILERS: ${LIST_OF_INTEL_COMPILERS[*]}\n"
 printf "LIST_OF_TPLS: ${LIST_OF_TPLS[*]}\n"
+printf "OPENFAST_BRANCH: ${OPENFAST_BRANCH}\n"
 printf "============================================================\n"
 
 if [ ! -d "${NALU_TESTING_DIR}" ]; then
@@ -183,7 +187,9 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
  
       # Uninstall Trilinos; it's an error if it doesn't exist yet, but we skip it
       printf "\nUninstalling Trilinos...\n"
-      cmd "spack uninstall -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS}"
+      cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #printf "\nUninstalling OpenFAST...\n"
+      #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
 
       if [ ${MACHINE_NAME} == 'peregrine' ]; then
         if [ ${COMPILER_NAME} == 'gcc' ]; then
@@ -224,19 +230,27 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
 
       printf "\nUpdating Trilinos...\n"
       cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
+      #printf "\nUpdating OpenFAST...\n"
+      #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno"
 
       printf "\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       TPL_VARIANTS=''
+      TPL_CONSTRAINTS=''
       for TPL in "${LIST_OF_TPLS[@]}"; do
         TPL_VARIANTS+="+${TPL}"
+        if "${TPL}" == 'openfast'; then
+          TPL_CONSTRAINTS="^openfast@${OPENFAST_BRANCH} ${TPL_CONSTRAINTS}"
+        fi
       done
-      cmd "spack install --keep-stage --only dependencies nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
+      cmd "spack install --keep-stage --only dependencies nalu ${TPL_VARIANTS} %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS}"
 
       STAGE_DIR=$(spack location -S)
       if [ ! -z "${STAGE_DIR}" ]; then
         #Haven't been able to find another robust way to rm with exclude
         printf "\nRemoving all staged directories except Trilinos...\n"
         cmd "cd ${STAGE_DIR} && rm -rf a* b* c* d* e* f* g* h* i* j* k* l* m* n* o* p* q* r* s* tar* u* v* w* x* y* z*"
+        #printf "\nRemoving all staged directories except Trilinos and OpenFAST...\n"
+        #cmd "cd ${STAGE_DIR} && rm -rf a* b* c* d* e* f* g* h* i* j* k* l* m* n* openmpi* p* q* r* s* tar* u* v* w* x* y* z*"
         #find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;
       fi
 
@@ -265,6 +279,14 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_NAME}@${COMPILER_VERSION})
       printf "TRILINOS_DIR=${TRILINOS_DIR}\n"
       printf "YAML_DIR=${YAML_DIR}\n"
+      TPL_TEST_ARGS=''
+      for TPL in "${LIST_OF_TPLS[@]}"; do
+        if "${TPL}" == 'openfast'; then
+          OPENFAST_DIR=$(spack location -i openfast %${COMPILER_NAME}@${COMPILER_VERSION})
+          TPL_TEST_ARGS="-DENABLE_OPENFAST=ON -DOpenFAST_DIR=${OPENFAST_DIR} ${TPL_TEST_ARGS}"
+          printf "OPENFAST_DIR=${OPENFAST_DIR}\n"
+        fi
+      done
 
       for BUILD_TYPE in "${LIST_OF_BUILD_TYPES[@]}"; do
 
@@ -290,7 +312,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
 
         printf "\nRunning CTest at $(date)...\n"
         cmd "cd ${NALU_DIR}/build"
-        cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
+        cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DTPL_TEST_ARGS=${TPL_TEST_ARGS} -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
         printf "Returned from CTest at $(date)...\n"
       done
 

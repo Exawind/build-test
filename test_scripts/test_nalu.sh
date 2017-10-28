@@ -48,7 +48,7 @@ if [ "${MACHINE_NAME}" == 'peregrine' ]; then
   declare -a LIST_OF_COMPILERS=('gcc' 'intel')
   declare -a LIST_OF_GCC_COMPILERS=('5.2.0')
   declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
-  declare -a LIST_OF_TPLS=('')
+  #declare -a LIST_OF_TPLS=('openfast')
   OPENFAST_BRANCH=master
   NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
 elif [ "${MACHINE_NAME}" == 'merlin' ]; then
@@ -57,7 +57,7 @@ elif [ "${MACHINE_NAME}" == 'merlin' ]; then
   declare -a LIST_OF_COMPILERS=('gcc' 'intel')
   declare -a LIST_OF_GCC_COMPILERS=('4.9.2')
   declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
-  declare -a LIST_OF_TPLS=('')
+  #declare -a LIST_OF_TPLS=('openfast')
   OPENFAST_BRANCH=master
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 elif [ "${MACHINE_NAME}" == 'mac' ]; then
@@ -66,7 +66,7 @@ elif [ "${MACHINE_NAME}" == 'mac' ]; then
   declare -a LIST_OF_COMPILERS=('gcc' 'clang')
   declare -a LIST_OF_GCC_COMPILERS=('7.2.0')
   declare -a LIST_OF_CLANG_COMPILERS=('9.0.0-apple')
-  declare -a LIST_OF_TPLS=('')
+  #declare -a LIST_OF_TPLS=('openfast')
   OPENFAST_BRANCH=master
   NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
 else

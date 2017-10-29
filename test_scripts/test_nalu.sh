@@ -170,9 +170,11 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
       printf "\nLoading modules...\n"
       if [ "${MACHINE_NAME}" == 'peregrine' ]; then
         cmd "module purge"
+        cmd "module use /nopt/nrel/apps/modules/candidate/modulefiles"
         cmd "module load gcc/5.2.0"
         cmd "module load python/2.7.8 &> /dev/null"
         cmd "module unload mkl"
+        cmd "module load git/2.6.3"
         cmd "module list"
       elif [ "${MACHINE_NAME}" == 'merlin' ]; then
         cmd "module purge"

@@ -298,8 +298,8 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}"
 
         if [ ! -z "${NALU_DIR}" ]; then
-          printf "\nCleaning build directory...\n"
-          cmd "cd ${NALU_DIR}/build && rm -rf ${NALU_DIR}/build/*"
+          printf "\nCleaning Nalu directory...\n"
+          cmd "cd ${NALU_DIR} && git reset --hard origin/master && git clean -df && git status -uno"
         fi
 
         printf "\nSetting warning flags...\n"

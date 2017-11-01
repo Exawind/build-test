@@ -2,7 +2,7 @@
 
 #PBS -N install_shared_software_peregrine
 #PBS -l nodes=1:ppn=24,walltime=14:00:00
-#PBS -A windFlowModeling
+#PBS -A windsim
 #PBS -q batch-h
 #PBS -j oe
 #PBS -W umask=002

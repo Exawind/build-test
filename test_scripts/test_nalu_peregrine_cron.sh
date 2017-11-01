@@ -6,7 +6,7 @@ cd /projects/windFlowModeling/ExaWind/NaluNightlyTesting/jobs && \
 qsub \
 -N test_nalu \
 -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell \
--A windFlowModeling \
+-A windsim \
 -q short \
 -j oe \
 -W umask=002 \

@@ -2,7 +2,7 @@
 
 #PBS -N nalu_build_intel
 #PBS -l nodes=1:ppn=24,walltime=4:00:00
-#PBS -A windFlowModeling
+#PBS -A windsim
 #PBS -q short
 #PBS -j oe
 #PBS -W umask=002

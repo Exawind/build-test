@@ -344,7 +344,9 @@ main() {
  
       # Test Nalu for the list of compiler versions
       for COMPILER_VERSION in "${COMPILER_VERSIONS[@]}"; do
-        (test_loop_body) 2>&1 | tee -i ${NALU_TESTING_DIR}/jobs/nalu-test-log-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}.txt
+        printf "\nRemoving previous test log for uploading to CDash...\n"
+        cmd "rm ${NALU_TESTING_DIR}/jobs/nalu-test-log.txt"
+        (test_loop_body) 2>&1 | tee -i ${NALU_TESTING_DIR}/jobs/nalu-test-log.txt
       done
     done
   done

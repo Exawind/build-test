@@ -300,6 +300,7 @@ for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
         if [ ! -z "${NALU_DIR}" ]; then
           printf "\nCleaning Nalu directory...\n"
           cmd "cd ${NALU_DIR} && git reset --hard origin/master && git clean -df && git status -uno"
+          cmd "cd ${NALU_DIR}/build && rm -rf ${NALU_DIR}/build/*"
         fi
 
         printf "\nSetting warning flags...\n"

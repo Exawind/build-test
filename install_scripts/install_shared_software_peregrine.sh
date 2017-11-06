@@ -60,7 +60,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "mkdir -p ${INSTALL_DIR}"
 
   printf "\nCloning Spack repo...\n"
-  cmd "git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}"
+  cmd "git clone https://github.com/spack/spack.git ${SPACK_ROOT}"
 
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR}"

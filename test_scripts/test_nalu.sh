@@ -296,7 +296,7 @@ main() {
     cmd "mkdir -p ${NALU_TESTING_DIR}"
  
     printf "\nCloning Spack repo...\n"
-    cmd "git clone https://github.com/LLNL/spack.git ${SPACK_ROOT}"
+    cmd "git clone https://github.com/spack/spack.git ${SPACK_ROOT}"
     # Nalu v1.2.0 matching sha-1 for Spack
     # cmd "cd ${SPACK_ROOT} && git checkout d3e4e88bae2b3ddf71bf56da18fe510e74e020b2"
  

@@ -58,7 +58,7 @@ config:
 
   # If this is false, tools like curl that use SSL will not verify
   # certifiates. (e.g., curl will use use the -k option)
-  verify_ssl: true
+  verify_ssl: false
 
 
   # If set to true, Spack will always check checksums after downloading

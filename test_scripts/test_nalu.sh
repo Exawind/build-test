@@ -255,7 +255,7 @@ main() {
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
     declare -a LIST_OF_BUILD_TYPES=('Release')
-    declare -a LIST_OF_TRILINOS_BRANCHES=('develop' 'master')
+    declare -a LIST_OF_TRILINOS_BRANCHES=('master' 'develop')
     declare -a LIST_OF_COMPILERS=('gcc' 'clang')
     declare -a LIST_OF_GCC_COMPILERS=('7.2.0')
     declare -a LIST_OF_CLANG_COMPILERS=('9.0.0-apple')

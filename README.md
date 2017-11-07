@@ -2,7 +2,7 @@ Some notes are here, but please refer to the official [Nalu documentation](http:
 
 ### Notes on this repo:
 
-In general, to start with a clean slate, clone Spack, clone this repo, go to the `spack_config` directory and run `setup_spack.sh` to automatically copy over a recommended Spack configuration for Peregrine, Merlin, or OSX, or study the `setup_spack.sh` script to create your own Spack configuration for your machine. Then look around at the install scripts and testing scripts to learn more about how Nalu is currently being installed and tested. Note the `shared_constraints.sh` script that is sourced which sets the preferred TPLs for Nalu and preferred Trilinos options.
+In general, to start with a clean slate, clone Spack, clone this repo, add `SPACK_ROOT` and Spack shell support to your `~/.bash_profile`, source `~/.bash_profile`, then go to the `spack_config` directory and run `setup_spack.sh` to automatically copy over a recommended Spack configuration for Peregrine, Merlin, or OSX, or study the `setup_spack.sh` script to create your own Spack configuration for your machine. Then look around at the install scripts and testing scripts to learn more about how Nalu is currently being installed and tested. Note the `shared_constraints.sh` script that is sourced which sets the preferred TPLs for Nalu and preferred Trilinos options.
 
 ### Notes on the Nalu nightly testing:
 

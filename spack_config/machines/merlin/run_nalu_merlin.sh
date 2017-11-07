@@ -2,7 +2,7 @@
 
 #PBS -N run_nalu_merlin
 #PBS -l nodes=8:ppn=64,walltime=4:00:00
-#PBS -A windFlowModeling
+#PBS -A windsim
 #PBS -q knl
 #PBS -j oe
 #PBS -W umask=002

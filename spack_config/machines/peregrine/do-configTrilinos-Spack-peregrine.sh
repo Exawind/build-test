@@ -27,7 +27,7 @@ COMPILER=gcc #or intel
 # Default to installing to 'install' directory in build directory
 INSTALL_PREFIX=$(pwd)/install
 # Using NREL communal spack installation by default
-SPACK_ROOT=/projects/windFlowModeling/ExaWind/SharedSoftware/spack
+SPACK_ROOT=/projects/windsim/exawind/SharedSoftware/spack
 
 SPACK_EXE=${SPACK_ROOT}/bin/spack
 

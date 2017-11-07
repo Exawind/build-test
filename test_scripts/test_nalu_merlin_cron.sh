@@ -6,7 +6,7 @@ cd /home/jrood/NaluNightlyTesting/jobs && \
 qsub \
 -N test_nalu \
 -l nodes=1:ppn=24,walltime=12:00:00 \
--A windFlowModeling \
+-A windsim \
 -q batch \
 -j oe \
 -W umask=002 \

@@ -243,7 +243,7 @@ main() {
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
     #declare -a LIST_OF_TPLS=('openfast')
     OPENFAST_BRANCH=master
-    NALU_TESTING_DIR=/projects/windFlowModeling/ExaWind/NaluNightlyTesting
+    NALU_TESTING_DIR=/projects/windsim/exawind/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     declare -a LIST_OF_BUILD_TYPES=('Release')
     declare -a LIST_OF_TRILINOS_BRANCHES=('develop')

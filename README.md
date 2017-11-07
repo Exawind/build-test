@@ -12,7 +12,7 @@ Then there are cron scripts provided for each machine which `qsub` the test job.
 
 The cron scripts for Mac are actually plist files which are added to a schedule on OSX by moving the plist file to `/Library/LaunchDaemons` and using `sudo launchctl load -w /Library/LaunchDaemons/com.test.nalu.nightly.plist` and `sudo launchctl list | grep nalu` to see that the launchd job was added.
 
-Lastly, there is a script used for updating this NaluSpack repo each night before running the tests so that changes to what is being tested can propagate to all the machines without do so manually.
+Lastly, there is a script used for updating this NaluSpack repo each night before running the tests so that changes to what is being tested can propagate to all the machines without doing so manually.
 
 Using crontab, the general cron jobs are written as such:
 ```

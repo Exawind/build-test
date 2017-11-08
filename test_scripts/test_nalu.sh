@@ -51,9 +51,9 @@ test_loop_body() {
   fi
 
   # Uninstall Trilinos; it's an error if it doesn't exist yet, but we skip it
-  printf "\nUninstalling Trilinos...\n"
+  printf "\nUninstalling Trilinos (this is fine to error when tests are first run)...\n"
   cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
-  #printf "\nUninstalling OpenFAST...\n"
+  #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run)...\n"
   #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
@@ -93,9 +93,9 @@ test_loop_body() {
     cmd "eval export TMPDIR=/dev/shm"
   fi
 
-  printf "\nUpdating Trilinos...\n"
+  printf "\nUpdating Trilinos (this is fine to error when tests are first run)...\n"
   cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
-  #printf "\nUpdating OpenFAST...\n"
+  #printf "\nUpdating OpenFAST (this is fine to error when tests are first run)...\n"
   #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno"
 
   printf "\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

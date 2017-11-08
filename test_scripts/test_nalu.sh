@@ -250,7 +250,7 @@ main() {
     declare -a LIST_OF_COMPILERS=('gcc' 'intel')
     declare -a LIST_OF_GCC_COMPILERS=('4.9.2')
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
-    #declare -a LIST_OF_TPLS=('openfast')
+    declare -a LIST_OF_TPLS=('openfast')
     OPENFAST_BRANCH=master
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'mac' ]; then

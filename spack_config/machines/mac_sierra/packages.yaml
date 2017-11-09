@@ -7,6 +7,10 @@ packages:
     paths:
       pkg-config@0.29.2 arch=darwin-sierra-x86_64: /usr/local/Cellar/pkg-config/0.29.2
     buildable: False
+  python:
+    paths:
+      python@2.7.10 arch=darwin-sierra-x86_64: /usr
+    buildable: False
   openmpi:
     version: [1.10.4]
   yaml-cpp:

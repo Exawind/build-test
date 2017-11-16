@@ -51,9 +51,9 @@ test_loop_body() {
   fi
 
   # Uninstall Trilinos; it's an error if it doesn't exist yet, but we skip it
-  printf "\nUninstalling Trilinos (this is fine to error when tests are first run)...\n"
+  printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
   cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
-  #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run)...\n"
+  #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
   #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then

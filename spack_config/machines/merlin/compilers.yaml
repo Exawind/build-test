@@ -1,25 +1,6 @@
 compilers:
 - compiler:
     extra_rpaths:
-     - /home/jrood/save/spack/opt/spack/linux-centos7-x86_64/gcc-4.9.2/gcc-4.9.3-oamtt5jnmjshezv3oetsuwi5qeywlzht/lib/gcc/x86_64-unknown-linux-gnu/4.9.3
-     - /home/jrood/save/spack/opt/spack/linux-centos7-x86_64/gcc-4.9.2/gcc-4.9.3-oamtt5jnmjshezv3oetsuwi5qeywlzht/lib64
-     - /home/jrood/save/spack/opt/spack/linux-centos7-x86_64/gcc-4.9.2/gcc-4.9.3-oamtt5jnmjshezv3oetsuwi5qeywlzht/lib
-    flags:
-      cflags: -O2
-      cxxflags: -O2
-      fflags: -O2
-      fcflags: -O2
-    modules: []
-    operating_system: centos7
-    paths:
-      cc: /home/jrood/save/spack/opt/spack/linux-centos7-x86_64/gcc-4.9.2/gcc-4.9.3-oamtt5jnmjshezv3oetsuwi5qeywlzht/bin/gcc
-      cxx: /home/jrood/save/spack/opt/spack/linux-centos7-x86_64/gcc-4.9.2/gcc-4.9.3-oamtt5jnmjshezv3oetsuwi5qeywlzht/bin/g++
-      f77: /home/jrood/save/spack/opt/spack/linux-centos7-x86_64/gcc-4.9.2/gcc-4.9.3-oamtt5jnmjshezv3oetsuwi5qeywlzht/bin/gfortran
-      fc: /home/jrood/save/spack/opt/spack/linux-centos7-x86_64/gcc-4.9.2/gcc-4.9.3-oamtt5jnmjshezv3oetsuwi5qeywlzht/bin/gfortran
-    spec: gcc@4.9.3
-    target: x86_64
-- compiler:
-    extra_rpaths:
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib/gcc/x86_64-unknown-linux-gnu/4.9.2
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib64
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib 

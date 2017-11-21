@@ -41,7 +41,7 @@ test_loop_body() {
     cmd "module list"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     cmd "module purge"
-    #cmd "module load GCCcore/4.9.2"
+    cmd "module load GCCcore/4.9.2"
     cmd "module list"
   fi
 
@@ -248,8 +248,7 @@ main() {
     declare -a LIST_OF_BUILD_TYPES=('Release')
     declare -a LIST_OF_TRILINOS_BRANCHES=('develop')
     declare -a LIST_OF_COMPILERS=('gcc' 'intel')
-    #declare -a LIST_OF_GCC_COMPILERS=('4.9.2')
-    declare -a LIST_OF_GCC_COMPILERS=('4.9.3')
+    declare -a LIST_OF_GCC_COMPILERS=('4.9.2')
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
     #declare -a LIST_OF_TPLS=('openfast')
     OPENFAST_BRANCH=master

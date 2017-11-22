@@ -6,12 +6,16 @@ packages:
   openmpi:
     version: [1.10.4]
     variants: fabrics=verbs schedulers=tm
+  intel-mpi:
+    version: [2017.2.174]
+  intel-mkl:
+    version: [2017.2.174]
   yaml-cpp:
     version: [develop]
   all:
     compiler: [gcc@5.2.0, intel@17.0.2]
     variants: build_type=Release
     providers:
-      mpi: [openmpi@1.10.4]
-      blas: [netlib-lapack]
-      lapack: [netlib-lapack]
+      mpi: [openmpi, intel-mpi]
+      blas: [netlib-lapack, intel-mkl]
+      lapack: [netlib-lapack, intel-mkl]

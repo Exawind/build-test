@@ -107,6 +107,12 @@ test_loop_body() {
       TPL_CONSTRAINTS="^openfast@${OPENFAST_BRANCH} ${TPL_CONSTRAINTS}"
     fi
   done
+
+  # For intel, we want to build against intel-mpi and intel-mkl
+  #if [ "${COMPILER_NAME}" == 'intel' ]; then
+  #  GENERAL_CONSTRAINTS="^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
+  #fi
+
   cmd "spack install --keep-stage --only dependencies nalu ${TPL_VARIANTS} %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS}"
 
   STAGE_DIR=$(spack location -S)

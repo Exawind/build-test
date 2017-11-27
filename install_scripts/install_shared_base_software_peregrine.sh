@@ -39,7 +39,6 @@ fi
 
 # Set some version numbers
 GCC_COMPILER_VERSION="5.2.0"
-INTEL_COMPILER_VERSION="17.0.2"
 
 # Set installation directory
 INSTALL_DIR=/projects/windsim/exawind/SharedBaseSoftwareA
@@ -103,16 +102,6 @@ do
   # Install our own python
   printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   cmd "spack install python %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "module unload python/2.7.8"
-  cmd "unset PYTHONHOME"
-  cmd "spack load python ${COMPILER_NAME}@${COMPILER_VERSION}"
-
-  # Install our own compilers
-  printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-  cmd "spack install gcc@7.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -120,6 +109,13 @@ do
   cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
+
+  # Install our own compilers
+  printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+  cmd "spack install gcc@7.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   cmd "unset TMPDIR"
 

@@ -42,7 +42,6 @@ GCC_COMPILER_VERSION="5.2.0"
 
 # Set installation directory
 INSTALL_DIR=/projects/windsim/exawind/SharedBaseSoftwareA
-NALU_DIR=${INSTALL_DIR}/Nalu
 NALUSPACK_DIR=${INSTALL_DIR}/NaluSpack
 
 # Set spack location
@@ -101,7 +100,8 @@ do
 
   # Install our own python
   printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-  cmd "spack install python %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"

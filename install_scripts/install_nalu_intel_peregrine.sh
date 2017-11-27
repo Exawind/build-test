@@ -19,8 +19,7 @@ set -e
 
 cmd "module purge"
 cmd "module load gcc/5.2.0"
-cmd "module load python/2.7.8 &> /dev/null"
-cmd "module unload mkl"
+cmd "module load /projects/windsim/exawind/spack/share/spack/modules/linux-centos6-x86_64/python-2.7.14"
 
 # The intel.cfg sets up the -xlinker rpath for the intel compiler's own libraries
 for i in ICCCFG ICPCCFG IFORTCFG
@@ -35,4 +34,4 @@ cmd "source ../spack_config/shared_constraints.sh"
 cmd "mkdir -p /scratch/${USER}/.tmp"
 cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
-cmd "spack install nalu %intel@17.0.2 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS}"
+cmd "spack install nalu %intel@17.0.2 ^${TRILINOS}@develop ^intel-mkl ^intel-mpi ${GENERAL_CONSTRAINTS}"

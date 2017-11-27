@@ -130,8 +130,13 @@ do
     cmd "spack load python ${COMPILER_NAME}@${COMPILER_VERSION}"
 
     printf "\nInstalling Nalu using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
-    cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ${GENERAL_CONSTRAINTS}"
+    if [ ${COMPILER_NAME} == 'gcc' ]; then
+      cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
+      cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ${GENERAL_CONSTRAINTS}"
+    elif [ ${COMPILER_NAME} == 'intel' ]; then
+      cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
+      cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
+    fi
 
     printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))

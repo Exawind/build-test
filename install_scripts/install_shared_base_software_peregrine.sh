@@ -5,8 +5,7 @@
 #PBS -A windsim
 #PBS -q batch-h
 #PBS -j oe
-#PBS -W umask=002
-
+#PBS -W umask=002 
 # Script for shared installation of Nalu related software on Peregrine using Spack
 
 # Control over printing and executing commands
@@ -116,6 +115,7 @@ do
   cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+  cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"

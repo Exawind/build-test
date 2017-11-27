@@ -49,10 +49,10 @@ compilers:
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib64
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib 
     flags:
-      cflags: -O2
-      cxxflags: -O2
-      fflags: -O2
-      fcflags: -O2
+      cflags: -O3 -xCORE-AVX2
+      cxxflags: -O3 -xCORE-AVX2
+      fflags: -O3 -xCORE-AVX2
+      fcflags: -O3 -xCORE-AVX2
     modules: []
     operating_system: centos7
     paths:

@@ -109,6 +109,7 @@ do
   cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   # Install our own compilers
   printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

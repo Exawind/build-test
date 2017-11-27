@@ -51,7 +51,7 @@ export TMPDIR=/scratch/${USER}/.tmp
 # Load correct modules per compiler
 if [ ${COMPILER} == 'gcc' ]; then
   module load $(${SPACK_EXE} module find -m tcl binutils %${COMPILER})
-elif [ ${COMPILER_NAME} == 'intel' ]; then
+elif [ ${COMPILER} == 'intel' ]; then
   module load comp-intel/2017.0.2
 fi
 

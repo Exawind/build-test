@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N install_shared_base_software_peregrine
-#PBS -l nodes=1:ppn=24,walltime=14:00:00
+#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
 #PBS -A windsim
-#PBS -q batch-h
+#PBS -q short
 #PBS -j oe
 #PBS -W umask=002 
 # Script for shared installation of Nalu related software on Peregrine using Spack
@@ -105,16 +105,11 @@ do
   cmd "module unload python/2.7.8"
   cmd "unset PYTHONHOME"
   cmd "spack load python@2.7.14 ${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-numpy ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-numpy ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-matplotlib ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-matplotlib ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-pandas ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-pandas ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-scipy ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-nose ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-nose ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-scipy ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install py-numpy %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install py-matplotlib %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install py-pandas %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install py-scipy %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install py-nose %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"

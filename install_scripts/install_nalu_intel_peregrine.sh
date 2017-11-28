@@ -19,7 +19,7 @@ set -e
 
 cmd "module purge"
 cmd "module load gcc/5.2.0"
-cmd "module load /projects/windsim/exawind/spack/share/spack/modules/linux-centos6-x86_64/python-2.7.14"
+cmd "module load /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64/python/2.7.14"
 
 # The intel.cfg sets up the -xlinker rpath for the intel compiler's own libraries
 for i in ICCCFG ICPCCFG IFORTCFG

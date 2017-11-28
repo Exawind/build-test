@@ -16,6 +16,6 @@ packages:
     compiler: [gcc@5.2.0, intel@17.0.2]
     variants: build_type=Release
     providers:
-      mpi: [openmpi, intel-mpi]
-      blas: [netlib-lapack, intel-mkl]
-      lapack: [netlib-lapack, intel-mkl]
+      mpi: [openmpi@1.10.4, intel-mpi@2017.2.174]
+      blas: [netlib-lapack, intel-mkl@2017.2.174]
+      lapack: [netlib-lapack, intel-mkl@2017.2.174]

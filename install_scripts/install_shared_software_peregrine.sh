@@ -109,6 +109,13 @@ do
       printf "\nLoading binutils...\n"
       cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
+      # Fix for Peregrine's broken linker for gcc
+      printf "\nInstalling binutils...\n"
+      cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+      printf "\nReloading Spack...\n"
+      cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+      printf "\nLoading binutils...\n"
+      cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
       printf "\nSetting up rpath for Intel...\n"
       # For Intel compiler to include rpath to its own libraries
       for i in ICCCFG ICPCCFG IFORTCFG

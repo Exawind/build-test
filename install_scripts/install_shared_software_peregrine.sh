@@ -158,6 +158,8 @@ do
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       cmd "spack install paraview+mpi+python+osmesa@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      printf "\nInstalling VisIt using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+      cmd "spack install visit %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
 
     cmd "unset TMPDIR"

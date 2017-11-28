@@ -102,6 +102,10 @@ do
   printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   cmd "spack install python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install py-numpy ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install py-numpy ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install py-matplotlib ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install py-matplotlib ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -110,6 +114,8 @@ do
   cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install texlive %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   # Install our own compilers
   printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -117,6 +123,7 @@ do
   cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   cmd "unset TMPDIR"
 

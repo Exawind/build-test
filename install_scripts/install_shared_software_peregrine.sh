@@ -142,7 +142,7 @@ do
       cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ${GENERAL_CONSTRAINTS}"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
-      cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
+      #cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
     fi
 
     printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

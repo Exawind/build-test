@@ -125,6 +125,7 @@ do
   cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install texlive %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   # Install our own compilers
   printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

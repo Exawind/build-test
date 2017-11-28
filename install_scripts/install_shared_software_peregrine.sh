@@ -149,7 +149,11 @@ do
     (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
 
     printf "\nInstalling hypre using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install hypre %${COMPILER_NAME}@${COMPILER_VERSION}"
+    if [ ${COMPILER_NAME} == 'gcc' ]; then
+      cmd "spack install hypre+mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    elif [ ${COMPILER_NAME} == 'intel' ]; then
+      cmd "spack install hypre+mpi ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
+    fi
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

@@ -130,6 +130,12 @@ test_loop_body() {
       cmd "module load comp-intel/2017.0.2"
       cmd "module list"
     fi
+  elif [ "${MACHINE_NAME}" == 'merlin' ]; then
+    if [ "${COMPILER_NAME}" == 'intel' ]; then
+      printf "\nLoading Intel compiler module for CTest...\n"
+      cmd "module load iccifort/2017.2.174-GCC-6.3.0-2.27"
+      cmd "module list"
+    fi
   fi
 
   printf "\nLoading Spack modules into environment...\n"

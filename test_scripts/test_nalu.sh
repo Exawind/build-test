@@ -62,27 +62,20 @@ test_loop_body() {
   #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    if [ "${COMPILER_NAME}" == 'gcc' ]; then
-      # Fix for Peregrine's broken linker for gcc
-      printf "\nInstalling binutils...\n"
-      cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-      printf "\nReloading Spack...\n"
-      cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-      printf "\nLoading binutils...\n"
-      cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-    elif [ "${COMPILER_NAME}" == 'intel' ]; then
+    # Fix for Peregrine's broken linker
+    printf "\nInstalling binutils...\n"
+    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    printf "\nReloading Spack...\n"
+    cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+    printf "\nLoading binutils...\n"
+    cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    if [ "${COMPILER_NAME}" == 'intel' ]; then
       printf "\nSetting up rpath for Intel...\n"
       # For Intel compiler to include rpath to its own libraries
       for i in ICCCFG ICPCCFG IFORTCFG
       do
         cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
       done
-      printf "\nInstalling binutils...\n"
-      cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-      printf "\nReloading Spack...\n"
-      cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-      printf "\nLoading binutils...\n"
-      cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     if [ "${COMPILER_NAME}" == 'intel' ]; then
@@ -147,8 +140,13 @@ test_loop_body() {
     cmd "eval export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
     cmd "eval export PATH=$(spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
   else
-    cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack load openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    if [ "${COMPILER_NAME}" == 'gcc' ]; then
+      cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack load openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    elif [ "${COMPILER_NAME}" == 'intel' ]; then
+      cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack load intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    fi
   fi
 
   printf "\nSetting variables to pass to CTest...\n"
@@ -196,14 +194,17 @@ test_loop_body() {
 
   printf "\nUnloading Spack modules from environment...\n"
   if [ "${MACHINE_NAME}" != 'mac' ]; then
-    cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    if [ "${COMPILER_NAME}" == 'gcc' ]; then
+      cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    elif [ "${COMPILER_NAME}" == 'intel' ]; then
+      cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack unload intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    fi
     cmd "module list"
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    if [ "${COMPILER_NAME}" == 'gcc' ]; then
-      cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "module list"
-    fi
+    cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "module list"
     #unset TMPDIR
   fi
 

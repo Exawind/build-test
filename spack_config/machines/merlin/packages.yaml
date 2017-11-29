@@ -6,12 +6,16 @@ packages:
   openmpi:
     version: [1.10.4]
     variants: fabrics=psm2
+  intel-mpi:
+    version: [2017.2.174]
+  intel-mkl:
+    version: [2017.2.174]
   yaml-cpp:
     version: [develop]
   all:
     compiler: [gcc@4.9.2, intel@17.0.2]
     variants: build_type=Release
     providers:
-      mpi: [openmpi@1.10.4]
-      blas: [netlib-lapack]
-      lapack: [netlib-lapack]
+      mpi: [openmpi@1.10.4, intel-mpi@2017.2.174]
+      blas: [netlib-lapack, intel-mkl@2017.2.174]
+      lapack: [netlib-lapack, intel-mkl@2017.2.174]

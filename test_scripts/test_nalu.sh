@@ -26,6 +26,10 @@ test_loop_body() {
   # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
   cmd "unset GENERAL_CONSTRAINTS"
   cmd "source ${NALU_TESTING_DIR}/NaluSpack/spack_config/shared_constraints.sh"
+  # For intel, we want to build against intel-mpi and intel-mkl
+  if [ "${COMPILER_NAME}" == 'intel' ]; then
+    GENERAL_CONSTRAINTS="^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
+  fi
   printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
   cmd "cd ${NALU_TESTING_DIR}"
@@ -45,6 +49,7 @@ test_loop_body() {
     cmd "module list"
   fi
 
+  # Don't use OpenMP for clang
   if [ "${COMPILER_NAME}" == 'clang' ]; then
     printf "\nTurning off OpenMP in Trilinos...\n"
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
@@ -66,18 +71,18 @@ test_loop_body() {
       printf "\nLoading binutils...\n"
       cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
-      #printf "\nInstalling binutils...\n"
-      #cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #printf "\nReloading Spack...\n"
-      #cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-      #printf "\nLoading binutils...\n"
-      #cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
       printf "\nSetting up rpath for Intel...\n"
       # For Intel compiler to include rpath to its own libraries
       for i in ICCCFG ICPCCFG IFORTCFG
       do
         cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
       done
+      printf "\nInstalling binutils...\n"
+      cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+      printf "\nReloading Spack...\n"
+      cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+      printf "\nLoading binutils...\n"
+      cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     if [ "${COMPILER_NAME}" == 'intel' ]; then
@@ -113,11 +118,6 @@ test_loop_body() {
       TPL_CONSTRAINTS="^openfast@${OPENFAST_BRANCH} ${TPL_CONSTRAINTS}"
     fi
   done
-
-  # For intel, we want to build against intel-mpi and intel-mkl
-  #if [ "${COMPILER_NAME}" == 'intel' ]; then
-  #  GENERAL_CONSTRAINTS="^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
-  #fi
 
   cmd "spack install --keep-stage --only dependencies nalu ${TPL_VARIANTS} %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS}"
 
@@ -254,7 +254,7 @@ main() {
     declare -a LIST_OF_GCC_COMPILERS=('5.2.0')
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
     declare -a LIST_OF_TPLS=('openfast')
-    OPENFAST_BRANCH=master
+    OPENFAST_BRANCH=develop
     NALU_TESTING_DIR=/projects/windsim/exawind/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     declare -a LIST_OF_BUILD_TYPES=('Release')
@@ -263,7 +263,7 @@ main() {
     declare -a LIST_OF_GCC_COMPILERS=('4.9.2')
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
     #declare -a LIST_OF_TPLS=('openfast')
-    OPENFAST_BRANCH=master
+    OPENFAST_BRANCH=develop
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
     declare -a LIST_OF_BUILD_TYPES=('Release')
@@ -272,7 +272,7 @@ main() {
     declare -a LIST_OF_GCC_COMPILERS=('7.2.0')
     declare -a LIST_OF_CLANG_COMPILERS=('9.0.0-apple')
     #declare -a LIST_OF_TPLS=('openfast')
-    OPENFAST_BRANCH=master
+    OPENFAST_BRANCH=develop
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   else
     printf "\nMachine name not recognized.\n"

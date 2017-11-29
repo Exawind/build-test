@@ -38,9 +38,9 @@ test_loop_body() {
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
     cmd "module purge"
     cmd "module use /nopt/nrel/apps/modules/candidate/modulefiles"
+    cmd "module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64"
     cmd "module load gcc/5.2.0"
-    cmd "module load python/2.7.8 &> /dev/null"
-    cmd "module unload mkl"
+    cmd "module load python/2.7.14"
     cmd "module load git/2.6.3"
     cmd "module list"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
@@ -147,6 +147,9 @@ test_loop_body() {
       cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack load intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
+    cmd "module list"
+    cmd "which cmake"
+    cmd "which mpiexec"
   fi
 
   printf "\nSetting variables to pass to CTest...\n"

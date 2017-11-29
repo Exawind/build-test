@@ -124,7 +124,7 @@ do
   cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install texlive %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install hplot %${COMPILER_NAME}@${COMPILER_VERSION}"
 

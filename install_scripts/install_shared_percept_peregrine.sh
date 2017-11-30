@@ -58,6 +58,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
 
   printf "\nCloning Spack repo...\n"
   cmd "git clone https://github.com/jrood-nrel/spack.git ${SPACK_ROOT}"
+  cmd "cd ${SPACK_ROOT} && git checkout add_percept"
 
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR}"

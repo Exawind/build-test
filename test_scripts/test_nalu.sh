@@ -133,7 +133,11 @@ test_loop_body() {
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     if [ "${COMPILER_NAME}" == 'intel' ]; then
       printf "\nLoading Intel compiler module for CTest...\n"
+      cmd "module purge"
       cmd "module load iccifort/2017.2.174-GCC-6.3.0-2.27"
+      cmd "module unload GCCcore/6.3.0"
+      cmd "module unload binutils/2.27-GCCcore-6.3.0"
+      cmd "module load GCCcore/4.9.2"
       cmd "module list"
     fi
   fi

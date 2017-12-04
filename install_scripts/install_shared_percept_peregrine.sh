@@ -72,7 +72,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for TRILINOS_BRANCH in develop
+for TRILINOS_BRANCH in 12.12.1
 do
   for COMPILER_NAME in gcc
   do
@@ -85,7 +85,10 @@ do
 
     # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
     unset GENERAL_CONSTRAINTS
-    cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints_percept.sh"
+
+    TRILINOS="trilinos~alloptpkgs~xsdkflags~metis~mumps~superlu-dist+superlu~hypre+hdf5~suite-sparse~python~shared+boost+tpetra+epetra+epetraext+exodus+pnetcdf+zlib+stk+teuchos+belos+zoltan+zoltan2~amesos+amesos2~anasazi~ifpack+ifpack2+muelu~fortran~ml+gtest+aztec+sacado~x11+instantiate~instantiate_cmplx~dtk~fortrilinos~openmp+shards~nox+intrepid~intrepid2+cgns"
+    GENERAL_CONSTRAINTS="^cmake@3.7.2 ^boost+filesystem+graph+mpi+program_options+regex+serialization+signals+system+thread@1.60.0 ^parallel-netcdf@1.6.1 ^hdf5@1.8.16 ^netcdf@4.3.3.1 ^superlu@4.3"
+    #cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints_percept.sh"
     printf "\nUsing constraints: ${GENERAL_CONSTRAINTS}\n"
 
     cd ${INSTALL_DIR}

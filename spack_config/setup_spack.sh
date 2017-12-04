@@ -67,7 +67,6 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #Extra stuff for cori
   if [ ${MACHINE} == 'cori' ]; then
     (set -x; cp -R machines/${MACHINE}/netcdf ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-    (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   fi
 
   #Extra stuff for macs

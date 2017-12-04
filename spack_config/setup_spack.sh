@@ -65,9 +65,9 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   fi
 
   #Extra stuff for cori
-  #if [ ${MACHINE} == 'cori' ]; then
-    #nothing at the moment
-  #fi
+  if [ ${MACHINE} == 'cori' ]; then
+    (set -x; cp -R machines/${MACHINE}/netcdf ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+  fi
 
   #Extra stuff for macs
   #if [ ${MACHINE} == 'mac' ] || [ "${MACHINE}" == 'mac_sierra' ]; then

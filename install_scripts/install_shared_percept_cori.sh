@@ -1,12 +1,5 @@
 #!/bin/bash -l
 
-##PBS -N install_shared_percept_peregrine
-##PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
-##PBS -A windsim
-##PBS -q short
-##PBS -j oe
-##PBS -W umask=002
-
 # Control over printing and executing commands
 print_cmds=true
 execute_cmds=true

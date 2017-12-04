@@ -59,7 +59,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for TRILINOS_BRANCH in develop
+for TRILINOS_BRANCH in 12.12.1
 do
   for COMPILER_NAME in gcc
   do

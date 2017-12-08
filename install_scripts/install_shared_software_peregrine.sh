@@ -142,7 +142,6 @@ do
       cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ${GENERAL_CONSTRAINTS}"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
-      #cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
     fi
 
     printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -150,9 +149,9 @@ do
 
     printf "\nInstalling hypre using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      cmd "spack install hypre+mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install hypre~shared+mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
-      cmd "spack install hypre+mpi ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install hypre~shared+mpi ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then

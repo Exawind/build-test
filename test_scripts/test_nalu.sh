@@ -282,7 +282,7 @@ main() {
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
     declare -a LIST_OF_TPLS=('openfast')
     OPENFAST_BRANCH=develop
-    TIOGA_BRANCH=nalu-api
+    TIOGA_BRANCH=develop # develop points to nalu-api in Spack
     NALU_TESTING_DIR=/projects/windsim/exawind/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     declare -a LIST_OF_BUILD_TYPES=('Release')
@@ -292,7 +292,7 @@ main() {
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
     #declare -a LIST_OF_TPLS=('openfast')
     OPENFAST_BRANCH=develop
-    TIOGA_BRANCH=nalu-api
+    TIOGA_BRANCH=develop # develop points to nalu-api in Spack
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
     declare -a LIST_OF_BUILD_TYPES=('Release')
@@ -302,7 +302,7 @@ main() {
     declare -a LIST_OF_CLANG_COMPILERS=('9.0.0-apple')
     #declare -a LIST_OF_TPLS=('openfast')
     OPENFAST_BRANCH=develop
-    TIOGA_BRANCH=nalu-api
+    TIOGA_BRANCH=develop # develop points to nalu-api in Spack
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   else
     printf "\nMachine name not recognized.\n"

@@ -130,8 +130,6 @@ do
     printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
-      # Might need to specify cmake 3.7.2 since older versions of cmake had problems knowing HDF5 was parallel
-      #cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@${TRILINOS_BRANCH} ^cmake@3.7.2 ${GENERAL_CONSTRAINTS}"
     fi
     cmd "unset TMPDIR"
 

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#THIS IS OUT OF DATE
+
 #Script for installing Nalu on Cori using Spack with GCC compiler.
 
 #With the Cori-specific packages.yaml we are using many external

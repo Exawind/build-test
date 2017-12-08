@@ -35,5 +35,3 @@ cmd "mkdir -p /scratch/${USER}/.tmp"
 cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
 cmd "spack install percept %gcc@5.2.0 ^${TRILINOS_PERCEPT}@12.12.1 ${GENERAL_CONSTRAINTS}"
-# Might need to force cmake 3.7.2 because cmake 3.6.1 had problems knowing if HDF5 was parallel
-#cmd "spack install percept %gcc@5.2.0 ^${TRILINOS_PERCEPT}@12.12.1 ^cmake@3.7.2 ${GENERAL_CONSTRAINTS}"

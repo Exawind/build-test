@@ -66,16 +66,14 @@ do
     printf "\nInstalling software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
     unset GENERAL_CONSTRAINTS
-    TRILINOS="trilinos~alloptpkgs~xsdkflags~metis~mumps~superlu-dist+superlu~hypre+hdf5~suite-sparse~python~shared+boost+tpetra+epetra+epetraext+exodus+pnetcdf+zlib+stk+teuchos+belos+zoltan+zoltan2~amesos+amesos2~anasazi~ifpack+ifpack2+muelu~fortran~ml+gtest+aztec+sacado~x11+instantiate~instantiate_cmplx~dtk~fortrilinos~openmp+shards~nox+intrepid~intrepid2+cgns"
-    GENERAL_CONSTRAINTS="^cmake@3.8.2 ^boost+filesystem+graph+mpi+program_options+regex+serialization+signals+system+thread@1.60.0 ^parallel-netcdf@1.6.1 ^hdf5@1.8.16 ^netcdf@4.3.3.1 ^superlu@4.3"
-    #cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
+    cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
     printf "\nUsing constraints: ${GENERAL_CONSTRAINTS}\n"
 
     cd ${INSTALL_DIR}
 
     printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
+      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@${TRILINOS_BRANCH} ^cmake@3.8.2 ${GENERAL_CONSTRAINTS}"
     fi
 
     printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"

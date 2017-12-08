@@ -57,9 +57,12 @@ test_loop_body() {
 
   # Uninstall Trilinos; it's an error if it doesn't exist yet, but we skip it
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
-  cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack uninstall -a -y trilinos %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
   #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
   #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
+  #cmd "spack uninstall -a -y tioga %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
     # Fix for Peregrine's broken linker
@@ -101,6 +104,8 @@ test_loop_body() {
   cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
   #printf "\nUpdating OpenFAST (this is fine to error when tests are first run)...\n"
   #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno"
+  #printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"
+  #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno"
 
   printf "\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   TPL_VARIANTS=''
@@ -109,6 +114,9 @@ test_loop_body() {
     TPL_VARIANTS+="+${TPL}"
     if [ "${TPL}" == 'openfast' ] ; then
       TPL_CONSTRAINTS="^openfast@${OPENFAST_BRANCH} ${TPL_CONSTRAINTS}"
+    fi
+    if [ "${TPL}" == 'tioga' ] ; then
+      TPL_CONSTRAINTS="^tioga@${TIOGA_BRANCH} ${TPL_CONSTRAINTS}"
     fi
   done
 
@@ -171,8 +179,13 @@ test_loop_body() {
   for TPL in "${LIST_OF_TPLS[@]}"; do
     if [ "${TPL}" == 'openfast' ]; then
       OPENFAST_DIR=$(spack location -i openfast %${COMPILER_NAME}@${COMPILER_VERSION})
-      TPL_TEST_ARGS="\"-DENABLE_OPENFAST=ON -DOpenFAST_DIR=${OPENFAST_DIR} ${TPL_TEST_ARGS}\""
+      TPL_TEST_ARGS="-DENABLE_OPENFAST=ON -DOpenFAST_DIR=${OPENFAST_DIR} ${TPL_TEST_ARGS}"
       printf "OPENFAST_DIR=${OPENFAST_DIR}\n"
+    fi
+    if [ "${TPL}" == 'tioga' ]; then
+      TIOGA_DIR=$(spack location -i tioga %${COMPILER_NAME}@${COMPILER_VERSION})
+      TPL_TEST_ARGS="-DENABLE_TIOGA=ON -DTIOGA_DIR=${TIOGA_DIR} ${TPL_TEST_ARGS}"
+      printf "TIOGA_DIR=${TIOGA_DIR}\n"
     fi
   done
 
@@ -201,7 +214,7 @@ test_loop_body() {
 
     printf "\nRunning CTest at $(date)...\n"
     cmd "cd ${NALU_DIR}/build"
-    cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DTPL_TEST_ARGS=${TPL_TEST_ARGS} -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
+    cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DTPL_TEST_ARGS=\"${TPL_TEST_ARGS}\" -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
     printf "Returned from CTest at $(date)...\n"
   done
 
@@ -269,6 +282,7 @@ main() {
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
     declare -a LIST_OF_TPLS=('openfast')
     OPENFAST_BRANCH=develop
+    TIOGA_BRANCH=nalu-api
     NALU_TESTING_DIR=/projects/windsim/exawind/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     declare -a LIST_OF_BUILD_TYPES=('Release')
@@ -278,6 +292,7 @@ main() {
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
     #declare -a LIST_OF_TPLS=('openfast')
     OPENFAST_BRANCH=develop
+    TIOGA_BRANCH=nalu-api
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
     declare -a LIST_OF_BUILD_TYPES=('Release')
@@ -287,6 +302,7 @@ main() {
     declare -a LIST_OF_CLANG_COMPILERS=('9.0.0-apple')
     #declare -a LIST_OF_TPLS=('openfast')
     OPENFAST_BRANCH=develop
+    TIOGA_BRANCH=nalu-api
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   else
     printf "\nMachine name not recognized.\n"

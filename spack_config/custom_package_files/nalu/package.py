@@ -39,6 +39,8 @@ class Nalu(CMakePackage):
 
     variant('openfast', default=False,
             description='Compile with OpenFAST support')
+    variant('tioga', default=False,
+            description='Compile with Tioga support')
     variant('catalyst', default=False,
             description='Compile with Catalyst support')
 
@@ -48,6 +50,7 @@ class Nalu(CMakePackage):
     depends_on('yaml-cpp+pic~shared@0.5.3:')
     depends_on('trilinos~shared+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards@master,12.12.1:')
     depends_on('openfast+cxx', when='+openfast')
+    depends_on('tioga', when='+tioga')
     depends_on('catalyst-ioss-adapter', when='+catalyst')
 
     def cmake_args(self):
@@ -62,7 +65,14 @@ class Nalu(CMakePackage):
 
         if '+openfast' in spec:
             options.extend([
+                '-DENABLE_OPENFAST:BOOL=ON',
                 '-DOpenFAST_DIR:PATH=%s' % spec['openfast'].prefix
+            ])
+
+        if '+tioga' in spec:
+            options.extend([
+                '-DENABLE_TIOGA:BOOL=ON',
+                '-DTIOGA_DIR:PATH=%s' % spec['tioga'].prefix
             ])
 
         if '+catalyst' in spec:

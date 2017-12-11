@@ -36,7 +36,7 @@ class CatalystIossAdapter(CMakePackage):
 
     depends_on('bison')
     depends_on('flex')
-    depends_on('paraview+mpi+python+osmesa')
+    depends_on('paraview+mpi+python+osmesa@5.4.1')
 
     def cmake_args(self):
         spec = self.spec

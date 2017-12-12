@@ -49,10 +49,10 @@ compilers:
      - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
      - /nopt/nrel/apps/gcc/5.2.0/lib64
     flags:
-      cflags: -O2 -axCORE-AVX2,AVX
-      cxxflags: -O2 -axCORE-AVX2,AVX
-      fflags: -O2 -axCORE-AVX2,AVX
-      fcflags: -O2 -axCORE-AVX2,AVX
+      cflags: -O2 -axCORE-AVX2,CORE-AVX-I
+      cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I
+      fflags: -O2 -axCORE-AVX2,CORE-AVX-I
+      fcflags: -O2 -axCORE-AVX2,CORE-AVX-I
     modules: []
     operating_system: centos6
     paths:
@@ -72,10 +72,10 @@ compilers:
      - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
      - /nopt/nrel/apps/gcc/5.2.0/lib64
     flags:
-      cflags: -O2 -axCORE-AVX2,AVX
-      cxxflags: -O2 -axCORE-AVX2,AVX
-      fflags: -O2 -axCORE-AVX2,AVX
-      fcflags: -O2 -axCORE-AVX2,AVX
+      cflags: -O2 -axCORE-AVX2,CORE-AVX-I
+      cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I
+      fflags: -O2 -axCORE-AVX2,CORE-AVX-I
+      fcflags: -O2 -axCORE-AVX2,CORE-AVX-I
     modules: []
     operating_system: rhel6
     paths:

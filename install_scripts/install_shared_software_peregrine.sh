@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N install_shared_software_peregrine
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
+#PBS -l nodes=1:ppn=24,walltime=20:00:00
 #PBS -A windsim
-#PBS -q short
+#PBS -q batch-h
 #PBS -j oe
 #PBS -W umask=002
 
@@ -43,7 +43,7 @@ GCC_COMPILER_VERSION="5.2.0"
 INTEL_COMPILER_VERSION="17.0.2"
 
 # Set installation directory
-INSTALL_DIR=/projects/windsim/exawind/SharedSoftwareB
+INSTALL_DIR=/projects/windsim/exawind/SharedSoftwareA
 NALU_DIR=${INSTALL_DIR}/Nalu
 NALUSPACK_DIR=${INSTALL_DIR}/NaluSpack
 
@@ -96,9 +96,12 @@ do
     # Load necessary modules
     printf "\nLoading modules...\n"
     cmd "module purge"
+    cmd "module use /nopt/nrel/apps/modules/candidate/modulefiles"
+    cmd "module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64"
     cmd "module load gcc/5.2.0"
-    cmd "module load python/2.7.8 &> /dev/null"
-    cmd "module unload mkl"
+    cmd "module load python/2.7.14"
+    cmd "module load git/2.6.3"
+    cmd "module list"
  
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       # Fix for Peregrine's broken linker for gcc
@@ -130,18 +133,18 @@ do
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
     # Install and load our own python for glib because it doesn't like the system python
-    printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install python %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "module unload python/2.7.8"
-    cmd "unset PYTHONHOME"
-    cmd "spack load python ${COMPILER_NAME}@${COMPILER_VERSION}"
+    #printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    #cmd "spack install python %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "module unload python/2.7.8"
+    #cmd "unset PYTHONHOME"
+    #cmd "spack load python ${COMPILER_NAME}@${COMPILER_VERSION}"
 
     printf "\nInstalling Nalu using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
-      cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ${GENERAL_CONSTRAINTS}"
+      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
+      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ${GENERAL_CONSTRAINTS}"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
-      cmd "spack install nalu %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
+      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
     fi
 
     printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -155,10 +158,12 @@ do
     fi
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      printf "\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-      cmd "spack install paraview+mpi+python+osmesa@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
       printf "\nInstalling VisIt using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       cmd "spack install visit %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #printf "\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+      #cmd "spack install paraview+mpi+python+osmesa@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
 
     cmd "unset TMPDIR"

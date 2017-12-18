@@ -157,14 +157,14 @@ do
     #  cmd "spack install hypre~shared+mpi ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
     #fi
 
-    if [ ${COMPILER_NAME} == 'gcc' ]; then
+    #if [ ${COMPILER_NAME} == 'gcc' ]; then
       #printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       #cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ${GENERAL_CONSTRAINTS}"
       #printf "\nInstalling VisIt using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       #cmd "spack install visit %${COMPILER_NAME}@${COMPILER_VERSION}"
       #printf "\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       #cmd "spack install paraview+mpi+python+osmesa@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    fi
+    #fi
 
     cmd "unset TMPDIR"
 

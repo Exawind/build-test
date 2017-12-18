@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #PBS -N install_shared_software_peregrine
-#PBS -l nodes=1:ppn=24,walltime=20:00:00
+#PBS -l nodes=1:ppn=24,walltime=16:00:00
 #PBS -A windsim
 #PBS -q batch-h
 #PBS -j oe
@@ -76,7 +76,7 @@ cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
 for TRILINOS_BRANCH in develop
 do
-  for COMPILER_NAME in gcc intel
+  for COMPILER_NAME in gcc #intel
   do
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -159,9 +159,9 @@ do
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
-      printf "\nInstalling VisIt using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-      cmd "spack install visit %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ${GENERAL_CONSTRAINTS}"
+      #printf "\nInstalling VisIt using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+      #cmd "spack install visit %${COMPILER_NAME}@${COMPILER_VERSION}"
       #printf "\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       #cmd "spack install paraview+mpi+python+osmesa@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi

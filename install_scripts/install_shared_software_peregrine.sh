@@ -76,7 +76,7 @@ cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
 for TRILINOS_BRANCH in develop
 do
-  for COMPILER_NAME in gcc #intel
+  for COMPILER_NAME in gcc intel
   do
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -142,29 +142,29 @@ do
     printf "\nInstalling Nalu using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
-      #cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ${GENERAL_CONSTRAINTS}"
+      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ${GENERAL_CONSTRAINTS}"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
     fi
 
-    #printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #(set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
+    printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
 
-    #printf "\nInstalling hypre using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #if [ ${COMPILER_NAME} == 'gcc' ]; then
-    #  cmd "spack install hypre~shared+mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #elif [ ${COMPILER_NAME} == 'intel' ]; then
-    #  cmd "spack install hypre~shared+mpi ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #fi
+    printf "\nInstalling hypre using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    if [ ${COMPILER_NAME} == 'gcc' ]; then
+      cmd "spack install hypre~shared+mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    elif [ ${COMPILER_NAME} == 'intel' ]; then
+      cmd "spack install hypre~shared+mpi ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
+    fi
 
-    #if [ ${COMPILER_NAME} == 'gcc' ]; then
-      #printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-      #cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ${GENERAL_CONSTRAINTS}"
+    if [ ${COMPILER_NAME} == 'gcc' ]; then
+      printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ${GENERAL_CONSTRAINTS}"
       #printf "\nInstalling VisIt using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       #cmd "spack install visit %${COMPILER_NAME}@${COMPILER_VERSION}"
       #printf "\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       #cmd "spack install paraview+mpi+python+osmesa@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #fi
+    fi
 
     cmd "unset TMPDIR"
 

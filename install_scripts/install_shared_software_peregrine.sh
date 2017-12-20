@@ -156,7 +156,7 @@ do
       cmd "spack install hypre~shared+mpi+int64 %${COMPILER_NAME}@${COMPILER_VERSION}"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       cmd "spack install hypre~shared+mpi ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install hypre~shared+mpi+int64 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install hypre~shared+mpi+int64 ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then

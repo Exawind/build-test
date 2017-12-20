@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N install_shared_software_peregrine
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
+#PBS -l nodes=1:ppn=24,walltime=48:00:00
 #PBS -A windsim
-#PBS -q short
+#PBS -q batch-h
 #PBS -j oe
 #PBS -W umask=002
 
@@ -148,13 +148,15 @@ do
     fi
 
     printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
+    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5~cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
 
     printf "\nInstalling hypre using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       cmd "spack install hypre~shared+mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install hypre~shared+mpi+int64 %${COMPILER_NAME}@${COMPILER_VERSION}"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       cmd "spack install hypre~shared+mpi ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install hypre~shared+mpi+int64 %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then

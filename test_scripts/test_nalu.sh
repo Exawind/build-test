@@ -55,7 +55,7 @@ test_loop_body() {
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
   fi
 
-  # Uninstall Trilinos; it's an error if it doesn't exist yet, but we skip it
+  # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
   cmd "spack uninstall -a -y trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
   #cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -290,7 +290,7 @@ main() {
     declare -a LIST_OF_COMPILERS=('gcc' 'intel')
     declare -a LIST_OF_GCC_COMPILERS=('5.2.0')
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
-    declare -a LIST_OF_TPLS=('openfast')
+    declare -a LIST_OF_TPLS=('openfast' 'tioga')
     #declare -a LIST_OF_TPLS=('openfast' 'tioga' 'catalyst')
     OPENFAST_BRANCH=develop
     TIOGA_BRANCH=develop # develop points to nalu-api in Spack
@@ -301,7 +301,7 @@ main() {
     declare -a LIST_OF_COMPILERS=('gcc' 'intel')
     declare -a LIST_OF_GCC_COMPILERS=('4.9.2')
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
-    #declare -a LIST_OF_TPLS=('openfast')
+    declare -a LIST_OF_TPLS=('openfast' 'tioga')
     OPENFAST_BRANCH=develop
     TIOGA_BRANCH=develop # develop points to nalu-api in Spack
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting

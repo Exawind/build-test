@@ -99,38 +99,32 @@ do
     cmd "module load gcc/5.2.0"
     cmd "module load python/2.7.14"
     cmd "module load git/2.6.3"
+    cmd "module load binutils/2.28"
     cmd "module list"
  
-    if [ ${COMPILER_NAME} == 'gcc' ]; then
-      # Fix for Peregrine's broken linker for gcc
-      printf "\nInstalling binutils...\n"
-      cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-      printf "\nReloading Spack...\n"
-      cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-      printf "\nLoading binutils...\n"
-      cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-    elif [ ${COMPILER_NAME} == 'intel' ]; then
+    if [ ${COMPILER_NAME} == 'intel' ]; then
      printf "\nSetting up rpath for Intel...\n"
       # For Intel compiler to include rpath to its own libraries
       for i in ICCCFG ICPCCFG IFORTCFG
       do
         cmd "export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
       done
-      # Fix for Peregrine's broken linker for gcc
-      printf "\nInstalling binutils...\n"
-      cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-      printf "\nReloading Spack...\n"
-      cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-      printf "\nLoading binutils...\n"
-      cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
+
+    # Fix for Peregrine's broken linker for gcc
+    printf "\nInstalling binutils...\n"
+    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    printf "\nReloading Spack...\n"
+    cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+    printf "\nLoading binutils...\n"
+    cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     # Set the TMPDIR to disk so it doesn't run out of space
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
-    # Install and load our own python for glib because it doesn't like the system python
+    # Install and load our own python for paraview stuff because the system python has unicode problems
     #printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     #cmd "spack install python %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "module unload python/2.7.8"

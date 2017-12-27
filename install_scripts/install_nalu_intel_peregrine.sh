@@ -18,8 +18,13 @@ cmd() {
 set -e
 
 cmd "module purge"
+cmd "module use /nopt/nrel/apps/modules/candidate/modulefiles"
+cmd "module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64"
 cmd "module load gcc/5.2.0"
-cmd "module load /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64/python/2.7.14"
+cmd "module load python/2.7.14"
+cmd "module load git/2.6.3"
+cmd "module load binutils/2.28"
+cmd "module list"
 
 # The intel.cfg sets up the -xlinker rpath for the intel compiler's own libraries
 for i in ICCCFG ICPCCFG IFORTCFG
@@ -29,11 +34,6 @@ done
 
 # Get general preferred Nalu constraints from a single location
 cmd "source ../spack_config/shared_constraints.sh"
-
-# Fix for Peregrine's broken linker
-cmd "spack install binutils %intel@17.0.2"
-cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-cmd "spack load binutils"
 
 # Using a disk instead of RAM for the tmp directory for intermediate Intel compiler files
 cmd "mkdir -p /scratch/${USER}/.tmp"

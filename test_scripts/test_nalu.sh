@@ -123,6 +123,10 @@ test_loop_body() {
     #if [ "${TPL}" == 'catalyst' ] ; then
     #  TPL_CONSTRAINTS="${TPL_CONSTRAINTS}"
     #fi
+    # Currently don't need any extra constraints for hypre
+    #if [ "${TPL}" == 'hypre' ] ; then
+    #  TPL_CONSTRAINTS="${TPL_CONSTRAINTS}"
+    #fi
   done
 
   cmd "spack install --dont-restage --keep-stage --only dependencies nalu ${TPL_VARIANTS} %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS}"
@@ -196,6 +200,11 @@ test_loop_body() {
       CATALYST_ADAPTER_DIR=$(spack location -i catalyst-ioss-adapter %${COMPILER_NAME}@${COMPILER_VERSION})
       TPL_TEST_ARGS="-DENABLE_PARAVIEW_CATALYST=ON -DPARAVIEW_CATALYST_INSTALL_PATH=${CATALYST_ADAPTER_DIR} ${TPL_TEST_ARGS}"
       printf "CATALYST_ADAPTER_DIR=${CATALYST_ADAPTER_DIR}\n"
+    fi
+    if [ "${TPL}" == 'hypre' ]; then
+      HYPRE_DIR=$(spack location -i hypre %${COMPILER_NAME}@${COMPILER_VERSION})
+      TPL_TEST_ARGS="-DENABLE_HYPRE=ON -DHYPRE_DIR=${HYPRE_DIR} ${TPL_TEST_ARGS}"
+      printf "HYPRE_DIR=${HYPRE_DIR}\n"
     fi
   done
 
@@ -291,7 +300,7 @@ main() {
     declare -a LIST_OF_GCC_COMPILERS=('5.2.0')
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
     declare -a LIST_OF_TPLS=('openfast' 'tioga')
-    #declare -a LIST_OF_TPLS=('openfast' 'tioga' 'catalyst')
+    #declare -a LIST_OF_TPLS=('openfast' 'tioga' 'catalyst' 'hypre')
     OPENFAST_BRANCH=develop
     TIOGA_BRANCH=develop # develop points to nalu-api in Spack
     NALU_TESTING_DIR=/projects/windsim/exawind/NaluNightlyTesting

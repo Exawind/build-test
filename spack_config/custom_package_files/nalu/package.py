@@ -43,6 +43,8 @@ class Nalu(CMakePackage):
             description='Compile with Tioga support')
     variant('catalyst', default=False,
             description='Compile with Catalyst support')
+    variant('hypre', default=False,
+            description='Compile with Hypre support')
 
     version('master',
             git='https://github.com/NaluCFD/Nalu.git', branch='master')
@@ -52,6 +54,7 @@ class Nalu(CMakePackage):
     depends_on('openfast+cxx', when='+openfast')
     depends_on('tioga', when='+tioga')
     depends_on('catalyst-ioss-adapter', when='+catalyst')
+    depends_on('hypre+mpi+int64~shared', when='+hypre')
 
     def cmake_args(self):
         spec = self.spec
@@ -80,6 +83,12 @@ class Nalu(CMakePackage):
                 '-DENABLE_PARAVIEW_CATALYST:BOOL=ON',
                 '-DPARAVIEW_CATALYST_INSTALL_PATH:PATH=%s' %
                 spec['catalyst-ioss-adapter'].prefix
+            ])
+
+        if '+hypre' in spec:
+            options.extend([
+                '-DENABLE_HYPRE:BOOL=ON',
+                '-DHYPRE_DIR:PATH=%s' % spec['hypre'].prefix
             ])
 
         return options

@@ -65,13 +65,15 @@ test_loop_body() {
 
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
     # Fix for Peregrine's broken linker
-    #printf "\nInstalling binutils...\n"
-    #cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #printf "\nReloading Spack...\n"
-    #cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-    #printf "\nLoading binutils...\n"
-    #cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    printf "\nInstalling binutils...\n"
+    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    printf "\nReloading Spack...\n"
+    cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+    printf "\nLoading binutils...\n"
+    cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     if [ "${COMPILER_NAME}" == 'intel' ]; then
+      printf "\nUnloading GCC binutils...\n"
+      cmd "module unload binutils/2.28"
       printf "\nSetting up rpath for Intel...\n"
       # For Intel compiler to include rpath to its own libraries
       for i in ICCCFG ICPCCFG IFORTCFG
@@ -249,10 +251,10 @@ test_loop_body() {
       cmd "spack unload intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
   fi
-  #if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    #cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+    cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     #unset TMPDIR
-  #fi
+  fi
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "module list"
   fi

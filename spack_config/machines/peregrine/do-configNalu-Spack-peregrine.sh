@@ -39,20 +39,20 @@ module load python/2.7.8
 module unload mkl
 } &> /dev/null
 
-# Load necessary modules created by spack
-module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
-module load $(${SPACK_EXE} module find -m tcl cmake %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl openmpi %${COMPILER})
-
 # Set tmpdir to the scratch filesystem so it doesn't run out of space
 mkdir -p /scratch/${USER}/.tmp
 export TMPDIR=/scratch/${USER}/.tmp
 
 # Load correct modules per compiler
+module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
 if [ ${COMPILER} == 'gcc' ]; then
   module load $(${SPACK_EXE} module find -m tcl binutils %${COMPILER})
+  module load $(${SPACK_EXE} module find -m tcl cmake %${COMPILER})
+  module load $(${SPACK_EXE} module find -m tcl openmpi %${COMPILER})
 elif [ ${COMPILER} == 'intel' ]; then
   module load comp-intel/2017.0.2
+  module load $(${SPACK_EXE} module find -m tcl cmake %${COMPILER})
+  module load $(${SPACK_EXE} module find -m tcl intel-mpi %${COMPILER})
 fi
 
 # Clean before cmake configure

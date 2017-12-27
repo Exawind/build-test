@@ -23,12 +23,12 @@ test_loop_body() {
   printf "************************************************************\n"
   printf "\n"
 
-  # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
+  # Define TRILINOS from a single location for all scripts
   cmd "unset GENERAL_CONSTRAINTS"
   cmd "source ${NALU_TESTING_DIR}/NaluSpack/spack_config/shared_constraints.sh"
   # For intel, we want to build against intel-mpi and intel-mkl
   if [ "${COMPILER_NAME}" == 'intel' ]; then
-    GENERAL_CONSTRAINTS="^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
+    GENERAL_CONSTRAINTS="^intel-mpi ^intel-mkl"
   fi
   printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 

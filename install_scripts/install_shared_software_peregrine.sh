@@ -85,10 +85,8 @@ do
     fi
     printf "\nInstalling software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
-    # Define TRILINOS and GENERAL_CONSTRAINTS from a single location for all scripts
-    unset GENERAL_CONSTRAINTS
+    # Define TRILINOS from a single location for all scripts
     cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
-    printf "\nUsing constraints: ${GENERAL_CONSTRAINTS}\n"
 
     # Change to Nalu testing directory
     cd ${INSTALL_DIR}
@@ -141,10 +139,10 @@ do
 
     printf "\nInstalling Nalu using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS}"
-      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ${GENERAL_CONSTRAINTS}"
+      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
-      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ${GENERAL_CONSTRAINTS}"
+      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
     fi
 
     printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -161,7 +159,7 @@ do
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ${GENERAL_CONSTRAINTS}"
+      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1"
       #printf "\nInstalling VisIt using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       #cmd "spack install visit %${COMPILER_NAME}@${COMPILER_VERSION}"
       #printf "\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

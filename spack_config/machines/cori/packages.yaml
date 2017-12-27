@@ -15,6 +15,7 @@ packages:
     version: []
     variants: +mpi build_type=Release
   mpich:
+    version: [7.4.4]
     buildable: false
     modules:
         mpich@7.4.4: cray-mpich
@@ -22,39 +23,55 @@ packages:
     providers: {}
     version: []
     compiler: []
+  boost:
+    version: [1.60.0]
   hdf5:
+      version: [1.8.16]
+      variants: +cxx+mpi+hl
       buildable: false
       modules:
-          hdf5@1.8.16+mpi+hl: cray-hdf5-parallel/1.8.16
+          hdf5@1.8.16+cxx+mpi+hl: cray-hdf5-parallel/1.8.16
+  netcdf:
+      version: [4.3.3.1]
+      variants: maxdims=65536 maxvars=524288
   #netcdf:
   #    buildable: false
   #    modules:
   #        netcdf@4.3.3.1+mpi+parallel-netcdf: cray-netcdf-hdf5parallel/4.3.3.1
+  superlu:
+    version: [4.3]
   parallel-netcdf:
+      version: [1.6.1]
       buildable: false
       modules:
           parallel-netcdf@1.6.1: cray-parallel-netcdf/1.6.1
   zlib:
+      version: [1.2.8]
       buildable: false
       modules:
           zlib@1.2.8: zlib/1.2.8
   intel-mkl:
+      version: [17.0.2.174]
       buildable: false
       paths:
           intel-mkl@17.0.2.174: /opt/intel/compilers_and_libraries_2017.2.174/linux/mkl
   netlib-lapack:
+      version: [3.6.1]
       buildable: False
       paths:
           netlib-lapack@3.6.1: /usr
   openssl:
+      version: [1.0.1i]
       buildable: False
       paths:
           openssl@1.0.1i: /usr
   cmake:
+      version: [3.8.2]
       buildable: False
       paths:
           cmake@3.8.2: /usr/common/software/cmake/3.8.2
   bzip2:
+      version: [1.0.6]
       buildable: False
       paths:
           bzip2@1.0.6: /usr

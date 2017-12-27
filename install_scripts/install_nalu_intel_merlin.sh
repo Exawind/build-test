@@ -31,6 +31,6 @@ done
 # Get general preferred Nalu constraints from a single location
 cmd "source ../spack_config/shared_constraints.sh"
 
-cmd "spack install nalu %intel@17.0.2 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS}"
+cmd "spack install nalu %intel@17.0.2 ^${TRILINOS}@develop"
 
 cmd "rm -rf /dev/shm/*"

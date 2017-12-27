@@ -34,4 +34,4 @@ cmd "spack load binutils"
 cmd "mkdir -p /scratch/${USER}/.tmp"
 cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
-cmd "spack install nalu %gcc@5.2.0 ^${TRILINOS}@develop ${GENERAL_CONSTRAINTS}"
+cmd "spack install nalu %gcc@5.2.0 ^${TRILINOS}@develop"

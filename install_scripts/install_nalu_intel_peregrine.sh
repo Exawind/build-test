@@ -39,4 +39,4 @@ cmd "spack load binutils"
 cmd "mkdir -p /scratch/${USER}/.tmp"
 cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
-cmd "spack install nalu %intel@17.0.2 ^${TRILINOS}@develop ^intel-mkl ^intel-mpi ${GENERAL_CONSTRAINTS}"
+cmd "spack install nalu %intel@17.0.2 ^${TRILINOS}@develop ^intel-mkl ^intel-mpi"

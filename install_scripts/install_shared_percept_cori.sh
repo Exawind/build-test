@@ -64,15 +64,13 @@ do
     fi
     printf "\nInstalling software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
-    unset GENERAL_CONSTRAINTS
     cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
-    printf "\nUsing constraints: ${GENERAL_CONSTRAINTS}\n"
 
     cd ${INSTALL_DIR}
 
     printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@${TRILINOS_BRANCH} ^cmake@3.8.2 ${GENERAL_CONSTRAINTS}"
+      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@${TRILINOS_BRANCH}"
     fi
 
     printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"

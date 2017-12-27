@@ -12,6 +12,18 @@ packages:
   #    python@2.7.14 arch=darwin-sierra-x86_64: /usr/local/Cellar/python/2.7.14
       python@2.7.10 arch=darwin-sierra-x86_64: /usr
     buildable: False
+  boost:
+    version: [1.60.0]
+  netcdf:
+    version: [4.3.3.1]
+    variants: maxdims=65536 maxvars=524288
+  parallel-netcdf:
+    version: [1.6.1]
+  hdf5:
+    version: [1.8.16]
+    variants: +cxx
+  superlu:
+    version: [4.3]
   openmpi:
     version: [1.10.4]
   yaml-cpp:

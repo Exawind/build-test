@@ -127,7 +127,6 @@ do
   cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   # Install our own compilers
   printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

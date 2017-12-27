@@ -160,6 +160,8 @@ do
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1"
+      printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+      cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
       #printf "\nInstalling VisIt using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       #cmd "spack install visit %${COMPILER_NAME}@${COMPILER_VERSION}"
       #printf "\nInstalling Paraview using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

@@ -39,8 +39,8 @@ module unload mkl
 } &> /dev/null
 
 module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
+module load $(${SPACK_EXE} module find -m tcl binutils %${COMPILER})
 module load $(${SPACK_EXE} module find -m tcl cmake %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl openmpi %${COMPILER})
 module load $(${SPACK_EXE} module find -m tcl hdf5 %${COMPILER})
 module load $(${SPACK_EXE} module find -m tcl netcdf %${COMPILER})
 module load $(${SPACK_EXE} module find -m tcl parallel-netcdf %${COMPILER})
@@ -55,13 +55,10 @@ export TMPDIR=/scratch/${USER}/.tmp
 
 # Load correct modules per compiler
 if [ ${COMPILER} == 'gcc' ]; then
-  module load $(${SPACK_EXE} module find -m tcl binutils %${COMPILER})
+  module load $(${SPACK_EXE} module find -m tcl openmpi %${COMPILER})
 elif [ ${COMPILER} == 'intel' ]; then
   module load comp-intel/2017.0.2
-  #for i in ICCCFG ICPCCFG IFORTCFG
-  #do
-  #  export $i=${SPACK_ROOT}/etc/spack/intel.cfg
-  #done
+  module load $(${SPACK_EXE} module find -m tcl intel-mpi %${COMPILER})
 fi
 
 # Clean before cmake configure

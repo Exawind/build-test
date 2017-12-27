@@ -106,6 +106,7 @@ test_loop_body() {
   #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno"
   #printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"
   #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno"
+  cmd "cd ${NALU_TESTING_DIR}" # Change directories to avoid any stale file handles
 
   printf "\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   TPL_VARIANTS=''

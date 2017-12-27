@@ -42,11 +42,9 @@ test_loop_body() {
     cmd "module load gcc/5.2.0"
     cmd "module load python/2.7.14"
     cmd "module load git/2.6.3"
-    cmd "module list"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     cmd "module purge"
     cmd "module load GCCcore/4.9.2"
-    cmd "module list"
   fi
 
   # Don't use OpenMP for clang
@@ -129,6 +127,7 @@ test_loop_body() {
     #fi
   done
 
+  cmd "module list"
   cmd "spack install --dont-restage --keep-stage --only dependencies nalu ${TPL_VARIANTS} %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS}"
 
   STAGE_DIR=$(spack location -S)
@@ -145,7 +144,6 @@ test_loop_body() {
     if [ "${COMPILER_NAME}" == 'intel' ]; then
       printf "\nLoading Intel compiler module for CTest...\n"
       cmd "module load comp-intel/2017.0.2"
-      cmd "module list"
     fi
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     if [ "${COMPILER_NAME}" == 'intel' ]; then
@@ -155,7 +153,6 @@ test_loop_body() {
       cmd "module unload GCCcore/6.3.0"
       cmd "module unload binutils/2.27-GCCcore-6.3.0"
       cmd "module load GCCcore/4.9.2"
-      cmd "module list"
     fi
   fi
 
@@ -174,7 +171,6 @@ test_loop_body() {
       cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack load intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
-    cmd "module list"
     cmd "which cmake"
     cmd "which mpiexec"
   fi
@@ -233,6 +229,7 @@ test_loop_body() {
 
     printf "\nRunning CTest at $(date)...\n"
     cmd "cd ${NALU_DIR}/build"
+    cmd "module list"
     cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DTPL_TEST_ARGS=\"${TPL_TEST_ARGS}\" -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
     printf "Returned from CTest at $(date)...\n"
   done
@@ -246,12 +243,12 @@ test_loop_body() {
       cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack unload intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
-    cmd "module list"
-  elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
+  fi
+  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
     cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "module list"
     #unset TMPDIR
   fi
+  cmd "module list"
 
   printf "\n"
   printf "************************************************************\n"

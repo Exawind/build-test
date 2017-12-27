@@ -128,7 +128,9 @@ test_loop_body() {
     #fi
   done
 
-  cmd "module list"
+  if [ "${MACHINE_NAME}" != 'mac' ]; then
+    cmd "module list"
+  fi
   cmd "spack install --dont-restage --keep-stage --only dependencies nalu ${TPL_VARIANTS} %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS}"
 
   STAGE_DIR=$(spack location -S)
@@ -230,7 +232,9 @@ test_loop_body() {
 
     printf "\nRunning CTest at $(date)...\n"
     cmd "cd ${NALU_DIR}/build"
-    cmd "module list"
+    if [ "${MACHINE_NAME}" != 'mac' ]; then
+      cmd "module list"
+    fi
     cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DTPL_TEST_ARGS=\"${TPL_TEST_ARGS}\" -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
     printf "Returned from CTest at $(date)...\n"
   done
@@ -249,7 +253,9 @@ test_loop_body() {
     #cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     #unset TMPDIR
   #fi
-  cmd "module list"
+  if [ "${MACHINE_NAME}" != 'mac' ]; then
+    cmd "module list"
+  fi
 
   printf "\n"
   printf "************************************************************\n"

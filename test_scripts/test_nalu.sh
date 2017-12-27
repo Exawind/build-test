@@ -42,7 +42,6 @@ test_loop_body() {
     cmd "module load gcc/5.2.0"
     cmd "module load python/2.7.14"
     cmd "module load git/2.6.3"
-    cmd "module load binutils/2.28"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     cmd "module purge"
     cmd "module load GCCcore/4.9.2"
@@ -63,6 +62,15 @@ test_loop_body() {
   #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
   #cmd "spack uninstall -a -y tioga %${COMPILER_NAME}@${COMPILER_VERSION}"
 
+  # Set the TMPDIR to disk so it doesn't run out of space
+  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+    printf "\nMaking and setting TMPDIR to disk...\n"
+    cmd "mkdir -p /scratch/${USER}/.tmp"
+    cmd "eval export TMPDIR=/scratch/${USER}/.tmp"
+  elif [ "${MACHINE_NAME}" == 'merlin' ]; then
+    cmd "eval export TMPDIR=/dev/shm"
+  fi
+
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
     # Fix for Peregrine's broken linker
     printf "\nInstalling binutils...\n"
@@ -72,8 +80,6 @@ test_loop_body() {
     printf "\nLoading binutils...\n"
     cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     if [ "${COMPILER_NAME}" == 'intel' ]; then
-      printf "\nUnloading GCC binutils...\n"
-      cmd "module unload binutils/2.28"
       printf "\nSetting up rpath for Intel...\n"
       # For Intel compiler to include rpath to its own libraries
       for i in ICCCFG ICPCCFG IFORTCFG
@@ -90,15 +96,6 @@ test_loop_body() {
         cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
       done
     fi
-  fi
-
-  # Set the TMPDIR to disk so it doesn't run out of space
-  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    printf "\nMaking and setting TMPDIR to disk...\n"
-    cmd "mkdir -p /scratch/${USER}/.tmp"
-    cmd "eval export TMPDIR=/scratch/${USER}/.tmp"
-  elif [ "${MACHINE_NAME}" == 'merlin' ]; then
-    cmd "eval export TMPDIR=/dev/shm"
   fi
 
   printf "\nUpdating Trilinos (this is fine to error when tests are first run)...\n"

@@ -23,7 +23,6 @@ cmd "module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules
 cmd "module load gcc/5.2.0"
 cmd "module load python/2.7.14"
 cmd "module load git/2.6.3"
-cmd "module load binutils/2.28"
 cmd "module list"
 
 # The intel.cfg sets up the -xlinker rpath for the intel compiler's own libraries
@@ -35,14 +34,13 @@ done
 # Get general preferred Nalu constraints from a single location
 cmd "source ../spack_config/shared_constraints.sh"
 
-# Fix Peregrine's broken linker
-cmd "spack install binutils %intel@17.0.2"		
-cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"		
-cmd "module unload binutils/2.28"
-cmd "spack load binutils"
-
 # Using a disk instead of RAM for the tmp directory for intermediate Intel compiler files
 cmd "mkdir -p /scratch/${USER}/.tmp"
 cmd "export TMPDIR=/scratch/${USER}/.tmp"
+
+# Fix Peregrine's broken linker
+cmd "spack install binutils %intel@17.0.2"		
+cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"		
+cmd "spack load binutils"
 
 cmd "spack install nalu %intel@17.0.2 ^${TRILINOS}@develop ^intel-mkl ^intel-mpi"

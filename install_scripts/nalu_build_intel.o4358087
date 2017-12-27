@@ -1,0 +1,192 @@
++ module purge
++ module use /nopt/nrel/apps/modules/candidate/modulefiles
++ module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64
++ module load gcc/5.2.0
++ module load python/2.7.14
++ module load git/2.6.3
++ module list
+Currently Loaded Modulefiles:
+  1) gcc/5.2.0       2) python/2.7.14   3) git/2.6.3
++ export ICCCFG=/home/jrood/spack/etc/spack/intel.cfg
++ export ICPCCFG=/home/jrood/spack/etc/spack/intel.cfg
++ export IFORTCFG=/home/jrood/spack/etc/spack/intel.cfg
++ source ../spack_config/shared_constraints.sh
++ mkdir -p /scratch/jrood/.tmp
++ export TMPDIR=/scratch/jrood/.tmp
++ spack install binutils %intel@17.0.2
+==> Installing libsigsegv
+==> Using cached archive: /home/jrood/.spack/cached_archives/libsigsegv/libsigsegv-2.11.tar.gz
+==> Staging archive: /home/jrood/spack/var/spack/stage/libsigsegv-2.11-enys6d6zk6hwxnjobj2alqrq7oymw4m2/libsigsegv-2.11.tar.gz
+==> Created stage in /home/jrood/spack/var/spack/stage/libsigsegv-2.11-enys6d6zk6hwxnjobj2alqrq7oymw4m2
+==> No patches needed for libsigsegv
+==> Building libsigsegv [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed libsigsegv
+  Fetch: 0.05s.  Build: 34.95s.  Total: 35.00s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/libsigsegv-2.11-enys6d6zk6hwxnjobj2alqrq7oymw4m2
+==> Installing m4
+==> Using cached archive: /home/jrood/.spack/cached_archives/m4/m4-1.4.18.tar.gz
+==> Staging archive: /home/jrood/spack/var/spack/stage/m4-1.4.18-634vg3iu6hjxbywrdzuc5drfmta7dqmy/m4-1.4.18.tar.gz
+==> Created stage in /home/jrood/spack/var/spack/stage/m4-1.4.18-634vg3iu6hjxbywrdzuc5drfmta7dqmy
+==> Applied patch gnulib-pgi.patch
+==> Building m4 [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed m4
+  Fetch: 0.04s.  Build: 2m 25.32s.  Total: 2m 25.36s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/m4-1.4.18-634vg3iu6hjxbywrdzuc5drfmta7dqmy
+==> Installing bison
+==> Using cached archive: /home/jrood/.spack/cached_archives/bison/bison-3.0.4.tar.gz
+==> Staging archive: /home/jrood/spack/var/spack/stage/bison-3.0.4-uw2rgfhzmhas6wasjs32dnwzxaktbbqf/bison-3.0.4.tar.gz
+==> Created stage in /home/jrood/spack/var/spack/stage/bison-3.0.4-uw2rgfhzmhas6wasjs32dnwzxaktbbqf
+==> Applied patch pgi.patch
+==> Building bison [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed bison
+  Fetch: 0.06s.  Build: 3m 18.42s.  Total: 3m 18.48s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/bison-3.0.4-uw2rgfhzmhas6wasjs32dnwzxaktbbqf
+==> Installing bzip2
+==> Using cached archive: /home/jrood/.spack/cached_archives/bzip2/bzip2-1.0.6.tar.gz
+==> Staging archive: /home/jrood/spack/var/spack/stage/bzip2-1.0.6-dfttfu7zluhuvpmhawnoqbwtpruk5sjg/bzip2-1.0.6.tar.gz
+==> Created stage in /home/jrood/spack/var/spack/stage/bzip2-1.0.6-dfttfu7zluhuvpmhawnoqbwtpruk5sjg
+==> Ran patch() for bzip2
+==> Building bzip2 [Package]
+==> Executing phase: 'install'
+==> Successfully installed bzip2
+  Fetch: 0.02s.  Build: 8.87s.  Total: 8.90s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/bzip2-1.0.6-dfttfu7zluhuvpmhawnoqbwtpruk5sjg
+==> Installing pkgconf
+==> Using cached archive: /home/jrood/.spack/cached_archives/pkgconf/pkgconf-1.3.10.tar.xz
+==> Staging archive: /home/jrood/spack/var/spack/stage/pkgconf-1.3.10-r7djqyt3gaqnzpc2jo5hr5f5yly4f3sm/pkgconf-1.3.10.tar.xz
+==> Created stage in /home/jrood/spack/var/spack/stage/pkgconf-1.3.10-r7djqyt3gaqnzpc2jo5hr5f5yly4f3sm
+==> No patches needed for pkgconf
+==> Building pkgconf [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed pkgconf
+  Fetch: 0.01s.  Build: 21.55s.  Total: 21.55s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/pkgconf-1.3.10-r7djqyt3gaqnzpc2jo5hr5f5yly4f3sm
+==> Installing xz
+==> Using cached archive: /home/jrood/.spack/cached_archives/xz/xz-5.2.3.tar.bz2
+==> Staging archive: /home/jrood/spack/var/spack/stage/xz-5.2.3-2dikwrjvvdu7yaucl32eexsvyvaf2umo/xz-5.2.3.tar.bz2
+==> Created stage in /home/jrood/spack/var/spack/stage/xz-5.2.3-2dikwrjvvdu7yaucl32eexsvyvaf2umo
+==> No patches needed for xz
+==> Building xz [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed xz
+  Fetch: 0.02s.  Build: 1m 3.31s.  Total: 1m 3.33s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/xz-5.2.3-2dikwrjvvdu7yaucl32eexsvyvaf2umo
+==> Installing zlib
+==> Using cached archive: /home/jrood/.spack/cached_archives/zlib/zlib-1.2.11.tar.gz
+==> Staging archive: /home/jrood/spack/var/spack/stage/zlib-1.2.11-daiturdzc2mrfszsqkxkd2p6pfghcxpu/zlib-1.2.11.tar.gz
+==> Created stage in /home/jrood/spack/var/spack/stage/zlib-1.2.11-daiturdzc2mrfszsqkxkd2p6pfghcxpu
+==> No patches needed for zlib
+==> Building zlib [Package]
+==> Executing phase: 'install'
+==> Successfully installed zlib
+  Fetch: 0.03s.  Build: 10.21s.  Total: 10.24s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/zlib-1.2.11-daiturdzc2mrfszsqkxkd2p6pfghcxpu
+==> Installing libxml2
+==> Using cached archive: /home/jrood/.spack/cached_archives/libxml2/libxml2-2.9.4.tar.gz
+==> Staging archive: /home/jrood/spack/var/spack/stage/libxml2-2.9.4-mvqk2jfgrg34oskf5xaud4tahmverrsr/libxml2-2.9.4.tar.gz
+==> Created stage in /home/jrood/spack/var/spack/stage/libxml2-2.9.4-mvqk2jfgrg34oskf5xaud4tahmverrsr
+==> No patches needed for libxml2
+==> Building libxml2 [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed libxml2
+  Fetch: 0.05s.  Build: 1m 30.28s.  Total: 1m 30.33s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/libxml2-2.9.4-mvqk2jfgrg34oskf5xaud4tahmverrsr
+==> Installing ncurses
+==> Using cached archive: /home/jrood/.spack/cached_archives/ncurses/ncurses-6.0.tar.gz
+==> Staging archive: /home/jrood/spack/var/spack/stage/ncurses-6.0-njkao2nc7gw7ngd3zq3gzsa7yjupk2od/ncurses-6.0.tar.gz
+==> Created stage in /home/jrood/spack/var/spack/stage/ncurses-6.0-njkao2nc7gw7ngd3zq3gzsa7yjupk2od
+==> Applied patch sed_pgi.patch
+==> Building ncurses [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed ncurses
+  Fetch: 0.05s.  Build: 3m 45.93s.  Total: 3m 45.98s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/ncurses-6.0-njkao2nc7gw7ngd3zq3gzsa7yjupk2od
+==> Installing tar
+==> Using cached archive: /home/jrood/.spack/cached_archives/tar/tar-1.29.tar.gz
+==> Staging archive: /home/jrood/spack/var/spack/stage/tar-1.29-ks4nj3qf7y4xaq53ojhp64zp3bfmoamt/tar-1.29.tar.gz
+==> Created stage in /home/jrood/spack/var/spack/stage/tar-1.29-ks4nj3qf7y4xaq53ojhp64zp3bfmoamt
+==> Applied patch config-pgi.patch
+==> Applied patch se-selinux.patch
+==> Applied patch argp-pgi.patch
+==> Applied patch tar-pgi.patch
+==> Building tar [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed tar
+  Fetch: 0.04s.  Build: 4m 0.79s.  Total: 4m 0.83s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/tar-1.29-ks4nj3qf7y4xaq53ojhp64zp3bfmoamt
+==> Installing gettext
+==> Using cached archive: /home/jrood/.spack/cached_archives/gettext/gettext-0.19.8.1.tar.xz
+==> Staging archive: /home/jrood/spack/var/spack/stage/gettext-0.19.8.1-iqfijyakez3dghba2p35kndxdmh44dab/gettext-0.19.8.1.tar.xz
+==> Created stage in /home/jrood/spack/var/spack/stage/gettext-0.19.8.1-iqfijyakez3dghba2p35kndxdmh44dab
+==> Applied patch test-verify-parallel-make-check.patch
+==> Building gettext [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed gettext
+  Fetch: 0.07s.  Build: 10m 3.20s.  Total: 10m 3.27s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/gettext-0.19.8.1-iqfijyakez3dghba2p35kndxdmh44dab
+==> Installing help2man
+==> Using cached archive: /home/jrood/.spack/cached_archives/help2man/help2man-1.47.4.tar.xz
+==> Staging archive: /home/jrood/spack/var/spack/stage/help2man-1.47.4-suw7qvx6s2e65nepdyxilhvbq6pmiey2/help2man-1.47.4.tar.xz
+==> Created stage in /home/jrood/spack/var/spack/stage/help2man-1.47.4-suw7qvx6s2e65nepdyxilhvbq6pmiey2
+==> No patches needed for help2man
+==> Building help2man [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed help2man
+  Fetch: 0.01s.  Build: 4.94s.  Total: 4.94s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/help2man-1.47.4-suw7qvx6s2e65nepdyxilhvbq6pmiey2
+==> Installing flex
+==> Using cached archive: /home/jrood/.spack/cached_archives/flex/flex-2.6.4.tar.gz
+==> Staging archive: /home/jrood/spack/var/spack/stage/flex-2.6.4-o4i3usfmb3f6tbed4hi2obedg63os2hc/flex-2.6.4.tar.gz
+==> Created stage in /home/jrood/spack/var/spack/stage/flex-2.6.4-o4i3usfmb3f6tbed4hi2obedg63os2hc
+==> No patches needed for flex
+==> Building flex [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'
+==> Successfully installed flex
+  Fetch: 0.02s.  Build: 51.37s.  Total: 51.39s.
+[+] /home/jrood/spack/opt/spack/linux-centos6-x86_64/intel-17.0.2/flex-2.6.4-o4i3usfmb3f6tbed4hi2obedg63os2hc
+==> Installing binutils
+==> Using cached archive: /home/jrood/.spack/cached_archives/binutils/binutils-2.28.tar.bz2
+==> Staging archive: /home/jrood/spack/var/spack/stage/binutils-2.28-fnnyeq4i5kaq2gxka5bjhpfjweer4lt7/binutils-2.28.tar.bz2
+==> Created stage in /home/jrood/spack/var/spack/stage/binutils-2.28-fnnyeq4i5kaq2gxka5bjhpfjweer4lt7
+==> Applied patch cr16.patch
+==> Building binutils [AutotoolsPackage]
+==> Executing phase: 'autoreconf'
+==> Executing phase: 'configure'
+==> Executing phase: 'build'
+==> Executing phase: 'install'

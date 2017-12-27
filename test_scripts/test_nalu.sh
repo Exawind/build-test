@@ -42,6 +42,7 @@ test_loop_body() {
     cmd "module load gcc/5.2.0"
     cmd "module load python/2.7.14"
     cmd "module load git/2.6.3"
+    cmd "module load binutils/2.28"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     cmd "module purge"
     cmd "module load GCCcore/4.9.2"
@@ -64,12 +65,12 @@ test_loop_body() {
 
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
     # Fix for Peregrine's broken linker
-    printf "\nInstalling binutils...\n"
-    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-    printf "\nReloading Spack...\n"
-    cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-    printf "\nLoading binutils...\n"
-    cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #printf "\nInstalling binutils...\n"
+    #cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #printf "\nReloading Spack...\n"
+    #cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+    #printf "\nLoading binutils...\n"
+    #cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     if [ "${COMPILER_NAME}" == 'intel' ]; then
       printf "\nSetting up rpath for Intel...\n"
       # For Intel compiler to include rpath to its own libraries
@@ -244,10 +245,10 @@ test_loop_body() {
       cmd "spack unload intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
   fi
-  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+    #cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     #unset TMPDIR
-  fi
+  #fi
   cmd "module list"
 
   printf "\n"

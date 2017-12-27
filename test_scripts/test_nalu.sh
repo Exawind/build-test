@@ -53,15 +53,6 @@ test_loop_body() {
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
   fi
 
-  # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
-  printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
-  cmd "spack uninstall -a -y trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
-  #cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
-  #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
-  #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
-  #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
-  #cmd "spack uninstall -a -y tioga %${COMPILER_NAME}@${COMPILER_VERSION}"
-
   # Set the TMPDIR to disk so it doesn't run out of space
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
     printf "\nMaking and setting TMPDIR to disk...\n"
@@ -72,13 +63,6 @@ test_loop_body() {
   fi
 
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    # Fix for Peregrine's broken linker
-    printf "\nInstalling binutils...\n"
-    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-    printf "\nReloading Spack...\n"
-    cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-    printf "\nLoading binutils...\n"
-    cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     if [ "${COMPILER_NAME}" == 'intel' ]; then
       printf "\nSetting up rpath for Intel...\n"
       # For Intel compiler to include rpath to its own libraries
@@ -87,6 +71,13 @@ test_loop_body() {
         cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
       done
     fi
+    # Fix for Peregrine's broken linker
+    printf "\nInstalling binutils...\n"
+    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    printf "\nReloading Spack...\n"
+    cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+    printf "\nLoading binutils...\n"
+    cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     if [ "${COMPILER_NAME}" == 'intel' ]; then
       # For Intel compiler to include rpath to its own libraries
@@ -98,6 +89,16 @@ test_loop_body() {
     fi
   fi
 
+  # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
+  printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
+  cmd "spack uninstall -a -y trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
+  #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
+  #cmd "spack uninstall -a -y tioga %${COMPILER_NAME}@${COMPILER_VERSION}"
+
+  # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating Trilinos (this is fine to error when tests are first run)...\n"
   cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
   #printf "\nUpdating OpenFAST (this is fine to error when tests are first run)...\n"
@@ -106,7 +107,6 @@ test_loop_body() {
   #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno"
   cmd "cd ${NALU_TESTING_DIR}" # Change directories to avoid any stale file handles
 
-  printf "\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   TPL_VARIANTS=''
   TPL_CONSTRAINTS=''
   for TPL in "${LIST_OF_TPLS[@]}"; do
@@ -130,6 +130,8 @@ test_loop_body() {
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "module list"
   fi
+
+  printf "\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   cmd "spack install --dont-restage --keep-stage --only dependencies nalu ${TPL_VARIANTS} %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS}"
 
   STAGE_DIR=$(spack location -S)

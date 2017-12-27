@@ -48,6 +48,7 @@ compilers:
      - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
      - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
      - /nopt/nrel/apps/gcc/5.2.0/lib64
+     - /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/compiler/lib/intel64
     flags:
       cflags: -O2 -axCORE-AVX2,CORE-AVX-I
       cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I
@@ -71,6 +72,7 @@ compilers:
      - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
      - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
      - /nopt/nrel/apps/gcc/5.2.0/lib64
+     - /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/compiler/lib/intel64
     flags:
       cflags: -O2 -axCORE-AVX2,CORE-AVX-I
       cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I

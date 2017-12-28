@@ -111,6 +111,11 @@ do
       done
     fi
 
+    # Set the TMPDIR to disk so it doesn't run out of space
+    printf "\nMaking and setting TMPDIR to disk...\n"
+    cmd "mkdir -p /scratch/${USER}/.tmp"
+    cmd "export TMPDIR=/scratch/${USER}/.tmp"
+
     # Fix for Peregrine's broken linker for gcc
     printf "\nInstalling binutils...\n"
     cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -118,11 +123,6 @@ do
     cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
     printf "\nLoading binutils...\n"
     cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-
-    # Set the TMPDIR to disk so it doesn't run out of space
-    printf "\nMaking and setting TMPDIR to disk...\n"
-    cmd "mkdir -p /scratch/${USER}/.tmp"
-    cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
     # Install and load our own python for paraview stuff because the system python has unicode problems
     #printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

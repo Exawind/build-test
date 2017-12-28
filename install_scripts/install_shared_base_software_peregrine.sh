@@ -85,6 +85,11 @@ do
   cmd "module load python/2.7.8 &> /dev/null"
   cmd "module unload mkl"
 
+  # Set the TMPDIR to disk so it doesn't run out of space
+  printf "\nMaking and setting TMPDIR to disk...\n"
+  cmd "mkdir -p /scratch/${USER}/.tmp"
+  cmd "export TMPDIR=/scratch/${USER}/.tmp"
+
   # Fix for Peregrine's broken linker for gcc
   printf "\nInstalling binutils...\n"
   cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -92,11 +97,6 @@ do
   cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
   printf "\nLoading binutils...\n"
   cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-
-  # Set the TMPDIR to disk so it doesn't run out of space
-  printf "\nMaking and setting TMPDIR to disk...\n"
-  cmd "mkdir -p /scratch/${USER}/.tmp"
-  cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
   # Install our own python
   printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

@@ -315,7 +315,7 @@ main() {
     declare -a LIST_OF_COMPILERS=('gcc' 'intel')
     declare -a LIST_OF_GCC_COMPILERS=('4.9.2')
     declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
-    declare -a LIST_OF_TPLS=('tioga' 'hypre')
+    declare -a LIST_OF_TPLS=('openfast' 'tioga' 'hypre')
     OPENFAST_BRANCH=develop
     TIOGA_BRANCH=develop # develop points to nalu-api in Spack
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting

@@ -56,7 +56,7 @@ class Openfast(CMakePackage):
     # Additional dependencies when compiling C++ library
     depends_on('mpi', when='+cxx')
     depends_on('yaml-cpp', when='+cxx')
-    depends_on('hdf5+mpi+cxx', when='+cxx')
+    depends_on('hdf5+mpi+cxx+hl', when='+cxx')
     depends_on('zlib', when='+cxx')
     depends_on('libxml2', when='+cxx')
 
@@ -79,11 +79,15 @@ class Openfast(CMakePackage):
                 'ON' if '+cxx' in spec else 'OFF'),
         ])
 
-        blas = spec['blas'].libs
-        lapack = spec['lapack'].libs
+        # Make sure we use Spack's blas/lapack:
+        lapack_libs = spec['lapack'].libs.joined(';')
+        blas_libs = spec['blas'].libs.joined(';')
+
         options.extend([
-            '-DBLAS_LIBRARIES=%s' % ';'.join(blas.names),
-            '-DLAPACK_LIBRARIES=%s' % ';'.join(lapack.names),
+            '-DLAPACK_INCLUDE_DIRS=%s' % spec['lapack'].prefix.include,
+            '-DBLAS_INCLUDE_DIRS=%s' % spec['blas'].prefix.include,
+            '-DLAPACK_LIBRARIES=%s;%s' % (lapack_libs,blas_libs),
+            '-DBLAS_LIBRARIES=%s;%s' % (blas_libs,lapack_libs),
         ])
 
         if '+cxx' in spec:

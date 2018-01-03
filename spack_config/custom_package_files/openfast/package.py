@@ -82,7 +82,7 @@ class Openfast(CMakePackage):
         # Make sure we use Spack's blas/lapack:
         blas_libs = spec['blas'].libs + spec['lapack'].libs
         options.extend([
-            '-DBLAS_LIBRARIES=%s' % blas_libs.joined(';')
+            '-DBLAS_LIBRARIES=%s' % blas_libs.joined(';'),
             '-DLAPACK_LIBRARIES=%s' % blas_libs.joined(';')
         ])
 

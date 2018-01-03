@@ -84,10 +84,8 @@ class Openfast(CMakePackage):
         blas_libs = spec['blas'].libs.joined(';')
 
         options.extend([
-            '-DLAPACK_INCLUDE_DIRS=%s' % spec['lapack'].prefix.include,
-            '-DBLAS_INCLUDE_DIRS=%s' % spec['blas'].prefix.include,
             '-DLAPACK_LIBRARIES=%s;%s' % (lapack_libs,blas_libs),
-            '-DBLAS_LIBRARIES=%s;%s' % (blas_libs,lapack_libs),
+            '-DBLAS_LIBRARIES=%s;%s' % (blas_libs,lapack_libs)
         ])
 
         if '+cxx' in spec:

@@ -124,32 +124,16 @@ do
     printf "\nLoading binutils...\n"
     cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
 
-    # Install and load our own python for paraview stuff because the system python has unicode problems
-    #printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install python %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "module unload python/2.7.8"
-    #cmd "unset PYTHONHOME"
-    #cmd "spack load python ${COMPILER_NAME}@${COMPILER_VERSION}"
-
     printf "\nInstalling Nalu using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+      cmd "spack install nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+      cmd "spack install nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
-      cmd "spack install nalu+openfast+tioga+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
+      cmd "spack install nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
     fi
 
     printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
-
-    printf "\nInstalling hypre using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    if [ ${COMPILER_NAME} == 'gcc' ]; then
-      cmd "spack install hypre~shared+mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install hypre~shared+mpi+int64 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    elif [ ${COMPILER_NAME} == 'intel' ]; then
-      cmd "spack install hypre~shared+mpi ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install hypre~shared+mpi+int64 ^intel-mpi ^intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
-    fi
 
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

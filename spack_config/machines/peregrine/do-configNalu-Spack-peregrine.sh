@@ -63,6 +63,16 @@ set -e
 (set -x; which cmake)
 (set -x; which mpirun)
 
+# Extra TPLs that can be included in the cmake configure:
+#  -DENABLE_OPENFAST:BOOL=ON \
+#  -DOpenFAST_DIR:PATH=$(${SPACK_EXE} location -i openfast %${COMPILER}) \
+#  -DENABLE_HYPRE:BOOL=ON \
+#  -DHYPRE_DIR:PATH=$(${SPACK_EXE} location -i hypre %${COMPILER}) \
+#  -DENABLE_TIOGA:BOOL=ON \
+#  -DTIOGA_DIR:PATH=$(${SPACK_EXE} location -i tioga %${COMPILER}) \
+#  -DENABLE_PARAVIEW_CATALYST:BOOL=ON \
+#  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=$(${SPACK_EXE} location -i catalyst-ioss-adapter %${COMPILER}) \
+
 cmake \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT} \
   -DYAML_DIR:PATH=$(${SPACK_EXE} location -i yaml-cpp %${COMPILER}) \

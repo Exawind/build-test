@@ -434,15 +434,15 @@ main() {
     fi
   fi
 
-  #if [ "${MACHINE_NAME}" != 'mac' ]; then
-  #  printf "\nSetting permissions...\n"
-  #  cmd "chmod -R a+rX,go-w ${NALU_TESTING_DIR}"
-  #  cmd "chmod g+w ${NALU_TESTING_DIR}"
-  #  cmd "chmod g+w ${NALU_TESTING_DIR}/spack"
-  #  cmd "chmod g+w ${NALU_TESTING_DIR}/spack/opt"
-  #  cmd "chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack"
-  #  cmd "chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db"
-  #fi
+  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+    printf "\nSetting permissions...\n"
+    cmd "chmod -R a+rX,go-w ${NALU_TESTING_DIR}"
+    cmd "chmod g+w ${NALU_TESTING_DIR}"
+    cmd "chmod g+w ${NALU_TESTING_DIR}/spack"
+    cmd "chmod g+w ${NALU_TESTING_DIR}/spack/opt"
+    cmd "chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack"
+    cmd "chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db"
+  fi
 
   printf "============================================================\n"
   printf "Done!\n"

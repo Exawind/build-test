@@ -48,10 +48,10 @@ test_loop_body() {
   fi
 
   # Don't use OpenMP for clang
-  if [ "${COMPILER_NAME}" == 'clang' ]; then
-    printf "\nTurning off OpenMP in Trilinos...\n"
-    TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
-  fi
+  #if [ "${COMPILER_NAME}" == 'clang' ]; then
+  printf "\nTurning off OpenMP in Trilinos...\n"
+  TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
+  #fi
 
   # Set the TMPDIR to disk so it doesn't run out of space
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then

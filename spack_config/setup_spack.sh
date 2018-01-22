@@ -10,12 +10,12 @@ fi
 
 set -e
 
-OS=`uname -s`
+OS=$(uname -s)
 
 #Use kind of ridiculous logic to find the machine name
 if [ ${OS} == 'Darwin' ]; then
   MACHINE=mac
-  OSX=`sw_vers -productVersion`
+  OSX=$(sw_vers -productVersion)
   case "${OSX}" in
     10.12*)
       MACHINE=mac_sierra
@@ -30,18 +30,19 @@ elif [ ${OS} == 'Linux' ]; then
       if [ -f "/etc/nrel" ]; then 
         MACHINE=merlin
       else
-        MYHOSTNAME=`hostname -d`
+        MYHOSTNAME=$(hostname -d)
         case "${MYHOSTNAME}" in
           hpc.nrel.gov)
             MACHINE=peregrine
+          ;;
+          mcp.alcf.anl.gov)
+            MACHINE=mira
           ;;
         esac
       fi
     ;;
   esac
 fi
-
-#MACHINE=mira
 
 # Copy machine-specific configuration for Spack if we recognize the machine
 if [ "${MACHINE}" == 'peregrine' ] || \

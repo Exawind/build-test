@@ -10,7 +10,7 @@ diff -crB Nalu.orig/CMakeLists.txt Nalu/CMakeLists.txt
 + set(CMAKE_EXE_LINKER_FLAGS "-Wl,--no-as-needed -Wl,--allow-multiple-definition")
 + SET(CMAKE_FIND_LIBRARY_PREFIXES lib)
 + SET(CMAKE_FIND_LIBRARY_SUFFIXES a)
-+ find_library(HDF5_LIBRARY NAMES libhdf5.a PATHS /soft/libraries/hdf5/1.8.17/cnk-gcc/current/lib/lib)
++ find_library(HDF5_LIBRARY NAMES libhdf5.a PATHS /soft/libraries/hdf5/1.8.17/cnk-gcc/current/lib)
 + find_library(LAPACK_LIBRARY NAMES liblapack.a PATHS /soft/libraries/alcf/current/gcc/LAPACK/lib)
 + find_library(BLAS_LIBRARY NAMES libblas.a PATHS /soft/libraries/alcf/current/gcc/BLAS/lib)
 + find_library(ZLIB_LIBRARY NAMES libz.a PATHS /soft/libraries/alcf/current/gcc/ZLIB/lib)

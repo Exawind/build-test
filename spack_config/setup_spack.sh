@@ -41,10 +41,13 @@ elif [ ${OS} == 'Linux' ]; then
   esac
 fi
 
+#MACHINE=mira
+
 # Copy machine-specific configuration for Spack if we recognize the machine
 if [ "${MACHINE}" == 'peregrine' ] || \
    [ "${MACHINE}" == 'merlin' ] || \
    [ "${MACHINE}" == 'cori' ] || \
+   [ "${MACHINE}" == 'mira' ] || \
    [ "${MACHINE}" == 'mac' ] || \
    [ "${MACHINE}" == 'mac_sierra' ]; then
 
@@ -69,6 +72,13 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #Extra stuff for cori
   if [ ${MACHINE} == 'cori' ]; then
     (set -x; cp -R machines/${MACHINE}/netcdf ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+  fi
+
+  #Extra stuff for mira
+  if [ ${MACHINE} == 'mira' ]; then
+    (set -x; cp -R machines/${MACHINE}/nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   fi
 
   #Extra stuff for macs

@@ -3,10 +3,10 @@
 set -ex
 
 COMPILER=gcc
-SPACK_ROOT=${HOME}/spack
+SPACK_ROOT=/projects/ExaWindFarm/spack
 SPACK_EXE=${SPACK_ROOT}/bin/spack
+NALUSPACK_ROOT=/projects/ExaWindFarm/NaluSpack
 NALU_DIR=${HOME}/Nalu
-NALUSPACK_ROOT=${HOME}/NaluSpack
 
 # Need to apply patch for this thing to build on Mira
 if (cd ${NALU_DIR} && ! patch -Rsfp1 --dry-run < ${NALUSPACK_ROOT}/spack_config/machines/mira/nalu/mira.patch); then
@@ -23,14 +23,6 @@ set -e
 
 (set -x; which cmake)
 (set -x; which mpicc)
-
-# Extra TPLs that can be included in the cmake configure:
-#  -DENABLE_OPENFAST:BOOL=ON \
-#  -DOpenFAST_DIR:PATH=$(${SPACK_EXE} location -i openfast %${COMPILER}) \
-#  -DENABLE_TIOGA:BOOL=ON \
-#  -DTIOGA_DIR:PATH=$(${SPACK_EXE} location -i tioga %${COMPILER}) \
-#  -DENABLE_PARAVIEW_CATALYST:BOOL=ON \
-#  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=$(${SPACK_EXE} location -i catalyst-ioss-adapter %${COMPILER}) \
 
 cmake \
   -DTrilinos_DIR:PATH=$(${SPACK_EXE} location -i trilinos@develop build_type=Release %${COMPILER}) \

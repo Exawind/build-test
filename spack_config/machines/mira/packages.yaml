@@ -74,6 +74,10 @@ packages:
             bzip2@system: /usr
         buildable: False
         version: [system]
+    xz:
+        paths:
+            xz@system: /usr
+        buildable: False
     cmake:
         paths:
             cmake@3.8.1: /soft/buildtools/cmake/3.8.1

@@ -80,6 +80,8 @@ if [ "${MACHINE}" == 'peregrine' ] || \
     (set -x; cp -R machines/${MACHINE}/nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/libxml2 ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   fi
 
   #Extra stuff for macs

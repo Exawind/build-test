@@ -16,4 +16,4 @@ cmd "source ../spack_config/shared_constraints.sh"
 # Disable openmp on Mira
 TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
 
-cmd "spack install nalu+hypre %gcc@4.8.4 arch=bgq-cnk-ppc64 ^${TRILINOS}@develop"
+cmd "spack install --only dependencies nalu+hypre+openfast %gcc@4.8.4 arch=bgq-cnk-ppc64 ^${TRILINOS}@develop"

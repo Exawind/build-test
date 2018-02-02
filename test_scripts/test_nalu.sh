@@ -95,16 +95,16 @@ test_loop_body() {
   #cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
   #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
   #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
-  printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
-  cmd "spack uninstall -a -y tioga %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
+  #cmd "spack uninstall -a -y tioga %${COMPILER_NAME}@${COMPILER_VERSION}"
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating Trilinos (this is fine to error when tests are first run)...\n"
   cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
   #printf "\nUpdating OpenFAST (this is fine to error when tests are first run)...\n"
   #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno"
-  printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"
-  cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno"
+  #printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"
+  #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno"
   cmd "cd ${NALU_TESTING_DIR}" # Change directories to avoid any stale file handles
 
   TPL_VARIANTS=''

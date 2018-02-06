@@ -105,16 +105,11 @@ do
   cmd "module unload python/2.7.8"
   cmd "unset PYTHONHOME"
   cmd "spack load python@2.7.14 ${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-numpy ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-matplotlib ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-pandas ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-scipy ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-nose ^python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-numpy ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-matplotlib ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-pandas ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-scipy ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install py-nose ^python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  for PYTHON_VERSION in '2.7.14' '3.6.3'; do
+    for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-scipy py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf; do
+      cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
+    done
+  done
 
   printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"

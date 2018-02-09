@@ -62,8 +62,7 @@ class Nalu(CMakePackage):
 
         options.extend([
             '-DTrilinos_DIR:PATH=%s' % spec['trilinos'].prefix,
-            '-DYAML_DIR:PATH=%s' % spec['yaml-cpp'].prefix,
-            '-DENABLE_INSTALL:BOOL=ON'
+            '-DYAML_DIR:PATH=%s' % spec['yaml-cpp'].prefix
         ])
 
         if '+openfast' in spec:

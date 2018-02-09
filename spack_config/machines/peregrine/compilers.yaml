@@ -40,6 +40,50 @@ compilers:
     spec: gcc@5.2.0
     target: x86_64
 - compiler:
+    extra_rpaths:
+     - /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/lib
+     - /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/lib/clang/5.0.0/lib/linux
+     - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
+     - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
+     - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
+     - /nopt/nrel/apps/gcc/5.2.0/lib64
+    flags:
+      cflags: -O2
+      cxxflags: -O2
+      fflags: -O2
+      fcflags: -O2
+    modules: []
+    operating_system: centos6
+    paths:
+      cc: /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/bin/clang
+      cxx: /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/bin/clang++
+      f77: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
+      fc: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
+    spec: clang@5.0.0
+    target: x86_64
+- compiler:
+    extra_rpaths:
+     - /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/lib
+     - /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/lib/clang/5.0.0/lib/linux
+     - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
+     - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
+     - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
+     - /nopt/nrel/apps/gcc/5.2.0/lib64
+    flags:
+      cflags: -O2
+      cxxflags: -O2
+      fflags: -O2
+      fcflags: -O2
+    modules: []
+    operating_system: rhel6
+    paths:
+      cc: /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/bin/clang
+      cxx: /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/bin/clang++
+      f77: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
+      fc: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
+    spec: clang@5.0.0
+    target: x86_64
+- compiler:
     environment:
       set:
         INTEL_LICENSE_FILE: 28518@admin1

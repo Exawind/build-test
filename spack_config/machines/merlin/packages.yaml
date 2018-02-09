@@ -24,6 +24,8 @@ packages:
     version: [2017.2.174]
   yaml-cpp:
     version: [develop]
+  netlib-lapack:
+    version: [3.6.1]
   all:
     compiler: [gcc@4.9.2, intel@17.0.2]
     variants: build_type=Release

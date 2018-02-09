@@ -17,6 +17,8 @@ packages:
     version: [1.10.4]
   yaml-cpp:
     version: [develop]
+  netlib-lapack:
+    version: [3.6.1]
   python:
     paths:
   #    python@2.7.14 arch=darwin-sierra-x86_64: /usr/local/Cellar/python/2.7.14

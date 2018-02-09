@@ -42,6 +42,7 @@ test_loop_body() {
     cmd "module load gcc/5.2.0"
     cmd "module load python/2.7.14"
     cmd "module load git/2.6.3"
+    cmd "module load cppcheck/1.81"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     cmd "module purge"
     cmd "module load GCCcore/4.9.2"
@@ -230,6 +231,11 @@ test_loop_body() {
     printf "\nSetting OpenMP stuff...\n"
     cmd "eval export OMP_NUM_THREADS=1"
     cmd "eval export OMP_PROC_BIND=false"
+
+    if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'mac' ]; then
+      printf "\nRunning cppcheck static analysis (Nalu not updated until after this step)...\n"
+      cmd "cppcheck --enable=all -j 8 -I ${NALU_DIR}/include ${NALU_DIR}/src"
+    fi
 
     printf "\nRunning CTest at $(date)...\n"
     cmd "cd ${NALU_DIR}/build"

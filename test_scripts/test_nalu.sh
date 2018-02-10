@@ -234,7 +234,8 @@ test_loop_body() {
 
     if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'mac' ]; then
       printf "\nRunning cppcheck static analysis (Nalu not updated until after this step)...\n"
-      cmd "cppcheck --enable=all -j 8 -I ${NALU_DIR}/include ${NALU_DIR}/src"
+      cmd "rm ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt"
+      cmd "cppcheck --enable=all --quiet -j 8 --output-file=${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt -I ${NALU_DIR}/include ${NALU_DIR}/src"
     fi
 
     printf "\nRunning CTest at $(date)...\n"

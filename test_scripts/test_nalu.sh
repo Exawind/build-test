@@ -232,10 +232,17 @@ test_loop_body() {
     cmd "eval export OMP_NUM_THREADS=1"
     cmd "eval export OMP_PROC_BIND=false"
 
+    # Run static analysis and let ctest know we have static analysis output
     if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'mac' ]; then
       printf "\nRunning cppcheck static analysis (Nalu not updated until after this step)...\n"
       cmd "rm ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt"
       cmd "cppcheck --enable=all --quiet -j 8 --output-file=${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt -I ${NALU_DIR}/include ${NALU_DIR}/src"
+      EXTRA_CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE ${EXTRA_CTEST_ARGS}"
+    fi
+
+    # Unset the TMPDIR variable after building but before testing during ctest nightly script
+    if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'merlin' ]; then
+      EXTRA_CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE ${EXTRA_CTEST_ARGS}"
     fi
 
     printf "\nRunning CTest at $(date)...\n"
@@ -243,7 +250,7 @@ test_loop_body() {
     if [ "${MACHINE_NAME}" != 'mac' ]; then
       cmd "module list"
     fi
-    cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DTPL_TEST_ARGS=\"${TPL_TEST_ARGS}\" -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
+    cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DTPL_TEST_ARGS=\"${TPL_TEST_ARGS}\" ${EXTRA_CTEST_ARGS} -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
     printf "Returned from CTest at $(date)...\n"
   done
 

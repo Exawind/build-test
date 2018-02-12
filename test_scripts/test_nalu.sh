@@ -222,12 +222,6 @@ test_loop_body() {
       cmd "cd ${NALU_DIR}/build && rm -rf ${NALU_DIR}/build/*"
     fi
 
-    printf "\nSetting warning flags...\n"
-    WARNINGS="-Wall"
-    cmd "eval export CXXFLAGS=\'"${WARNINGS}"\'"
-    cmd "eval export CFLAGS=\'"${WARNINGS}"\'"
-    cmd "eval export FFLAGS=\'"${WARNINGS}"\'"
-
     printf "\nSetting OpenMP stuff...\n"
     cmd "eval export OMP_NUM_THREADS=1"
     cmd "eval export OMP_PROC_BIND=false"

@@ -231,6 +231,7 @@ test_loop_body() {
       printf "\nRunning cppcheck static analysis (Nalu not updated until after this step)...\n"
       cmd "rm ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt"
       cmd "cppcheck --enable=all --quiet -j 8 --output-file=${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt -I ${NALU_DIR}/include ${NALU_DIR}/src"
+      cmd "printf \"%s warnings\n\" \"$(wc -l < ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt | xargs echo -n)\" >> ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt"
       EXTRA_CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE ${EXTRA_CTEST_ARGS}"
     fi
 

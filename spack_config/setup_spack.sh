@@ -39,6 +39,12 @@ elif [ ${OS} == 'Linux' ]; then
             MACHINE=mira
           ;;
         esac
+        MYHOSTNAME=$(hostname)
+        case "${MYHOSTNAME}" in
+          mutrino)
+            MACHINE=mutrino
+          ;;
+        esac
       fi
     ;;
   esac
@@ -49,6 +55,7 @@ if [ "${MACHINE}" == 'peregrine' ] || \
    [ "${MACHINE}" == 'merlin' ] || \
    [ "${MACHINE}" == 'cori' ] || \
    [ "${MACHINE}" == 'mira' ] || \
+   [ "${MACHINE}" == 'mutrino' ] || \
    [ "${MACHINE}" == 'mac' ] || \
    [ "${MACHINE}" == 'mac_sierra' ]; then
 
@@ -72,6 +79,11 @@ if [ "${MACHINE}" == 'peregrine' ] || \
 
   #Extra stuff for cori
   if [ ${MACHINE} == 'cori' ]; then
+    (set -x; cp -R machines/${MACHINE}/netcdf ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+  fi
+
+  #Extra stuff for mutrino
+  if [ ${MACHINE} == 'mutrino' ]; then
     (set -x; cp -R machines/${MACHINE}/netcdf ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   fi
 

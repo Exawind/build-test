@@ -1,7 +1,8 @@
 #!/bin/bash -l
 
 # Script for running nightly regression tests for Nalu on a particular set 
-# of machines using Spack and submitting results to CDash
+# of machines with a list of configurations for each machine using Spack
+# to satisfy dependencies and submitting results to CDash
 
 # Control over printing and executing commands
 print_cmds=true
@@ -14,11 +15,15 @@ cmd() {
 }
 
 # Function for testing a single configuration
-test_loop_body() {
+test_configuration() {
   printf "************************************************************\n"
   printf "Testing Nalu with:\n"
   printf "${COMPILER_NAME}@${COMPILER_VERSION}\n"
+  printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
   printf "trilinos@${TRILINOS_BRANCH}\n"
+  printf "openfast@${OPENFAST_BRANCH}\n"
+  printf "tioga@${TIOGA_BRANCH}\n"
+  printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date).\n"
   printf "************************************************************\n"
   printf "\n"
@@ -48,9 +53,11 @@ test_loop_body() {
     cmd "module load GCCcore/4.9.2"
   fi
 
-  # Don't use OpenMP for clang
-  if [ "${COMPILER_NAME}" == 'clang' ]; then
-    printf "\nTurning off OpenMP in Trilinos...\n"
+  # Enable or disable OpenMP
+  if [ "${OPENMP_ENABLED}" == 'true' ]; then
+    printf "\nOpenMP is enabled in Trilinos...\n"
+  elif [ "${OPENMP_ENABLED}" == 'false' ]; then
+    printf "\nOpenMP is disabled in Trilinos...\n"
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
   fi
 
@@ -110,7 +117,8 @@ test_loop_body() {
 
   TPL_VARIANTS=''
   TPL_CONSTRAINTS=''
-  for TPL in "${LIST_OF_TPLS[@]}"; do
+  TPLS=(${LIST_OF_TPLS//;/ })
+  for TPL in "${TPLS}"; do
     TPL_VARIANTS+="+${TPL}"
     if [ "${TPL}" == 'openfast' ] ; then
       TPL_CONSTRAINTS="^openfast@${OPENFAST_BRANCH} ${TPL_CONSTRAINTS}"
@@ -161,10 +169,11 @@ test_loop_body() {
     fi
   fi
 
-  printf "\nLoading Spack modules into environment...\n"
   # Refresh available modules (this is only really necessary on the first run of this script
   # because cmake and openmpi will already have been built and module files registered in subsequent runs)
   cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+
+  printf "\nLoading Spack modules into environment...\n"
   if [ "${MACHINE_NAME}" == 'mac' ]; then
     cmd "eval export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
     cmd "eval export PATH=$(spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
@@ -186,7 +195,7 @@ test_loop_body() {
   printf "TRILINOS_DIR=${TRILINOS_DIR}\n"
   printf "YAML_DIR=${YAML_DIR}\n"
   EXTRA_CONFIGURE_ARGS=''
-  for TPL in "${LIST_OF_TPLS[@]}"; do
+  for TPL in "${TPLS[@]}"; do
     if [ "${TPL}" == 'openfast' ]; then
       OPENFAST_DIR=$(spack location -i openfast %${COMPILER_NAME}@${COMPILER_VERSION})
       EXTRA_CONFIGURE_ARGS="-DENABLE_OPENFAST:BOOL=ON -DOpenFAST_DIR:PATH=${OPENFAST_DIR} ${EXTRA_CONFIGURE_ARGS}"
@@ -209,48 +218,48 @@ test_loop_body() {
     fi
   done
 
-  for BUILD_TYPE in "${LIST_OF_BUILD_TYPES[@]}"; do
+  # Set the extra identifiers for CDash build description
+  #BUILD_TYPE_LOWERCASE="$(tr [A-Z] [a-z] <<< "${BUILD_TYPE}")"
+  #EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}-${BUILD_TYPE_LOWERCASE}"
+  #EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-tr_${TRILINOS_BRANCH}-omp_${OPENMP_ENABLED}"
+  EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-tr_${TRILINOS_BRANCH}"
 
-    # Set the extra identifiers for CDash build description
-    #BUILD_TYPE_LOWERCASE="$(tr [A-Z] [a-z] <<< "${BUILD_TYPE}")"
-    #EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}-${BUILD_TYPE_LOWERCASE}"
-    EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-trlns_${TRILINOS_BRANCH}"
+  if [ ! -z "${NALU_DIR}" ]; then
+    printf "\nCleaning Nalu directory...\n"
+    cmd "cd ${NALU_DIR} && git reset --hard origin/master && git clean -df && git status -uno"
+    cmd "cd ${NALU_DIR}/build && rm -rf ${NALU_DIR}/build/*"
+  fi
 
-    if [ ! -z "${NALU_DIR}" ]; then
-      printf "\nCleaning Nalu directory...\n"
-      cmd "cd ${NALU_DIR} && git reset --hard origin/master && git clean -df && git status -uno"
-      cmd "cd ${NALU_DIR}/build && rm -rf ${NALU_DIR}/build/*"
-    fi
-
+  if [ "${OPENMP_ENABLED}" == 'true' ]; then
     printf "\nSetting OpenMP stuff...\n"
     cmd "eval export OMP_NUM_THREADS=1"
     cmd "eval export OMP_PROC_BIND=false"
+  fi
 
-    # Run static analysis and let ctest know we have static analysis output
-    if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'mac' ]; then
-      printf "\nRunning cppcheck static analysis (Nalu not updated until after this step)...\n"
-      cmd "rm ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt"
-      cmd "cppcheck --enable=all --quiet -j 8 --output-file=${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt -I ${NALU_DIR}/include ${NALU_DIR}/src"
-      cmd "printf \"%s warnings\n\" \"$(wc -l < ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt | xargs echo -n)\" >> ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt"
-      EXTRA_CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE ${EXTRA_CTEST_ARGS}"
-    fi
+  # Run static analysis and let ctest know we have static analysis output
+  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'mac' ]; then
+    printf "\nRunning cppcheck static analysis (Nalu not updated until after this step)...\n"
+    cmd "rm ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt"
+    cmd "cppcheck --enable=all --quiet -j 8 --output-file=${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt -I ${NALU_DIR}/include ${NALU_DIR}/src"
+    cmd "printf \"%s warnings\n\" \"$(wc -l < ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt | xargs echo -n)\" >> ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt"
+    EXTRA_CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE ${EXTRA_CTEST_ARGS}"
+  fi
 
-    # Unset the TMPDIR variable after building but before testing during ctest nightly script
-    if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'merlin' ]; then
-      EXTRA_CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE ${EXTRA_CTEST_ARGS}"
-    fi
+  # Unset the TMPDIR variable after building but before testing during ctest nightly script
+  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'merlin' ]; then
+    EXTRA_CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE ${EXTRA_CTEST_ARGS}"
+  fi
 
-    # Turn on -Wall but turn off -Wextra -pedantic
-    EXTRA_CONFIGURE_ARGS="-DENABLE_WARNINGS:BOOL=TRUE -DENABLE_EXTRA_WARNINGS:BOOL=FALSE ${EXTRA_CONFIGURE_ARGS}"
+  # Turn on -Wall but turn off -Wextra -pedantic
+  EXTRA_CONFIGURE_ARGS="-DENABLE_WARNINGS:BOOL=TRUE -DENABLE_EXTRA_WARNINGS:BOOL=FALSE ${EXTRA_CONFIGURE_ARGS}"
 
-    printf "\nRunning CTest at $(date)...\n"
-    cmd "cd ${NALU_DIR}/build"
-    if [ "${MACHINE_NAME}" != 'mac' ]; then
-      cmd "module list"
-    fi
-    cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DEXTRA_CONFIGURE_ARGS=\"${EXTRA_CONFIGURE_ARGS}\" ${EXTRA_CTEST_ARGS} -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
-    printf "Returned from CTest at $(date)...\n"
-  done
+  printf "\nRunning CTest at $(date)...\n"
+  cmd "cd ${NALU_DIR}/build"
+  if [ "${MACHINE_NAME}" != 'mac' ]; then
+    cmd "module list"
+  fi
+  cmd "ctest -DNIGHTLY_DIR=${NALU_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DEXTRA_CONFIGURE_ARGS=\"${EXTRA_CONFIGURE_ARGS}\" ${EXTRA_CTEST_ARGS} -VV -S ${NALU_DIR}/reg_tests/CTestNightlyScript.cmake"
+  printf "Returned from CTest at $(date)...\n"
 
   printf "\nUnloading Spack modules from environment...\n"
   if [ "${MACHINE_NAME}" != 'mac' ]; then
@@ -274,7 +283,11 @@ test_loop_body() {
   printf "************************************************************\n"
   printf "Done testing Nalu with:\n"
   printf "${COMPILER_NAME}@${COMPILER_VERSION}\n"
+  printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
   printf "trilinos@${TRILINOS_BRANCH}\n"
+  printf "openfast@${OPENFAST_BRANCH}\n"
+  printf "tioga@${TIOGA_BRANCH}\n"
+  printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date).\n"
   printf "************************************************************\n"
 }
@@ -310,36 +323,21 @@ main() {
   HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
  
   # Set configurations to test for each machine
+  declare -a CONFIGURATIONS
+  #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    declare -a LIST_OF_BUILD_TYPES=('Release')
-    declare -a LIST_OF_TRILINOS_BRANCHES=('develop')
-    declare -a LIST_OF_COMPILERS=('gcc' 'intel')
-    declare -a LIST_OF_GCC_COMPILERS=('5.2.0')
-    declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
-    declare -a LIST_OF_TPLS=('openfast' 'tioga' 'hypre')
-    #declare -a LIST_OF_TPLS=('openfast' 'tioga' 'hypre' 'catalyst')
-    OPENFAST_BRANCH=develop
-    TIOGA_BRANCH=develop # develop points to nalu-api in Spack
+    CONFIGURATIONS[0]='gcc:5.2.0:true:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[1]='intel:17.0.2:true:develop:develop:develop:openfast;tioga;hypre'
     NALU_TESTING_DIR=/projects/windsim/exawind/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
-    declare -a LIST_OF_BUILD_TYPES=('Release')
-    declare -a LIST_OF_TRILINOS_BRANCHES=('develop')
-    declare -a LIST_OF_COMPILERS=('gcc' 'intel')
-    declare -a LIST_OF_GCC_COMPILERS=('4.9.2')
-    declare -a LIST_OF_INTEL_COMPILERS=('17.0.2')
-    declare -a LIST_OF_TPLS=('openfast' 'tioga' 'hypre')
-    OPENFAST_BRANCH=develop
-    TIOGA_BRANCH=develop # develop points to nalu-api in Spack
+    CONFIGURATIONS[0]='gcc:4.9.2:true:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[1]='intel:17.0.2:true:develop:develop:develop:openfast;tioga;hypre'
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    declare -a LIST_OF_BUILD_TYPES=('Release')
-    declare -a LIST_OF_TRILINOS_BRANCHES=('master' 'develop')
-    declare -a LIST_OF_COMPILERS=('gcc' 'clang')
-    declare -a LIST_OF_GCC_COMPILERS=('7.2.0')
-    declare -a LIST_OF_CLANG_COMPILERS=('9.0.0-apple')
-    declare -a LIST_OF_TPLS=('openfast' 'tioga' 'hypre')
-    OPENFAST_BRANCH=develop
-    TIOGA_BRANCH=develop # develop points to nalu-api in Spack
+    CONFIGURATIONS[0]='gcc:7.2.0:true:master:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[1]='clang:9.0.0-apple:false:master:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[2]='gcc:7.2.0:true:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[3]='clang:9.0.0-apple:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   else
     printf "\nMachine name not recognized.\n"
@@ -356,13 +354,10 @@ main() {
   printf "NALUSPACK_DIR: ${NALU_DIR}\n"
   printf "SPACK_ROOT: ${SPACK_ROOT}\n"
   printf "Testing configurations:\n"
-  printf "LIST_OF_BUILD_TYPES: ${LIST_OF_BUILD_TYPES[*]}\n"
-  printf "LIST_OF_TRILINOS_BRANCHES: ${LIST_OF_TRILINOS_BRANCHES[*]}\n"
-  printf "LIST_OF_COMPILERS: ${LIST_OF_COMPILERS[*]}\n"
-  printf "LIST_OF_GCC_COMPILERS: ${LIST_OF_GCC_COMPILERS[*]}\n"
-  printf "LIST_OF_INTEL_COMPILERS: ${LIST_OF_INTEL_COMPILERS[*]}\n"
-  printf "LIST_OF_TPLS: ${LIST_OF_TPLS[*]}\n"
-  printf "OPENFAST_BRANCH: ${OPENFAST_BRANCH}\n"
+  printf " compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls\n"
+  for CONFIGURATION in "${CONFIGURATIONS[@]}"; do
+    printf " ${CONFIGURATION}\n"
+  done
   printf "============================================================\n"
  
   if [ ! -d "${NALU_TESTING_DIR}" ]; then
@@ -407,27 +402,20 @@ main() {
   printf "Starting testing loops...\n"
   printf "============================================================\n"
  
-  # Test Nalu for the list of trilinos branches
-  for TRILINOS_BRANCH in "${LIST_OF_TRILINOS_BRANCHES[@]}"; do
-    # Test Nalu for the list of compilers
-    for COMPILER_NAME in "${LIST_OF_COMPILERS[@]}"; do
+  # Test Nalu for the list of configurations
+  for CONFIGURATION in "${CONFIGURATIONS[@]}"; do
+    CONFIG=(${CONFIGURATION//:/ })
+    COMPILER_NAME=${CONFIG[0]}
+    COMPILER_VERSION=${CONFIG[1]}
+    OPENMP_ENABLED=${CONFIG[2]}
+    TRILINOS_BRANCH=${CONFIG[3]}
+    OPENFAST_BRANCH=${CONFIG[4]}
+    TIOGA_BRANCH=${CONFIG[5]}
+    LIST_OF_TPLS=${CONFIG[6]}
  
-      # Move specific compiler version to generic compiler version
-      if [ "${COMPILER_NAME}" == 'gcc' ]; then
-        declare -a COMPILER_VERSIONS=("${LIST_OF_GCC_COMPILERS[@]}")
-      elif [ "${COMPILER_NAME}" == 'intel' ]; then
-        declare -a COMPILER_VERSIONS=("${LIST_OF_INTEL_COMPILERS[@]}")
-      elif [ "${COMPILER_NAME}" == 'clang' ]; then
-        declare -a COMPILER_VERSIONS=("${LIST_OF_CLANG_COMPILERS[@]}")
-      fi
- 
-      # Test Nalu for the list of compiler versions
-      for COMPILER_VERSION in "${COMPILER_VERSIONS[@]}"; do
-        printf "\nRemoving previous test log for uploading to CDash...\n"
-        cmd "rm ${NALU_TESTING_DIR}/jobs/nalu-test-log.txt"
-        (test_loop_body) 2>&1 | tee -i ${NALU_TESTING_DIR}/jobs/nalu-test-log.txt
-      done
-    done
+    printf "\nRemoving previous test log for uploading to CDash...\n"
+    cmd "rm ${NALU_TESTING_DIR}/jobs/nalu-test-log.txt"
+    (test_configuration) 2>&1 | tee -i ${NALU_TESTING_DIR}/jobs/nalu-test-log.txt
   done
 
   printf "============================================================\n"

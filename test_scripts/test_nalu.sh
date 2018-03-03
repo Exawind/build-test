@@ -41,7 +41,7 @@ test_loop_body() {
     cmd "module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64"
     cmd "module load gcc/5.2.0"
     cmd "module load python/2.7.14"
-    cmd "module load git/2.6.3"
+    cmd "module load git/2.14.1"
     cmd "module load cppcheck/1.81"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     cmd "module purge"

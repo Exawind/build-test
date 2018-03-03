@@ -55,9 +55,9 @@ test_configuration() {
 
   # Enable or disable OpenMP
   if [ "${OPENMP_ENABLED}" == 'true' ]; then
-    printf "\nOpenMP is enabled in Trilinos...\n"
+    printf "\nOpenMP is enabled in Trilinos...\n\n"
   elif [ "${OPENMP_ENABLED}" == 'false' ]; then
-    printf "\nOpenMP is disabled in Trilinos...\n"
+    printf "\nOpenMP is disabled in Trilinos...\n\n"
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
   fi
 

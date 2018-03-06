@@ -67,6 +67,7 @@ test_configuration() {
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "eval export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
+    printf "\nSetting TMPDIR to RAM...\n"
     cmd "eval export TMPDIR=/dev/shm"
   fi
 

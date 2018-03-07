@@ -1,0 +1,32 @@
+compilers:
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags: {}
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /opt/apps/ossw/applications/gcc/gcc-5.2/c7/bin/gcc
+      cxx: /opt/apps/ossw/applications/gcc/gcc-5.2/c7/bin/g++
+      f77: /opt/apps/ossw/applications/gcc/gcc-5.2/c7/bin/gfortran
+      fc: /opt/apps/ossw/applications/gcc/gcc-5.2/c7/bin/gfortran
+    spec: gcc@5.2.0
+    target: x86_64
+- compiler:
+    environment: {}
+    extra_rpaths:
+      - /opt/apps/ossw/libraries/mpc/mpc-1.0.3/c7/lib
+      - /opt/apps/ossw/libraries/mpfr/mpfr-3.1.5/c7/lib
+      - /opt/apps/ossw/libraries/gmp/gmp-6.1.2/c7/lib
+      - /opt/apps/ossw/applications/gcc/gcc-7.2/c7/lib64
+    flags: {}
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /opt/apps/ossw/applications/gcc/gcc-7.2/c7/bin/gcc
+      cxx: /opt/apps/ossw/applications/gcc/gcc-7.2/c7/bin/g++
+      f77: /opt/apps/ossw/applications/gcc/gcc-7.2/c7/bin/gfortran
+      fc: /opt/apps/ossw/applications/gcc/gcc-7.2/c7/bin/gfortran
+    spec: gcc@7.2.0
+    target: x86_64
+

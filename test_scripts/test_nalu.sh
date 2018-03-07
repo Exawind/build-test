@@ -55,9 +55,9 @@ test_configuration() {
 
   # Enable or disable OpenMP
   if [ "${OPENMP_ENABLED}" == 'true' ]; then
-    printf "\nOpenMP is enabled in Trilinos...\n\n"
+    printf "\nOpenMP is enabled in Trilinos...\n"
   elif [ "${OPENMP_ENABLED}" == 'false' ]; then
-    printf "\nOpenMP is disabled in Trilinos...\n\n"
+    printf "\nOpenMP is disabled in Trilinos...\n"
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
   fi
 
@@ -67,6 +67,7 @@ test_configuration() {
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "eval export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
+    printf "\nSetting TMPDIR to RAM...\n"
     cmd "eval export TMPDIR=/dev/shm"
   fi
 

@@ -38,6 +38,9 @@ elif [ ${OS} == 'Linux' ]; then
           mcp.alcf.anl.gov)
             MACHINE=mira
           ;;
+          ices.utexas.edu)
+            MACHINE=ices
+          ;;
         esac
         MYHOSTNAME=$(hostname)
         case "${MYHOSTNAME}" in
@@ -56,6 +59,7 @@ if [ "${MACHINE}" == 'peregrine' ] || \
    [ "${MACHINE}" == 'cori' ] || \
    [ "${MACHINE}" == 'mira' ] || \
    [ "${MACHINE}" == 'mutrino' ] || \
+   [ "${MACHINE}" == 'ices' ] || \
    [ "${MACHINE}" == 'mac' ] || \
    [ "${MACHINE}" == 'mac_sierra' ]; then
 
@@ -96,6 +100,10 @@ if [ "${MACHINE}" == 'peregrine' ] || \
     (set -x; cp -R machines/${MACHINE}/libxml2 ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   fi
 
+  #Extra stuff for ices
+  #if [ ${MACHINE} == 'ices' ]; then
+    #nothing at the moment
+  #fi
   #Extra stuff for macs
   #if [ ${MACHINE} == 'mac' ] || [ "${MACHINE}" == 'mac_sierra' ]; then
     #nothing at the moment

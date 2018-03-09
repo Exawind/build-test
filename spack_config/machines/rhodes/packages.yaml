@@ -1,0 +1,34 @@
+packages:
+  m4:
+    version: [1.4.18]
+  cmake:
+    version: [3.9.4]
+  boost:
+    version: [1.60.0]
+  netcdf:
+    version: [4.3.3.1]
+    variants: maxdims=65536 maxvars=524288
+  parallel-netcdf:
+    version: [1.6.1]
+  hdf5:
+    version: [1.8.16]
+    variants: +cxx+hl
+  superlu:
+    version: [4.3]
+  openmpi:
+    version: [1.10.4]
+  intel-mpi:
+    version: [2017.2.174]
+  intel-mkl:
+    version: [2017.2.174]
+  yaml-cpp:
+    version: [develop]
+  netlib-lapack:
+    version: [3.6.1]
+  all:
+    compiler: [gcc@4.8.5]
+    variants: build_type=Release
+    providers:
+      mpi: [openmpi@1.10.4]
+      blas: [netlib-lapack]
+      lapack: [netlib-lapack]

@@ -48,6 +48,12 @@ elif [ ${OS} == 'Linux' ]; then
             MACHINE=mutrino
           ;;
         esac
+        MYHOSTNAME=$(hostname -s)
+        case "${MYHOSTNAME}" in
+          rhodes)
+            MACHINE=rhodes
+          ;;
+        esac
       fi
     ;;
   esac
@@ -55,6 +61,7 @@ fi
 
 # Copy machine-specific configuration for Spack if we recognize the machine
 if [ "${MACHINE}" == 'peregrine' ] || \
+   [ "${MACHINE}" == 'rhodes' ] || \
    [ "${MACHINE}" == 'merlin' ] || \
    [ "${MACHINE}" == 'cori' ] || \
    [ "${MACHINE}" == 'mira' ] || \
@@ -74,6 +81,11 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   if [ ${MACHINE} == 'peregrine' ]; then
     (set -x; cp machines/${MACHINE}/intel.cfg ${SPACK_ROOT}/etc/spack/intel.cfg)
   fi
+
+  #Extra stuff for rhodes
+  #if [ ${MACHINE} == 'rhodes' ]; then
+    #nothing at the moment
+  #fi
 
   #Extra stuff for merlin
   if [ ${MACHINE} == 'merlin' ]; then
@@ -103,6 +115,7 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #if [ ${MACHINE} == 'ices' ]; then
     #nothing at the moment
   #fi
+
   #Extra stuff for macs
   #if [ ${MACHINE} == 'mac' ] || [ "${MACHINE}" == 'mac_sierra' ]; then
     #nothing at the moment

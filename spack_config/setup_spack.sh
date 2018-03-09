@@ -68,7 +68,6 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #All machines do this
   (set -x; cp machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/)
   (set -x; cp -R custom_package_files/nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp -R custom_package_files/openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom_package_files/catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
 
   #Extra stuff for peregrine

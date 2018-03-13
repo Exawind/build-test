@@ -327,17 +327,17 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    CONFIGURATIONS[0]='gcc:5.2.0:true:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[1]='intel:17.0.2:true:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:5.2.0:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[1]='intel:17.0.2:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_TESTING_DIR=/projects/windsim/exawind/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
-    CONFIGURATIONS[0]='gcc:4.9.2:true:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[1]='intel:17.0.2:true:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:4.9.2:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[1]='intel:17.0.2:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.2.0:true:master:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:7.2.0:false:master:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='clang:9.0.0-apple:false:master:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[2]='gcc:7.2.0:true:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[2]='gcc:7.2.0:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[3]='clang:9.0.0-apple:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_TESTING_DIR=${HOME}/NaluNightlyTesting
   else

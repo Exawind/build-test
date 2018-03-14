@@ -1,5 +1,7 @@
 #!/bin/bash -l
 
+# Script for installing all the base software in /opt on Rhodes
+
 # Control over printing and executing commands
 print_cmds=true
 execute_cmds=true
@@ -23,14 +25,27 @@ COMPILER_VERSION="4.8.5"
 # Set installation directory
 INSTALL_DIR=/opt/software/a
 
-# Assuming we already have some necessary modules available
-# from our login environment for installing a whole new set
-# of software with Spack
+#Rhodes has almost *nothing* installed on it besides python and gcc
+#so we are relying on Spack heavily as a non-root package manager here.
+#Kind of annoying to use Spack to build tools Spack needs, but after
+#the initial bootstrapping, we can now just rely on pure modules sans Spack
+#to set up our environment and tools we need to build with Spack.
+
+#Pure modules sans Spack (assuming the module init is alreay in .bashrc)
+#export MODULE_PREFIX=/opt/software/module_prefix
+#export PATH=${MODULE_PREFIX}/Modules/bin:${PATH}
+#module() { eval $(${MODULE_PREFIX}/Modules/bin/modulecmd $(basename ${SHELL}) $*); }
+#module use /opt/software/modules
 cmd "module load unzip"
 cmd "module load patch"
 cmd "module load bzip2"
 cmd "module load cmake"
 cmd "module load git"
+cmd "module load texinfo"
+cmd "module load flex"
+cmd "module load bison"
+cmd "module load wget"
+cmd "module load texlive"
 
 # Set spack location
 export SPACK_ROOT=${INSTALL_DIR}/spack
@@ -49,74 +64,84 @@ if [ ! -d "${INSTALL_DIR}" ]; then
 
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${INSTALL_DIR}/NaluSpack"
-  cmd "cd ${NALUSPACK_DIR}/spack_config && ./setup_spack.sh"
+  cmd "cd ${INSTALL_DIR}/NaluSpack/spack_config && ./setup_spack.sh"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
   printf "============================================================\n"
 fi
 
-# Load Spack after we know Spack is setup
+# Load Spack after we know Spack is set up
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
+cmd "export TRILINOS_BRANCH=develop"
 
 printf "\n============================================================\n"
 printf "Installing base software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 printf "============================================================\n"
 
-#Rhodes has almost *nothing* installed on it besides python and gcc
-#so we are relying on Spack heavily as a non-root package manager here.
-#Kind of annoying to use Spack to build tools Spack needs.
-
 printf "\nBootstrapping Spack with environment-modules...\n"
 cmd "spack bootstrap"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-printf "\nInstalling and loading essential tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install unzip %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install patch %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install bzip2 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
-#Don't seem to need binutils so far on rhodes
+#printf "\nInstalling and loading essential tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+#cmd "spack install unzip %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install patch %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install bzip2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install flex %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
+##Don't seem to need binutils so far on rhodes
 #cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-
-printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
+#
+#printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+#cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
 #cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
-
-# Install our own python
-printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-for PYTHON_VERSION in '2.7.14' '3.6.3'; do
-  for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-scipy py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf; do
-    cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
-  done
-done
-
-# Install our own compilers
-printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
+#
+## Install our own python
+#printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+#cmd "spack install python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+#for PYTHON_VERSION in '2.7.14' '3.6.3'; do
+#  for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-scipy py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf; do
+#    cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
+#  done
+#done
+#
+## Install our own compilers
+#printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+#cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install llvm@5.0.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install llvm@6.0.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack install intel-parallel-studio@cluster.2017.5+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
 #cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
-
+#
 ## Install Nalu with everything turned on
-#cmd "spack install nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-#cmd "spack install nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
-
+#printf "\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+#cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+#cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+#
+## Turn off OpenMP
+#TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
+#cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+#cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+#
 #printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 #(set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
 #
@@ -126,10 +151,6 @@ cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
 #printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 #cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
 
-# Set some version numbers
-#COMPILER_NAME="intel"
-#COMPILER_VERSION="18.0.1"
-
 #Last thing to do is install VisIt with the build_visit script
 
 printf "\n============================================================\n"
@@ -137,7 +158,11 @@ printf "Done installing base software with ${COMPILER_NAME}@${COMPILER_VERSION} 
 printf "============================================================\n"
 
 printf "\nSetting permissions...\n"
+cmd "chmod a+rX,go-w /opt"
+cmd "chmod -R a+rX,go-w /opt/software"
 cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
+cmd "chmod g+w /opt"
+cmd "chmod g+w /opt/software"
 cmd "chmod g+w ${INSTALL_DIR}"
 cmd "chmod g+w ${INSTALL_DIR}/spack"
 cmd "chmod g+w ${INSTALL_DIR}/spack/opt"

@@ -31,14 +31,17 @@ modules:
 
   tcl:
     #naming_scheme: '${PACKAGE}/${VERSION}-${COMPILERNAME}-${COMPILERVER}'
-    naming_scheme: '${PACKAGE}/${VERSION}-${COMPILERNAME}'
+    naming_scheme: '${PACKAGE}/${VERSION}'
     hash_length: 0
     all:
       suffixes:
-        ^python@2.7.14: 'python2'
-        ^python@3.6.3: 'python3'
-        +debug: 'debug'
-        trilinos build_type=Debug: 'debug'
+        '%intel': 'intel'
+        '^python@2.7.14': 'py2'
+        '^python@3.6.3': 'py3'
+        '+debug': 'dbg'
+        '+openmp': 'omp'
+        'trilinos build_type=Debug': 'dbg'
+        'boost+mpi': 'mpi'
       conflict:
         - '${PACKAGE}'
       environment:

@@ -30,10 +30,12 @@ modules:
       - mpi
 
   tcl:
-    naming_scheme: '${COMPILERNAME}/${COMPILERVER}/${PACKAGE}/${VERSION}'
+    #naming_scheme: '${PACKAGE}/${VERSION}-${COMPILERNAME}-${COMPILERVER}'
+    naming_scheme: '${PACKAGE}/${VERSION}'
     hash_length: 0
     all:
       suffixes:
+        '%intel': 'intel'
         '^python@2.7.14': 'py2'
         '^python@3.6.3': 'py3'
         '+debug': 'dbg'

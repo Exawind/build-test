@@ -22,7 +22,7 @@ packages:
   netlib-lapack:
     version: [3.6.1]
   all:
-    compiler: [gcc@4.9.4, gcc@5.5.0, gcc@6.4.0, gcc@7.3.0, intel@17.0.5, intel@18.0.1]
+    compiler: [gcc@4.8.5]
     variants: build_type=Release
     providers:
       mpi: [openmpi@1.10.4]

@@ -1,0 +1,134 @@
+compilers:
+- compiler:
+    environment: {}
+    extra_rpaths: []
+    flags:
+      cflags: -O2
+      cxxflags: -O2
+      fflags: -O2
+      fcflags: -O2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /usr/bin/gcc
+      cxx: /usr/bin/g++
+      f77: /usr/bin/gfortran
+      fc: /usr/bin/gfortran
+    spec: gcc@4.8.5
+    target: x86_64
+- compiler:
+    extra_rpaths:
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4ycp7iloaunwyavhk44mwqb7mp6trzsr/lib/gcc/x86_64-unknown-linux-gnu/4.9.4
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4ycp7iloaunwyavhk44mwqb7mp6trzsr/libexec/gcc/x86_64-unknown-linux-gnu/4.9.4
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4ycp7iloaunwyavhk44mwqb7mp6trzsr/lib64
+    flags:
+      cflags: -O2
+      cxxflags: -O2
+      fflags: -O2
+      fcflags: -O2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4ycp7iloaunwyavhk44mwqb7mp6trzsr/bin/gcc
+      cxx: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4ycp7iloaunwyavhk44mwqb7mp6trzsr/bin/g++
+      f77: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4ycp7iloaunwyavhk44mwqb7mp6trzsr/bin/gfortran
+      fc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4ycp7iloaunwyavhk44mwqb7mp6trzsr/bin/gfortran
+    spec: gcc@4.9.4
+    target: x86_64
+- compiler:
+    extra_rpaths:
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-izc2xgvos7bp7onxtw7cbg6qczp35rtr/lib/gcc/x86_64-unknown-linux-gnu/5.5.0
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-izc2xgvos7bp7onxtw7cbg6qczp35rtr/libexec/gcc/x86_64-unknown-linux-gnu/5.5.0
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-izc2xgvos7bp7onxtw7cbg6qczp35rtr/lib64
+    flags:
+      cflags: -O2
+      cxxflags: -O2
+      fflags: -O2
+      fcflags: -O2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-izc2xgvos7bp7onxtw7cbg6qczp35rtr/bin/gcc
+      cxx: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-izc2xgvos7bp7onxtw7cbg6qczp35rtr/bin/g++
+      f77: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-izc2xgvos7bp7onxtw7cbg6qczp35rtr/bin/gfortran
+      fc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-izc2xgvos7bp7onxtw7cbg6qczp35rtr/bin/gfortran
+    spec: gcc@5.5.0
+    target: x86_64
+- compiler:
+    extra_rpaths:
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-3x557td6zpmtuhgimlzhewikehwhhu5j/lib/gcc/x86_64-unknown-linux-gnu/6.4.0
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-3x557td6zpmtuhgimlzhewikehwhhu5j/libexec/gcc/x86_64-unknown-linux-gnu/6.4.0
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-3x557td6zpmtuhgimlzhewikehwhhu5j/lib64
+    flags:
+      cflags: -O2
+      cxxflags: -O2
+      fflags: -O2
+      fcflags: -O2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-3x557td6zpmtuhgimlzhewikehwhhu5j/bin/gcc
+      cxx: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-3x557td6zpmtuhgimlzhewikehwhhu5j/bin/g++
+      f77: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-3x557td6zpmtuhgimlzhewikehwhhu5j/bin/gfortran
+      fc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-3x557td6zpmtuhgimlzhewikehwhhu5j/bin/gfortran
+    spec: gcc@6.4.0
+    target: x86_64
+- compiler:
+    extra_rpaths:
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-cdq7rj6u4jjf4tousllmwqtqhacpmamm/lib/gcc/x86_64-unknown-linux-gnu/7.3.0
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-cdq7rj6u4jjf4tousllmwqtqhacpmamm/libexec/gcc/x86_64-unknown-linux-gnu/7.3.0
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-cdq7rj6u4jjf4tousllmwqtqhacpmamm/lib64
+    flags:
+      cflags: -O2
+      cxxflags: -O2
+      fflags: -O2
+      fcflags: -O2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-cdq7rj6u4jjf4tousllmwqtqhacpmamm/bin/gcc
+      cxx: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-cdq7rj6u4jjf4tousllmwqtqhacpmamm/bin/g++
+      f77: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-cdq7rj6u4jjf4tousllmwqtqhacpmamm/bin/gfortran
+      fc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-cdq7rj6u4jjf4tousllmwqtqhacpmamm/bin/gfortran
+    spec: gcc@7.3.0
+    target: x86_64
+- compiler:
+    environment:
+      set:
+        INTEL_LICENSE_FILE: 28518@hpc-admin1.hpc.nrel.gov
+    extra_rpaths:
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2017.5-5ghtwdavdyrdvslwt4nr2ojdfgfqe5wt/compilers_and_libraries/linux/lib/intel64
+    flags:
+      cflags: -O2 -xCORE-AVX2
+      cxxflags: -O2 -xCORE-AVX2
+      fflags: -O2 -xCORE-AVX2
+      fcflags: -O2 -xCORE-AVX2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2017.5-5ghtwdavdyrdvslwt4nr2ojdfgfqe5wt/compilers_and_libraries/linux/bin/intel64/icc
+      cxx: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2017.5-5ghtwdavdyrdvslwt4nr2ojdfgfqe5wt/compilers_and_libraries/linux/bin/intel64/icpc
+      f77: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2017.5-5ghtwdavdyrdvslwt4nr2ojdfgfqe5wt/compilers_and_libraries/linux/bin/intel64/ifort
+      fc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2017.5-5ghtwdavdyrdvslwt4nr2ojdfgfqe5wt/compilers_and_libraries/linux/bin/intel64/ifort
+    spec: intel@17.0.5
+    target: x86_64
+- compiler:
+    environment:
+      set:
+        INTEL_LICENSE_FILE: 28518@hpc-admin1.hpc.nrel.gov
+    extra_rpaths:
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.1-bfdqgk5ngxudy6nga65k374zouwp2suh/compilers_and_libraries/linux/lib/intel64
+    flags:
+      cflags: -O2 -xCORE-AVX2
+      cxxflags: -O2 -xCORE-AVX2
+      fflags: -O2 -xCORE-AVX2
+      fcflags: -O2 -xCORE-AVX2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.1-bfdqgk5ngxudy6nga65k374zouwp2suh/compilers_and_libraries/linux/bin/intel64/icc
+      cxx: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.1-bfdqgk5ngxudy6nga65k374zouwp2suh/compilers_and_libraries/linux/bin/intel64/icpc
+      f77: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.1-bfdqgk5ngxudy6nga65k374zouwp2suh/compilers_and_libraries/linux/bin/intel64/ifort
+      fc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.1-bfdqgk5ngxudy6nga65k374zouwp2suh/compilers_and_libraries/linux/bin/intel64/ifort
+    spec: intel@18.0.1
+    target: x86_64

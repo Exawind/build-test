@@ -83,9 +83,9 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   fi
 
   #Extra stuff for rhodes
-  #if [ ${MACHINE} == 'rhodes' ]; then
-    #nothing at the moment
-  #fi
+  if [ ${MACHINE} == 'rhodes' ]; then
+    (set -x; cp machines/${MACHINE}/intel.cfg* ${SPACK_ROOT}/etc/spack/)
+  fi
 
   #Extra stuff for merlin
   if [ ${MACHINE} == 'merlin' ]; then

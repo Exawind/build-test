@@ -40,7 +40,10 @@ test_configuration() {
   cmd "cd ${NALU_TESTING_DIR}"
 
   printf "\nLoading modules...\n"
-  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+  if [ "${MACHINE_NAME}" == 'rhodes' ]; then
+    cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
+    cmd "module load cppcheck/1.81"
+  elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     cmd "module purge"
     cmd "module use /nopt/nrel/apps/modules/candidate/modulefiles"
     cmd "module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64"
@@ -94,6 +97,15 @@ test_configuration() {
       for i in ICCCFG ICPCCFG IFORTCFG
       do
         cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
+      done
+    fi
+  elif [ "${MACHINE_NAME}" == 'rhodes' ]; then
+    if [ "${COMPILER_NAME}" == 'intel' ]; then
+      # For Intel compiler to include rpath to its own libraries
+      cmd "eval export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov"
+      for i in ICCCFG ICPCCFG IFORTCFG
+      do
+        cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg.${COMPILER_VERSION}"
       done
     fi
   fi
@@ -168,6 +180,11 @@ test_configuration() {
       cmd "module unload binutils/2.27-GCCcore-6.3.0"
       cmd "module load GCCcore/4.9.2"
     fi
+  elif [ "${MACHINE_NAME}" == 'rhodes' ]; then
+    if [ "${COMPILER_NAME}" == 'intel' ]; then
+      printf "\nLoading Intel compiler module for CTest...\n"
+      cmd "module load intel-parallel-studio/${COMPILER_VERSION}"
+    fi
   fi
 
   # Refresh available modules (this is only really necessary on the first run of this script
@@ -238,7 +255,7 @@ test_configuration() {
   fi
 
   # Run static analysis and let ctest know we have static analysis output
-  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'mac' ]; then
+  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'mac' ] || [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nRunning cppcheck static analysis (Nalu not updated until after this step)...\n"
     cmd "rm ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt"
     cmd "cppcheck --enable=all --quiet -j 8 --output-file=${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt -I ${NALU_DIR}/include ${NALU_DIR}/src"
@@ -326,7 +343,10 @@ main() {
   # Set configurations to test for each machine
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
-  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+  if [ "${MACHINE_NAME}" == 'rhodes' ]; then
+    CONFIGURATIONS[0]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
+    NALU_TESTING_DIR=/home/jrood/nalu_testing
+  elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     CONFIGURATIONS[0]='gcc:5.2.0:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='intel:17.0.2:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_TESTING_DIR=/projects/windsim/exawind/NaluNightlyTesting
@@ -435,7 +455,7 @@ main() {
     fi
   fi
 
-  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting permissions...\n"
     cmd "chmod -R a+rX,go-w ${NALU_TESTING_DIR}"
     cmd "chmod g+w ${NALU_TESTING_DIR}"

@@ -30,7 +30,7 @@ modules:
       - mpi
 
   tcl:
-    naming_scheme: '${COMPILERNAME}/${COMPILERVER}/${PACKAGE}/${VERSION}'
+    naming_scheme: '${COMPILERNAME}-${COMPILERVER}/${PACKAGE}/${VERSION}'
     hash_length: 0
     all:
       suffixes:

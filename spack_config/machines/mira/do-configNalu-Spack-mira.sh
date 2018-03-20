@@ -34,4 +34,4 @@ cmake \
   -DHYPRE_DIR:PATH=$(${SPACK_EXE} location -i hypre %${COMPILER}) \
   ..
 
-make -j 4
+nice make -j 8

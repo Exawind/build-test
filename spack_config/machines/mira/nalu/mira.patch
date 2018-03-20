@@ -1,71 +1,55 @@
-diff -crB Nalu.orig/CMakeLists.txt Nalu/CMakeLists.txt
-*** Nalu.orig/CMakeLists.txt	2018-01-22 20:29:31.276843000 +0000
---- Nalu/CMakeLists.txt	2018-01-22 20:29:48.462436000 +0000
-***************
-*** 98,103 ****
---- 98,111 ----
-    add_definitions("-DNALU_USES_TIOGA")
-  endif()
-  
-+ set(CMAKE_EXE_LINKER_FLAGS "-Wl,--no-as-needed -Wl,--allow-multiple-definition")
-+ SET(CMAKE_FIND_LIBRARY_PREFIXES lib)
-+ SET(CMAKE_FIND_LIBRARY_SUFFIXES a)
-+ find_library(HDF5_LIBRARY NAMES libhdf5.a PATHS /soft/libraries/hdf5/1.8.17/cnk-gcc/current/lib)
-+ find_library(LAPACK_LIBRARY NAMES liblapack.a PATHS /soft/libraries/alcf/current/gcc/LAPACK/lib)
-+ find_library(BLAS_LIBRARY NAMES libblas.a PATHS /soft/libraries/alcf/current/gcc/BLAS/lib)
-+ find_library(ZLIB_LIBRARY NAMES libz.a PATHS /soft/libraries/alcf/current/gcc/ZLIB/lib)
-+ 
-  ########################### NALU #####################################
-  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    set(EXTRA_FLAGS "")
-***************
-*** 126,131 ****
---- 134,141 ----
-  file(GLOB SOURCE src/*.C src/*/*.C src/*/*.F)
-  file(GLOB HEADER include/*.h include/*/*.h)
-  
-+ set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "-L/soft/compilers/gcc/4.8.4/powerpc64-bgq-linux/lib -Wl,-Bstatic -lmpichf90-gcc -lgfortran -ldl")
-+ 
-  include_directories(${CMAKE_SOURCE_DIR}/include)
-  add_library(nalu ${SOURCE} ${HEADER})
-  target_link_libraries(nalu ${Trilinos_LIBRARIES})
-***************
-*** 143,148 ****
---- 153,160 ----
-    target_link_libraries(nalu ${HYPRE_LIBRARIES})
-  endif()
-  
-+ target_link_libraries(nalu ${HDF5_LIBRARY} ${LAPACK_LIBRARY} ${BLAS_LIBRARY} ${ZLIB_LIBRARY})
-+ 
-  file(GLOB UNIT_TESTS_SOURCES unit_tests/*.C unit_tests/*/*.C)
-  
-  set(nalu_ex_name "naluX")
-diff -crB Nalu.orig/unit_tests/UnitTestSimdBasic.C Nalu/unit_tests/UnitTestSimdBasic.C
-*** Nalu.orig/unit_tests/UnitTestSimdBasic.C	2018-01-22 20:29:35.182831000 +0000
---- Nalu/unit_tests/UnitTestSimdBasic.C	2018-01-22 20:30:23.020482000 +0000
-***************
-*** 86,96 ****
-           std::cout<<std::endl;
-        }
-     }
-! 
-     stk::simd::Double& d = DoubleView(0,0);
-     double* all = &d[0];
-     for(int i=0; i<N*N*stk::simd::ndoubles; ++i) {
-       std::cout<<i<<": "<<all[i]<<std::endl;
-     }
-  }
-  
---- 86,97 ----
-           std::cout<<std::endl;
-        }
-     }
-! /*
-     stk::simd::Double& d = DoubleView(0,0);
-     double* all = &d[0];
-     for(int i=0; i<N*N*stk::simd::ndoubles; ++i) {
-       std::cout<<i<<": "<<all[i]<<std::endl;
-     }
-+ */
-  }
-  
+diff -Naru Nalu.orig/CMakeLists.txt Nalu/CMakeLists.txt
+--- Nalu.orig/CMakeLists.txt	2018-03-20 00:13:14.054243000 +0000
++++ Nalu/CMakeLists.txt	2018-03-20 00:16:55.834556954 +0000
+@@ -113,6 +113,14 @@
+   add_definitions("-DNALU_USES_TIOGA")
+ endif()
+ 
++set(CMAKE_EXE_LINKER_FLAGS "-Wl,--no-as-needed -Wl,--allow-multiple-definition")
++set(CMAKE_FIND_LIBRARY_PREFIXES lib)
++set(CMAKE_FIND_LIBRARY_SUFFIXES a)
++find_library(HDF5_LIBRARY NAMES libhdf5.a PATHS /soft/libraries/hdf5/1.8.17/cnk-gcc/current/lib)
++find_library(LAPACK_LIBRARY NAMES liblapack.a PATHS /soft/libraries/alcf/current/gcc/LAPACK/lib)
++find_library(BLAS_LIBRARY NAMES libblas.a PATHS /soft/libraries/alcf/current/gcc/BLAS/lib)
++find_library(ZLIB_LIBRARY NAMES libz.a PATHS /soft/libraries/alcf/current/gcc/ZLIB/lib)
++
+ ########################### NALU #####################################
+ 
+ # Add any extra flags based on compiler and/or OS
+@@ -193,6 +201,8 @@
+ file(GLOB HEADER include/*.h include/*/*.h
+   ${CMAKE_CURRENT_BINARY_DIR}/include/*.h)
+ 
++set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "-L/soft/compilers/gcc/4.8.4/powerpc64-bgq-linux/lib -Wl,-Bstatic -lmpichf90-gcc -lgfortran -ldl")
++
+ include_directories(${CMAKE_SOURCE_DIR}/include)
+ include_directories(${CMAKE_BINARY_DIR}/include)
+ add_library(nalu ${SOURCE} ${HEADER})
+@@ -211,6 +221,8 @@
+   target_link_libraries(nalu ${HYPRE_LIBRARIES})
+ endif()
+ 
++target_link_libraries(nalu ${HDF5_LIBRARY} ${LAPACK_LIBRARY} ${BLAS_LIBRARY} ${ZLIB_LIBRARY})
++
+ file(GLOB UNIT_TESTS_SOURCES unit_tests/*.C unit_tests/*/*.C)
+ 
+ set(nalu_ex_name "naluX")
+diff -Naru Nalu.orig/unit_tests/UnitTestSimdBasic.C Nalu/unit_tests/UnitTestSimdBasic.C
+--- Nalu.orig/unit_tests/UnitTestSimdBasic.C	2018-03-20 00:13:34.723750000 +0000
++++ Nalu/unit_tests/UnitTestSimdBasic.C	2018-03-20 00:43:41.384965000 +0000
+@@ -87,10 +87,10 @@
+       }
+    }
+ 
+-   stk::simd::Double& d = DoubleView(0,0);
+-   double* all = &d[0];
+-   for(int i=0; i<N*N*stk::simd::ndoubles; ++i) {
+-     std::cout<<i<<": "<<all[i]<<std::endl;
+-   }
++   //stk::simd::Double& d = DoubleView(0,0);
++   //double* all = &d[0];
++   //for(int i=0; i<N*N*stk::simd::ndoubles; ++i) {
++   //  std::cout<<i<<": "<<all[i]<<std::endl;
++   //}
+ }
+ 

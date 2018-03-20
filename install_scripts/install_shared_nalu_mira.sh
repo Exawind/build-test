@@ -13,7 +13,7 @@ set -e
 export SPACK_ROOT=/projects/ExaWindFarm/spack
 source ${SPACK_ROOT}/share/spack/setup-env.sh
 
-cd /projects/ExaWindFarm/NaluSpack/spack_config && ./setup_spack.sh
+#cd /projects/ExaWindFarm/NaluSpack/spack_config && ./setup_spack.sh
 #spack compilers
 
 # Get general preferred Nalu constraints from a single location
@@ -23,3 +23,9 @@ cmd "source /projects/ExaWindFarm/NaluSpack/spack_config/shared_constraints.sh"
 TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
 
 cmd "spack install --only dependencies nalu+hypre+openfast %gcc@4.8.4 arch=bgq-cnk-ppc64 ^${TRILINOS}@develop"
+
+#cmd "chmod -R ug+rX,go-w /projects/ExaWindFarm/NaluSpack /projects/ExaWindFarm/spack"
+#cmd "chmod g+w /projects/ExaWindFarm/spack/"
+#cmd "chmod g+w /projects/ExaWindFarm/spack/opt"
+#cmd "chmod g+w /projects/ExaWindFarm/spack/opt/spack"
+#cmd "chmod -R g+w /projects/ExaWindFarm/spack/opt/spack/.spack-db"

@@ -13,6 +13,9 @@ if (cd ${NALU_DIR} && ! patch -Rsfp1 --dry-run < ${NALUSPACK_ROOT}/spack_config/
   (cd ${NALU_DIR} && patch -fp1 < ${NALUSPACK_ROOT}/spack_config/machines/mira/nalu/mira.patch)
 fi
 
+# Apply patch to ctest to use runjob instead of mpiexec
+(cd ${NALU_DIR} && git apply ${NALUSPACK_ROOT}/spack_config/machines/mira/nalu/ctest.patch || true)
+
 export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}
 export PATH=$(${SPACK_EXE} location -i mpich %${COMPILER})/bin:${PATH}
 

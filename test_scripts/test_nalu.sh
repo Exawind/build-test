@@ -41,6 +41,17 @@ test_configuration() {
 
   printf "\nLoading modules...\n"
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
+    cmd "module purge"
+    cmd "module use /opt/software/modules"
+    cmd "module load unzip"
+    cmd "module load patch"
+    cmd "module load bzip2"
+    cmd "module load cmake"
+    cmd "module load git"
+    cmd "module load flex"
+    cmd "module load bison"
+    cmd "module load wget"
+    cmd "module load python/2.7.14"
     cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     cmd "module load cppcheck/1.81"
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then

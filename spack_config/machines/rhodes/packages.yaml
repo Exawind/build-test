@@ -17,14 +17,18 @@ packages:
     version: [4.3]
   openmpi:
     version: [1.10.4]
+  intel-mpi:
+    version: [2018.1.163]
+  intel-mkl:
+    version: [2018.1.163]
   yaml-cpp:
     version: [develop]
   netlib-lapack:
     version: [3.6.1]
   all:
-    compiler: [gcc@4.9.4, gcc@5.5.0, gcc@6.4.0, gcc@7.3.0, intel@17.0.5, intel@18.0.1]
+    compiler: [gcc@4.9.4, gcc@5.5.0, gcc@6.4.0, gcc@7.3.0, intel@18.0.1]
     variants: build_type=Release
     providers:
-      mpi: [openmpi@1.10.4]
-      blas: [netlib-lapack]
-      lapack: [netlib-lapack]
+      mpi: [openmpi@1.10.4, intel-mpi@2018.1.163]
+      blas: [netlib-lapack@3.6.1, intel-mkl@2018.1.163]
+      lapack: [netlib-lapack@3.6.1, intel-mkl@2018.1.163]

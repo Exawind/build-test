@@ -46,7 +46,6 @@ test_configuration() {
     cmd "module load unzip"
     cmd "module load patch"
     cmd "module load bzip2"
-    cmd "module load cmake"
     cmd "module load git"
     cmd "module load flex"
     cmd "module load bison"
@@ -356,7 +355,7 @@ main() {
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     CONFIGURATIONS[0]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
-    NALU_TESTING_DIR=/home/jrood/nalu_testing
+    NALU_TESTING_DIR=${HOME}/nalu_testing
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     CONFIGURATIONS[0]='gcc:5.2.0:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='intel:17.0.2:false:develop:develop:develop:openfast;tioga;hypre'

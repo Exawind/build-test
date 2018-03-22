@@ -142,7 +142,7 @@ test_configuration() {
   TPL_VARIANTS=''
   TPL_CONSTRAINTS=''
   TPLS=(${LIST_OF_TPLS//;/ })
-  for TPL in "${TPLS}"; do
+  for TPL in ${TPLS[*]}; do
     TPL_VARIANTS+="+${TPL}"
     if [ "${TPL}" == 'openfast' ] ; then
       TPL_CONSTRAINTS="^openfast@${OPENFAST_BRANCH} ${TPL_CONSTRAINTS}"
@@ -224,7 +224,7 @@ test_configuration() {
   printf "TRILINOS_DIR=${TRILINOS_DIR}\n"
   printf "YAML_DIR=${YAML_DIR}\n"
   EXTRA_CONFIGURE_ARGS=''
-  for TPL in "${TPLS[@]}"; do
+  for TPL in ${TPLS[*]}; do
     if [ "${TPL}" == 'openfast' ]; then
       OPENFAST_DIR=$(spack location -i openfast %${COMPILER_NAME}@${COMPILER_VERSION})
       EXTRA_CONFIGURE_ARGS="-DENABLE_OPENFAST:BOOL=ON -DOpenFAST_DIR:PATH=${OPENFAST_DIR} ${EXTRA_CONFIGURE_ARGS}"

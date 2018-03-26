@@ -42,7 +42,7 @@ compilers:
         #ICCCFG: $spack/etc/spack/intel.cfg
         #ICPCCFG: $spack/etc/spack/intel.cfg
         #IFORTCFG: $spack/etc/spack/intel.cfg
-        #TMPDIR: /dev/shm
+        TMPDIR: /dev/shm
     extra_rpaths:
      - /opt/ohpc/pub/nrel/eb/software/ifort/2017.2.174-GCC-6.3.0-2.27/compilers_and_libraries_2017.2.174/linux/compiler/lib/intel64
      - /opt/ohpc/pub/nrel/eb/software/GCCcore/4.9.2/lib/gcc/x86_64-unknown-linux-gnu/4.9.2

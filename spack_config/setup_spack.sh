@@ -78,19 +78,19 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   (set -x; cp -R custom_package_files/catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
 
   #Extra stuff for peregrine
-  if [ ${MACHINE} == 'peregrine' ]; then
-    (set -x; cp machines/${MACHINE}/intel.cfg ${SPACK_ROOT}/etc/spack/intel.cfg)
-  fi
+  #if [ ${MACHINE} == 'peregrine' ]; then
+    #nothing at the moment
+  #fi
 
   #Extra stuff for rhodes
-  if [ ${MACHINE} == 'rhodes' ]; then
-    (set -x; cp machines/${MACHINE}/intel.cfg* ${SPACK_ROOT}/etc/spack/)
-  fi
+  #if [ ${MACHINE} == 'rhodes' ]; then
+    #nothing at the moment
+  #fi
 
   #Extra stuff for merlin
-  if [ ${MACHINE} == 'merlin' ]; then
-    (set -x; cp machines/${MACHINE}/intel.cfg ${SPACK_ROOT}/etc/spack/intel.cfg)
-  fi
+  #if [ ${MACHINE} == 'merlin' ]; then
+    #nothing at the moment
+  #fi
 
   #Extra stuff for cori
   if [ ${MACHINE} == 'cori' ]; then

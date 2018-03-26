@@ -86,7 +86,7 @@ compilers:
 - compiler:
     environment:
       set:
-        INTEL_LICENSE_FILE: 28518@admin1
+        INTEL_LICENSE_FILE: 28518@hpc-admin1.hpc.nrel.gov
     extra_rpaths:
      - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
      - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
@@ -110,7 +110,7 @@ compilers:
 - compiler:
     environment:
       set:
-        INTEL_LICENSE_FILE: 28518@admin1
+        INTEL_LICENSE_FILE: 28518@hpc-admin1.hpc.nrel.gov
     extra_rpaths:
      - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
      - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0

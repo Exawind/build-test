@@ -52,8 +52,10 @@ test_configuration() {
     cmd "module load wget"
     cmd "module load bc"
     cmd "module load python/2.7.14"
-    cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     cmd "module load cppcheck/1.81"
+    if [ "${COMPILER_NAME}" == 'gcc' ]; then
+      cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
+    fi
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     cmd "module purge"
     cmd "module use /nopt/nrel/apps/modules/candidate/modulefiles"
@@ -79,46 +81,34 @@ test_configuration() {
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
-    cmd "eval export TMPDIR=/scratch/${USER}/.tmp"
+    cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     printf "\nSetting TMPDIR to RAM...\n"
-    cmd "eval export TMPDIR=/dev/shm"
+    cmd "export TMPDIR=/dev/shm"
   fi
 
+  # Set Intel compiler license and include rpath to its own libraries
+  #if [ "${COMPILER_NAME}" == 'intel' ]; then
+  #  if [ "${MACHINE_NAME}" == 'peregrine' ] || \
+  #     [ "${MACHINE_NAME}" == 'merlin' ] || \
+  #     [ "${MACHINE_NAME}" == 'rhodes' ]; then
+  #    printf "\nSetting up license and rpath for Intel...\n"
+  #    cmd "export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov"
+  #    for i in ICCCFG ICPCCFG IFORTCFG
+  #    do
+  #      cmd "export $i=${SPACK_ROOT}/etc/spack/intel.cfg.${COMPILER_VERSION}"
+  #    done
+  #  fi
+  #fi
+
+  # Fix for Peregrine's broken linker
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    if [ "${COMPILER_NAME}" == 'intel' ]; then
-      printf "\nSetting up rpath for Intel...\n"
-      # For Intel compiler to include rpath to its own libraries
-      for i in ICCCFG ICPCCFG IFORTCFG
-      do
-        cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
-      done
-    fi
-    # Fix for Peregrine's broken linker
     printf "\nInstalling binutils...\n"
     cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     printf "\nReloading Spack...\n"
     cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
     printf "\nLoading binutils...\n"
     cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-  elif [ "${MACHINE_NAME}" == 'merlin' ]; then
-    if [ "${COMPILER_NAME}" == 'intel' ]; then
-      # For Intel compiler to include rpath to its own libraries
-      cmd "eval export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov"
-      for i in ICCCFG ICPCCFG IFORTCFG
-      do
-        cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg"
-      done
-    fi
-  elif [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    if [ "${COMPILER_NAME}" == 'intel' ]; then
-      # For Intel compiler to include rpath to its own libraries
-      cmd "eval export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov"
-      for i in ICCCFG ICPCCFG IFORTCFG
-      do
-        cmd "eval export $i=${SPACK_ROOT}/etc/spack/intel.cfg.${COMPILER_VERSION}"
-      done
-    fi
   fi
 
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
@@ -177,24 +167,23 @@ test_configuration() {
     #find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;
   fi
 
-  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    if [ "${COMPILER_NAME}" == 'intel' ]; then
-      printf "\nLoading Intel compiler module for CTest...\n"
+  # Since we are building outside of Spack during CTest we need to load the correct Intel compiler modules
+  if [ "${COMPILER_NAME}" == 'intel' ]; then
+    printf "\nLoading Intel compiler module for CTest...\n"
+    if [ "${MACHINE_NAME}" == 'peregrine' ]; then
       cmd "module load comp-intel/2017.0.2"
-    fi
-  elif [ "${MACHINE_NAME}" == 'merlin' ]; then
-    if [ "${COMPILER_NAME}" == 'intel' ]; then
-      printf "\nLoading Intel compiler module for CTest...\n"
+    elif [ "${MACHINE_NAME}" == 'merlin' ]; then
       cmd "module purge"
       cmd "module load iccifort/2017.2.174-GCC-6.3.0-2.27"
       cmd "module unload GCCcore/6.3.0"
       cmd "module unload binutils/2.27-GCCcore-6.3.0"
       cmd "module load GCCcore/4.9.2"
-    fi
-  elif [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    if [ "${COMPILER_NAME}" == 'intel' ]; then
-      printf "\nLoading Intel compiler module for CTest...\n"
-      cmd "module load intel-parallel-studio/${COMPILER_VERSION}"
+    elif [ "${MACHINE_NAME}" == 'rhodes' ]; then
+      if [ "${COMPILER_VERSION}" == '18.0.1' ]; then
+        cmd "module load intel-parallel-studio/cluster.2018.1"
+      elif [ "${COMPILER_VERSION}" == '17.0.5' ]; then
+        cmd "module load intel-parallel-studio/cluster.2017.5"
+      fi
     fi
   fi
 
@@ -202,10 +191,10 @@ test_configuration() {
   # because cmake and openmpi will already have been built and module files registered in subsequent runs)
   cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-  printf "\nLoading Spack modules into environment...\n"
+  printf "\nLoading Spack modules into environment for CMake and MPI to use during CTest...\n"
   if [ "${MACHINE_NAME}" == 'mac' ]; then
-    cmd "eval export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
-    cmd "eval export PATH=$(spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
+    cmd "export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
+    cmd "export PATH=$(spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
   else
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -261,12 +250,14 @@ test_configuration() {
 
   if [ "${OPENMP_ENABLED}" == 'true' ]; then
     printf "\nSetting OpenMP stuff...\n"
-    cmd "eval export OMP_NUM_THREADS=1"
-    cmd "eval export OMP_PROC_BIND=false"
+    cmd "export OMP_NUM_THREADS=1"
+    cmd "export OMP_PROC_BIND=false"
   fi
 
   # Run static analysis and let ctest know we have static analysis output
-  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'mac' ] || [ "${MACHINE_NAME}" == 'rhodes' ]; then
+  if [ "${MACHINE_NAME}" == 'peregrine' ] || \
+     [ "${MACHINE_NAME}" == 'mac' ] || \
+     [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nRunning cppcheck static analysis (Nalu not updated until after this step)...\n"
     cmd "rm ${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt"
     cmd "cppcheck --enable=all --quiet -j 8 --output-file=${NALU_TESTING_DIR}/jobs/nalu-static-analysis.txt -I ${NALU_DIR}/include ${NALU_DIR}/src"
@@ -356,7 +347,8 @@ main() {
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     CONFIGURATIONS[0]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
-    NALU_TESTING_DIR=${HOME}/nalu_testing
+    CONFIGURATIONS[1]='intel:18.0.1:false:develop:develop:develop:openfast;tioga;hypre'
+    NALU_TESTING_DIR=/projects/ecp/exawind/nalu_testing
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     CONFIGURATIONS[0]='gcc:5.2.0:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='intel:17.0.2:false:develop:develop:develop:openfast;tioga;hypre'
@@ -377,7 +369,7 @@ main() {
  
   NALU_DIR=${NALU_TESTING_DIR}/Nalu
   NALUSPACK_DIR=${NALU_TESTING_DIR}/NaluSpack
-  cmd "eval export SPACK_ROOT=${NALU_TESTING_DIR}/spack"
+  cmd "export SPACK_ROOT=${NALU_TESTING_DIR}/spack"
  
   printf "============================================================\n"
   printf "HOST_NAME: ${HOST_NAME}\n"
@@ -461,19 +453,19 @@ main() {
     if [ ! -z "${TMPDIR}" ]; then
       printf "\nCleaning TMPDIR directory...\n"
       cmd "cd /dev/shm && rm -rf /dev/shm/* &> /dev/null"
-      #cmd "cd ${TMPDIR} && rm -r ${TMPDIR}/* &> /dev/null"
       cmd "unset TMPDIR"
     fi
   fi
 
-  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'rhodes' ]; then
+  if [ "${MACHINE_NAME}" == 'peregrine' ] || \
+     [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting permissions...\n"
     cmd "chmod -R a+rX,go-w ${NALU_TESTING_DIR}"
-    cmd "chmod g+w ${NALU_TESTING_DIR}"
-    cmd "chmod g+w ${NALU_TESTING_DIR}/spack"
-    cmd "chmod g+w ${NALU_TESTING_DIR}/spack/opt"
-    cmd "chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack"
-    cmd "chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db"
+    #cmd "chmod g+w ${NALU_TESTING_DIR}"
+    #cmd "chmod g+w ${NALU_TESTING_DIR}/spack"
+    #cmd "chmod g+w ${NALU_TESTING_DIR}/spack/opt"
+    #cmd "chmod g+w ${NALU_TESTING_DIR}/spack/opt/spack"
+    #cmd "chmod -R g+w ${NALU_TESTING_DIR}/spack/opt/spack/.spack-db"
   fi
 
   printf "============================================================\n"

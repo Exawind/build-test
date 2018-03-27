@@ -457,6 +457,11 @@ main() {
     fi
   fi
 
+  if [ "${MACHINE_NAME}" == 'rhodes' ]; then
+    printf "\nSetting group...\n"
+    cmd "chgrp -R windsim ${NALU_TESTING_DIR}"
+  fi
+
   if [ "${MACHINE_NAME}" == 'peregrine' ] || \
      [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting permissions...\n"

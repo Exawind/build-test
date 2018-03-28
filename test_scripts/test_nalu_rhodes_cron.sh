@@ -5,4 +5,6 @@
 set -e
 
 cd /projects/ecp/exawind/nalu_testing/jobs && \
-/projects/ecp/exawind/nalu_testing/NaluSpack/test_scripts/test_nalu.sh rhodes &> "TestNalu-$(date +%Y-%m-%d).log"
+nice -n19 ionice -c2 -n7 \
+/projects/ecp/exawind/nalu_testing/NaluSpack/test_scripts/test_nalu.sh rhodes &> \
+"TestNalu-$(date +%Y-%m-%d).log"

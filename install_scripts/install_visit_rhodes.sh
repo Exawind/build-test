@@ -7,7 +7,7 @@ cmd() {
 
 set -e
 
-VISIT_DIR=/opt/software/a/visit
+VISIT_DIR=${HOME}/visit
 
 cmd "module purge"
 cmd "module load unzip"
@@ -24,4 +24,4 @@ cmd "module load libxml2/2.9.4"
 cmd "module load makedepend/1.0.5"
 cmd "module list"
 
-cmd "cp build_visit2_13_0 ${VISIT_DIR}/ && cd ${VISIT_DIR} && ./build_visit2_13_0 --makeflags -j24 --parallel --required --optional --all-io --nonio --no-fastbit --no-fastquery --prefix ${VISIT_DIR}/install"
+cmd "mkdir -p ${VISIT_DIR} && cp build_visit2_13_0 ${VISIT_DIR}/ && cd ${VISIT_DIR} && ./build_visit2_13_0 --makeflags -j32 --parallel --required --optional --all-io --nonio --no-fastbit --no-fastquery --prefix ${VISIT_DIR}/install"

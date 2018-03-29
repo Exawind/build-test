@@ -98,7 +98,7 @@ cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
 #Don't seem to need binutils so far on rhodes
-cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+#cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
 
 printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"

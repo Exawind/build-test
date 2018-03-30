@@ -20,6 +20,9 @@ if [ ${OS} == 'Darwin' ]; then
     10.12*)
       MACHINE=mac_sierra
     ;;
+    10.13*)
+      MACHINE=mac_high_sierra
+    ;;
   esac
 elif [ ${OS} == 'Linux' ]; then
   case "${NERSC_HOST}" in
@@ -68,7 +71,8 @@ if [ "${MACHINE}" == 'peregrine' ] || \
    [ "${MACHINE}" == 'mutrino' ] || \
    [ "${MACHINE}" == 'ices' ] || \
    [ "${MACHINE}" == 'mac' ] || \
-   [ "${MACHINE}" == 'mac_sierra' ]; then
+   [ "${MACHINE}" == 'mac_sierra' ] || \
+   [ "${MACHINE}" == 'mac_high_sierra' ]; then
 
   printf "Machine is detected as ${MACHINE}.\n"
 
@@ -117,12 +121,12 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #fi
 
   #Extra stuff for macs
-  #if [ ${MACHINE} == 'mac' ] || [ "${MACHINE}" == 'mac_sierra' ]; then
+  #if [ ${MACHINE} == 'mac' ] || [ "${MACHINE}" == 'mac_sierra' ] || [ "${MACHINE}" == 'mac_high_sierra' ]; then
     #nothing at the moment
   #fi
 
   #Use branch instead of tag so spack will checkout a real git repo instead of caching a tar.gz of a branch
-  if [ ${MACHINE} == 'mac' ] || [ "${MACHINE}" == 'mac_sierra' ]; then
+  if [ ${MACHINE} == 'mac' ] || [ "${MACHINE}" == 'mac_sierra' ] || [ "${MACHINE}" == 'mac_high_sierra' ]; then
     (set -x; sed -i "" -e "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py)
   else
     (set -x; sed -i "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py)

@@ -4,7 +4,7 @@
     <Field name="host" type="string">rhodes.hpc.nrel.gov</Field>
     <Field name="userName" type="string">notset</Field>
     <Field name="hostAliases" type="string"></Field>
-    <Field name="directory" type="string">/home/jrood/visit/install</Field>
+    <Field name="directory" type="string">/opt/software/active/visit/install</Field>
     <Field name="shareOneBatchJob" type="bool">false</Field>
     <Field name="sshPortSpecified" type="bool">false</Field>
     <Field name="sshPort" type="int">22</Field>

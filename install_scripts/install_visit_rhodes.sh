@@ -7,7 +7,7 @@ cmd() {
 
 set -e
 
-VISIT_DIR=${HOME}/visit
+VISIT_DIR=/opt/software/a/visit
 
 # Load the necessary modules
 cmd "module purge"
@@ -32,7 +32,6 @@ cmd "module load libpthread-stubs"
 cmd "module load zlib"
 cmd "module load xz"
 cmd "module load netlib-lapack"
-cmd "module load openssl"
 
 # X11 stuff
 cmd "module load xproto"
@@ -67,6 +66,7 @@ cmd "module load libsm"
 cmd "module load libice"
 cmd "module load mesa"
 cmd "module load mesa-glu"
+cmd "module load openssl"
 
 cmd "module list"
 
@@ -74,4 +74,5 @@ cmd "module list"
 cmd "mkdir -p ${VISIT_DIR} && cp build_visit2_13_0 ${VISIT_DIR}/ && cd ${VISIT_DIR} && ./build_visit2_13_0 --makeflags -j32 --parallel --required --optional --all-io --nonio --no-fastbit --no-fastquery --prefix ${VISIT_DIR}/install"
 
 # Set the permissions
-#cmd "chmod -R a+rX,go-w ${VISIT_DIR}"
+cmd "chmod -R a+rX,go-w ${VISIT_DIR}"
+cmd "chgrp -R windsim ${VISIT_DIR}"

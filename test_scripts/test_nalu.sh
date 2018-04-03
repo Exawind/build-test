@@ -51,6 +51,8 @@ test_configuration() {
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
+    cmd "module load texinfo"
+    cmd "module load texlive/live"
     cmd "module load python/2.7.14"
     cmd "module load cppcheck/1.81"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
@@ -225,6 +227,7 @@ test_configuration() {
       printf "TIOGA_DIR=${TIOGA_DIR}\n"
     fi
     if [ "${TPL}" == 'catalyst' ]; then
+      cmd "spack load paraview %${COMPILER_NAME}@${COMPILER_VERSION}"
       CATALYST_ADAPTER_DIR=$(spack location -i catalyst-ioss-adapter %${COMPILER_NAME}@${COMPILER_VERSION})
       EXTRA_CONFIGURE_ARGS="-DENABLE_PARAVIEW_CATALYST:BOOL=ON -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_ADAPTER_DIR} ${EXTRA_CONFIGURE_ARGS}"
       printf "CATALYST_ADAPTER_DIR=${CATALYST_ADAPTER_DIR}\n"
@@ -346,7 +349,7 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
     CONFIGURATIONS[1]='intel:18.0.1:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_TESTING_DIR=/projects/ecp/exawind/nalu_testing
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then

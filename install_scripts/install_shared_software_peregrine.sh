@@ -43,7 +43,7 @@ GCC_COMPILER_VERSION="5.2.0"
 INTEL_COMPILER_VERSION="17.0.2"
 
 # Set installation directory
-INSTALL_DIR=/projects/windsim/exawind/SharedSoftwareA
+INSTALL_DIR=/projects/windsim/exawind/SharedSoftwareB
 NALU_DIR=${INSTALL_DIR}/Nalu
 NALUSPACK_DIR=${INSTALL_DIR}/NaluSpack
 
@@ -94,11 +94,11 @@ do
     # Load necessary modules
     printf "\nLoading modules...\n"
     cmd "module purge"
-    cmd "module use /nopt/nrel/apps/modules/candidate/modulefiles"
+    #cmd "module use /nopt/nrel/apps/modules/candidate/modulefiles"
     cmd "module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64"
     cmd "module load gcc/5.2.0"
     cmd "module load python/2.7.14"
-    cmd "module load git/2.6.3"
+    cmd "module load git/2.14.1"
     cmd "module load binutils/2.28"
     cmd "module list"
  

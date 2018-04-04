@@ -30,14 +30,13 @@ modules:
       - mpi
 
   tcl:
-    #naming_scheme: '${PACKAGE}/${VERSION}-${COMPILERNAME}-${COMPILERVER}'
     naming_scheme: '${PACKAGE}/${VERSION}'
     hash_length: 0
     all:
       suffixes:
         '%intel': 'intel'
         '^python@2.7.14': 'py2'
-        '^python@3.6.3': 'py3'
+        '^python@3.6.5': 'py3'
         '+debug': 'dbg'
         '+openmp': 'omp'
         'trilinos build_type=Debug': 'dbg'
@@ -47,4 +46,3 @@ modules:
       environment:
         set:
           '${PACKAGE}_ROOT': '${PREFIX}'
-    blacklist: ['pcre', 'environment-modules']

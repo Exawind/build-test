@@ -43,7 +43,7 @@ GCC_COMPILER_VERSION="5.2.0"
 INTEL_COMPILER_VERSION="17.0.2"
 
 # Set installation directory
-INSTALL_DIR=/projects/windsim/exawind/software/base/a
+INSTALL_DIR=/nopt/nrel/ecom/ecp/base/a
 NALUSPACK_DIR=${INSTALL_DIR}/NaluSpack
 
 # Set spack location
@@ -87,8 +87,8 @@ do
   cmd "module purge"
   cmd "module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64"
   cmd "module load gcc/5.2.0"
-  cmd "module load python/2.7.14"
   cmd "module load git/2.14.1"
+  cmd "module load python/2.7.14"
 
   # Set the TMPDIR to disk so it doesn't run out of space
   printf "\nMaking and setting TMPDIR to disk...\n"
@@ -168,7 +168,7 @@ do
 done
 
 printf "\nSetting permissions...\n"
-cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
+cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
 printf "\n$(date)\n"
 printf "\nDone!\n"
 

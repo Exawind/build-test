@@ -30,14 +30,12 @@ modules:
       - mpi
 
   tcl:
-    naming_scheme: '${PACKAGE}/${VERSION}'
+    naming_scheme: '${COMPILERNAME}-${COMPILERVER}/${PACKAGE}/${VERSION}'
     hash_length: 0
     all:
       suffixes:
-        '%intel': 'intel'
         '^python@2.7.14': 'py2'
         '^python@3.6.5': 'py3'
-        '+debug': 'dbg'
         '+openmp': 'omp'
         'trilinos build_type=Debug': 'dbg'
         'boost+mpi': 'mpi'

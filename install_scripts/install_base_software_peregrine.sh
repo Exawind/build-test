@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N install_base_software_peregrine
-#PBS -l nodes=1:ppn=24,walltime=48:00:00
+#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
 #PBS -A windsim
-#PBS -q batch-h
+#PBS -q short
 #PBS -j oe
 #PBS -W umask=002
 
@@ -89,6 +89,7 @@ do
   cmd "module load gcc/5.2.0"
   cmd "module load git/2.14.1"
   cmd "module load python/2.7.14"
+  cmd "module load curl/7.56.0"
 
   # Set the TMPDIR to disk so it doesn't run out of space
   printf "\nMaking and setting TMPDIR to disk...\n"
@@ -108,9 +109,6 @@ do
     printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install python@3.6.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "module unload python/2.7.8"
-    cmd "unset PYTHONHOME"
-    cmd "spack load python@2.7.14 ${COMPILER_NAME}@${COMPILER_VERSION}"
     for PYTHON_VERSION in '2.7.14' '3.6.5'; do
       for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-scipy py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf; do
         cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -118,6 +116,8 @@ do
     done
 
     printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"

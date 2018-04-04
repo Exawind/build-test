@@ -115,8 +115,8 @@ cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
 # Install our own python
 printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 cmd "spack install python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install python@3.6.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-for PYTHON_VERSION in '2.7.14' '3.6.3'; do
+cmd "spack install python@3.6.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
+for PYTHON_VERSION in '2.7.14' '3.6.5'; do
   for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-scipy py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf; do
     cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
   done

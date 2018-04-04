@@ -1,0 +1,50 @@
+modules:
+  enable:
+    - tcl
+  prefix_inspections:
+    bin:
+      - PATH
+    man:
+      - MANPATH
+    share/man:
+      - MANPATH
+    share/aclocal:
+      - ACLOCAL_PATH
+    lib:
+      - LIBRARY_PATH
+      - LD_LIBRARY_PATH
+    lib64:
+      - LIBRARY_PATH
+      - LD_LIBRARY_PATH
+    include:
+      - CPATH
+    lib/pkgconfig:
+      - PKG_CONFIG_PATH
+    lib64/pkgconfig:
+      - PKG_CONFIG_PATH
+    '':
+      - CMAKE_PREFIX_PATH
+
+  lmod:
+    hierarchy:
+      - mpi
+
+  tcl:
+    #naming_scheme: '${PACKAGE}/${VERSION}-${COMPILERNAME}-${COMPILERVER}'
+    naming_scheme: '${PACKAGE}/${VERSION}'
+    hash_length: 0
+    all:
+      suffixes:
+        '%intel': 'intel'
+        '^python@2.7.14': 'py2'
+        '^python@3.6.3': 'py3'
+        '+debug': 'dbg'
+        '+openmp': 'omp'
+        'trilinos build_type=Debug': 'dbg'
+        'boost+mpi': 'mpi'
+      conflict:
+        - '${PACKAGE}'
+      environment:
+        set:
+          '${PACKAGE}_ROOT': '${PREFIX}'
+    blacklist: ['pcre', 'environment-modules']

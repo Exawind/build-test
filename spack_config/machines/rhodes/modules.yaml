@@ -44,5 +44,5 @@ modules:
         - '${PACKAGE}'
       environment:
         set:
-          '${PACKAGE}_ROOT': '${PREFIX}'
+          '${PACKAGE}_ROOT_DIR': '${PREFIX}'
     blacklist: ['pcre', 'environment-modules']

@@ -73,6 +73,7 @@ fi
 
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
 
 for COMPILER_NAME in gcc intel
 do
@@ -169,8 +170,8 @@ do
   printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
-printf "\nSetting permissions...\n"
-cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
+#printf "\nSetting permissions...\n"
+#cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
 printf "\n$(date)\n"
 printf "\nDone!\n"
 

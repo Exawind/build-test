@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N install_base_software_peregrine
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
+#PBS -l nodes=1:ppn=24,walltime=24:00:00
 #PBS -A windsim
-#PBS -q short
+#PBS -q batch-h
 #PBS -j oe
 #PBS -W umask=002
 
@@ -41,6 +41,7 @@ fi
 # Set some version numbers
 GCC_COMPILER_VERSION="5.2.0"
 INTEL_COMPILER_VERSION="17.0.2"
+TRILINOS_BRANCH=develop
 
 # Set installation directory
 INSTALL_DIR=/nopt/nrel/ecom/ecp/base/a
@@ -73,7 +74,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc
+for COMPILER_NAME in gcc intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"

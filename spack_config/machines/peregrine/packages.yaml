@@ -1,4 +1,6 @@
 packages:
+  glib:
+    version: [2.55.1]
   m4:
     version: [1.4.18]
   cmake:

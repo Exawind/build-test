@@ -22,6 +22,9 @@ cmd "module load git/2.14.1"
 cmd "module load binutils/2.28"
 cmd "module load libxml2/2.9.4"
 cmd "module load makedepend/1.0.5"
+# Need libxml2+python installed
+#cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos6-x86_64"
+#cmd "module load libxml2/2.9.4-py2"
 cmd "module list"
 
 cmd "mkdir -p /scratch/${USER}/.tmp"

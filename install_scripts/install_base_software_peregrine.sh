@@ -141,6 +141,7 @@ do
     cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     printf "\nInstalling Nalu stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     # Install Nalu dependencies with everything turned on

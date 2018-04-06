@@ -18,11 +18,10 @@ cmd() {
 set -e
 
 cmd "module purge"
-cmd "module use /nopt/nrel/apps/modules/candidate/modulefiles"
 cmd "module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64"
 cmd "module load gcc/5.2.0"
 cmd "module load python/2.7.14"
-cmd "module load git/2.6.3"
+cmd "module load git/2.14.1"
 cmd "module list"
 
 # The intel.cfg sets up the -xlinker rpath for the intel compiler's own libraries

@@ -8,4 +8,4 @@ cmd() {
   if ${execute_cmds}; then eval "$@"; fi
 }
 
-cmd "chmod a+rX,o-w,ug+w /nopt/nrel/ecom/ecp"
+cmd "chmod -R a+rX,o-w,ug+w /nopt/nrel/ecom/ecp"

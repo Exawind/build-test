@@ -110,6 +110,7 @@ cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
 
 # Install our own python

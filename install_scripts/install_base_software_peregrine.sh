@@ -133,6 +133,7 @@ do
     cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     # Install our own compilers
     printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

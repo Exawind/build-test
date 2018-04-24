@@ -39,6 +39,6 @@ packages:
     compiler: [gcc@6.2.0]
     variants: build_type=Release
     providers:
-      mpi: [openmpi@3.0.1]
+      mpi: [openmpi]
       blas: [netlib-lapack]
       lapack: [netlib-lapack]

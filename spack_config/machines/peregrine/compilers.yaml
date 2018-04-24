@@ -1,133 +1,62 @@
 compilers:
 - compiler:
     extra_rpaths:
-     - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
-     - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/lib64
+     - /nopt/nrel/apps/gcc/6.2.0/lib64 
+     - /nopt/nrel/apps/gcc/6.2.0/libexec/gcc/x86_64-linux-gnu/6.2.0 
+     - /nopt/nrel/apps/gcc/6.2.0/lib/gcc/x86_64-linux-gnu/6.2.0 
     flags:
       cflags: -O2
       cxxflags: -O2
       fflags: -O2
       fcflags: -O2
     modules: []
-    operating_system: centos6
+    operating_system: centos7
     paths:
-      cc: /nopt/nrel/apps/gcc/5.2.0/bin/gcc
-      cxx: /nopt/nrel/apps/gcc/5.2.0/bin/g++
-      f77: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
-      fc: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
-    spec: gcc@5.2.0
+      cc: /nopt/nrel/apps/gcc/6.2.0/bin/gcc
+      cxx: /nopt/nrel/apps/gcc/6.2.0/bin/g++
+      f77: /nopt/nrel/apps/gcc/6.2.0/bin/gfortran
+      fc: /nopt/nrel/apps/gcc/6.2.0/bin/gfortran
+    spec: gcc@6.2.0
     target: x86_64
-- compiler:
-    extra_rpaths:
-     - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
-     - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/lib64
-    flags:
-      cflags: -O2
-      cxxflags: -O2
-      fflags: -O2
-      fcflags: -O2
-    modules: []
-    operating_system: rhel6
-    paths:
-      cc: /nopt/nrel/apps/gcc/5.2.0/bin/gcc
-      cxx: /nopt/nrel/apps/gcc/5.2.0/bin/g++
-      f77: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
-      fc: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
-    spec: gcc@5.2.0
-    target: x86_64
-- compiler:
-    extra_rpaths:
-     - /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/lib
-     - /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/lib/clang/5.0.0/lib/linux
-     - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
-     - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/lib64
-    flags:
-      cflags: -O2
-      cxxflags: -O2
-      fflags: -O2
-      fcflags: -O2
-    modules: []
-    operating_system: centos6
-    paths:
-      cc: /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/bin/clang
-      cxx: /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/bin/clang++
-      f77: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
-      fc: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
-    spec: clang@5.0.0
-    target: x86_64
-- compiler:
-    extra_rpaths:
-     - /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/lib
-     - /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/lib/clang/5.0.0/lib/linux
-     - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
-     - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/lib64
-    flags:
-      cflags: -O2
-      cxxflags: -O2
-      fflags: -O2
-      fcflags: -O2
-    modules: []
-    operating_system: rhel6
-    paths:
-      cc: /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/bin/clang
-      cxx: /projects/windsim/exawind/BaseSoftware/spack/opt/spack/linux-centos6-x86_64/gcc-5.2.0/llvm-5.0.0-berg4gzvuj4i4mbdayosfo3kgzz5sahu/bin/clang++
-      f77: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
-      fc: /nopt/nrel/apps/gcc/5.2.0/bin/gfortran
-    spec: clang@5.0.0
-    target: x86_64
-- compiler:
-    environment:
-      set:
-        INTEL_LICENSE_FILE: 28518@hpc-admin1.hpc.nrel.gov
-    extra_rpaths:
-     - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
-     - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/lib64
-     - /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/compiler/lib/intel64
-    flags:
-      cflags: -O2 -axCORE-AVX2,CORE-AVX-I
-      cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I
-      fflags: -O2 -axCORE-AVX2,CORE-AVX-I
-      fcflags: -O2 -axCORE-AVX2,CORE-AVX-I
-    modules: []
-    operating_system: centos6
-    paths:
-      cc: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/bin/intel64/icc
-      cxx: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/bin/intel64/icpc
-      f77: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/bin/intel64/ifort
-      fc: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/bin/intel64/ifort
-    spec: intel@17.0.2
-    target: x86_64
-- compiler:
-    environment:
-      set:
-        INTEL_LICENSE_FILE: 28518@hpc-admin1.hpc.nrel.gov
-    extra_rpaths:
-     - /nopt/nrel/apps/gcc/5.2.0/lib64/gcj-5.2.0-16
-     - /nopt/nrel/apps/gcc/5.2.0/lib/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/libexec/gcc/x86_64-unknown-linux-gnu/5.2.0
-     - /nopt/nrel/apps/gcc/5.2.0/lib64
-     - /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/compiler/lib/intel64
-    flags:
-      cflags: -O2 -axCORE-AVX2,CORE-AVX-I
-      cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I
-      fflags: -O2 -axCORE-AVX2,CORE-AVX-I
-      fcflags: -O2 -axCORE-AVX2,CORE-AVX-I
-    modules: []
-    operating_system: rhel6
-    paths:
-      cc: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/bin/intel64/icc
-      cxx: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/bin/intel64/icpc
-      f77: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/bin/intel64/ifort
-      fc: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.2.174/linux/bin/intel64/ifort
-    spec: intel@17.0.2
-    target: x86_64
+#- compiler:
+#    extra_rpaths:
+#     - /nopt/nrel/apps/gcc/7.2.0/lib64 
+#     - /nopt/nrel/apps/gcc/7.2.0/libexec/gcc/x86_64-linux-gnu/7.2.0 
+#     - /nopt/nrel/apps/gcc/7.2.0/lib/gcc/x86_64-linux-gnu/7.2.0 
+#    flags:
+#      cflags: -O2
+#      cxxflags: -O2
+#      fflags: -O2
+#      fcflags: -O2
+#    modules: []
+#    operating_system: centos7
+#    paths:
+#      cc: /nopt/nrel/apps/gcc/7.2.0/bin/gcc
+#      cxx: /nopt/nrel/apps/gcc/7.2.0/bin/g++
+#      f77: /nopt/nrel/apps/gcc/7.2.0/bin/gfortran
+#      fc: /nopt/nrel/apps/gcc/7.2.0/bin/gfortran
+#    spec: gcc@7.2.0
+#    target: x86_64
+#- compiler:
+#    environment:
+#      set:
+#        INTEL_LICENSE_FILE: 28518@hpc-admin1.hpc.nrel.gov
+#    extra_rpaths:
+#     - /nopt/nrel/apps/gcc/7.2.0/lib64 
+#     - /nopt/nrel/apps/gcc/7.2.0/libexec/gcc/x86_64-linux-gnu/7.2.0 
+#     - /nopt/nrel/apps/gcc/7.2.0/lib/gcc/x86_64-linux-gnu/7.2.0 
+#     - /nopt/intel/psxe2017u2/compilers_and_libraries_2017.5.239/linux/compiler/lib/intel64
+#    flags:
+#      cflags: -O2 -axCORE-AVX2,CORE-AVX-I
+#      cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I
+#      fflags: -O2 -axCORE-AVX2,CORE-AVX-I
+#      fcflags: -O2 -axCORE-AVX2,CORE-AVX-I
+#    modules: []
+#    operating_system: centos7
+#    paths:
+#      cc: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.5.239/linux/bin/intel64/icc
+#      cxx: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.5.239/linux/bin/intel64/icpc
+#      f77: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.5.239/linux/bin/intel64/ifort
+#      fc: /nopt/intel/psxe2017u2/compilers_and_libraries_2017.5.239/linux/bin/intel64/ifort
+#    spec: intel@17.0.5
+#    target: x86_64

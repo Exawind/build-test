@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N install_base_software_peregrine_centos7
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
+#PBS -l nodes=1:ppn=24,walltime=10:00:00
 #PBS -A windsim
-#PBS -q short
+#PBS -q batch-h
 #PBS -j oe
 #PBS -W umask=002
 
@@ -111,37 +111,37 @@ do
     printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     for PYTHON_VERSION in '2.7.14' '3.6.5'; do
       cmd "spack install python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #  for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-scipy py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf; do
-    #    cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #  done
+      for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-scipy py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf; do
+        cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
+      done
     done
 
-    #printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
+    printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
 
-    ## Install our own compilers
+    # Install our own compilers
     #printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     #cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install intel-parallel-studio@cluster.2018.2+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     #printf "\nInstalling Nalu stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     ## Install Nalu dependencies with everything turned on

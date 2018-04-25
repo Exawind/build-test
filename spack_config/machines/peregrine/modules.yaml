@@ -39,8 +39,10 @@ modules:
         '+openmp': 'omp'
         'trilinos build_type=Debug': 'dbg'
         'boost+mpi': 'mpi'
+        'yaml-cpp+shared': 'shared'
       conflict:
         - '${PACKAGE}'
       environment:
         set:
           '${PACKAGE}_ROOT_DIR': '${PREFIX}'
+    blacklist: ['pcre']

@@ -19,7 +19,7 @@ packages:
     version: [4.3]
   openmpi:
     version: [3.0.1]
-    variants: fabrics=mxm schedulers=tm
+    variants: fabrics=verbs schedulers=tm
   #intel-mpi:
   #  version: [2017.2.174]
   #intel-mkl:

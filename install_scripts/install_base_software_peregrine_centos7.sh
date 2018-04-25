@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #PBS -N install_base_software_peregrine_centos7
-#PBS -l nodes=1:ppn=24,walltime=18:00:00
+#PBS -l nodes=1:ppn=24,walltime=20:00:00
 #PBS -A windsim
 #PBS -q batch-h
 #PBS -j oe
@@ -40,7 +40,7 @@ fi
 
 # Set some version numbers
 GCC_COMPILER_VERSION="6.2.0"
-INTEL_COMPILER_VERSION="18.0.1"
+INTEL_COMPILER_VERSION="18.1.163"
 TRILINOS_BRANCH=develop
 
 # Set installation directory
@@ -75,7 +75,7 @@ printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
 
-for COMPILER_NAME in gcc
+for COMPILER_NAME in intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -166,7 +166,7 @@ do
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     printf "\nInstalling Nalu stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^py-matplotlib@2.0.2"
+    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi@${INTEL_COMPILER_VERSION} ^intel-mkl@${INTEL_COMPILER_VERSION} ^py-matplotlib@2.0.2"
   fi
 
   cmd "unset TMPDIR"

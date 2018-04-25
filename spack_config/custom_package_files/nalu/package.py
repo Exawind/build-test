@@ -49,9 +49,8 @@ class Nalu(CMakePackage):
     version('master',
             git='https://github.com/NaluCFD/Nalu.git', branch='master')
 
-    # Currently Nalu only builds with certain libraries statically
     depends_on('yaml-cpp@develop')
-    depends_on('trilinos~shared+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards~hypre@master,12.12.1:')
+    depends_on('trilinos+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards~hypre@master,12.12.1:')
     depends_on('openfast+cxx', when='+openfast')
     depends_on('tioga', when='+tioga')
     depends_on('hypre+mpi+int64', when='+hypre')

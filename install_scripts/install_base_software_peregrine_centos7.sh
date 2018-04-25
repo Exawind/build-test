@@ -166,7 +166,7 @@ do
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     printf "\nInstalling Nalu stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi@${INTEL_COMPILER_VERSION} ^intel-mkl@${INTEL_COMPILER_VERSION} ^py-matplotlib@2.0.2"
+    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^cmake@3.9.4 ^py-matplotlib@2.0.2"
   fi
 
   cmd "unset TMPDIR"

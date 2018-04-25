@@ -3,8 +3,6 @@ packages:
     version: [2.55.1]
   m4:
     version: [1.4.18]
-  cmake:
-    version: [3.11.1]
   boost:
     version: [1.66.0]
   netcdf:
@@ -20,25 +18,18 @@ packages:
   openmpi:
     version: [3.0.1]
     variants: fabrics=verbs schedulers=tm
-  #intel-mpi:
-  #  version: [2017.2.174]
-  #intel-mkl:
-  #  version: [2017.2.174]
+  intel-mpi:
+    version: [2018.1.163]
+  intel-mkl:
+    version: [2018.1.163]
   yaml-cpp:
     version: [develop]
   netlib-lapack:
     version: [3.8.0]
-#  all:
-#    compiler: [gcc@7.2.0, intel@17.0.5]
-#    variants: build_type=Release
-#    providers:
-#      mpi: [openmpi@1.10.4, intel-mpi@2017.2.174]
-#      blas: [netlib-lapack, intel-mkl@2017.2.174]
-#      lapack: [netlib-lapack, intel-mkl@2017.2.174]
   all:
-    compiler: [gcc@6.2.0]
+    compiler: [gcc@6.2.0, intel@18.1.163]
     variants: build_type=Release
     providers:
-      mpi: [openmpi]
-      blas: [netlib-lapack]
-      lapack: [netlib-lapack]
+      mpi: [openmpi, intel-mpi]
+      blas: [netlib-lapack, intel-mkl]
+      lapack: [netlib-lapack, intel-mkl]

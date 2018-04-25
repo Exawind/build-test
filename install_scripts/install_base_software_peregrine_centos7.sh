@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #PBS -N install_base_software_peregrine_centos7
-#PBS -l nodes=1:ppn=24,walltime=10:00:00
+#PBS -l nodes=1:ppn=24,walltime=18:00:00
 #PBS -A windsim
 #PBS -q batch-h
 #PBS -j oe
@@ -40,7 +40,7 @@ fi
 
 # Set some version numbers
 GCC_COMPILER_VERSION="6.2.0"
-#INTEL_COMPILER_VERSION="17.0.5"
+INTEL_COMPILER_VERSION="18.0.1"
 TRILINOS_BRANCH=develop
 
 # Set installation directory
@@ -133,37 +133,40 @@ do
     cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     # Install our own compilers
-    #printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install intel-parallel-studio@cluster.2018.2+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
+    printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
 
-    #printf "\nInstalling Nalu stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    ## Install Nalu dependencies with everything turned on
-    #cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-    ## Install Nalu with Trilinos debug
-    #cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
-    ## Turn off OpenMP
-    #TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
-    ## Install Nalu dependencies with everything turned on
-    #cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-    ## Install Nalu with Trilinos debug
-    #cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+    printf "\nInstalling Nalu stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack load texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack load texlive %${COMPILER_NAME}@${COMPILER_VERSION}"
+    # Install Nalu dependencies with everything turned on
+    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+    # Install Nalu with Trilinos debug
+    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+    # Turn off OpenMP
+    TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
+    # Install Nalu dependencies with everything turned on
+    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+    # Install Nalu with Trilinos debug
+    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
 
-    #printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #(set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
-    #printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1"
-    #printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
+    printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
+    printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1"
+    printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     printf "\nInstalling Nalu stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^py-matplotlib@2.0.2"
+    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^py-matplotlib@2.0.2"
   fi
 
   cmd "unset TMPDIR"

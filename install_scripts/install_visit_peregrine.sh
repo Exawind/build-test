@@ -22,6 +22,7 @@ cmd "module load git/2.15.1"
 cmd "module load binutils/2.29.1"
 cmd "module load libxml2/2.9.4-py2"
 cmd "module load makedepend/1.0.5"
+cmd "module load netlib-lapack/3.8.0"
 cmd "module list"
 
 cmd "mkdir -p /scratch/${USER}/.tmp"

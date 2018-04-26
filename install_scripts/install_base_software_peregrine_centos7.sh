@@ -75,7 +75,7 @@ printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
 
-for COMPILER_NAME in intel
+for COMPILER_NAME in gcc intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -166,7 +166,9 @@ do
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     printf "\nInstalling Nalu stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^cmake@3.9.4 ^py-matplotlib@2.0.2"
+    cmd "spack load texinfo %gcc@${GCC_COMPILER_VERSION}"
+    cmd "spack load texlive %gcc@${GCC_COMPILER_VERSION}"
+    cmd "spack install --only dependencies nalu+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^cmake@3.9.4"
   fi
 
   cmd "unset TMPDIR"
@@ -174,8 +176,8 @@ do
   printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
-#printf "\nSetting permissions...\n"
-#cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
+printf "\nSetting permissions...\n"
+cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
 printf "\n$(date)\n"
 printf "\nDone!\n"
 

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-DIR=a
+DIR=b
 
-unlink active
-unlink modules
-ln -s ${DIR} active
-ln -s ${DIR}/spack/share/spack/modules/linux-centos6-x86_64 modules
+cd /nopt/nrel/ecom/ecp/base && unlink active && unlink modules && ln -s ${DIR} active && ln -s ${DIR}/spack/share/spack/modules/linux-centos7-x86_64 modules

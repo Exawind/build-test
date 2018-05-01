@@ -2565,8 +2565,8 @@ function build_hostconf
     fi
 
     if [[ "$USE_VISIBILITY_HIDDEN" == "yes" ]] ; then
-        echo "VISIT_OPTION_DEFAULT(VISIT_C_FLAGS \"$CFLAGS ${C_OPT_FLAGS} -fvisibility=hidden\" TYPE STRING)" >> $HOSTCONF
-        echo "VISIT_OPTION_DEFAULT(VISIT_CXX_FLAGS \"$CXXFLAGS ${CXX_OPT_FLAGS} -fvisibility=hidden\" TYPE STRING)" >> $HOSTCONF
+        echo "VISIT_OPTION_DEFAULT(VISIT_C_FLAGS \"$CFLAGS ${C_OPT_FLAGS} -I $VISITDIR/mesa/${MESA_VERSION}/$VISITARCH/include -fvisibility=hidden\" TYPE STRING)" >> $HOSTCONF
+        echo "VISIT_OPTION_DEFAULT(VISIT_CXX_FLAGS \"$CXXFLAGS ${CXX_OPT_FLAGS} -I $VISITDIR/mesa/${MESA_VERSION}/$VISITARCH/include -fvisibility=hidden\" TYPE STRING)" >> $HOSTCONF
     else
         if test -n "$CFLAGS" ; then
             echo "VISIT_OPTION_DEFAULT(VISIT_C_FLAGS \"$CFLAGS ${C_OPT_FLAGS}\" TYPE STRING)" >> $HOSTCONF

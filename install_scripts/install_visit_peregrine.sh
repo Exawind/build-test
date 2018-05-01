@@ -16,7 +16,7 @@ set -e
 
 cmd "module purge"
 cmd "module use /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-cmd "module load gcc/6.2.0"
+cmd "module load gcc/5.5.0"
 cmd "module load python/2.7.14"
 cmd "module load git/2.15.1"
 cmd "module load binutils/2.29.1"

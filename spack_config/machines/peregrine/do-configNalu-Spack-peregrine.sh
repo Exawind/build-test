@@ -1,13 +1,10 @@
 #!/bin/bash
 
-set -ex
-
 # Instructions:
 # A Nalu do-config script that uses Spack-built TPLs on Peregrine.
 # Make a directory in the Nalu directory for building,
 # Copy this script to that directory and edit the
-# options below to your own needs. Leave the SPACK_ROOT option
-# alone to build against the communal spack location at NREL.
+# options below to your own needs.
 # Uncomment the last line and then run this script.
 
 # Note Spack uses rpath so we don't need to worry so much
@@ -20,67 +17,85 @@ set -ex
 # environment modules so the 'module load'
 # won't add to your PATH (and LD_LIBRARY_PATH).
 
-# Change these three options to suit your needs:
 COMPILER=gcc #or intel
-# Using NREL communal spack installation by default
-SPACK_ROOT=/projects/windsim/exawind/SharedSoftware/spack
-SPACK_EXE=${SPACK_ROOT}/bin/spack #actual spack executable
-# Specify location of Trilinos
-TRILINOS_ROOT=$(${SPACK_EXE} location -i trilinos@develop build_type=Release %${COMPILER})
-#TRILINOS_ROOT=$(${SPACK_EXE} location -i trilinos@develop build_type=Debug %${COMPILER})
-# Use this line instead if you want to build against your own Trilinos:
-#TRILINOS_ROOT=${HOME}/Trilinos/build/install
+
+set -e
+
+cmd() {
+  echo "+ $@"
+  eval "$@"
+}
 
 # Set up environment on Peregrine
-{
-module purge
-module load gcc/5.2.0
-module load python/2.7.8
-module unload mkl
-} &> /dev/null
+cmd "module purge"
+if [ "${COMPILER}" == 'gcc' ]; then
+  cmd "module use /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+  #cmd "module use /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0"
+elif [ "${COMPILER}" == 'intel' ]; then
+  cmd "module use /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/intel-18.1.163"
+  #cmd "module use /nopt/nrel/ecom/ecp/base/modules/intel-18.1.163"
+fi
+
+cmd "module load gcc/6.2.0"
+cmd "module load git/2.15.1"
+cmd "module load python/2.7.14"
+cmd "module load binutils/2.29.1"
+cmd "module load openfast/master"
+cmd "module load hypre/2.14.0"
+cmd "module load tioga/develop"
+cmd "module load yaml-cpp/develop-shared"
+
+if [ "${COMPILER}" == 'gcc' ]; then
+  # Load correct modules for GCC
+  cmd "module load cmake/3.11.1"
+  cmd "module load openmpi/3.0.1"
+  cmd "module load catalyst-ioss-adapter/develop"
+  cmd "module load trilinos/develop"
+  #cmd "module load trilinos/develop-omp"
+  #cmd "module load trilinos/develop-dbg"
+  #cmd "module load trilinos/develop-omp-dbg"
+elif [ "${COMPILER}" == 'intel' ]; then
+  # Load correct modules for Intel"
+  cmd "module load /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
+  cmd "module load intel-mpi/2018.1.163"
+  cmd "module load intel-mkl/2018.1.163"
+  cmd "module load cmake/3.9.4"
+  cmd "module load trilinos/develop-omp"
+fi
+
+cmd "module list"
 
 # Set tmpdir to the scratch filesystem so it doesn't run out of space
-mkdir -p /scratch/${USER}/.tmp
-export TMPDIR=/scratch/${USER}/.tmp
-
-# Load correct modules per compiler
-module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
-module load $(${SPACK_EXE} module find -m tcl binutils %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl cmake %${COMPILER})
-if [ ${COMPILER} == 'gcc' ]; then
-  module load $(${SPACK_EXE} module find -m tcl openmpi %${COMPILER})
-elif [ ${COMPILER} == 'intel' ]; then
-  module load comp-intel/2017.0.2
-  module load $(${SPACK_EXE} module find -m tcl intel-mpi %${COMPILER})
-fi
+cmd "mkdir -p /scratch/${USER}/.tmp"
+cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
 # Clean before cmake configure
 set +e
-rm -rf CMakeFiles
-rm -f CMakeCache.txt
+cmd "rm -rf CMakeFiles"
+cmd "rm -f CMakeCache.txt"
 set -e
 
-(set -x; which cmake)
-(set -x; which mpirun)
+cmd "which cmake"
+cmd "which mpirun"
 
 # Extra TPLs that can be included in the cmake configure:
 #  -DENABLE_OPENFAST:BOOL=ON \
-#  -DOpenFAST_DIR:PATH=$(${SPACK_EXE} location -i openfast %${COMPILER}) \
+#  -DOpenFAST_DIR:PATH=${OPENFAST_ROOT_DIR} \
 #  -DENABLE_HYPRE:BOOL=ON \
-#  -DHYPRE_DIR:PATH=$(${SPACK_EXE} location -i hypre %${COMPILER}) \
+#  -DHYPRE_DIR:PATH=${HYPRE_ROOT_DIR} \
 #  -DENABLE_TIOGA:BOOL=ON \
-#  -DTIOGA_DIR:PATH=$(${SPACK_EXE} location -i tioga %${COMPILER}) \
+#  -DTIOGA_DIR:PATH=${TIOGA_ROOT_DIR} \
 #  -DENABLE_PARAVIEW_CATALYST:BOOL=ON \
-#  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=$(${SPACK_EXE} location -i catalyst-ioss-adapter %${COMPILER}) \
+#  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_IOSS_ADAPTER_ROOT_DIR} \
 
-cmake \
-  -DTrilinos_DIR:PATH=${TRILINOS_ROOT} \
-  -DYAML_DIR:PATH=$(${SPACK_EXE} location -i yaml-cpp %${COMPILER}) \
+(set -x; cmake \
+  -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
+  -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
   -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \
-  ..
+  ..)
 
 # Uncomment the next line after you make sure you are not on a login node
 # and run this script to configure and build Nalu
-#make -j 24
+#cmd "make -j 24"

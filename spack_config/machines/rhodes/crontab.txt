@@ -1,0 +1,6 @@
+SHELL=/bin/bash
+
+#Nalu update NaluSpack
+0 0 * * * /bin/bash -c "cd /projects/ecp/exawind/nalu_testing/NaluSpack && ./test_scripts/update_naluspack.sh > /projects/ecp/exawind/nalu_testing/jobs/last_naluspack_update.txt 2>&1"
+#Nalu tests
+0 1 * * * /projects/ecp/exawind/nalu_testing/NaluSpack/test_scripts/test_nalu_rhodes_cron.sh 2>&1

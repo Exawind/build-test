@@ -13,11 +13,11 @@ set -e
 export SPACK_ROOT=/projects/ExaWindFarm/spack
 source ${SPACK_ROOT}/share/spack/setup-env.sh
 
-#cd /projects/ExaWindFarm/NaluSpack/spack_config && ./setup_spack.sh
+#cd /projects/ExaWindFarm/NaluSpack/configs && ./setup_spack.sh
 #spack compilers
 
 # Get general preferred Nalu constraints from a single location
-cmd "source /projects/ExaWindFarm/NaluSpack/spack_config/shared_constraints.sh"
+cmd "source /projects/ExaWindFarm/NaluSpack/configs/shared_constraints.sh"
 
 # Disable openmp on Mira
 TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")

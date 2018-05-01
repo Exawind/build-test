@@ -25,7 +25,7 @@ cmd "module load git/2.14.1"
 cmd "module list"
 
 # Get general preferred Nalu constraints from a single location
-cmd "source ../spack_config/shared_constraints.sh"
+cmd "source ../configs/shared_constraints.sh"
 
 # Sometimes /tmp runs out of space for some reason so set TMPDIR to /scratch
 cmd "mkdir -p /scratch/${USER}/.tmp"

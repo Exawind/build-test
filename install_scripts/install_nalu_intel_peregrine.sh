@@ -31,7 +31,7 @@ do
 done
 
 # Get general preferred Nalu constraints from a single location
-cmd "source ../spack_config/shared_constraints.sh"
+cmd "source ../configs/shared_constraints.sh"
 
 # Using a disk instead of RAM for the tmp directory for intermediate Intel compiler files
 cmd "mkdir -p /scratch/${USER}/.tmp"

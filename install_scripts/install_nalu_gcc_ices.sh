@@ -9,6 +9,6 @@ cmd() {
 }
 
 # Get general preferred Nalu constraints from a single location
-cmd "source ${SPACK_ROOT}/../NaluSpack/spack_config/shared_constraints.sh"
+cmd "source ${SPACK_ROOT}/../NaluSpack/configs/shared_constraints.sh"
 
 cmd "spack install nalu %gcc@7.2.0 ^${TRILINOS}@develop"

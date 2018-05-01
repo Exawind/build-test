@@ -12,7 +12,7 @@
 set -e
 
 # Get general preferred Nalu constraints from a single location
-source ../spack_config/shared_constraints.sh
+source ../configs/shared_constraints.sh
 
 (set -x; spack -k install -j 4 -v nalu %gcc@7.2.0 ^${TRILINOS}@develop)
 # (set -x; spack -k install -j 1 -v nalu %gcc@7.2.0 ^${TRILINOS}@develop)

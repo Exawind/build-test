@@ -29,7 +29,7 @@ do
 done
 
 # Get general preferred Nalu constraints from a single location
-cmd "source ../spack_config/shared_constraints.sh"
+cmd "source ../configs/shared_constraints.sh"
 
 cmd "spack install nalu %intel@17.0.2 ^${TRILINOS}@develop"
 

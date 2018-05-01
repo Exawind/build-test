@@ -30,7 +30,7 @@ test_configuration() {
 
   # Define TRILINOS from a single location for all scripts
   cmd "unset GENERAL_CONSTRAINTS"
-  cmd "source ${NALU_TESTING_DIR}/NaluSpack/spack_config/shared_constraints.sh"
+  cmd "source ${NALU_TESTING_DIR}/NaluSpack/configs/shared_constraints.sh"
   # For intel, we want to build against intel-mpi and intel-mkl
   if [ "${COMPILER_NAME}" == 'intel' ]; then
     GENERAL_CONSTRAINTS="^intel-mpi ^intel-mkl"
@@ -405,7 +405,7 @@ main() {
     cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR}"
     # Nalu v1.2.0 matching tag for NaluSpack
     #cmd "cd ${NALUSPACK_DIR} && git checkout v1.2.0"
-    cmd "cd ${NALUSPACK_DIR}/spack_config && ./setup_spack.sh"
+    cmd "cd ${NALUSPACK_DIR}/configs && ./setup_spack.sh"
  
     # Checkout Nalu and meshes submodule outside of Spack so ctest can build it itself
     printf "\nCloning Nalu repo...\n"

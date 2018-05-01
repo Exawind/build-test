@@ -9,12 +9,12 @@ NALUSPACK_ROOT=/projects/ExaWindFarm/NaluSpack
 NALU_DIR=${HOME}/Nalu
 
 # Need to apply patch for this thing to build on Mira
-if (cd ${NALU_DIR} && ! patch -Rsfp1 --dry-run < ${NALUSPACK_ROOT}/spack_config/machines/mira/nalu/mira.patch); then
-  (cd ${NALU_DIR} && patch -fp1 < ${NALUSPACK_ROOT}/spack_config/machines/mira/nalu/mira.patch)
+if (cd ${NALU_DIR} && ! patch -Rsfp1 --dry-run < ${NALUSPACK_ROOT}/configs/machines/mira/nalu/mira.patch); then
+  (cd ${NALU_DIR} && patch -fp1 < ${NALUSPACK_ROOT}/configs/machines/mira/nalu/mira.patch)
 fi
 
 # Apply patch to ctest to use runjob instead of mpiexec
-(cd ${NALU_DIR} && git apply ${NALUSPACK_ROOT}/spack_config/machines/mira/nalu/ctest.patch || true)
+(cd ${NALU_DIR} && git apply ${NALUSPACK_ROOT}/configs/machines/mira/nalu/ctest.patch || true)
 
 export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}
 export PATH=$(${SPACK_EXE} location -i mpich %${COMPILER})/bin:${PATH}

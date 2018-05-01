@@ -64,7 +64,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
 
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR}"
-  cmd "cd ${NALUSPACK_DIR}/spack_config && ./setup_spack.sh"
+  cmd "cd ${NALUSPACK_DIR}/configs && ./setup_spack.sh"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -73,7 +73,7 @@ fi
 
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
+cmd "source ${INSTALL_DIR}/NaluSpack/configs/shared_constraints.sh"
 
 for COMPILER_NAME in gcc intel
 do

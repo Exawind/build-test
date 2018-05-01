@@ -64,7 +64,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
 
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${INSTALL_DIR}/NaluSpack"
-  cmd "cd ${INSTALL_DIR}/NaluSpack/spack_config && ./setup_spack.sh"
+  cmd "cd ${INSTALL_DIR}/NaluSpack/configs && ./setup_spack.sh"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -74,7 +74,7 @@ fi
 # Load Spack after we know Spack is set up
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
+cmd "source ${INSTALL_DIR}/NaluSpack/configs/shared_constraints.sh"
 cmd "export TRILINOS_BRANCH=develop"
 
 printf "\n============================================================\n"

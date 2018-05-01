@@ -43,7 +43,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
 
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR}"
-  cmd "cd ${NALUSPACK_DIR}/spack_config && ./setup_spack.sh"
+  cmd "cd ${NALUSPACK_DIR}/configs && ./setup_spack.sh"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -64,7 +64,7 @@ do
     fi
     printf "\nInstalling software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
-    cmd "source ${INSTALL_DIR}/NaluSpack/spack_config/shared_constraints.sh"
+    cmd "source ${INSTALL_DIR}/NaluSpack/configs/shared_constraints.sh"
 
     cd ${INSTALL_DIR}
 

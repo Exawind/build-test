@@ -32,7 +32,7 @@ class CatalystIossAdapter(CMakePackage):
     url      = "https://github.com/nalucfd/naluspack.git"
 
     version('develop', 'aa5266fddb8554d39c6087550d3c8b27',
-            url='https://github.com/NaluCFD/NaluSpack/raw/master/spack_config/custom_package_files/catalyst-ioss-adapter/ParaViewCatalystIossAdapter.tar.gz')
+            url='https://github.com/NaluCFD/NaluSpack/raw/master/configs/custom_package_files/catalyst-ioss-adapter/ParaViewCatalystIossAdapter.tar.gz')
 
     depends_on('bison@2.7')
     depends_on('flex@2.5.39')

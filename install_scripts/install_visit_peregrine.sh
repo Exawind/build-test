@@ -32,3 +32,11 @@ cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
 VISIT_DIR=/nopt/nrel/ecom/ecp/base/b/visit
 cmd "cp build_visit2_13_0 ${VISIT_DIR}/ && cd ${VISIT_DIR} && ./build_visit2_13_0 --makeflags -j24 --parallel --required --optional --all-io --nonio --no-fastbit --no-fastquery --prefix ${VISIT_DIR}/install"
+
+#Then manually create module file for visit
+
+#Then add this to /nopt/nrel/ecom/ecp/base/b/visit/install/2.13.0/bin/internallauncher
+#SETENV("PATH", self.joinpaths(["/nopt/nrel/ecom/ecp/base/a/visit/install/bin", "/nopt/nrel/ecom/ecp/base/a/visit/install/2.13.0/linux-x86_64/bin", GETENV("PATH")]))
+#SETENV("LD_LIBRARY_PATH", self.joinpaths(["/nopt/nrel/ecom/ecp/base/a/visit/install/2.13.0/linux-x86_64/lib", GETENV("LD_LIBRARY_PATH")]))
+#SETENV("LIBRARY_PATH", self.joinpaths(["/nopt/nrel/ecom/ecp/base/a/visit/install/2.13.0/linux-x86_64/lib", GETENV("LIBRARY_PATH")]))
+#SETENV("VISIT_ROOT_DIR", "/nopt/nrel/ecom/ecp/base/a/visit/install") 

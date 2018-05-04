@@ -2,7 +2,7 @@
 
 set -e
 
-# A Nalu do-config script for OSX that uses Spack-built TPLs.
+# A Nalu-Wind do-config script for OSX that uses Spack-built TPLs.
 
 COMPILER=gcc
 SPACK_EXE=${HOME}/spack/bin/spack

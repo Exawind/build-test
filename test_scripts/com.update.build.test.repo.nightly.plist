@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.update.naluspack.nightly</string>
+  <string>com.update.nalu.wind.nightly</string>
 
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string>
     <string>-c</string>
-    <string>cd /Users/jrood/NaluNightlyTesting/NaluSpack && ./test_scripts/update_naluspack.sh</string>
+    <string>cd /Users/jrood/nalu-wind-testing/build-test && ./test-scripts/update-build-test-repo.sh</string>
   </array>
 
   <key>UserName</key>
@@ -27,9 +27,9 @@
   </dict>
 
   <key>StandardErrorPath</key>
-  <string>/Users/jrood/NaluNightlyTesting/jobs/last_naluspack_update.err</string>
+  <string>/Users/jrood/nalu-wind-testing/jobs/last-build-test-update.err</string>
 
   <key>StandardOutPath</key>
-  <string>/Users/jrood/NaluNightlyTesting/jobs/last_naluspack_update.out</string>
+  <string>/Users/jrood/nalu-wind-testing/jobs/last-build-test-update.out</string>
 </dict>
 </plist>

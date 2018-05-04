@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Script for copying the recommended configuration for Spack onto your system
-#for building Nalu, be it on Peregrine, Merlin, Cori, or a Mac
+#for building Nalu-Wind, be it on any systems listed below
 
 if [ -z "${SPACK_ROOT}" ]; then
     echo "SPACK_ROOT must be set first"
@@ -78,8 +78,8 @@ if [ "${MACHINE}" == 'peregrine' ] || \
 
   #All machines do this
   (set -x; cp machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/)
-  (set -x; cp -R custom_package_files/nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp -R custom_package_files/catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+  (set -x; cp -R custom-package-files/nalu-wind ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+  (set -x; cp -R custom-package-files/catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
 
   #Extra stuff for peregrine
   #if [ ${MACHINE} == 'peregrine' ]; then
@@ -108,7 +108,7 @@ if [ "${MACHINE}" == 'peregrine' ] || \
 
   #Extra stuff for mira
   if [ ${MACHINE} == 'mira' ]; then
-    (set -x; cp -R machines/${MACHINE}/nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/nalu-wind ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/)

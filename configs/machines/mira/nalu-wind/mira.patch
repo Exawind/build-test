@@ -1,6 +1,6 @@
-diff -Naru Nalu.orig/CMakeLists.txt Nalu/CMakeLists.txt
---- Nalu.orig/CMakeLists.txt	2018-03-20 00:13:14.054243000 +0000
-+++ Nalu/CMakeLists.txt	2018-03-20 00:16:55.834556954 +0000
+diff -Naru nalu-wind.orig/CMakeLists.txt nalu-wind/CMakeLists.txt
+--- nalu-wind.orig/CMakeLists.txt	2018-03-20 00:13:14.054243000 +0000
++++ nalu-wind/CMakeLists.txt	2018-03-20 00:16:55.834556954 +0000
 @@ -113,6 +113,14 @@
    add_definitions("-DNALU_USES_TIOGA")
  endif()
@@ -34,9 +34,9 @@ diff -Naru Nalu.orig/CMakeLists.txt Nalu/CMakeLists.txt
  file(GLOB UNIT_TESTS_SOURCES unit_tests/*.C unit_tests/*/*.C)
  
  set(nalu_ex_name "naluX")
-diff -Naru Nalu.orig/unit_tests/UnitTestSimdBasic.C Nalu/unit_tests/UnitTestSimdBasic.C
---- Nalu.orig/unit_tests/UnitTestSimdBasic.C	2018-03-20 00:13:34.723750000 +0000
-+++ Nalu/unit_tests/UnitTestSimdBasic.C	2018-03-20 00:43:41.384965000 +0000
+diff -Naru nalu-wind.orig/unit_tests/UnitTestSimdBasic.C nalu-wind/unit_tests/UnitTestSimdBasic.C
+--- nalu-wind.orig/unit_tests/UnitTestSimdBasic.C	2018-03-20 00:13:34.723750000 +0000
++++ nalu-wind/unit_tests/UnitTestSimdBasic.C	2018-03-20 00:43:41.384965000 +0000
 @@ -87,10 +87,10 @@
        }
     }

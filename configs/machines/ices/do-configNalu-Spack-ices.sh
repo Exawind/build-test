@@ -2,7 +2,7 @@
 
 set -e
 
-# A Nalu do-config script for OSX that uses Spack-built TPLs.
+# A Nalu-Wind do-config script for OSX that uses Spack-built TPLs.
 
 # Set up environment on ices machines
 {

@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2013-2018, Lawrence Livermore National Security, LLC.
+# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
 # Produced at the Lawrence Livermore National Laboratory.
 #
 # This file is part of Spack.
@@ -25,15 +25,15 @@
 from spack import *
 
 
-class Nalu(CMakePackage):
-    """Nalu: a generalized unstructured massively parallel low Mach flow code
+class NaluWind(CMakePackage):
+    """Nalu-Wind: a generalized unstructured massively parallel low Mach flow code
        designed to support a variety of energy applications of interest (most
        notably Wind ECP) built on the Sierra Toolkit and Trilinos solver
        Tpetra/Epetra stack
     """
 
-    homepage = "https://github.com/NaluCFD/Nalu"
-    url      = "https://github.com/NaluCFD/Nalu.git"
+    homepage = "https://github.com/exawind/nalu-wind"
+    url      = "https://github.com/exawind/nalu-wind.git"
 
     maintainers = ['jrood-nrel']
 
@@ -43,18 +43,18 @@ class Nalu(CMakePackage):
             description='Compile with Tioga support')
     variant('hypre', default=False,
             description='Compile with Hypre support')
-    variant('catalyst', default=False,
-            description='Compile with Catalyst support')
 
     version('master',
-            git='https://github.com/NaluCFD/Nalu.git', branch='master')
+            git='https://github.com/exawind/nalu-wind.git', branch='master')
 
-    depends_on('yaml-cpp@develop')
-    depends_on('trilinos+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards~hypre@master,12.12.1:')
+    # Currently Nalu only builds with certain libraries statically
+    depends_on('yaml-cpp+pic~shared@develop')
+    depends_on('trilinos~shared+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards@master,12.12.1:')
     depends_on('openfast+cxx', when='+openfast')
     depends_on('tioga', when='+tioga')
-    depends_on('hypre+mpi+int64', when='+hypre')
-    depends_on('catalyst-ioss-adapter', when='+catalyst')
+    depends_on('hypre+mpi+int64~shared', when='+hypre')
+
+    patch('mira.patch')
 
     def cmake_args(self):
         spec = self.spec
@@ -62,7 +62,8 @@ class Nalu(CMakePackage):
 
         options.extend([
             '-DTrilinos_DIR:PATH=%s' % spec['trilinos'].prefix,
-            '-DYAML_DIR:PATH=%s' % spec['yaml-cpp'].prefix
+            '-DYAML_DIR:PATH=%s' % spec['yaml-cpp'].prefix,
+            '-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE',
         ])
 
         if '+openfast' in spec:
@@ -81,13 +82,6 @@ class Nalu(CMakePackage):
             options.extend([
                 '-DENABLE_HYPRE:BOOL=ON',
                 '-DHYPRE_DIR:PATH=%s' % spec['hypre'].prefix
-            ])
-
-        if '+catalyst' in spec:
-            options.extend([
-                '-DENABLE_PARAVIEW_CATALYST:BOOL=ON',
-                '-DPARAVIEW_CATALYST_INSTALL_PATH:PATH=%s' %
-                spec['catalyst-ioss-adapter'].prefix
             ])
 
         return options

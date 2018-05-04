@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-#PBS -N install_base_software_peregrine
+#PBS -N install-base-software-peregrine
 #PBS -l nodes=1:ppn=24,walltime=24:00:00
 #PBS -A windsim
 #PBS -q batch-h
@@ -45,7 +45,7 @@ TRILINOS_BRANCH=develop
 
 # Set installation directory
 INSTALL_DIR=/nopt/nrel/ecom/ecp/base/a
-NALUSPACK_DIR=${INSTALL_DIR}/NaluSpack
+BUILD_TEST_DIR=${INSTALL_DIR}/build-test
 
 # Set spack location
 export SPACK_ROOT=${INSTALL_DIR}/spack
@@ -63,8 +63,8 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "git clone https://github.com/spack/spack.git ${SPACK_ROOT}"
 
   printf "\nConfiguring Spack...\n"
-  cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR}"
-  cmd "cd ${NALUSPACK_DIR}/configs && ./setup_spack.sh"
+  cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
+  cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -73,7 +73,7 @@ fi
 
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-cmd "source ${INSTALL_DIR}/NaluSpack/configs/shared_constraints.sh"
+cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 
 for COMPILER_NAME in gcc intel
 do
@@ -144,17 +144,17 @@ do
     cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
 
-    printf "\nInstalling Nalu stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    # Install Nalu dependencies with everything turned on
-    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-    # Install Nalu with Trilinos debug
-    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+    printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    # Install Nalu-Wind dependencies with everything turned on
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+    # Install Nalu-Wind with Trilinos debug
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
     # Turn off OpenMP
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
-    # Install Nalu dependencies with everything turned on
-    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-    # Install Nalu with Trilinos debug
-    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+    # Install Nalu-Wind dependencies with everything turned on
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+    # Install Nalu-Wind with Trilinos debug
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
 
     printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
@@ -163,8 +163,8 @@ do
     printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
-    printf "\nInstalling Nalu stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^py-matplotlib@2.0.2"
+    printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^py-matplotlib@2.0.2"
   fi
 
   cmd "unset TMPDIR"
@@ -179,4 +179,4 @@ printf "\nDone!\n"
 
 # Other final manual customizations:
 # - Change texlive path to be bin/linux_x86 yadda yadda
-# - Add visit module manually
+# - Add visit module manually, add ld_library_path stuff to internallauncher

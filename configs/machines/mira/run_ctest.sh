@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script for running Nalu job on Mira
+# Script for running Nalu-Wind job on Mira
 #qsub -A ExaWindFarm -t 60 -n 1 -env INDEX1=i:INDEX2=j --mode script run_ctest.sh
 
 set -ex

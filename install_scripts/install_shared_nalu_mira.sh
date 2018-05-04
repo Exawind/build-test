@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Script for installing Nalu on Mira using Spack with GCC compiler
+#Script for installing Nalu-Wind on Mira using Spack with GCC compiler
 
 # Function for printing and executing commands
 cmd() {
@@ -13,18 +13,18 @@ set -e
 export SPACK_ROOT=/projects/ExaWindFarm/spack
 source ${SPACK_ROOT}/share/spack/setup-env.sh
 
-#cd /projects/ExaWindFarm/NaluSpack/configs && ./setup_spack.sh
+#cd /projects/ExaWindFarm/build-test/configs && ./setup-spack.sh
 #spack compilers
 
-# Get general preferred Nalu constraints from a single location
-cmd "source /projects/ExaWindFarm/NaluSpack/configs/shared_constraints.sh"
+# Get general preferred Nalu-Wind constraints from a single location
+cmd "source /projects/ExaWindFarm/build-test/configs/shared-constraints.sh"
 
 # Disable openmp on Mira
 TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
 
-cmd "spack install --only dependencies nalu+hypre+openfast %gcc@4.8.4 arch=bgq-cnk-ppc64 ^${TRILINOS}@develop"
+cmd "spack install --only dependencies nalu-wind+hypre+openfast %gcc@4.8.4 arch=bgq-cnk-ppc64 ^${TRILINOS}@develop"
 
-#cmd "chmod -R ug+rX,go-w /projects/ExaWindFarm/NaluSpack /projects/ExaWindFarm/spack"
+#cmd "chmod -R ug+rX,go-w /projects/ExaWindFarm/build-test /projects/ExaWindFarm/spack"
 #cmd "chmod g+w /projects/ExaWindFarm/spack/"
 #cmd "chmod g+w /projects/ExaWindFarm/spack/opt"
 #cmd "chmod g+w /projects/ExaWindFarm/spack/opt/spack"

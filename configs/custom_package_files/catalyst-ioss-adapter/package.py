@@ -28,11 +28,11 @@ from spack import *
 class CatalystIossAdapter(CMakePackage):
     """Adapter for Trilinos Ioss and Paraview Catalyst"""
 
-    homepage = "https://github.com/nalucfd/naluspack"
-    url      = "https://github.com/nalucfd/naluspack.git"
+    homepage = "https://github.com/exawind/build-test"
+    url      = "https://github.com/exawind/build-test.git"
 
     version('develop', 'aa5266fddb8554d39c6087550d3c8b27',
-            url='https://github.com/NaluCFD/NaluSpack/raw/master/configs/custom_package_files/catalyst-ioss-adapter/ParaViewCatalystIossAdapter.tar.gz')
+            url='https://github.com/exawind/build-test/raw/master/configs/custom-package-files/catalyst-ioss-adapter/ParaViewCatalystIossAdapter.tar.gz')
 
     depends_on('bison@2.7')
     depends_on('flex@2.5.39')

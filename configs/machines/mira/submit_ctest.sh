@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script for submitting Nalu test suite in pieces on Mira
+# Script for submitting Nalu-Wind test suite in pieces on Mira
 
 set -e
 

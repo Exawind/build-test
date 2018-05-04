@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-#Nalu update NaluSpack
-0 0 * * * /bin/bash -c "cd /home/jrood/NaluNightlyTesting/NaluSpack && ./test_scripts/update_naluspack.sh > /home/jrood/NaluNightlyTesting/jobs/last_naluspack_update.txt 2>&1"
-#Nalu tests
-0 1 * * * /home/jrood/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu_merlin_cron.sh > /home/jrood/NaluNightlyTesting/jobs/last_nalu_test_job.txt 2>&1
+#Nalu-Wind update build-test
+0 0 * * * /bin/bash -c "cd /home/jrood/nalu-wind-testing/build-test && ./test-scripts/update-build-test.sh > /home/jrood/nalu-wind-testing/jobs/last-build-test-update.txt 2>&1"
+#Nalu-Wind tests
+0 1 * * * /home/jrood/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-merlin-cron.sh > /home/jrood/nalu-wind-testing/jobs/last-nalu-wind-test-job.txt 2>&1

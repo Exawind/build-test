@@ -63,8 +63,8 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "git clone https://github.com/spack/spack.git ${SPACK_ROOT}"
 
   printf "\nConfiguring Spack...\n"
-  cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${INSTALL_DIR}/NaluSpack"
-  cmd "cd ${INSTALL_DIR}/NaluSpack/configs && ./setup_spack.sh"
+  cmd "git clone https://github.com/exawind/build-test.git ${INSTALL_DIR}/build-test"
+  cmd "cd ${INSTALL_DIR}/build-test/configs && ./setup-spack.sh"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -74,7 +74,7 @@ fi
 # Load Spack after we know Spack is set up
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-cmd "source ${INSTALL_DIR}/NaluSpack/configs/shared_constraints.sh"
+cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 cmd "export TRILINOS_BRANCH=develop"
 
 printf "\n============================================================\n"
@@ -173,15 +173,15 @@ cmd "spack install llvm@6.0.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install intel-parallel-studio@cluster.2017.5+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
 
-# Install Nalu with everything turned on
-printf "\nInstalling Nalu dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+# Install Nalu-Wind with everything turned on
+printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
 
 # Turn off OpenMP
 TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
-cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-cmd "spack install --only dependencies nalu+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
 
 printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))

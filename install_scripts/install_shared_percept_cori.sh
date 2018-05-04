@@ -24,7 +24,7 @@ INTEL_COMPILER_VERSION="17.0.2"
 
 # Set installation directory
 INSTALL_DIR=$SCRATCH/percept
-NALUSPACK_DIR=${INSTALL_DIR}/NaluSpack
+BUILD_TEST_DIR=${INSTALL_DIR}/build-test
 
 # Set spack location
 export SPACK_ROOT=${INSTALL_DIR}/spack
@@ -42,8 +42,8 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "git clone https://github.com/spack/spack.git ${SPACK_ROOT}"
 
   printf "\nConfiguring Spack...\n"
-  cmd "git clone https://github.com/NaluCFD/NaluSpack.git ${NALUSPACK_DIR}"
-  cmd "cd ${NALUSPACK_DIR}/configs && ./setup_spack.sh"
+  cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
+  cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -64,7 +64,7 @@ do
     fi
     printf "\nInstalling software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
-    cmd "source ${INSTALL_DIR}/NaluSpack/configs/shared_constraints.sh"
+    cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 
     cd ${INSTALL_DIR}
 
@@ -79,10 +79,10 @@ done
 
 printf "\nSetting permissions...\n"
 cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
-cmd "chmod g+w ${INSTALL_DIR}"
-cmd "chmod g+w ${INSTALL_DIR}/spack"
-cmd "chmod g+w ${INSTALL_DIR}/spack/opt"
-cmd "chmod g+w ${INSTALL_DIR}/spack/opt/spack"
-cmd "chmod -R g+w ${INSTALL_DIR}/spack/opt/spack/.spack-db"
+#cmd "chmod g+w ${INSTALL_DIR}"
+#cmd "chmod g+w ${INSTALL_DIR}/spack"
+#cmd "chmod g+w ${INSTALL_DIR}/spack/opt"
+#cmd "chmod g+w ${INSTALL_DIR}/spack/opt/spack"
+#cmd "chmod -R g+w ${INSTALL_DIR}/spack/opt/spack/.spack-db"
 printf "\n$(date)\n"
 printf "\nDone!\n"

@@ -5,7 +5,7 @@ SHELL=/bin/bash
 #Pele verification
 0 0 1,15 * * /projects/ExaCT/Pele/PeleTests/PeleRegressionTesting/pelec-mms/peregrine_verification_cron_script.sh > /dev/null 2>&1"
 
-#Nalu update NaluSpack
-0 0 * * * /bin/bash -c "cd /projects/windsim/exawind/NaluNightlyTesting/NaluSpack && ./test_scripts/update_naluspack.sh > /projects/windsim/exawind/NaluNightlyTesting/jobs/last_naluspack_update.txt 2>&1"
-#Nalu tests
-0 1 * * * /projects/windsim/exawind/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu_peregrine_cron.sh > /projects/windsim/exawind/NaluNightlyTesting/jobs/last_nalu_test_job.txt 2>&1
+#Nalu-Wind update build-test repo
+0 0 * * * /bin/bash -c "cd /projects/windsim/exawind/nalu-wind-testing/build-test && ./test-scripts/update-build-test-repo.sh > /projects/windsim/exawind/nalu-wind-testing/jobs/last-update-build-test-rep.txt 2>&1"
+#Nalu-Wind tests
+0 1 * * * /projects/windsim/exawind/nalu-wind-testing/build-test/test-scripts/test-nalu-peregrine-cron.sh > /projects/windsim/exawind/nalu-wind-testing/jobs/last-nalu-test-job.txt 2>&1

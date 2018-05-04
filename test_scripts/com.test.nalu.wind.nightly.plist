@@ -7,7 +7,7 @@
 
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/jrood/NaluNightlyTesting/NaluSpack/test_scripts/test_nalu_mac_cron.sh</string>
+    <string>/Users/jrood/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-mac-cron.sh</string>
   </array>
 
   <key>UserName</key>
@@ -25,9 +25,9 @@
   </dict>
 
   <key>StandardErrorPath</key>
-  <string>/Users/jrood/NaluNightlyTesting/jobs/last_nalu_test_job.err</string>
+  <string>/Users/jrood/nalu-wind-testing/jobs/last-nalu-wind-test-job.err</string>
 
   <key>StandardOutPath</key>
-  <string>/Users/jrood/NaluNightlyTesting/jobs/last_nalu_test_job.out</string>
+  <string>/Users/jrood/nalu-wind-testing/jobs/last-nalu-wind-test-job.out</string>
 </dict>
 </plist>

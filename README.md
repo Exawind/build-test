@@ -6,7 +6,7 @@ In general, to start with a clean slate, clone Spack, clone this repo, add `SPAC
 
 ### Notes on the Nalu-Wind nightly testing:
 
-The file, `test-nalu.sh`, is used for testing on all machines, and the machine name is passed into the script to be able to perform certain required machine-specific tasks.
+The file, `test-nalu-wind.sh`, is used for testing on all machines, and the machine name is passed into the script to be able to perform certain required machine-specific tasks.
 
 Then there are cron scripts provided for each machine which `qsub` the test job. Note on Peregrine, `qsub` cannot pass arguments to the script itself (`man qsub` says the `-F` parameter should do so, but it doesn't work), so another script is provided that does only the task of passing `peregrine` to `test-nalu-wind.sh`.
 

@@ -264,7 +264,7 @@ test_configuration() {
     cmd "rm ${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-static-analysis.txt"
     cmd "cppcheck --enable=all --quiet -j 8 --output-file=${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-static-analysis.txt -I ${NALU_WIND_DIR}/include ${NALU_WIND_DIR}/src"
     cmd "printf \"%s warnings\n\" \"$(wc -l < ${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-static-analysis.txt | xargs echo -n)\" >> ${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-static-analysis.txt"
-    EXTRA_CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE ${EXTRA_CTEST_ARGS}"
+    EXTRA_CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-static-analysis.txt ${EXTRA_CTEST_ARGS}"
   fi
 
   # Unset the TMPDIR variable after building but before testing during ctest nightly script
@@ -280,7 +280,7 @@ test_configuration() {
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "module list"
   fi
-  cmd "ctest -DTESTING_ROOT_DIR=${NALU_WIND_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DEXTRA_CONFIGURE_ARGS=\"${EXTRA_CONFIGURE_ARGS}\" ${EXTRA_CTEST_ARGS} -VV -S ${NALU_WIND_DIR}/reg_tests/CTestNightlyScript.cmake"
+  cmd "ctest -DTESTING_ROOT_DIR=${NALU_WIND_TESTING_DIR} -DNALU_DIR=${NALU_WIND_TESTING_DIR}/nalu-wind -DTEST_LOG=${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-test-log.txt -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DEXTRA_CONFIGURE_ARGS=\"${EXTRA_CONFIGURE_ARGS}\" ${EXTRA_CTEST_ARGS} -VV -S ${NALU_WIND_DIR}/reg_tests/CTestNightlyScript.cmake"
   printf "Returned from CTest at $(date)...\n"
 
   printf "\nUnloading Spack modules from environment...\n"

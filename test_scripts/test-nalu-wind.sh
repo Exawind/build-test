@@ -30,14 +30,14 @@ test_configuration() {
 
   # Define TRILINOS from a single location for all scripts
   cmd "unset GENERAL_CONSTRAINTS"
-  cmd "source ${NALU_WIND_TESTING_DIR}/build-test/configs/shared-constraints.sh"
+  cmd "source ${BUILD_TEST_DIR}/configs/shared-constraints.sh"
   # For intel, we want to build against intel-mpi and intel-mkl
   if [ "${COMPILER_NAME}" == 'intel' ]; then
     GENERAL_CONSTRAINTS="^intel-mpi ^intel-mkl"
   fi
   printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
-  cmd "cd ${NALU_WIND_TESTING_DIR}"
+  cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}"
 
   printf "\nLoading modules...\n"
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
@@ -128,7 +128,7 @@ test_configuration() {
   #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno"
   #printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"
   #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno"
-  cmd "cd ${NALU_WIND_TESTING_DIR}" # Change directories to avoid any stale file handles
+  cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}" # Change directories to avoid any stale file handles
 
   TPL_VARIANTS=''
   TPL_CONSTRAINTS=''
@@ -261,10 +261,10 @@ test_configuration() {
      [ "${MACHINE_NAME}" == 'mac' ] || \
      [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nRunning cppcheck static analysis (Nalu-Wind not updated until after this step)...\n"
-    cmd "rm ${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-static-analysis.txt"
-    cmd "cppcheck --enable=all --quiet -j 8 --output-file=${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-static-analysis.txt -I ${NALU_WIND_DIR}/include ${NALU_WIND_DIR}/src"
-    cmd "printf \"%s warnings\n\" \"$(wc -l < ${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-static-analysis.txt | xargs echo -n)\" >> ${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-static-analysis.txt"
-    EXTRA_CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-static-analysis.txt ${EXTRA_CTEST_ARGS}"
+    cmd "rm ${LOGS_DIR}/nalu-wind-static-analysis.txt"
+    cmd "cppcheck --enable=all --quiet -j 8 --output-file=${LOGS_DIR}/nalu-wind-static-analysis.txt -I ${NALU_WIND_DIR}/include ${NALU_WIND_DIR}/src"
+    cmd "printf \"%s warnings\n\" \"$(wc -l < ${LOGS_DIR}/nalu-wind-static-analysis.txt | xargs echo -n)\" >> ${LOGS_DIR}/nalu-wind-static-analysis.txt"
+    EXTRA_CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${LOGS_DIR}/nalu-wind-static-analysis.txt ${EXTRA_CTEST_ARGS}"
   fi
 
   # Unset the TMPDIR variable after building but before testing during ctest nightly script
@@ -280,7 +280,7 @@ test_configuration() {
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "module list"
   fi
-  cmd "ctest -DTESTING_ROOT_DIR=${NALU_WIND_TESTING_DIR} -DNALU_DIR=${NALU_WIND_TESTING_DIR}/nalu-wind -DTEST_LOG=${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-test-log.txt -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DEXTRA_CONFIGURE_ARGS=\"${EXTRA_CONFIGURE_ARGS}\" ${EXTRA_CTEST_ARGS} -VV -S ${NALU_WIND_DIR}/reg_tests/CTestNightlyScript.cmake"
+  cmd "ctest -DTESTING_ROOT_DIR=${NALU_WIND_TESTING_ROOT_DIR} -DNALU_DIR=${NALU_WIND_TESTING_ROOT_DIR}/nalu-wind -DTEST_LOG=${LOGS_DIR}/nalu-wind-test-log.txt -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DEXTRA_CONFIGURE_ARGS=\"${EXTRA_CONFIGURE_ARGS}\" ${EXTRA_CTEST_ARGS} -VV -S ${NALU_WIND_DIR}/reg_tests/CTestNightlyScript.cmake"
   printf "Returned from CTest at $(date)...\n"
 
   printf "\nUnloading Spack modules from environment...\n"
@@ -350,34 +350,36 @@ main() {
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     CONFIGURATIONS[0]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
     CONFIGURATIONS[1]='intel:18.0.1:false:develop:develop:develop:openfast;tioga;hypre'
-    NALU_WIND_TESTING_DIR=/projects/ecp/exawind/nalu-wind-testing
+    NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     CONFIGURATIONS[0]='gcc:6.2.0:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='intel:18.0.1:false:develop:develop:develop:openfast;tioga;hypre'
-    NALU_WIND_TESTING_DIR=/projects/windsim/exawind/nalu-wind-testing
+    NALU_WIND_TESTING_ROOT_DIR=/projects/windsim/exawind/nalu-wind-testing
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     CONFIGURATIONS[0]='gcc:4.9.2:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='intel:17.0.2:false:develop:develop:develop:openfast;tioga;hypre'
-    NALU_WIND_TESTING_DIR=${HOME}/nalu-wind-testing
+    NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
     CONFIGURATIONS[0]='gcc:7.2.0:false:master:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='clang:9.0.0-apple:false:master:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[2]='gcc:7.2.0:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[3]='clang:9.0.0-apple:false:develop:develop:develop:openfast;tioga;hypre'
-    NALU_WIND_TESTING_DIR=${HOME}/nalu-wind-testing
+    NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else
     printf "\nMachine name not recognized.\n"
   fi
  
-  NALU_WIND_DIR=${NALU_WIND_TESTING_DIR}/nalu-wind
-  BUILD_TEST_DIR=${NALU_WIND_TESTING_DIR}/build-test
-  cmd "export SPACK_ROOT=${NALU_WIND_TESTING_DIR}/spack"
+  NALU_WIND_DIR=${NALU_WIND_TESTING_ROOT_DIR}/nalu-wind
+  BUILD_TEST_DIR=${NALU_WIND_TESTING_ROOT_DIR}/build-test
+  LOGS_DIR=${NALU_WIND_TESTING_ROOT_DIR}/logs
+  cmd "export SPACK_ROOT=${NALU_WIND_TESTING_ROOT_DIR}/spack"
  
   printf "============================================================\n"
   printf "HOST_NAME: ${HOST_NAME}\n"
-  printf "NALU_WIND_TESTING_DIR: ${NALU_WIND_TESTING_DIR}\n"
+  printf "NALU_WIND_TESTING_ROOT_DIR: ${NALU_WIND_TESTING_ROOT_DIR}\n"
   printf "NALU_WIND_DIR: ${NALU_WIND_DIR}\n"
-  printf "BUILD_TEST_DIR: ${NALU_WIND_DIR}\n"
+  printf "BUILD_TEST_DIR: ${BUILD_TEST_DIR}\n"
+  printf "LOGS_DIR: ${LOGS_DIR}\n"
   printf "SPACK_ROOT: ${SPACK_ROOT}\n"
   printf "Testing configurations:\n"
   printf " compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls\n"
@@ -386,14 +388,14 @@ main() {
   done
   printf "============================================================\n"
  
-  if [ ! -d "${NALU_WIND_TESTING_DIR}" ]; then
+  if [ ! -d "${NALU_WIND_TESTING_ROOT_DIR}" ]; then
     printf "============================================================\n"
     printf "Top level testing directory doesn't exist.\n"
     printf "Creating everything from scratch...\n"
     printf "============================================================\n"
  
     printf "Creating top level testing directory...\n"
-    cmd "mkdir -p ${NALU_WIND_TESTING_DIR}"
+    cmd "mkdir -p ${NALU_WIND_TESTING_ROOT_DIR}"
  
     printf "\nCloning Spack repo...\n"
     cmd "git clone https://github.com/spack/spack.git ${SPACK_ROOT}"
@@ -413,7 +415,7 @@ main() {
     #cmd "cd ${NALU_WIND_DIR} && git checkout v1.2.0"
  
     printf "\nMaking job output directory...\n"
-    cmd "mkdir -p ${NALU_WIND_TESTING_DIR}/jobs"
+    cmd "mkdir -p ${LOGS_DIR}"
  
     printf "============================================================\n"
     printf "Done setting up testing directory.\n"
@@ -440,8 +442,8 @@ main() {
     LIST_OF_TPLS=${CONFIG[6]}
  
     printf "\nRemoving previous test log for uploading to CDash...\n"
-    cmd "rm ${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-test-log.txt"
-    (test_configuration) 2>&1 | tee -i ${NALU_WIND_TESTING_DIR}/jobs/nalu-wind-test-log.txt
+    cmd "rm ${LOGS_DIR}/nalu-wind-test-log.txt"
+    (test_configuration) 2>&1 | tee -i ${LOGS_DIR}/nalu-wind-test-log.txt
   done
 
   printf "============================================================\n"
@@ -461,18 +463,18 @@ main() {
 
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting group...\n"
-    cmd "chgrp -R windsim ${NALU_WIND_TESTING_DIR}"
+    cmd "chgrp -R windsim ${NALU_WIND_TESTING_ROOT_DIR}"
   fi
 
   if [ "${MACHINE_NAME}" == 'peregrine' ] || \
      [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting permissions...\n"
-    cmd "chmod -R a+rX,go-w ${NALU_WIND_TESTING_DIR}"
-    #cmd "chmod g+w ${NALU_WIND_TESTING_DIR}"
-    #cmd "chmod g+w ${NALU_WIND_TESTING_DIR}/spack"
-    #cmd "chmod g+w ${NALU_WIND_TESTING_DIR}/spack/opt"
-    #cmd "chmod g+w ${NALU_WIND_TESTING_DIR}/spack/opt/spack"
-    #cmd "chmod -R g+w ${NALU_WIND_TESTING_DIR}/spack/opt/spack/.spack-db"
+    cmd "chmod -R a+rX,go-w ${NALU_WIND_TESTING_ROOT_DIR}"
+    #cmd "chmod g+w ${NALU_WIND_TESTING_ROOT_DIR}"
+    #cmd "chmod g+w ${NALU_WIND_TESTING_ROOT_DIR}/spack"
+    #cmd "chmod g+w ${NALU_WIND_TESTING_ROOT_DIR}/spack/opt"
+    #cmd "chmod g+w ${NALU_WIND_TESTING_ROOT_DIR}/spack/opt/spack"
+    #cmd "chmod -R g+w ${NALU_WIND_TESTING_ROOT_DIR}/spack/opt/spack/.spack-db"
   fi
 
   printf "============================================================\n"

@@ -1,6 +1,8 @@
 packages:
   boost:
     version: [1.66.0]
+  cmake:
+    version: [3.9.4]
   netcdf:
     version: [4.4.1.1]
     variants: maxdims=65536 maxvars=524288

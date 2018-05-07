@@ -4,7 +4,7 @@ set -e
 
 # A Nalu-Wind do-config script for OSX that uses Spack-built TPLs.
 
-COMPILER=gcc
+COMPILER=gcc #or clang
 SPACK_EXE=${HOME}/spack/bin/spack
 export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}
 export PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER})/bin:${PATH}

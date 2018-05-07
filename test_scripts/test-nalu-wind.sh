@@ -280,7 +280,7 @@ test_configuration() {
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "module list"
   fi
-  cmd "ctest -DNIGHTLY_DIR=${NALU_WIND_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DEXTRA_CONFIGURE_ARGS=\"${EXTRA_CONFIGURE_ARGS}\" ${EXTRA_CTEST_ARGS} -VV -S ${NALU_WIND_DIR}/reg_tests/CTestNightlyScript.cmake"
+  cmd "ctest -DTESTING_ROOT_DIR=${NALU_WIND_TESTING_DIR} -DYAML_DIR=${YAML_DIR} -DTRILINOS_DIR=${TRILINOS_DIR} -DHOST_NAME=${HOST_NAME} -DBUILD_TYPE=${BUILD_TYPE} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} -DEXTRA_CONFIGURE_ARGS=\"${EXTRA_CONFIGURE_ARGS}\" ${EXTRA_CTEST_ARGS} -VV -S ${NALU_WIND_DIR}/reg_tests/CTestNightlyScript.cmake"
   printf "Returned from CTest at $(date)...\n"
 
   printf "\nUnloading Spack modules from environment...\n"

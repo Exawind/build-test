@@ -8,7 +8,8 @@ COMPILER=gcc #or clang
 SPACK_EXE=${HOME}/spack/bin/spack
 export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}
 export PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER})/bin:${PATH}
-export LD_LIBRARY_PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER})/lib:${PATH}
+#export LD_LIBRARY_PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER})/lib:${LD_LIBRARY_PATH}
+#export DYLD_FALLBACK_LIBRARY_PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER})/lib:${DYLD_FALLBACK_LIBRARY_PATH}
 
 # Clean before cmake configure
 set +e

@@ -25,6 +25,6 @@ packages:
     compiler: [gcc@4.8.5]
     variants: build_type=Release
     providers:
-      mpi: [openmpi]
-      blas: [netlib-lapack]
-      lapack: [netlib-lapack]
+      mpi: [openmpi@1.10.4]
+      blas: [netlib-lapack@3.8.0]
+      lapack: [netlib-lapack@3.8.0]

@@ -1,4 +1,6 @@
 packages:
+  py-matplotlib:
+    version: [2.0.2]
   m4:
     version: [1.4.18]
   cmake:

@@ -48,7 +48,7 @@ cmd "module load yaml-cpp/develop-shared"
 if [ "${COMPILER}" == 'gcc' ]; then
   # Load correct modules for GCC
   cmd "module load cmake/3.11.1"
-  cmd "module load openmpi/3.0.1"
+  cmd "module load openmpi/1.10.4"
   cmd "module load catalyst-ioss-adapter/develop"
   cmd "module load trilinos/develop"
   #cmd "module load trilinos/develop-omp"

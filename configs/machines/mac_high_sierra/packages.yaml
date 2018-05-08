@@ -28,7 +28,7 @@ packages:
   superlu:
     version: [4.3]
   openmpi:
-    version: [3.0.1]
+    version: [1.10.4]
   yaml-cpp:
     version: [develop]
   netlib-lapack:

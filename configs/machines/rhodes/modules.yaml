@@ -35,11 +35,13 @@ modules:
     all:
       suffixes:
         '^python@2.7.14': 'py2'
-        '^python@3.6.3': 'py3'
-        '+debug': 'dbg'
-        '+openmp': 'omp'
+        '^python@3.6.5': 'py3'
+        'trilinos+openmp': 'omp'
         'trilinos build_type=Debug': 'dbg'
         'boost+mpi': 'mpi'
+        'yaml-cpp+shared': 'shared'
+        'yaml-cpp~shared': 'static'
+        'paraview+qt': 'gui'
       conflict:
         - '${PACKAGE}'
       environment:

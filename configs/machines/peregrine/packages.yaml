@@ -1,6 +1,4 @@
 packages:
-  py-matplotlib:
-    version: [2.0.2]
   glib:
     version: [2.55.1]
   m4:

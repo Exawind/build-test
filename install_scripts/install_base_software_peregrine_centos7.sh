@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #PBS -N install-base-software-peregrine-centos7
-#PBS -l nodes=1:ppn=24,walltime=20:00:00
+#PBS -l nodes=1:ppn=24,walltime=10:00:00
 #PBS -A windsim
 #PBS -q batch-h
 #PBS -j oe
@@ -87,11 +87,11 @@ do
   # Load necessary modules
   printf "\nLoading modules...\n"
   cmd "module purge"
-  cmd "module use /projects/windsim/exawind/BaseSoftware/spack/share/spack/modules/linux-centos6-x86_64"
+  cmd "module use /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
   cmd "module load gcc/6.2.0"
-  cmd "module load git/2.14.1"
+  cmd "module load git/2.15.1"
   cmd "module load python/2.7.14"
-  cmd "module load curl/7.56.0"
+  cmd "module load curl/7.59.0"
 
   # Set the TMPDIR to disk so it doesn't run out of space
   printf "\nMaking and setting TMPDIR to disk...\n"
@@ -164,6 +164,8 @@ do
     cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1"
     printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
+    printf "\nInstalling Paraview with GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install paraview+mpi+python+qt@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack load texinfo %gcc@${GCC_COMPILER_VERSION}"

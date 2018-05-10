@@ -29,10 +29,10 @@ cmd() {
 # Set up environment on Peregrine
 cmd "module purge"
 if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "module use /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+  cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
   #cmd "module use /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0"
 elif [ "${COMPILER}" == 'intel' ]; then
-  cmd "module use /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/intel-18.1.163"
+  cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/intel-18.1.163"
   #cmd "module use /nopt/nrel/ecom/ecp/base/modules/intel-18.1.163"
 fi
 
@@ -47,7 +47,7 @@ cmd "module load yaml-cpp/develop-shared"
 
 if [ "${COMPILER}" == 'gcc' ]; then
   # Load correct modules for GCC
-  cmd "module load cmake/3.11.1"
+  cmd "module load cmake/3.9.4"
   cmd "module load openmpi/1.10.4"
   cmd "module load catalyst-ioss-adapter/develop"
   cmd "module load trilinos/develop"
@@ -56,7 +56,7 @@ if [ "${COMPILER}" == 'gcc' ]; then
   #cmd "module load trilinos/develop-omp-dbg"
 elif [ "${COMPILER}" == 'intel' ]; then
   # Load correct modules for Intel"
-  cmd "module load /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
+  cmd "module load /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
   cmd "module load intel-mpi/2018.1.163"
   cmd "module load intel-mkl/2018.1.163"
   cmd "module load cmake/3.9.4"

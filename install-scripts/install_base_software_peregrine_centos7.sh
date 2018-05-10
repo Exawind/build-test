@@ -44,7 +44,7 @@ INTEL_COMPILER_VERSION="18.1.163"
 TRILINOS_BRANCH=develop
 
 # Set installation directory
-INSTALL_DIR=/nopt/nrel/ecom/ecp/base/b
+INSTALL_DIR=/nopt/nrel/ecom/ecp/base/c
 BUILD_TEST_DIR=${INSTALL_DIR}/build-test
 
 # Set spack location
@@ -92,31 +92,27 @@ do
   cmd "module load git/2.15.1"
   cmd "module load python/2.7.14"
   cmd "module load curl/7.59.0"
+  cmd "module load binutils/2.29.1"
+  cmd "module load texinfo/6.5"
+  cmd "module load texlive/live"
 
   # Set the TMPDIR to disk so it doesn't run out of space
   printf "\nMaking and setting TMPDIR to disk...\n"
   cmd "mkdir -p /scratch/${USER}/.tmp"
   cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
-  # Fix for Peregrine's broken linker for gcc
-  printf "\nInstalling binutils...\n"
-  cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-  printf "\nReloading Spack...\n"
-  cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-  printf "\nLoading binutils...\n"
-  cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     # Install our own python
     printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     for PYTHON_VERSION in '2.7.14' '3.6.5'; do
       cmd "spack install python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
-      for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-scipy py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf; do
+      for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf; do #py-scipy
         cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
       done
     done
 
     printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -145,8 +141,6 @@ do
     cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack load texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack load texlive %${COMPILER_NAME}@${COMPILER_VERSION}"
     # Install Nalu-Wind dependencies with everything turned on
     cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^openfast@develop"
     # Install Nalu-Wind with Trilinos debug
@@ -168,8 +162,6 @@ do
     cmd "spack install paraview+mpi+python+qt@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack load texinfo %gcc@${GCC_COMPILER_VERSION}"
-    cmd "spack load texlive %gcc@${GCC_COMPILER_VERSION}"
     cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^cmake@3.9.4 ^openfast@develop"
   fi
 
@@ -178,11 +170,11 @@ do
   printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
-printf "\nSetting permissions...\n"
-cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
+#printf "\nSetting permissions...\n"
+#cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
 printf "\n$(date)\n"
 printf "\nDone!\n"
 
 # Other final manual customizations:
-# - Change texlive path to be bin/linux_x86 yadda yadda
+# - Rename necessary module files and set defaults
 # - Add visit module manually, and add ld_library_path stuff to internallauncher

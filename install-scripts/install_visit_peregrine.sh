@@ -15,7 +15,7 @@ cmd() {
 set -e
 
 cmd "module purge"
-cmd "module use /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
 cmd "module load gcc/5.5.0"
 cmd "module load python/2.7.14"
 cmd "module load git/2.15.1"
@@ -30,13 +30,13 @@ cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
 #cmd "export PAR_COMPILER=mpicc; export PAR_COMPILER_CXX=mpicxx; export PAR_INCLUDE=/nopt/nrel/apps/openmpi/1.10.0-serial-gcc-5.2.0/include; export PAR_LIBS=/nopt/nrel/apps/openmpi/1.10.0-serial-gcc-5.2.0/lib/libmpi.a; ./build_visit2_13_0 --makeflags -j24 --parallel --required --optional --all-io --nonio --no-fastbit --no-fastquery --prefix /projects/windsim/exawind/software/visit/a/install"
 
-VISIT_DIR=/nopt/nrel/ecom/ecp/base/b/visit
+VISIT_DIR=/nopt/nrel/ecom/ecp/base/c/visit
 cmd "cp build_visit2_13_0 ${VISIT_DIR}/ && cd ${VISIT_DIR} && ./build_visit2_13_0 --makeflags -j24 --parallel --required --optional --all-io --nonio --no-fastbit --no-fastquery --prefix ${VISIT_DIR}/install"
 
 #Then manually create module file for visit
 
-#Then add this to /nopt/nrel/ecom/ecp/base/b/visit/install/2.13.0/bin/internallauncher
-#SETENV("PATH", self.joinpaths(["/nopt/nrel/ecom/ecp/base/a/visit/install/bin", "/nopt/nrel/ecom/ecp/base/a/visit/install/2.13.0/linux-x86_64/bin", GETENV("PATH")]))
-#SETENV("LD_LIBRARY_PATH", self.joinpaths(["/nopt/nrel/ecom/ecp/base/a/visit/install/2.13.0/linux-x86_64/lib", GETENV("LD_LIBRARY_PATH")]))
-#SETENV("LIBRARY_PATH", self.joinpaths(["/nopt/nrel/ecom/ecp/base/a/visit/install/2.13.0/linux-x86_64/lib", GETENV("LIBRARY_PATH")]))
-#SETENV("VISIT_ROOT_DIR", "/nopt/nrel/ecom/ecp/base/a/visit/install") 
+#Then add this to /nopt/nrel/ecom/ecp/base/c/visit/install/2.13.0/bin/internallauncher
+#SETENV("PATH", self.joinpaths(["/nopt/nrel/ecom/ecp/base/c/visit/install/bin", "/nopt/nrel/ecom/ecp/base/c/visit/install/2.13.0/linux-x86_64/bin", GETENV("PATH")]))
+#SETENV("LD_LIBRARY_PATH", self.joinpaths(["/nopt/nrel/ecom/ecp/base/c/visit/install/2.13.0/linux-x86_64/lib", GETENV("LD_LIBRARY_PATH")]))
+#SETENV("LIBRARY_PATH", self.joinpaths(["/nopt/nrel/ecom/ecp/base/c/visit/install/2.13.0/linux-x86_64/lib", GETENV("LIBRARY_PATH")]))
+#SETENV("VISIT_ROOT_DIR", "/nopt/nrel/ecom/ecp/base/c/visit/install")

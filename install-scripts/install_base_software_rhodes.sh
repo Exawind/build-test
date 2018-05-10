@@ -23,7 +23,7 @@ COMPILER_NAME="gcc"
 COMPILER_VERSION="4.8.5"
 
 # Set installation directory
-INSTALL_DIR=/opt/software/a
+INSTALL_DIR=/opt/software/b
 
 #Rhodes has almost *nothing* installed on it besides python and gcc
 #so we are relying on Spack heavily as a non-root package manager here.
@@ -97,8 +97,7 @@ cmd "spack install flex %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
-#Don't seem to need binutils so far on rhodes
-#cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
 
 printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -168,9 +167,7 @@ cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install llvm@5.0.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install llvm@6.0.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install intel-parallel-studio@cluster.2017.5+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
 
 # Install Nalu-Wind with everything turned on
@@ -192,6 +189,10 @@ cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PER
 printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
 
+printf "\nInstalling Paraview with GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+cmd "spack install paraview+mpi+python+qt@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+
+#Modify necessary module files
 #Last thing to do is install VisIt with the build_visit script
 
 printf "\n============================================================\n"
@@ -202,13 +203,6 @@ printf "\nSetting permissions...\n"
 cmd "chmod a+rX,go-w /opt"
 cmd "chmod -R a+rX,go-w /opt/software"
 cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
-#cmd "chmod g+w /opt"
-#cmd "chmod g+w /opt/software"
-#cmd "chmod g+w ${INSTALL_DIR}"
-#cmd "chmod g+w ${INSTALL_DIR}/spack"
-#cmd "chmod g+w ${INSTALL_DIR}/spack/opt"
-#cmd "chmod g+w ${INSTALL_DIR}/spack/opt/spack"
-#cmd "chmod -R g+w ${INSTALL_DIR}/spack/opt/spack/.spack-db"
 printf "\n$(date)\n"
 printf "\nDone!\n"
 printf "============================================================\n"

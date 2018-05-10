@@ -2,7 +2,7 @@
 
 #Script that runs the nightly Nalu-Wind tests at NREL on Peregrine
 
-cd /projects/windsim/exawind/nalu-wind-testing/jobs && \
+cd /projects/windsim/exawind/nalu-wind-testing/logs && \
 qsub \
 -N test-nalu-wind \
 -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell \

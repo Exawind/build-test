@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-#Nalu-Wind update build-test repo
-0 0 * * * /bin/bash -c "cd /projects/ecp/exawind/nalu-wind-testing/build-test && ./test-scripts/update-build-test-repo.sh > /projects/ecp/exawind/nalu-wind-testing/logs/last-update-build-test-repo.txt 2>&1"
-#Nalu-Wind tests
-0 1 * * * /projects/ecp/exawind/nalu-wind-testing/build-test/test_scripts/test-nalu-wind-rhodes-cron.sh 2>&1
+#Nalu update NaluSpack
+0 0 * * * /bin/bash -c "cd /projects/ecp/exawind/nalu-wind-testing/build-test && ./test-scripts/update-build-test-repo.sh > /projects/ecp/exawind/nalu-wind-testing/logs/last-nalu-wind-build-test-repo-update.txt 2>&1"
+#Nalu tests
+0 1 * * * /projects/ecp/exawind/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-rhodes-cron.sh 2>&1

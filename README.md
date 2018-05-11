@@ -19,7 +19,7 @@ Using crontab, the general cron jobs are written as such:
 SHELL=/bin/bash
 
 #Nalu-Wind update build-test
-0 0 * * * /bin/bash -c "cd /whereever/nalu-wind-testing/ && ./test_scripts/update-build-test-repo.sh > /whereever/nalu-wind-testing/logs/last-build-test-repo-update.txt 2>&1"
+0 0 * * * /bin/bash -c "cd /whereever/nalu-wind-testing/ && ./test-scripts/update-build-test-repo.sh > /whereever/nalu-wind-testing/logs/last-build-test-repo-update.txt 2>&1"
 #Nalu-Wind tests
-0 1 * * * /whereever/nalu-wind-testing/build-test/test_scripts/test-nalu-wind-peregrine-cron.sh > /whereever/nalu-wind-testing/logs/last-nalu-wind-test-job.txt 2>&1
+0 1 * * * /whereever/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-peregrine-cron.sh > /whereever/nalu-wind-testing/logs/last-nalu-wind-test-job.txt 2>&1
 ```

@@ -82,7 +82,8 @@ printf "Installing base software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(
 printf "============================================================\n"
 
 printf "\nBootstrapping Spack with environment-modules...\n"
-cmd "spack bootstrap"
+#cmd "spack bootstrap"
+cmd "spack install environment-modules %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
 printf "\nInstalling and loading essential tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -111,6 +112,7 @@ cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
 
 # Install our own python
 printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -184,7 +186,7 @@ printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}..
 (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
 
 printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1"
+cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^boost@1.60.0"
 
 printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"

@@ -130,5 +130,5 @@ compilers:
       cxx: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.1-bfdqgk5ngxudy6nga65k374zouwp2suh/compilers_and_libraries/linux/bin/intel64/icpc
       f77: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.1-bfdqgk5ngxudy6nga65k374zouwp2suh/compilers_and_libraries/linux/bin/intel64/ifort
       fc: /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.1-bfdqgk5ngxudy6nga65k374zouwp2suh/compilers_and_libraries/linux/bin/intel64/ifort
-    spec: intel@18.0.1
+    spec: intel@18.1.163
     target: x86_64

@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-#PBS -N install-base-software-peregrine-centos7
+#PBS -N install-base-software-peregrine
 #PBS -l nodes=1:ppn=24,walltime=10:00:00
 #PBS -A windsim
 #PBS -q batch-h
@@ -87,9 +87,9 @@ do
   # Load necessary modules
   printf "\nLoading modules...\n"
   cmd "module purge"
-  cmd "module use /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+  cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
   cmd "module load gcc/6.2.0"
-  cmd "module load git/2.15.1"
+  cmd "module load git/2.17.0"
   cmd "module load python/2.7.14"
   cmd "module load curl/7.59.0"
   cmd "module load binutils/2.29.1"
@@ -130,6 +130,7 @@ do
     cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     # Install our own compilers
     printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

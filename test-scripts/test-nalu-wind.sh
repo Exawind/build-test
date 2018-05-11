@@ -180,7 +180,7 @@ test_configuration() {
       cmd "module unload binutils/2.27-GCCcore-6.3.0"
       cmd "module load GCCcore/4.9.2"
     elif [ "${MACHINE_NAME}" == 'rhodes' ]; then
-      if [ "${COMPILER_VERSION}" == '18.0.1' ]; then
+      if [ "${COMPILER_VERSION}" == '18.1.163' ]; then
         cmd "module load intel-parallel-studio/cluster.2018.1"
       elif [ "${COMPILER_VERSION}" == '17.0.5' ]; then
         cmd "module load intel-parallel-studio/cluster.2017.5"
@@ -349,11 +349,11 @@ main() {
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     CONFIGURATIONS[0]='gcc:6.4.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
-    CONFIGURATIONS[1]='intel:18.0.1:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[1]='intel:18.1.163:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     CONFIGURATIONS[0]='gcc:6.2.0:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[1]='intel:18.0.1:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[1]='intel:18.1.163:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/windsim/exawind/nalu-wind-testing
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     CONFIGURATIONS[0]='gcc:4.9.2:false:develop:develop:develop:openfast;tioga;hypre'

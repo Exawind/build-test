@@ -60,10 +60,10 @@ test_configuration() {
     fi
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     cmd "module purge"
-    cmd "module use /nopt/nrel/ecom/ecp/base/b/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+    cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
     cmd "module load gcc/6.2.0"
     cmd "module load python/2.7.14"
-    cmd "module load git/2.15.1"
+    cmd "module load git/2.17.0"
     cmd "module load cppcheck/1.81"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     cmd "module purge"

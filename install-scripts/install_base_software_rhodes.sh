@@ -202,6 +202,9 @@ printf "Done installing base software with ${COMPILER_NAME}@${COMPILER_VERSION} 
 printf "============================================================\n"
 
 printf "\nSetting permissions...\n"
+cmd "chgrp windsim /opt"
+cmd "chgrp -R windsim /opt/software"
+cmd "chgrp -R windsim ${INSTALL_DIR}"
 cmd "chmod a+rX,go-w /opt"
 cmd "chmod -R a+rX,go-w /opt/software"
 cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"

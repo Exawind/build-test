@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #PBS -N install-base-software-peregrine
-#PBS -l nodes=1:ppn=24,walltime=10:00:00
+#PBS -l nodes=1:ppn=24,walltime=24:00:00
 #PBS -A windsim
 #PBS -q batch-h
 #PBS -j oe
@@ -75,7 +75,7 @@ printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 
-for COMPILER_NAME in gcc intel
+for COMPILER_NAME in gcc
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -162,9 +162,11 @@ do
     printf "\nInstalling Paraview with GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install paraview+mpi+python+qt@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
+    # Need to update compilers.yaml to point to newest intel-parallel-studio built by gcc before installing with intel
+    printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^cmake@3.9.4 ^openfast@develop"
     # Turn off OpenMP
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
-    printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
   fi
 

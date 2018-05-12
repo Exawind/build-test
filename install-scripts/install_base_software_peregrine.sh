@@ -162,8 +162,10 @@ do
     printf "\nInstalling Paraview with GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install paraview+mpi+python+qt@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
+    # Turn off OpenMP
+    TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl ^cmake@3.9.4 ^openfast@develop"
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
   fi
 
   cmd "unset TMPDIR"

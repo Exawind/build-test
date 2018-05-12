@@ -35,6 +35,8 @@ packages:
       variants: maxdims=65536 maxvars=524288
   superlu:
     version: [4.3]
+  openfast:
+    version: [develop]
   parallel-netcdf:
       version: [1.6.1]
   intel-mkl:

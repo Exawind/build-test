@@ -5,7 +5,6 @@
 # This file is part of Spack.
 # Created by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
 # LLNL-CODE-647188
-#
 # For details, see https://github.com/spack/spack
 # Please also see the NOTICE and LICENSE files for our notice and the LGPL.
 #
@@ -49,6 +48,7 @@ class NaluWind(CMakePackage):
     version('master',
             git='https://github.com/exawind/nalu-wind.git', branch='master')
 
+    depends_on('mpi')
     depends_on('yaml-cpp@develop')
     depends_on('trilinos+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards~hypre@master,12.12.1:')
     depends_on('openfast+cxx', when='+openfast')
@@ -63,6 +63,9 @@ class NaluWind(CMakePackage):
         options.extend([
             '-DTrilinos_DIR:PATH=%s' % spec['trilinos'].prefix,
             '-DYAML_DIR:PATH=%s' % spec['yaml-cpp'].prefix
+            '-DCMAKE_C_COMPILER=%s'       % spec['mpi'].mpicc,
+            '-DCMAKE_CXX_COMPILER=%s'     % spec['mpi'].mpicxx,
+            '-DCMAKE_Fortran_COMPILER=%s' % spec['mpi'].mpifc
         ])
 
         if '+openfast' in spec:

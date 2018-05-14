@@ -1,13 +1,15 @@
 #!/bin/bash
-
-COMPILER=gcc
-
+ 
 set -e
 
 cmd() {
   echo "+ $@"
   eval "$@"
 }
+
+CXX_COMPILER=mpicxx
+C_COMPILER=mpicc
+FORTRAN_COMPILER=mpifc
 
 # Set up environment on Rhodes
 #Pure modules sans Spack
@@ -26,6 +28,7 @@ cmd "module load flex"
 cmd "module load bison"
 cmd "module load wget"
 cmd "module load bc"
+cmd "module load binutils"
 cmd "module load python/2.7.14"
 cmd "module load openmpi"
 cmd "module load catalyst-ioss-adapter"
@@ -56,9 +59,17 @@ cmd "which mpirun"
 #  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_IOSS_ADAPTER_ROOT_DIR} \
 
 (set -x; cmake \
+  -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
+  -DCMAKE_C_COMPILER:STRING=${C_COMPILER} \
+  -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
+  -DMPI_CXX_COMPILER:STRING=${CXX_COMPILER} \
+  -DMPI_C_COMPILER:STRING=${C_COMPILER} \
+  -DMPI_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
   -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
   -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \
-  .. && nice make -j 32)
+  ..)
+
+cmd "nice make -j32"

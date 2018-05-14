@@ -6,7 +6,7 @@
 # options below to your own needs.
 # Uncomment the last line and then run this script.
 
-COMPILER=intel #or intel
+COMPILER=gcc #or intel
 if [ "${COMPILER}" == 'gcc' ]; then
   CXX_COMPILER=mpicxx
   C_COMPILER=mpicc

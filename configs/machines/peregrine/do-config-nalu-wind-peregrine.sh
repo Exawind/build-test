@@ -6,8 +6,17 @@
 # options below to your own needs.
 # Uncomment the last line and then run this script.
 
-COMPILER=gcc #or intel or clang
-
+COMPILER=intel #or intel
+if [ "${COMPILER}" == 'gcc' ]; then
+  CXX_COMPILER=mpicxx
+  C_COMPILER=mpicc
+  FORTRAN_COMPILER=mpifc
+elif [ "${COMPILER}" == 'intel' ]; then
+  CXX_COMPILER=mpiicpc
+  C_COMPILER=mpiicc
+  FORTRAN_COMPILER=mpiifort
+fi
+  
 set -e
 
 cmd() {
@@ -19,37 +28,30 @@ cmd() {
 cmd "module purge"
 if [ "${COMPILER}" == 'gcc' ]; then
   cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-  #cmd "module use /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0"
+  cmd "module load git/2.17.0"
+  cmd "module load python/2.7.14"
+  cmd "module load binutils/2.29.1"
 elif [ "${COMPILER}" == 'intel' ]; then
   cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/intel-18.1.163"
-  #cmd "module use /nopt/nrel/ecom/ecp/base/modules/intel-18.1.163"
 fi
 
 cmd "module load gcc/6.2.0"
-cmd "module load git/2.15.1"
-cmd "module load python/2.7.14"
-cmd "module load binutils/2.29.1"
-cmd "module load openfast/master"
+cmd "module load openfast/develop"
 cmd "module load hypre/2.14.0"
 cmd "module load tioga/develop"
 cmd "module load yaml-cpp/develop-shared"
+cmd "module load cmake/3.9.4"
+cmd "module load trilinos/develop"
 
 if [ "${COMPILER}" == 'gcc' ]; then
   # Load correct modules for GCC
-  cmd "module load cmake/3.9.4"
   cmd "module load openmpi/1.10.4"
   cmd "module load catalyst-ioss-adapter/develop"
-  cmd "module load trilinos/develop"
-  #cmd "module load trilinos/develop-omp"
-  #cmd "module load trilinos/develop-dbg"
-  #cmd "module load trilinos/develop-omp-dbg"
 elif [ "${COMPILER}" == 'intel' ]; then
   # Load correct modules for Intel"
   cmd "module load /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
   cmd "module load intel-mpi/2018.1.163"
   cmd "module load intel-mkl/2018.1.163"
-  cmd "module load cmake/3.9.4"
-  cmd "module load trilinos/develop-omp"
 fi
 
 cmd "module list"
@@ -78,6 +80,12 @@ cmd "which mpirun"
 #  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_IOSS_ADAPTER_ROOT_DIR} \
 
 (set -x; cmake \
+  -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
+  -DCMAKE_C_COMPILER:STRING=${C_COMPILER} \
+  -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
+  -DMPI_CXX_COMPILER:STRING=${CXX_COMPILER} \
+  -DMPI_C_COMPILER:STRING=${C_COMPILER} \
+  -DMPI_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
   -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
@@ -85,6 +93,4 @@ cmd "which mpirun"
   -DENABLE_TESTS:BOOL=ON \
   ..)
 
-# Uncomment the next line after you make sure you are not on a login node
-# and run this script to configure and build Nalu
-#cmd "make -j 24"
+cmd "nice make -j 8"

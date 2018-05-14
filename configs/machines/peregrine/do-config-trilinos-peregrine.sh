@@ -1,76 +1,72 @@
 #!/bin/bash
 
-set -ex
+set -e
 
-# Instructions:
-# A Trilinos do-config script that uses Spack-built TPLs.
-# Make a directory in the trilinos directory for building,
-# Copy this script to that directory and edit the three
-# options below to your own needs. Leave the SPACK_ROOT option
-# alone to build against the communal spack location at NREL.
-# Uncomment the last two lines and then run this script.
-
-# Note Spack uses rpath so we don't need to worry so much
-# about setting our environment when running, but when we 
-# build manually we will then need to have the TPLs loaded in 
-# the environment, and you will likely need
-# the module load commands in effect to both build and run
-# using a manual build of Trilinos and Nalu.
-
-# Also note this script won't work on OSX.
-# Mostly due to your OSX machine not having
-# environment modules so the 'module load'
-# won't add to your PATH (and LD_LIBRARY_PATH).
-
-# Change these three options to suit your needs:
 COMPILER=gcc #or intel
 # Default to installing to 'install' directory in build directory
 INSTALL_PREFIX=$(pwd)/install
-# Using NREL communal spack installation by default
-SPACK_ROOT=/projects/windsim/exawind/SharedSoftware/spack
 
-SPACK_EXE=${SPACK_ROOT}/bin/spack
+cmd() {
+  echo "+ $@"
+  eval "$@"
+}
 
-{
-module purge
-module load gcc/5.2.0
-module load python/2.7.8
-module unload mkl
-} &> /dev/null
+# Set up environment on Peregrine
+cmd "module purge"
+if [ "${COMPILER}" == 'gcc' ]; then
+  cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+  #cmd "module use /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0"
+elif [ "${COMPILER}" == 'intel' ]; then
+  cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/intel-18.1.163"
+  #cmd "module use /nopt/nrel/ecom/ecp/base/modules/intel-18.1.163"
+fi
 
-module use ${SPACK_ROOT}/share/spack/modules/$(${SPACK_EXE} arch)
-module load $(${SPACK_EXE} module find -m tcl binutils %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl cmake %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl hdf5 %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl netcdf %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl parallel-netcdf %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl zlib %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl superlu %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl boost %${COMPILER})
-module load $(${SPACK_EXE} module find -m tcl netlib-lapack %${COMPILER})
+cmd "module load gcc/6.2.0"
+cmd "module load git/2.17.0"
+cmd "module load python/2.7.14"
+cmd "module load binutils/2.29.1"
+cmd "module load yaml-cpp/develop-shared"
+cmd "module load cmake/3.9.4"
+cmd "module load hdf5/1.10.1"
+cmd "module load zlib/1.2.11"
+cmd "module load netcdf/4.4.1.1"
+cmd "module load parallel-netcdf/1.8.0"
+cmd "module load boost/1.66.0"
+cmd "module load superlu/4.3"
+cmd "module load openfast/develop"
+cmd "module load hypre/2.14.0"
+cmd "module load tioga/develop"
+
+if [ "${COMPILER}" == 'gcc' ]; then
+  # Load correct modules for GCC
+  cmd "module load openmpi/1.10.4"
+  cmd "module load netlib-lapack/3.8.0"
+  MPI_ROOT_DIR=${OPENMPI_ROOT_DIR}
+  BLAS_ROOT_DIR=${NETLIB_LAPACK_ROOT_DIR}
+elif [ "${COMPILER}" == 'intel' ]; then
+  # Load correct modules for Intel"
+  cmd "module load /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
+  cmd "module load intel-mpi/2018.1.163"
+  cmd "module load intel-mkl/2018.1.163"
+  MPI_ROOT_DIR=${INTEL_MPI_ROOT_DIR}
+  BLAS_ROOT_DIR=${INTEL_MKL_ROOT_DIR}
+fi
+cmd "module list"
 
 # Set tmpdir to scratch filesystem so it doesn't run out of space
-mkdir -p /scratch/${USER}/.tmp
-export TMPDIR=/scratch/${USER}/.tmp
-
-# Load correct modules per compiler
-if [ ${COMPILER} == 'gcc' ]; then
-  module load $(${SPACK_EXE} module find -m tcl openmpi %${COMPILER})
-elif [ ${COMPILER} == 'intel' ]; then
-  module load comp-intel/2017.0.2
-  module load $(${SPACK_EXE} module find -m tcl intel-mpi %${COMPILER})
-fi
+cmd "mkdir -p /scratch/${USER}/.tmp"
+cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
 # Clean before cmake configure
 set +e
-rm -rf CMakeFiles
-rm -f CMakeCache.txt
+cmd "rm -rf CMakeFiles"
+cmd "rm -f CMakeCache.txt"
 set -e
 
-(set -x; which cmake)
-(set -x; which mpirun)
+cmd "which cmake"
+cmd "which mpirun"
 
-cmake \
+(set -x; cmake \
   -DCMAKE_INSTALL_PREFIX:PATH=${INSTALL_PREFIX} \
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
   -DTrilinos_ENABLE_CXX11:BOOL=ON \
@@ -113,29 +109,26 @@ cmake \
   -DTrilinos_ENABLE_SEACASNemslice:BOOL=ON \
   -DTrilinos_ENABLE_SEACASIoss:BOOL=ON \
   -DTPL_ENABLE_MPI:BOOL=ON \
-  -DMPI_BASE_DIR:PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER}) \
+  -DMPI_BASE_DIR:PATH=${MPI_ROOT_DIR} \
   -DTPL_ENABLE_Boost:BOOL=ON \
-  -DBoostLib_INCLUDE_DIRS:PATH=$(${SPACK_EXE} location -i boost %${COMPILER})/include \
-  -DBoostLib_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i boost %${COMPILER})/lib \
+  -DBoostLib_INCLUDE_DIRS:PATH=${BOOST_ROOT_DIR}/include \
+  -DBoostLib_LIBRARY_DIRS:PATH=${BOOST_ROOT_DIR}/lib \
   -DTPL_ENABLE_SuperLU:BOOL=ON \
-  -DSuperLU_INCLUDE_DIRS:PATH=$(${SPACK_EXE} location -i superlu %${COMPILER})/include \
-  -DSuperLU_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i superlu %${COMPILER})/lib \
+  -DSuperLU_INCLUDE_DIRS:PATH=${SUPERLU_ROOT_DIR}/include \
+  -DSuperLU_LIBRARY_DIRS:PATH=${SUPERLU_ROOT_DIR}/lib \
   -DTPL_ENABLE_Netcdf:BOOL=ON \
-  -DNetCDF_ROOT:PATH=$(${SPACK_EXE} location -i netcdf %${COMPILER}) \
+  -DNetCDF_ROOT:PATH=${NETCDF_ROOT_DIR} \
   -DTPL_ENABLE_Pnetcdf:BOOL=ON \
-  -DPNetCDF_ROOT:PATH=$(${SPACK_EXE} location -i parallel-netcdf %${COMPILER}) \
+  -DPNetCDF_ROOT:PATH=${PARALLEL_NETCDF_ROOT_DIR} \
   -DTPL_ENABLE_HDF5:BOOL=ON \
-  -DHDF5_ROOT:PATH=$(${SPACK_EXE} location -i hdf5 %${COMPILER}) \
+  -DHDF5_ROOT:PATH=${HDF5_ROOT_DIR} \
   -DHDF5_NO_SYSTEM_PATHS:BOOL=ON \
   -DTPL_ENABLE_Zlib:BOOL=ON \
-  -DZlib_INCLUDE_DIRS:PATH=$(${SPACK_EXE} location -i zlib %${COMPILER})/include \
-  -DZlib_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i zlib %${COMPILER})/lib \
+  -DZlib_INCLUDE_DIRS:PATH=${ZLIB_ROOT_DIR}/include \
+  -DZlib_LIBRARY_DIRS:PATH=${ZLIB_ROOT_DIR/lib \
   -DTPL_ENABLE_BLAS:BOOL=ON \
-  -DBLAS_INCLUDE_DIRS:PATH=$(${SPACK_EXE} location -i netlib-lapack %${COMPILER})/include \
-  -DBLAS_LIBRARY_DIRS:PATH=$(${SPACK_EXE} location -i netlib-lapack %${COMPILER})/lib \
-  ..
-
-# Uncomment the next two lines after you make sure you are not on a login node
-# and run this script to configure and build Trilinos
-#make -j 24
-#make install
+  -DBLAS_INCLUDE_DIRS:PATH=${BLAS_ROOT_DIR}/include \
+  -DBLAS_LIBRARY_DIRS:PATH=${BLAS_ROOT_DIR}/lib \
+  ..)
+  #.. && make -j24 && make install)
+  # Replace the ..) with the line above to actually build and install

@@ -10,7 +10,7 @@ COMPILER=gcc #or intel
 if [ "${COMPILER}" == 'gcc' ]; then
   CXX_COMPILER=mpicxx
   C_COMPILER=mpicc
-  FORTRAN_COMPILER=mpifc
+  FORTRAN_COMPILER=mpifort
 elif [ "${COMPILER}" == 'intel' ]; then
   CXX_COMPILER=mpiicpc
   C_COMPILER=mpiicc

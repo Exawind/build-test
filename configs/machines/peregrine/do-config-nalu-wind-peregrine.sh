@@ -1,23 +1,12 @@
 #!/bin/bash
 
 # Instructions:
-# A Nalu do-config script that uses Spack-built TPLs on Peregrine.
 # Make a directory in the Nalu directory for building,
 # Copy this script to that directory and edit the
 # options below to your own needs.
 # Uncomment the last line and then run this script.
 
-# Note Spack uses rpath so we don't need to worry so much
-# about setting our environment when running, but when we 
-# build manually we will then need to have some TPLs loaded in 
-# the environment, namely binutils, cmake, and openmpi.
-
-# Also note this script won't work on OSX.
-# Mostly due to your OSX machine not having
-# environment modules so the 'module load'
-# won't add to your PATH (and LD_LIBRARY_PATH).
-
-COMPILER=gcc #or intel
+COMPILER=gcc #or intel or clang
 
 set -e
 

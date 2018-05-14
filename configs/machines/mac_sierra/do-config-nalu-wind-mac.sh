@@ -9,14 +9,11 @@ cmd() {
   eval "$@"
 }
 
-SPACK_COMPILER=gcc
+COMPILER=gcc
 SPACK_EXE=${HOME}/spack/bin/spack
-CXX_COMPILER=g++
-C_COMPILER=gcc
-FORTRAN_COMPILER=gfortran-7
 
-cmd "export PATH=$(${SPACK_EXE} location -i cmake %${SPACK_COMPILER})/bin:${PATH}"
-cmd "export PATH=$(${SPACK_EXE} location -i openmpi %${SPACK_COMPILER})/bin:${PATH}"
+cmd "export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}"
+cmd "export PATH=$(${SPACK_EXE} location -i openmpi %${COMPILER})/bin:${PATH}"
 
 set +e
 cmd "rm -rf CMakeFiles"
@@ -27,11 +24,8 @@ cmd "which cmake"
 cmd "which mpiexec"
 
 (set -x; cmake \
-  -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
-  -DCMAKE_C_COMPILER:STRING=${C_COMPILER} \
-  -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
-  -DTrilinos_DIR:PATH=$(${SPACK_EXE} location -i trilinos %${SPACK_COMPILER}) \
-  -DYAML_DIR:PATH=$(${SPACK_EXE} location -i yaml-cpp %${SPACK_COMPILER}) \
+  -DTrilinos_DIR:PATH=$(${SPACK_EXE} location -i trilinos %${COMPILER}) \
+  -DYAML_DIR:PATH=$(${SPACK_EXE} location -i yaml-cpp %${COMPILER}) \
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
   -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \

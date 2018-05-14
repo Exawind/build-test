@@ -174,13 +174,13 @@ cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mp
 
 # Install Nalu-Wind with everything turned on
 printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^openfast@develop"
+cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ^openfast@develop"
 
 # Turn off OpenMP
 TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
-cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^openfast@develop"
+cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug ^openfast@develop"
 
 printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
@@ -202,6 +202,9 @@ printf "Done installing base software with ${COMPILER_NAME}@${COMPILER_VERSION} 
 printf "============================================================\n"
 
 printf "\nSetting permissions...\n"
+cmd "chgrp windsim /opt"
+cmd "chgrp -R windsim /opt/software"
+cmd "chgrp -R windsim ${INSTALL_DIR}"
 cmd "chmod a+rX,go-w /opt"
 cmd "chmod -R a+rX,go-w /opt/software"
 cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"

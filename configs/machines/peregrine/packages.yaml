@@ -20,6 +20,8 @@ packages:
   openmpi:
     version: [1.10.4]
     variants: fabrics=verbs schedulers=tm
+  openfast:
+    version: [develop]
   intel-mpi:
     version: [2018.1.163]
   intel-mkl:

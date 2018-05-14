@@ -62,10 +62,13 @@ class NaluWind(CMakePackage):
 
         options.extend([
             '-DTrilinos_DIR:PATH=%s' % spec['trilinos'].prefix,
-            '-DYAML_DIR:PATH=%s' % spec['yaml-cpp'].prefix
+            '-DYAML_DIR:PATH=%s' % spec['yaml-cpp'].prefix,
             '-DCMAKE_C_COMPILER=%s'       % spec['mpi'].mpicc,
             '-DCMAKE_CXX_COMPILER=%s'     % spec['mpi'].mpicxx,
-            '-DCMAKE_Fortran_COMPILER=%s' % spec['mpi'].mpifc
+            '-DCMAKE_Fortran_COMPILER=%s' % spec['mpi'].mpifc,
+            '-DMPI_C_COMPILER=%s'         % spec['mpi'].mpicc,
+            '-DMPI_CXX_COMPILER=%s'       % spec['mpi'].mpicxx,
+            '-DMPI_Fortran_COMPILER=%s'   % spec['mpi'].mpifc
         ])
 
         if '+openfast' in spec:

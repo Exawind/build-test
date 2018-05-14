@@ -112,3 +112,24 @@ compilers:
       fc: /opt/software/b/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.1-bfdqgk5ngxudy6nga65k374zouwp2suh/compilers_and_libraries/linux/bin/intel64/ifort
     spec: intel@18.1.163
     target: x86_64
+- compiler:
+    extra_rpaths:
+     - /opt/software/b/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.0-xxji3hq27n7zpibeew6vhlyvayptzoks/lib
+     - /opt/software/b/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.0-xxji3hq27n7zpibeew6vhlyvayptzoks/lib/clang/6.0.0/lib/linux
+     - /opt/software/b/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-yyzc7g6v43jb3jcbr4lbcxnnbuap3lbq/lib/gcc/x86_64-unknown-linux-gnu/6.4.0
+     - /opt/software/b/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-yyzc7g6v43jb3jcbr4lbcxnnbuap3lbq/libexec/gcc/x86_64-unknown-linux-gnu/6.4.0
+     - /opt/software/b/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-yyzc7g6v43jb3jcbr4lbcxnnbuap3lbq/lib64
+    flags:
+      cflags: -O2
+      cxxflags: -O2
+      fflags: -O2
+      fcflags: -O2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /opt/software/b/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.0-xxji3hq27n7zpibeew6vhlyvayptzoks/bin/clang
+      cxx: /opt/software/b/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.0-xxji3hq27n7zpibeew6vhlyvayptzoks/bin/clang++
+      f77: /opt/software/b/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-yyzc7g6v43jb3jcbr4lbcxnnbuap3lbq/bin/gfortran
+      fc: /opt/software/b/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-yyzc7g6v43jb3jcbr4lbcxnnbuap3lbq/bin/gfortran
+    spec: clang@6.0.0
+    target: x86_64

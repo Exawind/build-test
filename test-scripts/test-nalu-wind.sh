@@ -279,8 +279,8 @@ test_configuration() {
     MPI_C_COMPILER=mpicc
     MPI_FORTRAN_COMPILER=mpifort
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
-    MPI_CXX_COMPILER=mpiicc
-    MPI_C_COMPILER=mpiicpc
+    MPI_CXX_COMPILER=mpiicpc
+    MPI_C_COMPILER=mpiicc
     MPI_FORTRAN_COMPILER=mpiifort
   fi
   printf "\nListing compilers that will be used in ctest...\n"

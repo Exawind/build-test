@@ -283,6 +283,7 @@ test_configuration() {
     MPI_C_COMPILER=mpiicpc
     MPI_FORTRAN_COMPILER=mpiifort
   fi
+  printf "\nListing compilers that will be used in ctest...\n"
   cmd "which ${MPI_CXX_COMPILER}"
   cmd "which ${MPI_C_COMPILER}"
   cmd "which ${MPI_FORTRAN_COMPILER}"

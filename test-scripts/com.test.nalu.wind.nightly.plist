@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.test.nalu.nightly</string>
+  <string>com.test.nalu.wind.nightly</string>
 
   <key>ProgramArguments</key>
   <array>

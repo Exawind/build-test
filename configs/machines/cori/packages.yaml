@@ -76,4 +76,4 @@ packages:
       paths:
           bzip2@1.0.6: /usr
   yaml-cpp:
-      version: [develop]
+      version: [0.6.2]

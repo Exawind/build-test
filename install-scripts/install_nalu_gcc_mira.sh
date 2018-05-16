@@ -11,9 +11,9 @@ cmd() {
 set -e
 
 # Get general preferred Nalu constraints from a single location
-cmd "source ../configs/shared_constraints.sh"
+cmd "source ../configs/shared-constraints.sh"
 
 # Disable openmp on Mira
 TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
 
-cmd "spack install --only dependencies nalu+hypre+openfast %gcc@4.8.4 arch=bgq-cnk-ppc64 ^${TRILINOS}@develop"
+cmd "spack install --only dependencies nalu-wind+hypre+openfast %gcc@4.8.4 arch=bgq-cnk-ppc64 ^${TRILINOS}@develop"

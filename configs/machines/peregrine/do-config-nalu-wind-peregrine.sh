@@ -39,7 +39,7 @@ cmd "module load gcc/6.2.0"
 cmd "module load openfast/develop"
 cmd "module load hypre/2.14.0"
 cmd "module load tioga/develop"
-cmd "module load yaml-cpp/develop-shared"
+cmd "module load yaml-cpp"
 cmd "module load cmake/3.9.4"
 cmd "module load trilinos/develop"
 

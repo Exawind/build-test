@@ -19,5 +19,5 @@ set -e
 
 cmd "module purge"
 cmd "module load GCCcore/4.9.2"
-cmd "source ../configs/shared_constraints.sh"
-cmd "spack install nalu %gcc@4.9.2 ^${TRILINOS}@develop"
+cmd "source ../configs/shared-constraints.sh"
+cmd "spack install nalu-wind %gcc@4.9.2 ^${TRILINOS}@develop"

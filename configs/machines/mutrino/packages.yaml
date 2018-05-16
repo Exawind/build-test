@@ -50,4 +50,4 @@ packages:
       modules:
           cmake@3.9.0: cmake/3.9.0
   yaml-cpp:
-      version: [develop]
+      version: [0.6.2]

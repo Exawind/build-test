@@ -32,7 +32,7 @@ packages:
   openfast:
     version: [develop]
   yaml-cpp:
-    version: [develop]
+    version: [0.6.2]
   netlib-lapack:
     version: [3.8.0]
   all:

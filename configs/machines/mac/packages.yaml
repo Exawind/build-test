@@ -14,7 +14,7 @@ packages:
   superlu:
     version: [4.3]
   yaml-cpp:
-    version: [develop]
+    version: [0.6.2]
   openmpi:
     version: [1.10.4]
   openfast:

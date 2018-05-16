@@ -204,8 +204,6 @@ test_configuration() {
       cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack load intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
-    cmd "which cmake"
-    cmd "which mpiexec"
   fi
 
   printf "\nSetting variables to pass to CTest...\n"
@@ -283,10 +281,14 @@ test_configuration() {
     MPI_C_COMPILER=mpiicc
     MPI_FORTRAN_COMPILER=mpiifort
   fi
-  printf "\nListing compilers that will be used in ctest...\n"
+
+  printf "\nListing cmake and compilers that will be used in ctest...\n"
   cmd "which ${MPI_CXX_COMPILER}"
   cmd "which ${MPI_C_COMPILER}"
   cmd "which ${MPI_FORTRAN_COMPILER}"
+  cmd "which mpiexec"
+  cmd "which cmake"
+
   CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${MPI_C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} -DMPI_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DMPI_C_COMPILER:STRING=${MPI_C_COMPILER} -DMPI_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
 
   # Set essential arguments for ctest

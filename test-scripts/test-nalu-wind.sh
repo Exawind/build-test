@@ -274,7 +274,7 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DENABLE_WARNINGS:BOOL=TRUE -DENABLE_EXTRA_WARNINGS:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
 
   # Explicitly set compilers to MPI compilers
-  if [ "${COMPILER_NAME}" == 'gcc' ]; then
+  if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
     MPI_CXX_COMPILER=mpicxx
     MPI_C_COMPILER=mpicc
     MPI_FORTRAN_COMPILER=mpifort

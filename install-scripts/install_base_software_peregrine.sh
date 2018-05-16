@@ -106,7 +106,7 @@ do
     printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     for PYTHON_VERSION in '2.7.14' '3.6.5'; do
       cmd "spack install python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
-      for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf py-backports-functools-lru-cache py-scipy; do
+      for PYTHON_LIBRARY in py-numpy py-matplotlib@2.0.2 py-pandas py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf py-scipy; do
         cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
       done
     done

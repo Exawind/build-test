@@ -5,7 +5,7 @@
 cd /projects/windsim/exawind/nalu-wind-testing/logs && \
 qsub \
 -N test-nalu-wind \
--l nodes=1:ppn=24,walltime=4:00:00,feature=haswell \
+-l nodes=1:ppn=24,walltime=6:00:00,feature=haswell \
 -A windsim \
 -q batch-h \
 -j oe \

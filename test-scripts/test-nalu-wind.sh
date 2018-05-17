@@ -382,9 +382,9 @@ main() {
     CONFIGURATIONS[1]='intel:17.0.2:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.2.0:false:master:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:8.1.0:false:master:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='clang:9.0.0-apple:false:master:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[2]='gcc:7.2.0:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[2]='gcc:8.1.0:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[3]='clang:9.0.0-apple:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else

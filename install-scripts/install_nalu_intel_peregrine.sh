@@ -18,7 +18,7 @@ cmd() {
 set -e
 
 cmd "module purge"
-cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/intel-18.1.163"
+cmd "module use /nopt/nrel/ecom/ecp/base/modules/intel-18.1.163"
 cmd "module load gcc/6.2.0"
 cmd "module list"
 

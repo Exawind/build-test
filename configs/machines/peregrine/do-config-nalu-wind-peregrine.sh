@@ -27,7 +27,7 @@ cmd() {
 # Set up environment on Peregrine
 cmd "module purge"
 if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+  cmd "module use /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0"
   cmd "module load git/2.17.0"
   cmd "module load python/2.7.14"
   cmd "module load binutils/2.29.1"
@@ -35,8 +35,8 @@ if [ "${COMPILER}" == 'gcc' ]; then
   cmd "module load netlib-lapack"
   cmd "module load catalyst-ioss-adapter"
 elif [ "${COMPILER}" == 'intel' ]; then
-  cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/intel-18.1.163"
-  cmd "module load /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
+  cmd "module use /nopt/nrel/ecom/ecp/base/modules/intel-18.1.163"
+  cmd "module load /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
   cmd "module load intel-mpi/2018.1.163"
   cmd "module load intel-mkl/2018.1.163"
 fi

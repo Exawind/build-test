@@ -14,11 +14,9 @@ cmd() {
 # Set up environment on Peregrine
 cmd "module purge"
 if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-  #cmd "module use /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0"
+  cmd "module use /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0"
 elif [ "${COMPILER}" == 'intel' ]; then
-  cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/intel-18.1.163"
-  #cmd "module use /nopt/nrel/ecom/ecp/base/modules/intel-18.1.163"
+  cmd "module use /nopt/nrel/ecom/ecp/base/modules/intel-18.1.163"
 fi
 
 cmd "module load gcc/6.2.0"
@@ -45,7 +43,7 @@ if [ "${COMPILER}" == 'gcc' ]; then
   BLAS_ROOT_DIR=${NETLIB_LAPACK_ROOT_DIR}
 elif [ "${COMPILER}" == 'intel' ]; then
   # Load correct modules for Intel"
-  cmd "module load /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
+  cmd "module load /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
   cmd "module load intel-mpi/2018.1.163"
   cmd "module load intel-mkl/2018.1.163"
   MPI_ROOT_DIR=${INTEL_MPI_ROOT_DIR}

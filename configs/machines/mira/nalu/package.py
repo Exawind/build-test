@@ -25,15 +25,15 @@
 from spack import *
 
 
-class NaluWind(CMakePackage):
-    """Nalu-Wind: a generalized unstructured massively parallel low Mach flow code
+class Nalu(CMakePackage):
+    """Nalu: a generalized unstructured massively parallel low Mach flow code
        designed to support a variety of energy applications of interest (most
        notably Wind ECP) built on the Sierra Toolkit and Trilinos solver
        Tpetra/Epetra stack
     """
 
-    homepage = "https://github.com/exawind/nalu-wind"
-    url      = "https://github.com/exawind/nalu-wind.git"
+    homepage = "https://github.com/nalucfd/nalu"
+    url      = "https://github.com/nalucfd/nalu.git"
 
     maintainers = ['jrood-nrel']
 
@@ -45,10 +45,10 @@ class NaluWind(CMakePackage):
             description='Compile with Hypre support')
 
     version('master',
-            git='https://github.com/exawind/nalu-wind.git', branch='master')
+            git='https://github.com/nalucfd/nalu.git', branch='master')
 
     # Currently Nalu only builds with certain libraries statically
-    depends_on('yaml-cpp+pic~shared@develop')
+    depends_on('yaml-cpp+pic~shared@0.5.3')
     depends_on('trilinos~shared+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards@master,12.12.1:')
     depends_on('openfast+cxx', when='+openfast')
     depends_on('tioga', when='+tioga')

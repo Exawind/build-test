@@ -6,15 +6,15 @@ COMPILER=gcc
 SPACK_ROOT=/projects/ExaWindFarm/spack
 SPACK_EXE=${SPACK_ROOT}/bin/spack
 BUILD_TEST_ROOT=/projects/ExaWindFarm/build-test
-NALU_WIND_DIR=${HOME}/nalu-wind
+NALU_DIR=${HOME}/nalu
 
 # Need to apply patch for this thing to build on Mira
-if (cd ${NALU_WIND_DIR} && ! patch -Rsfp1 --dry-run < ${BUILD_TEST_ROOT}/configs/machines/mira/nalu-wind/mira.patch); then
-  (cd ${NALU_WIND_DIR} && patch -fp1 < ${BUILD_TEST_ROOT}/configs/machines/mira/nalu-wind/mira.patch)
+if (cd ${NALU_DIR} && ! patch -Rsfp1 --dry-run < ${BUILD_TEST_ROOT}/configs/machines/mira/nalu/mira.patch); then
+  (cd ${NALU_DIR} && patch -fp1 < ${BUILD_TEST_ROOT}/configs/machines/mira/nalu/mira.patch)
 fi
 
 # Apply patch to ctest to use runjob instead of mpiexec
-(cd ${NALU_WIND_DIR} && git apply ${BUILD_TEST_ROOT}/configs/machines/mira/nalu-wind/ctest.patch || true)
+(cd ${NALU_DIR} && git apply ${BUILD_TEST_ROOT}/configs/machines/mira/nalu/ctest.patch || true)
 
 export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}
 export PATH=$(${SPACK_EXE} location -i mpich %${COMPILER})/bin:${PATH}

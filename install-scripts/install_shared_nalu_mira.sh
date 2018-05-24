@@ -10,22 +10,42 @@ cmd() {
 
 set -e
 
-export SPACK_ROOT=/projects/ExaWindFarm/spack
-source ${SPACK_ROOT}/share/spack/setup-env.sh
+INSTALL_DIR=/projects/ExaWindFarm/software
+BUILD_TEST_DIR=${INSTALL_DIR}/build-test
 
-#cd /projects/ExaWindFarm/build-test/configs && ./setup-spack.sh
-#spack compilers
+# Set spack location
+export SPACK_ROOT=${INSTALL_DIR}/spack
+
+if [ ! -d "${INSTALL_DIR}" ]; then
+  printf "============================================================\n"
+  printf "Install directory doesn't exist.\n"
+  printf "Creating everything from scratch...\n"
+  printf "============================================================\n"
+
+  printf "Creating top level install directory...\n"
+  cmd "mkdir -p ${INSTALL_DIR}"
+
+  printf "\nCloning Spack repo...\n"
+  cmd "git clone https://github.com/spack/spack.git ${SPACK_ROOT}"
+
+  printf "\nConfiguring Spack...\n"
+  cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
+  cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
+
+  printf "============================================================\n"
+  printf "Done setting up install directory.\n"
+  printf "============================================================\n"
+fi
+
+printf "\nLoading Spack...\n"
+cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
 # Get general preferred Nalu-Wind constraints from a single location
-cmd "source /projects/ExaWindFarm/build-test/configs/shared-constraints.sh"
+cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 
 # Disable openmp on Mira
 TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
 
-cmd "spack install --only dependencies nalu-wind+hypre+openfast %gcc@4.8.4 arch=bgq-cnk-ppc64 ^${TRILINOS}@develop"
+cmd "nice spack install -j 8 --only dependencies nalu+hypre+openfast %gcc@4.8.4 arch=bgq-cnk-ppc64 ^${TRILINOS}@develop"
 
-#cmd "chmod -R ug+rX,go-w /projects/ExaWindFarm/build-test /projects/ExaWindFarm/spack"
-#cmd "chmod g+w /projects/ExaWindFarm/spack/"
-#cmd "chmod g+w /projects/ExaWindFarm/spack/opt"
-#cmd "chmod g+w /projects/ExaWindFarm/spack/opt/spack"
-#cmd "chmod -R g+w /projects/ExaWindFarm/spack/opt/spack/.spack-db"
+#cmd "chmod -R ug+rX,go-w ${INSTALL_DIR}"

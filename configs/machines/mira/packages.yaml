@@ -1,6 +1,6 @@
 packages:
     yaml-cpp:
-        version: [develop]
+        version: [0.5.3]
     hdf5:
         paths:
             hdf5@1.8.17%xl: /soft/libraries/hdf5/1.8.17/cnk-xl/current

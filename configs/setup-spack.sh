@@ -112,7 +112,7 @@ if [ "${MACHINE}" == 'peregrine' ] || \
 
   #Extra stuff for mira
   if [ ${MACHINE} == 'mira' ]; then
-    (set -x; cp -R machines/${MACHINE}/nalu-wind ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/)

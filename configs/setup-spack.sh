@@ -41,6 +41,9 @@ elif [ ${OS} == 'Linux' ]; then
           mcp.alcf.anl.gov)
             MACHINE=mira
           ;;
+          fst.alcf.anl.gov)
+            MACHINE=mira
+          ;;
           ices.utexas.edu)
             MACHINE=ices
           ;;

@@ -3,7 +3,6 @@ packages:
         version: [0.5.3]
     hdf5:
         paths:
-            hdf5@1.8.17%xl: /soft/libraries/hdf5/1.8.17/cnk-xl/current
             hdf5@1.8.17%gcc: /soft/libraries/hdf5/1.8.17/cnk-gcc/current
         buildable: False
         variants: +cxx+hl
@@ -12,26 +11,22 @@ packages:
         version: [4.3]
     parallel-netcdf:
         paths: 
-            parallel-netcdf@1.6.1%xl: /soft/libraries/pnetcdf/1.6.1/cnk-xl/current
             parallel-netcdf@1.6.1%gcc: /soft/libraries/pnetcdf/1.6.1/cnk-gcc/current
         buildable: False
         version: [1.6.1]
     netcdf:
         paths: 
-            netcdf@4.3.3.1%xl: /soft/libraries/netcdf/4.3.3-f4.4.1/cnk-xl/current
             netcdf@4.3.3.1%gcc: /soft/libraries/netcdf/4.3.3-f4.4.1/cnk-gcc/current
         variants: ~dap~hdf4 maxdims=1024 maxvars=8192 +mpi+parallel-netcdf+shared
         version: [4.3.3.1]
     boost:
         paths:
-            boost@1.60.0%xl: /soft/libraries/boost/1.60.0/cnk-xl/current
             boost@1.60.0%gcc: /soft/libraries/boost/1.60.0/cnk-gcc/current
         buildable: False
         version: [1.60.0]
     mpich:
         paths:
-            mpich@3.2%xl: /bgsys/drivers/ppcfloor/comm/xl
-            mpich@3.2%gcc: /bgsys/drivers/ppcfloor/comm/gcc
+            mpich@3.2%gcc: /soft/libraries/mpich3/gcc
         buildable: False
         version: [3.2]
     autoconf:
@@ -90,18 +85,16 @@ packages:
         buildable: False
     zlib:
         paths:
-            zlib@1.2.7%xl: /soft/libraries/alcf/current/xl/ZLIB
             zlib@1.2.7%gcc: /soft/libraries/alcf/current/gcc/ZLIB
         buildable: False
         version: [1.2.7]
     netlib-lapack:
         paths:
-            netlib-lapack@3.6.1%xl: /soft/libraries/alcf/current/xl/BLAS
             netlib-lapack@3.6.1%gcc: /soft/libraries/alcf/current/gcc/BLAS
         buildable: False
         version: [3.6.1]
     all:
-        compiler: [gcc@4.8.4,xl@12.1]
+        compiler: [gcc@4.8.4]
         variants: ~shared build_type=Release
         providers:
             mpi: [mpich]

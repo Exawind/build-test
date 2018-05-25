@@ -9,7 +9,8 @@ BUILD_TEST_ROOT=/projects/ExaWindFarm/software/build-test
 NALU_DIR=${HOME}/Nalu
 
 # Matching Nalu commit for current dependencies installed on mira
-(set -x; cd ${NALU_DIR} && git checkout 7c12601dd7fe77e399c9cbad294aec0ddd3a257b)
+#(set -x; cd ${NALU_DIR} && git checkout 7c12601dd7fe77e399c9cbad294aec0ddd3a257b)
+(set -x; cd ${NALU_DIR} && git checkout tpetraInitMarksChanges)
 
 # Need to apply a patch for this thing to build on Mira
 (set -x; cd ${NALU_DIR} && git apply ${BUILD_TEST_ROOT}/configs/machines/mira/nalu/mira.patch || true)
@@ -33,6 +34,7 @@ set -e
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
   -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \
+  -DTEST_TOLERANCE=0.000001 \
   -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE \
   ..)
 

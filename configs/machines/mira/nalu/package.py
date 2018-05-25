@@ -54,7 +54,7 @@ class Nalu(CMakePackage):
     depends_on('tioga', when='+tioga')
     depends_on('hypre+mpi+int64~shared', when='+hypre')
 
-    patch('mira.patch')
+    #patch('mira.patch')
 
     def cmake_args(self):
         spec = self.spec

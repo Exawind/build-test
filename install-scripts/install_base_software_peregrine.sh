@@ -123,7 +123,7 @@ do
     cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gnuplot+X+wx %${COMPILER_NAME}@${COMPILER_VERSION} ^pango+X"
     cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"

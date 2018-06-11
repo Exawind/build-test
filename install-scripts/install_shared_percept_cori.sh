@@ -19,7 +19,7 @@ printf "Job is running on ${HOSTNAME}\n"
 printf "============================================================\n"
 
 # Set some version numbers
-GCC_COMPILER_VERSION="7.1.0"
+GCC_COMPILER_VERSION="4.9.3"
 INTEL_COMPILER_VERSION="18.0.1"
 
 # Set installation directory

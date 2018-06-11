@@ -19,12 +19,14 @@ printf "Job is running on ${HOSTNAME}\n"
 printf "============================================================\n"
 
 # Set some version numbers
-GCC_COMPILER_VERSION="6.3.0"
-INTEL_COMPILER_VERSION="17.0.2"
+GCC_COMPILER_VERSION="7.1.0"
+INTEL_COMPILER_VERSION="18.0.1"
 
 # Set installation directory
-INSTALL_DIR=$SCRATCH/percept
+INSTALL_DIR=${SCRATCH}/percept
 BUILD_TEST_DIR=${INSTALL_DIR}/build-test
+TRILINOS_BRANCH=12.12.1
+COMPILER_NAME=gcc
 
 # Set spack location
 export SPACK_ROOT=${INSTALL_DIR}/spack
@@ -52,37 +54,28 @@ fi
 
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+cmd "spack compiler find"
 
-for TRILINOS_BRANCH in 12.12.1
-do
-  for COMPILER_NAME in gcc
-  do
-    if [ ${COMPILER_NAME} == 'gcc' ]; then
-      COMPILER_VERSION="${GCC_COMPILER_VERSION}"
-    elif [ ${COMPILER_NAME} == 'intel' ]; then
-      COMPILER_VERSION="${INTEL_COMPILER_VERSION}"
-    fi
-    printf "\nInstalling software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+if [ ${COMPILER_NAME} == 'gcc' ]; then
+  COMPILER_VERSION="${GCC_COMPILER_VERSION}"
+elif [ ${COMPILER_NAME} == 'intel' ]; then
+  COMPILER_VERSION="${INTEL_COMPILER_VERSION}"
+fi
+printf "\nInstalling software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
-    cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
+cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 
-    cd ${INSTALL_DIR}
+cd ${INSTALL_DIR}
 
-    printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    if [ ${COMPILER_NAME} == 'gcc' ]; then
-      cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@${TRILINOS_BRANCH}"
-    fi
+printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+if [ ${COMPILER_NAME} == 'gcc' ]; then
+  cmd "nice spack install -j 8 percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@${TRILINOS_BRANCH}"
+fi
 
-    printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
-  done
-done
+printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
 printf "\nSetting permissions...\n"
-cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
-#cmd "chmod g+w ${INSTALL_DIR}"
-#cmd "chmod g+w ${INSTALL_DIR}/spack"
-#cmd "chmod g+w ${INSTALL_DIR}/spack/opt"
-#cmd "chmod g+w ${INSTALL_DIR}/spack/opt/spack"
-#cmd "chmod -R g+w ${INSTALL_DIR}/spack/opt/spack/.spack-db"
+#cmd "chgrp -R m2593 ${INSTALL_DIR}"
+#cmd "chmod -R ug+wrX,o-w ${INSTALL_DIR}"
 printf "\n$(date)\n"
 printf "\nDone!\n"

@@ -15,13 +15,12 @@ packages:
     version: []
     variants: +mpi build_type=Release
   mpich:
-    version: [7.4.4]
+    version: [7.6.2]
     buildable: false
     modules:
-        mpich@7.4.4: cray-mpich
+        mpich@7.6.2: cray-mpich
     paths: {}
     providers: {}
-    version: []
     compiler: []
   boost:
     version: [1.60.0]
@@ -76,4 +75,4 @@ packages:
       paths:
           bzip2@1.0.6: /usr
   yaml-cpp:
-      version: [0.6.2]
+      version: [0.5.3]

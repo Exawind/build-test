@@ -69,7 +69,7 @@ cd ${INSTALL_DIR}
 
 printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 if [ ${COMPILER_NAME} == 'gcc' ]; then
-  cmd "nice spack install -j 8 percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@${TRILINOS_BRANCH}"
+  cmd "nice spack install -j 8 percept %${COMPILER_NAME}@${COMPILER_VERSION} ^googletest~shared ^${TRILINOS_PERCEPT}@${TRILINOS_BRANCH}"
 fi
 
 printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"

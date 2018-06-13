@@ -129,11 +129,11 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #fi
 
   #Use branch instead of tag so spack will checkout a real git repo instead of caching a tar.gz of a branch
-  if [ ${MACHINE} == 'mac' ] || [ "${MACHINE}" == 'mac_sierra' ] || [ "${MACHINE}" == 'mac_high_sierra' ]; then
-    (set -x; sed -i "" -e "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py)
-  else
-    (set -x; sed -i "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py)
-  fi
+  #if [ ${MACHINE} == 'mac' ] || [ "${MACHINE}" == 'mac_sierra' ] || [ "${MACHINE}" == 'mac_high_sierra' ]; then
+  #  (set -x; sed -i "" -e "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py)
+  #else
+  #  (set -x; sed -i "s/tag=/branch=/g" ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py)
+  #fi
 else
   printf "\nMachine name not found.\n"
 fi

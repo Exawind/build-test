@@ -160,7 +160,7 @@ do
     printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
     printf "\nInstalling Paraview with GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install paraview+mpi+python+qt+visit+boxlib %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install paraview+mpi+python+qt+visit+boxlib %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
     cmd "spack install paraview+mpi+python+osmesa+visit+boxlib %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     # Need to update compilers.yaml to point to newest intel-parallel-studio built by gcc before installing with intel
@@ -183,4 +183,6 @@ printf "\nDone!\n"
 
 # Other final manual customizations:
 # - Rename necessary module files and set defaults
-# - Add visit module manually, and add ld_library_path stuff to internallauncher
+# - Use downloadable Paraview for dav node; add module
+# - Use downloadable Visit for dav node; add module
+# - Add visit server module manually, and add ld_library_path stuff to internallauncher

@@ -199,7 +199,8 @@ test_configuration() {
     cmd "export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
     cmd "export PATH=$(spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
   else
-    if [ "${COMPILER_NAME}" == 'gcc' ]; then
+    if [ "${COMPILER_NAME}" == 'gcc' ] || \
+       [ "${COMPILER_NAME}" == 'clang' ]; then
       cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack load openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
@@ -274,7 +275,8 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DENABLE_WARNINGS:BOOL=TRUE -DENABLE_EXTRA_WARNINGS:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
 
   # Explicitly set compilers to MPI compilers
-  if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
+  if [ "${COMPILER_NAME}" == 'gcc' ] || \
+     [ "${COMPILER_NAME}" == 'clang' ]; then
     MPI_CXX_COMPILER=mpicxx
     MPI_C_COMPILER=mpicc
     MPI_FORTRAN_COMPILER=mpifort
@@ -309,7 +311,8 @@ test_configuration() {
 
   printf "\nUnloading Spack modules from environment...\n"
   if [ "${MACHINE_NAME}" != 'mac' ]; then
-    if [ "${COMPILER_NAME}" == 'gcc' ]; then
+    if [ "${COMPILER_NAME}" == 'gcc' ] || \
+       [ "${COMPILER_NAME}" == 'clang' ]; then
       cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then

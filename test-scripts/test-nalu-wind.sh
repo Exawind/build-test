@@ -274,6 +274,11 @@ test_configuration() {
   # Turn on -Wall but turn off -Wextra -pedantic
   CMAKE_CONFIGURE_ARGS="-DENABLE_WARNINGS:BOOL=TRUE -DENABLE_EXTRA_WARNINGS:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
 
+  # Turn on address sanitizer for clang builds
+  if [ "${COMPILER_NAME}" == 'clang' ]; then
+    CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_FLAGS:STRING=-fsanitize=address ${CMAKE_CONFIGURE_ARGS}"
+  fi
+
   # Explicitly set compilers to MPI compilers
   if [ "${COMPILER_NAME}" == 'gcc' ] || \
      [ "${COMPILER_NAME}" == 'clang' ]; then
@@ -378,7 +383,7 @@ main() {
     CONFIGURATIONS[0]='gcc:6.4.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
     CONFIGURATIONS[1]='intel:18.1.163:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:develop:tioga;hypre'
-    CONFIGURATIONS[3]='clang:6.0.0:false:develop:develop:develop:tioga;hypre'
+    CONFIGURATIONS[3]='clang:6.0.0:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     CONFIGURATIONS[0]='gcc:6.2.0:false:develop:develop:develop:openfast;tioga;hypre'

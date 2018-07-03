@@ -383,7 +383,7 @@ main() {
     CONFIGURATIONS[0]='gcc:6.4.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
     CONFIGURATIONS[1]='intel:18.1.163:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:develop:tioga;hypre'
-    CONFIGURATIONS[3]='clang:6.0.0:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[3]='clang:6.0.0:false:develop:develop:develop:tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     CONFIGURATIONS[0]='gcc:6.2.0:false:develop:develop:develop:openfast;tioga;hypre'

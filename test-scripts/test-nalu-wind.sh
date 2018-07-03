@@ -274,9 +274,11 @@ test_configuration() {
   # Turn on -Wall but turn off -Wextra -pedantic
   CMAKE_CONFIGURE_ARGS="-DENABLE_WARNINGS:BOOL=TRUE -DENABLE_EXTRA_WARNINGS:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
 
-  # Turn on address sanitizer for clang builds
+  # Turn on address sanitizer for clang build on rhodes
   if [ "${COMPILER_NAME}" == 'clang' ]; then
-    CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_FLAGS:STRING=-fsanitize=address ${CMAKE_CONFIGURE_ARGS}"
+    if [ "${MACHINE_NAME}" == 'rhodes' ]; then
+      CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_FLAGS:STRING=-fsanitize=address ${CMAKE_CONFIGURE_ARGS}"
+    fi
   fi
 
   # Explicitly set compilers to MPI compilers

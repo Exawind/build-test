@@ -55,6 +55,7 @@ test_configuration() {
     cmd "module load texlive/live"
     cmd "module load python/2.7.14"
     cmd "module load cppcheck/1.81"
+    cmd "module load binutils/2.29.1"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'clang' ]; then
@@ -67,6 +68,7 @@ test_configuration() {
     cmd "module load python/2.7.14"
     cmd "module load git/2.17.0"
     cmd "module load cppcheck/1.81"
+    cmd "module load binutils/2.29.1"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     cmd "module purge"
     cmd "module load GCCcore/4.9.2"
@@ -105,14 +107,14 @@ test_configuration() {
   #fi
 
   # Fix for Peregrine's broken linker
-  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    printf "\nInstalling binutils...\n"
-    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-    printf "\nReloading Spack...\n"
-    cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-    printf "\nLoading binutils...\n"
-    cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-  fi
+  #if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+  #  printf "\nInstalling binutils...\n"
+  #  cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #  printf "\nReloading Spack...\n"
+  #  cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+  #  printf "\nLoading binutils...\n"
+  #  cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #fi
 
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
@@ -327,10 +329,10 @@ test_configuration() {
       cmd "spack unload intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
   fi
-  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #unset TMPDIR
-  fi
+  #if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+  #  cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #  #unset TMPDIR
+  #fi
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "module list"
   fi

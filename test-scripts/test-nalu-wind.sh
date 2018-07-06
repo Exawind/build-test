@@ -280,6 +280,7 @@ test_configuration() {
   if [ "${COMPILER_NAME}" == 'clang' ]; then
     if [ "${MACHINE_NAME}" == 'rhodes' ]; then
       CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_FLAGS:STRING=-fsanitize=address ${CMAKE_CONFIGURE_ARGS}"
+      cmd "export ASAN_OPTIONS=detect_container_overflow=0"
     fi
   fi
 

@@ -1,17 +1,19 @@
 packages:
     mpich:
         modules:
-            mpich@7.7.0%gcc@5.3.0 arch=cray-CNL-mic_knl: cray-mpich/7.7.0
+            mpich@7.7.0 arch=cray-CNL-mic_knl: cray-mpich/7.7.0
         buildable: False
     python:
         paths:
-            python@2.7.13%gcc@5.3.0 arch=cray-CNL-mic_knl: /usr
-            python@2.7.13%intel@16.0.3.210 arch=cray-CNL-mic_knl: /usr
+            python@2.7.13 arch=cray-CNL-mic_knl: /usr
         buildable: False
     boost:
       version: [1.66.0]
     cmake:
-      version: [3.9.4]
+        version: [3.9.1]
+        paths:
+            cmake@3.9.1: /soft/buildtools/cmake/3.9.1
+        buildable: False
     hdf5:
         version: [1.10.1]
         variants: +cxx+mpi+hl

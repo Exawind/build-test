@@ -6,7 +6,7 @@
 set -ex
 
 COMPILER=gcc
-SPACK_ROOT=/projects/ExaWindFarm/spack
+SPACK_ROOT=/projects/ExaWindFarm/software/spack
 SPACK_EXE=${SPACK_ROOT}/bin/spack
 
 export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}

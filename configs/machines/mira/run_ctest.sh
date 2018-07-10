@@ -15,4 +15,4 @@ export PATH=$(${SPACK_EXE} location -i mpich %${COMPILER})/bin:${PATH}
 (set -x; which cmake)
 (set -x; which mpicc)
 
-ctest -VV -I ${INDEX1},${INDEX2}
+ctest -VV -j 16 -I ${INDEX1},${INDEX2}

@@ -53,6 +53,9 @@ elif [ ${OS} == 'Linux' ]; then
           mutrino)
             MACHINE=mutrino
           ;;
+          theta*)
+            MACHINE=theta
+          ;;
         esac
         MYHOSTNAME=$(hostname -s)
         case "${MYHOSTNAME}" in
@@ -71,6 +74,7 @@ if [ "${MACHINE}" == 'peregrine' ] || \
    [ "${MACHINE}" == 'merlin' ] || \
    [ "${MACHINE}" == 'cori' ] || \
    [ "${MACHINE}" == 'mira' ] || \
+   [ "${MACHINE}" == 'theta' ] || \
    [ "${MACHINE}" == 'mutrino' ] || \
    [ "${MACHINE}" == 'ices' ] || \
    [ "${MACHINE}" == 'mac' ] || \
@@ -118,6 +122,11 @@ if [ "${MACHINE}" == 'peregrine' ] || \
     (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   fi
+
+  #Extra stuff for theta
+  #if [ ${MACHINE} == 'theta' ]; then
+    #nothing at the moment
+  #fi
 
   #Extra stuff for ices
   #if [ ${MACHINE} == 'ices' ]; then

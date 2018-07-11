@@ -6,7 +6,7 @@
 set -ex
 
 COMPILER=gcc
-SPACK_ROOT=/projects/ExaWindFarm/spack
+SPACK_ROOT=/projects/ExaWindFarm/software/spack
 SPACK_EXE=${SPACK_ROOT}/bin/spack
 
 export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}
@@ -15,4 +15,4 @@ export PATH=$(${SPACK_EXE} location -i mpich %${COMPILER})/bin:${PATH}
 (set -x; which cmake)
 (set -x; which mpicc)
 
-ctest -VV -j 16 -I ${INDEX1},${INDEX2}
+ctest -VV -I ${INDEX1},${INDEX2}

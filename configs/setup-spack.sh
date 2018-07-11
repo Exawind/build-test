@@ -53,6 +53,9 @@ elif [ ${OS} == 'Linux' ]; then
           mutrino)
             MACHINE=mutrino
           ;;
+          theta*)
+            MACHINE=theta
+          ;;
         esac
         MYHOSTNAME=$(hostname -s)
         case "${MYHOSTNAME}" in
@@ -71,6 +74,7 @@ if [ "${MACHINE}" == 'peregrine' ] || \
    [ "${MACHINE}" == 'merlin' ] || \
    [ "${MACHINE}" == 'cori' ] || \
    [ "${MACHINE}" == 'mira' ] || \
+   [ "${MACHINE}" == 'theta' ] || \
    [ "${MACHINE}" == 'mutrino' ] || \
    [ "${MACHINE}" == 'ices' ] || \
    [ "${MACHINE}" == 'mac' ] || \
@@ -116,6 +120,12 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   if [ ${MACHINE} == 'mira' ]; then
     (set -x; cp -R machines/${MACHINE}/nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+  fi
+
+  #Extra stuff for theta
+  # SuperLU tries to run a KNL executable on the haswell login nodes without this custom SuperLU version
+  if [ ${MACHINE} == 'theta' ]; then
     (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   fi
 

@@ -124,9 +124,10 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   fi
 
   #Extra stuff for theta
-  #if [ ${MACHINE} == 'theta' ]; then
-    #nothing at the moment
-  #fi
+  # SuperLU tries to run a KNL executable on the haswell login nodes without this custom SuperLU version
+  if [ ${MACHINE} == 'theta' ]; then
+    (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+  fi
 
   #Extra stuff for ices
   #if [ ${MACHINE} == 'ices' ]; then

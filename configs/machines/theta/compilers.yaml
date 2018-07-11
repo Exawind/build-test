@@ -452,7 +452,14 @@ compilers:
 - compiler:
     environment: {}
     extra_rpaths: []
-    flags: {}
+    # I don't have a current solution for cross compiling
+    # to use AVX512 instructions while on a login node.
+    # So using compatible vector instructions for now.
+    flags:
+      cflags: -O2 -xCORE-AVX2
+      cxxflags: -O2 -xCORE-AVX2
+      fflags: -O2 -xCORE-AVX2
+      fcflags: -O2 -xCORE-AVX2
     modules:
     - PrgEnv-intel
     - intel/18.2.199

@@ -86,45 +86,45 @@ printf "\nBootstrapping Spack with environment-modules...\n"
 cmd "spack install environment-modules %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-printf "\nInstalling and loading essential tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install unzip %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install bc %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install patch %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install bzip2 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install flex %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
-
-printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install gnuplot+X+wx %${COMPILER_NAME}@${COMPILER_VERSION} ^pango+X"
-cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
-
 # Install our own python
 printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install python@2.7.14 %${COMPILER_NAME}@${COMPILER_VERSION}"
-cmd "spack install python@3.6.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
-for PYTHON_VERSION in '2.7.14' '3.6.5'; do
-  for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-scipy py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf; do
+for PYTHON_VERSION in '2.7.15' '3.6.5'; do
+      cmd "spack install python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
+  for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf py-scipy py-yt; do
     cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
   done
 done
 
-# Some stuff needed for Visit build script
+printf "\nInstalling  essential tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install gnuplot+X+wx %${COMPILER_NAME}@${COMPILER_VERSION} ^pango+X"
+cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
+
+# Rhodes specific
+cmd "spack install unzip %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install bc %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install patch %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install bzip2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install flex %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
+
+printf "\nInstalling stuff needed for Visit ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 cmd "spack install libxrender %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install libxrandr %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -165,12 +165,14 @@ cmd "spack install mesa-glu %${COMPILER_NAME}@${COMPILER_VERSION}"
 
 # Install our own compilers
 printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+cmd "spack install gcc@8.1.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
 cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install flang %${COMPILER_NAME}@${COMPILER_VERSION}"
 
 # Install Nalu-Wind with everything turned on
 printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -186,13 +188,19 @@ printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}..
 (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
 
 printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^boost@1.60.0"
+cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1 ^libxml2@2.9.4"
 
 printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
 cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
 
-printf "\nInstalling Paraview with GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-cmd "spack install paraview+mpi+python+qt@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+printf "\nInstalling Paraview server using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+cmd "spack install paraview+mpi+python+osmesa+visit+boxlib %${COMPILER_NAME}@${COMPILER_VERSION}"
+#printf "\nInstalling Paraview GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+#cmd "spack install paraview+mpi+python+qt+visit+boxlib %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
+
+printf "\nInstalling Amrvis using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+cmd "spack install amrvis+mpi dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
 
 #Modify necessary module files
 #Last thing to do is install VisIt with the build_visit script

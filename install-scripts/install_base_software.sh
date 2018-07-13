@@ -1,13 +1,13 @@
 #!/bin/bash -l
 
-#PBS -N install-base-software-peregrine
-#PBS -l nodes=1:ppn=24,walltime=24:00:00
+#PBS -N install-base-software
+#PBS -l nodes=1:ppn=24,walltime=24:00:00,feature=haswell
 #PBS -A windsim
 #PBS -q batch-h
 #PBS -j oe
 #PBS -W umask=002
 
-# Script for shared installation of Exawind related software on Peregrine using Spack
+# Script for shared installation of ECP related software on Peregrine and Rhodes using Spack
 
 # Control over printing and executing commands
 print_cmds=true
@@ -38,13 +38,34 @@ if [ ! -z "${PBS_JOBID}" ]; then
   printf "============================================================\n"
 fi
 
-# Set some version numbers
-GCC_COMPILER_VERSION="6.2.0"
-INTEL_COMPILER_VERSION="18.1.163"
-TRILINOS_BRANCH=develop
+# Find machine we're on
+MYHOSTNAME=$(hostname -d)
+case "${MYHOSTNAME}" in
+  hpc.nrel.gov)
+    MACHINE=peregrine
+  ;;
+esac
+MYHOSTNAME=$(hostname -s)
+case "${MYHOSTNAME}" in
+  rhodes)
+    MACHINE=rhodes
+  ;;
+esac
+ 
+if [ "${MACHINE}" == 'peregrine' ]; then
+  INSTALL_DIR=/nopt/nrel/ecom/ecp/base/a
+  GCC_COMPILER_VERSION="6.2.0"
+  INTEL_COMPILER_VERSION="18.1.163"
+elif [ "${MACHINE}" == 'rhodes' ]; then
+  INSTALL_DIR=/opt/software/a
+  GCC_COMPILER_VERSION="4.8.5"
+  INTEL_COMPILER_VERSION="18.1.163"
+else
+  printf "\nMachine name not recognized.\n"
+  exit 1
+fi
 
-# Set installation directory
-INSTALL_DIR=/nopt/nrel/ecom/ecp/base/c
+TRILINOS_BRANCH=develop
 BUILD_TEST_DIR=${INSTALL_DIR}/build-test
 
 # Set spack location
@@ -86,20 +107,50 @@ do
 
   # Load necessary modules
   printf "\nLoading modules...\n"
-  cmd "module purge"
-  cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-  cmd "module load gcc/6.2.0"
-  cmd "module load git/2.17.0"
-  cmd "module load python/2.7.14"
-  cmd "module load curl/7.59.0"
-  cmd "module load binutils/2.29.1"
-  cmd "module load texinfo/6.5"
-  cmd "module load texlive/live"
-
-  # Set the TMPDIR to disk so it doesn't run out of space
-  printf "\nMaking and setting TMPDIR to disk...\n"
-  cmd "mkdir -p /scratch/${USER}/.tmp"
-  cmd "export TMPDIR=/scratch/${USER}/.tmp"
+  if [ "${MACHINE}" == 'peregrine' ]; then
+    cmd "module purge"
+    cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+    cmd "module load gcc/6.2.0"
+    cmd "module load git/2.17.0"
+    cmd "module load python/2.7.14"
+    cmd "module load curl/7.59.0"
+    cmd "module load binutils/2.29.1"
+    cmd "module load texinfo/6.5"
+    cmd "module load texlive/live"
+    cmd "module list"
+    # Set the TMPDIR to disk so it doesn't run out of space
+    printf "\nMaking and setting TMPDIR to disk...\n"
+    cmd "mkdir -p /scratch/${USER}/.tmp"
+    cmd "export TMPDIR=/scratch/${USER}/.tmp"
+  elif [ "${MACHINE}" == 'rhodes' ]; then
+    #Rhodes has almost *nothing* installed on it besides python and gcc
+    #so we are relying on Spack heavily as a non-root package manager here.
+    #Kind of annoying to use Spack to build tools Spack needs, but after
+    #the initial bootstrapping, we can now just rely on pure modules sans Spack
+    #to set up our environment and tools we need to build with Spack.
+    
+    #Pure modules sans Spack (assuming the module init is alreay in .bashrc)
+    #export MODULE_PREFIX=/opt/software/module_prefix
+    #export PATH=${MODULE_PREFIX}/Modules/bin:${PATH}
+    #module() { eval $(${MODULE_PREFIX}/Modules/bin/modulecmd $(basename ${SHELL}) $*); }
+    #module use /opt/software/modules
+    cmd "module purge"
+    cmd "module load unzip"
+    cmd "module load patch"
+    cmd "module load bzip2"
+    cmd "module load cmake"
+    cmd "module load git"
+    cmd "module load texinfo"
+    cmd "module load flex"
+    cmd "module load bison"
+    cmd "module load wget"
+    cmd "module load texlive"
+    cmd "module list"
+    printf "\nBootstrapping Spack with environment-modules...\n"
+    #cmd "spack bootstrap"
+    cmd "spack install environment-modules %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
+  fi
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     # Install our own python
@@ -131,6 +182,54 @@ do
     cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
+
+    # Rhodes specific
+    if [ "${MACHINE}" == 'rhodes' ]; then
+      cmd "spack install unzip %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install bc %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install patch %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install bzip2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install flex %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
+      printf "\nInstalling stuff needed for Visit ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+      cmd "spack install libxrender %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install libxrandr %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install libxi %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install libxft %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install libxcursor %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install libxt %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install glib %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install glproto %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install libxt %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install mesa %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install mesa-glu %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install xproto %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install inputproto %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install xextproto %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install xcb-proto %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install xtrans %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install fontconfig %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install freetype %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install randrproto %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install renderproto %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libx11 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxau %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxcb %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxcursor %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxdamage %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxdmcp %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxext %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxfixes %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxft %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxi %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxpm %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxrandr %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxrender %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxshmfence %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxv %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxvmc %${COMPILER_NAME}@${COMPILER_VERSION}"
+    fi
 
     # Install our own compilers
     printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -186,8 +285,18 @@ do
   printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
-#printf "\nSetting permissions...\n"
-#cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
+printf "\nSetting permissions...\n"
+if [ "${MACHINE}" == 'peregrine' ]; then
+  #cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
+elif [ "${MACHINE}" == 'rhodes' ]; then
+  cmd "chgrp windsim /opt"
+  cmd "chgrp -R windsim /opt/software"
+  cmd "chgrp -R windsim ${INSTALL_DIR}"
+  cmd "chmod a+rX,go-w /opt"
+  cmd "chmod -R a+rX,go-w /opt/software"
+  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
+fi
+
 printf "\n$(date)\n"
 printf "\nDone!\n"
 

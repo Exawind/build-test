@@ -18,7 +18,7 @@ packages:
   superlu:
     version: [4.3]
   openmpi:
-    version: [1.10.4]
+    version: [3.1.1]
     variants: fabrics=verbs schedulers=tm
   openfast:
     version: [develop]
@@ -34,6 +34,6 @@ packages:
     compiler: [gcc@6.2.0, intel@18.1.163]
     variants: build_type=Release
     providers:
-      mpi: [openmpi@1.10.4, intel-mpi@2018.1.163]
+      mpi: [openmpi@3.1.1, intel-mpi@2018.1.163]
       blas: [netlib-lapack@3.8.0, intel-mkl@2018.1.163]
       lapack: [netlib-lapack@3.8.0, intel-mkl@2018.1.163]

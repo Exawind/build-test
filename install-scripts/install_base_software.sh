@@ -86,6 +86,9 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
+  if [ "${MACHINE}" == 'rhodes' ]; then
+    cmd "cp ${BUILD_TEST_DIR}/configs/machines/rhodes/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  fi
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -264,9 +267,9 @@ do
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     printf "\nInstalling Paraview server using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install paraview+mpi+python+osmesa+visit+boxlib %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install paraview+mpi+python+osmesa+visit+boxlib@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
     #printf "\nInstalling Paraview GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install paraview+mpi+python+qt+visit+boxlib %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
+    #cmd "spack install paraview+mpi+python+qt+visit+boxlib@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
 
     printf "\nInstalling Amrvis using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"

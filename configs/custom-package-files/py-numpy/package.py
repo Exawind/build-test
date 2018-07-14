@@ -48,6 +48,7 @@ class PyNumpy(PythonPackage):
     # FIXME: numpy._build_utils and numpy.core.code_generators failed to import
     # FIXME: Is this expected?
 
+    version('1.14.3', '97416212c0a172db4bc6b905e9c4634b')
     version('1.14.2', '080f01a19707cf467393e426382c7619')
     version('1.14.1', 'b8324ef90ac9064cd0eac46b8b388674')
     version('1.14.0', 'c12d4bf380ac925fcdc8a59ada6c3298')
@@ -71,9 +72,7 @@ class PyNumpy(PythonPackage):
     depends_on('blas',   when='+blas')
     depends_on('lapack', when='+lapack')
 
-    # Tests require:
-    # TODO: Add a 'test' deptype
-    # depends_on('py-nose@1.0.0:', type='test')
+    depends_on('py-nose@1.0.0:', type='test')
 
     def setup_dependent_package(self, module, dependent_spec):
         python_version = self.spec['python'].version.up_to(2)
@@ -89,6 +88,13 @@ class PyNumpy(PythonPackage):
 
     def patch(self):
         spec = self.spec
+
+        def writeLibraryDirs(f, dirs):
+            f.write('library_dirs=%s\n' % dirs)
+            if not ((platform.system() == "Darwin") and
+                    (platform.mac_ver()[0] == '10.12')):
+                f.write('rpath=%s\n' % dirs)
+
         # for build notes see http://www.scipy.org/scipylib/building/linux.html
         lapackblas = []
         if '+lapack' in spec:
@@ -133,18 +139,12 @@ class PyNumpy(PythonPackage):
                     f.write('[atlas]\n')
                     f.write('atlas_libs=%s\n'   % names)
                 elif '^netlib-lapack' in spec:
-                    f.write('[blas]\n')
-                    f.write('blas_libs=%s\n'    % names)
-                    f.write('library_dirs=%s\n' % dirs)
-                    if not ((platform.system() == "Darwin") and
-                            (platform.mac_ver()[0] == '10.12')):
-                        f.write('rpath=%s\n' % dirs)
-                    f.write('[lapack]\n')
-                    f.write('lapack_libs=%s\n'    % names)
-                    f.write('library_dirs=%s\n'   % dirs)
-                    if not ((platform.system() == "Darwin") and
-                            (platform.mac_ver()[0] == '10.12')):
-                        f.write('rpath=%s\n' % dirs)
+                    # netlib requires blas and lapack listed
+                    # separately so that scipy can find them
+                    for library in ['blas', 'lapack']:
+                        f.write('[%s]\n' % library)
+                        f.write('%s_libs=%s\n' % (library, names))
+                        writeLibraryDirs(f, dirs)
                 else:
                     # The section title for the defaults changed in @1.10, see
                     # https://github.com/numpy/numpy/blob/master/site.cfg.example
@@ -154,10 +154,7 @@ class PyNumpy(PythonPackage):
                         f.write('[ALL]\n')
                     f.write('libraries=%s\n'    % names)
 
-                f.write('library_dirs=%s\n' % dirs)
-                if not ((platform.system() == "Darwin") and
-                        (platform.mac_ver()[0] == '10.12')):
-                    f.write('rpath=%s\n' % dirs)
+                writeLibraryDirs(f, dirs)
 
     def build_args(self, spec, prefix):
         args = []

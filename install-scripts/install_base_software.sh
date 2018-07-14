@@ -269,7 +269,11 @@ do
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     printf "\nInstalling Paraview server using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install paraview+mpi+python+osmesa+visit+boxlib@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    if [ "${MACHINE}" == 'rhodes' ]; then
+      cmd "spack install paraview+mpi+python+osmesa+visit@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    elif [ "${MACHINE}" == 'peregrine' ]; then
+      cmd "spack install paraview+mpi+python+osmesa+visit+boxlib@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    fi
     #printf "\nInstalling Paraview GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     #cmd "spack install paraview+mpi+python+qt+visit+boxlib@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
 

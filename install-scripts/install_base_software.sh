@@ -99,7 +99,7 @@ printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 
-for COMPILER_NAME in gcc
+for COMPILER_NAME in gcc #intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -245,7 +245,7 @@ do
     cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install flang %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install flang %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     # Install Nalu-Wind dependencies with everything turned on
@@ -260,7 +260,7 @@ do
     cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
 
     printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
+    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.4.1.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
 
     printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
@@ -273,9 +273,9 @@ do
     #printf "\nInstalling Paraview GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     #cmd "spack install paraview+mpi+python+qt+visit+boxlib@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
 
-    printf "\nInstalling Amrvis using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install amrvis+mpi dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #printf "\nInstalling Amrvis using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    #cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install amrvis+mpi dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     # Need to update compilers.yaml to point to newest intel-parallel-studio built by gcc before installing with intel
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

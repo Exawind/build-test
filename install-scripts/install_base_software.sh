@@ -99,7 +99,7 @@ printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 
-for COMPILER_NAME in gcc intel
+for COMPILER_NAME in gcc
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -136,7 +136,7 @@ do
     #export MODULE_PREFIX=/opt/software/module_prefix
     #export PATH=${MODULE_PREFIX}/Modules/bin:${PATH}
     #module() { eval $(${MODULE_PREFIX}/Modules/bin/modulecmd $(basename ${SHELL}) $*); }
-    #module use /opt/software/modules
+    module use /opt/software/modules
     cmd "module purge"
     cmd "module load unzip"
     cmd "module load patch"
@@ -147,7 +147,9 @@ do
     cmd "module load flex"
     cmd "module load bison"
     cmd "module load wget"
+    cmd "module load bc"
     cmd "module load texlive"
+    cmd "module load python"
     cmd "module list"
     printf "\nBootstrapping Spack with environment-modules...\n"
     #cmd "spack bootstrap"
@@ -261,7 +263,7 @@ do
     (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
 
     printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1 ^libxml2@2.9.4"
+    cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
 
     printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -288,15 +290,16 @@ do
   printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
-printf "\nSetting permissions...\n"
 if [ "${MACHINE}" == 'peregrine' ]; then
+  printf "\nSetting permissions...\n"
   #cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then
+  printf "\nSetting permissions...\n"
   cmd "chgrp windsim /opt"
-  cmd "chgrp -R windsim /opt/software"
+  cmd "chgrp windsim /opt/software"
   cmd "chgrp -R windsim ${INSTALL_DIR}"
   cmd "chmod a+rX,go-w /opt"
-  cmd "chmod -R a+rX,go-w /opt/software"
+  cmd "chmod a+rX,go-w /opt/software"
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 fi
 

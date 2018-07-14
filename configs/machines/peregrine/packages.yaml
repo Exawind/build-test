@@ -1,4 +1,6 @@
 packages:
+  libxml2:
+    version: [2.9.8]
   glib:
     version: [2.55.1]
   m4:

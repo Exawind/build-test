@@ -88,6 +88,12 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
   if [ "${MACHINE}" == 'rhodes' ]; then
     cmd "cp ${BUILD_TEST_DIR}/configs/machines/rhodes/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+    cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
+    cmd "cp /opt/software/active/spack/etc/spack/licenses/intel/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
+  elif [ "${MACHINE}" == 'peregrine' ]; then
+    cmd "cp ${BUILD_TEST_DIR}/configs/machines/peregrine/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+    cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
+    cmd "cp /nopt/nrel/ecom/ecp/base/active/spack/etc/spack/licenses/intel/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
   fi
 
   printf "============================================================\n"

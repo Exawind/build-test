@@ -1,0 +1,20 @@
+compilers:
+- compiler:
+    extra_rpaths:
+     - /nopt/nrel/apps/gcc/6.2.0/lib64 
+     - /nopt/nrel/apps/gcc/6.2.0/libexec/gcc/x86_64-linux-gnu/6.2.0 
+     - /nopt/nrel/apps/gcc/6.2.0/lib/gcc/x86_64-linux-gnu/6.2.0 
+    flags:
+      cflags: -O2
+      cxxflags: -O2
+      fflags: -O2
+      fcflags: -O2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /nopt/nrel/apps/gcc/6.2.0/bin/gcc
+      cxx: /nopt/nrel/apps/gcc/6.2.0/bin/g++
+      f77: /nopt/nrel/apps/gcc/6.2.0/bin/gfortran
+      fc: /nopt/nrel/apps/gcc/6.2.0/bin/gfortran
+    spec: gcc@6.2.0
+    target: x86_64

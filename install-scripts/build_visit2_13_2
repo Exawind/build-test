@@ -16642,16 +16642,22 @@ function build_pidx
 #        ntopts="${ntopts} -DCMAKE_INSTALL_NAME_DIR:PATH=${pidx_inst_path}/lib"
 #    fi
 
-#    if test "x${DO_MPICH}" = "xyes"; then
-#        info "mpich requested.  Configuring PIDX with mpich support."
-#        ntopts="${ntopts} -DMPI_ROOT:PATH=${VISITDIR}/mpich/${MPICH_VERSION}/${VISITARCH}"
+    if test "x${DO_MPICH}" = "xyes"; then
+        info "mpich requested.  Configuring PIDX with mpich support."
+        ntopts="${ntopts} -DMPI_ROOT:PATH=${VISITDIR}/mpich/${MPICH_VERSION}/${VISITARCH}"
+        ntopts="${ntopts} -DMPI_CXX_COMPILER:PATH=${VISITDIR}/mpich/${MPICH_VERSION}/${VISITARCH}/bin/mpicxx"
+        ntopts="${ntopts} -DMPI_C_COMPILER:PATH=${VISITDIR}/mpich/${MPICH_VERSION}/${VISITARCH}/bin/mpicc"
+        #ntopts="${ntopts} -DMPI_Fortran_COMPILER:PATH=${VISITDIR}/mpich/${MPICH_VERSION}/${VISITARCH}/bin/mpifc"
+        ntopts="${ntopts} -DMPI_CXX_HEADER_DIR:PATH=${VISITDIR}/mpich/${MPICH_VERSION}/${VISITARCH}/include"
+        ntopts="${ntopts} -DMPI_C_HEADER_DIR:PATH=${VISITDIR}/mpich/${MPICH_VERSION}/${VISITARCH}/include"
+        #ntopts="${ntopts} -DMPI_Fortran_INCLUDE_PATH:PATH=${VISITDIR}/mpich/${MPICH_VERSION}/${VISITARCH}/include"
 
-#        if [[ "$OPSYS" == "Darwin" ]]; then
-#            export DYLD_LIBRARY_PATH="$VISITDIR/mpich/$MPICH_VERSION/$VISITARCH/lib":$DYLD_LIBRARY_PATH
-#        else
-#            export LD_LIBRARY_PATH="$VISITDIR/mpich/$MPICH_VERSION/$VISITARCH/lib":$LD_LIBRARY_PATH
-#        fi
-#    fi
+        if [[ "$OPSYS" == "Darwin" ]]; then
+            export DYLD_LIBRARY_PATH="$VISITDIR/mpich/$MPICH_VERSION/$VISITARCH/lib":$DYLD_LIBRARY_PATH
+        else
+            export LD_LIBRARY_PATH="$VISITDIR/mpich/$MPICH_VERSION/$VISITARCH/lib":$LD_LIBRARY_PATH
+        fi
+    fi
 
     cd "$START_DIR"
 
@@ -17069,7 +17075,7 @@ function build_pyside_component
     popts="${popts} -DShiboken_DIR:FILEPATH=\"$VISIT_PYSIDE_DIR/lib/\""
     popts="${popts} -DPYTHON_EXECUTABLE:FILEPATH=\"$PYTHON_COMMAND\""
     popts="${popts} -DPYTHON_INCLUDE_PATH:FILEPATH=\"$PYTHON_INCLUDE_DIR\""
-    popts="${popts} -DPYTHON_LIBRARY:FILEPATH=\"/scratch/jrood/visit/visit/python/2.7.11/linux-x86_64_gcc-6.2/lib/libpython2.7.a\""
+    popts="${popts} -DPYTHON_LIBRARY:FILEPATH=\"${MY_PYTHON_LIB}\""
     popts="${popts} -DDISABLE_DOCSTRINGS:BOOL=true"
 
     if [[ "$IS_QT4" == "no" ]]; then
@@ -20263,6 +20269,8 @@ function bv_uintah_dry_run
 
 function build_uintah
 {
+    export PAR_INCLUDE="-I${VISITDIR}/mpich/$MPICH_VERSION/${VISITARCH}/include"
+
     if [[ "$OPSYS" == "Linux"  ]]; then
         if [[ "$PAR_COMPILER" == "" || "$PAR_COMPILER_CXX" == "" || "$PAR_INCLUDE" == "" ]]; then
             warn "For Linux builds the PAR_COMPILER, PAR_COMPILER_CXX, and PAR_INCLUDE environment variables must be set."

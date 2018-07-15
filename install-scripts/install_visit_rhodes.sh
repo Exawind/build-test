@@ -7,8 +7,6 @@ cmd() {
 
 set -e
 
-VISIT_DIR=/opt/software/b/visit
-
 # Load the necessary modules
 cmd "module purge"
 cmd "module load unzip"
@@ -20,9 +18,9 @@ cmd "module load flex"
 cmd "module load bison"
 cmd "module load wget"
 cmd "module load bc"
-cmd "module load python/2.7.14"
+cmd "module load python/2.7.15"
 cmd "module load makedepend"
-cmd "module load libxml2/2.9.4-py2"
+cmd "module load libxml2/2.9.8-py2"
 cmd "module load autoconf"
 cmd "module load automake"
 cmd "module load pkgconf"
@@ -69,12 +67,14 @@ cmd "module load mesa"
 cmd "module load mesa-glu"
 cmd "module load openssl"
 cmd "module load perl"
-
 cmd "module list"
 
+export MY_VISIT_DIR=/opt/software/a/visit
+export MY_PYTHON_LIB=${MY_VISIT_DIR}/visit/python/2.7.11/linux-x86_64_gcc-4.8/lib/libpython2.7.so
+
 # Setup the directory and run the build visit script
-cmd "cp build_visit2_13_0 ${VISIT_DIR}/ && cd ${VISIT_DIR} && ./build_visit2_13_0 --makeflags -j32 --parallel --required --optional --all-io --nonio --no-fastbit --no-fastquery --prefix ${VISIT_DIR}/install"
+cmd "mkdir -p ${MY_VISIT_DIR} && cp build_visit2_13_2 ${MY_VISIT_DIR}/ && cd ${MY_VISIT_DIR} && ./build_visit2_13_2 --makeflags -j32 --parallel --required --optional --all-io --nonio --no-fastbit --no-fastquery --prefix ${MY_VISIT_DIR}/install"
 
 # Set the permissions
-cmd "chmod -R a+rX,go-w ${VISIT_DIR}"
-cmd "chgrp -R windsim ${VISIT_DIR}"
+cmd "chmod -R a+rX,go-w ${MY_VISIT_DIR}"
+cmd "chgrp -R windsim ${MY_VISIT_DIR}"

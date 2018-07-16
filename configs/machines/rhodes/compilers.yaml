@@ -133,7 +133,7 @@ compilers:
     target: x86_64
 - compiler:
     extra_rpaths:
-     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.0-l7dkpjfmk4nsw46uuml45cdjpnncraii
+     - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.0-l7dkpjfmk4nsw46uuml45cdjpnncraii/lib
      - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.0-l7dkpjfmk4nsw46uuml45cdjpnncraii/lib/clang/6.0.0/lib/linux
      - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-6cgvvb2vrmccbahcyg2y43eqbmrmco3s/lib/gcc/x86_64-pc-linux-gnu/6.4.0
      - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-6cgvvb2vrmccbahcyg2y43eqbmrmco3s/libexec/gcc/x86_64-pc-linux-gnu/6.4.0

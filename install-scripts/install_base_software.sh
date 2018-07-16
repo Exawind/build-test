@@ -120,12 +120,12 @@ do
     cmd "module purge"
     cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
     cmd "module load gcc/6.2.0"
-    cmd "module load git/2.17.0"
+    cmd "module load git"
     cmd "module load python/2.7.14"
-    cmd "module load curl/7.59.0"
-    cmd "module load binutils/2.29.1"
-    cmd "module load texinfo/6.5"
-    cmd "module load texlive/live"
+    cmd "module load curl"
+    cmd "module load binutils"
+    cmd "module load texinfo"
+    cmd "module load texlive"
     cmd "module list"
     # Set the TMPDIR to disk so it doesn't run out of space
     printf "\nMaking and setting TMPDIR to disk...\n"
@@ -204,7 +204,7 @@ do
       cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
       printf "\nInstalling stuff needed for Visit ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       cmd "spack install libxrender %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install libxml2 %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install libxrandr %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install libxi %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install libxft %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -284,9 +284,9 @@ do
     #printf "\nInstalling Paraview GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     #cmd "spack install paraview+mpi+python+qt+visit+boxlib@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
 
-    #printf "\nInstalling Amrvis using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install amrvis+mpi dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    printf "\nInstalling Amrvis using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install amrvis+mpi dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     # Need to update compilers.yaml to point to newest intel-parallel-studio built by gcc before installing with intel
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

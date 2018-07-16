@@ -52,10 +52,10 @@ test_configuration() {
     cmd "module load wget"
     cmd "module load bc"
     cmd "module load texinfo"
-    cmd "module load texlive/live"
-    cmd "module load python/2.7.14"
-    cmd "module load cppcheck/1.81"
-    cmd "module load binutils/2.29.1"
+    cmd "module load texlive"
+    cmd "module load python"
+    cmd "module load cppcheck"
+    cmd "module load binutils"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'clang' ]; then

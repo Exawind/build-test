@@ -30,7 +30,7 @@ packages:
   netlib-lapack:
     version: [3.8.0]
   all:
-    compiler: [gcc@4.8.5, gcc@4.9.4, gcc@5.5.0, gcc@6.4.0, gcc@7.3.0, clang@6.0.0, intel@18.1.163]
+    compiler: [gcc@4.8.5, gcc@4.9.4, gcc@5.5.0, gcc@6.4.0, gcc@7.3.0, gcc@8.1.0, clang@6.0.0, intel@18.1.163]
     variants: build_type=Release
     providers:
       mpi: [openmpi@3.1.1, intel-mpi@2018.1.163]

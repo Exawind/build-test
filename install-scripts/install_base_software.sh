@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #PBS -N install-base-software
-#PBS -l nodes=1:ppn=24,walltime=24:00:00,feature=haswell
+#PBS -l nodes=1:ppn=24,walltime=12:00:00,feature=haswell
 #PBS -A windsim
 #PBS -q batch-h
 #PBS -j oe
@@ -105,7 +105,7 @@ printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 
-for COMPILER_NAME in gcc #intel
+for COMPILER_NAME in gcc intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -193,6 +193,7 @@ do
     cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install image-magick %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     # Rhodes specific
     if [ "${MACHINE}" == 'rhodes' ]; then

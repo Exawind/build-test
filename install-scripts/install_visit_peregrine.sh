@@ -29,7 +29,7 @@ cmd "mkdir -p /scratch/${USER}/.tmp"
 cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
 export MY_VISIT_DIR=/nopt/nrel/ecom/ecp/base/a/visit
-export MY_PYTHON_LIB=${MY_VISIT_DIR}/visit/python/2.7.11/linux-x86_64_gcc-4.8/lib/libpython2.7.so
+export MY_PYTHON_LIB=${MY_VISIT_DIR}/visit/python/2.7.11/linux-x86_64_gcc-6.2/lib/libpython2.7.so
 
 cmd "mkdir -p ${MY_VISIT_DIR} && cp build_visit2_13_2 ${MY_VISIT_DIR}/ && cd ${MY_VISIT_DIR} && ./build_visit2_13_2 --makeflags -j24 --parallel --required --optional --all-io --nonio --no-fastbit --no-fastquery --prefix ${MY_VISIT_DIR}/install"
 

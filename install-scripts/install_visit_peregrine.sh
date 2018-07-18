@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N build_visit
-#PBS -l nodes=1:ppn=24,walltime=6:00:00,feature=haswell
+#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
 #PBS -A windsim
-#PBS -q batch-h
+#PBS -q short
 #PBS -j oe
 #PBS -W umask=002
 

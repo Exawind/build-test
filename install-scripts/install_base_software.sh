@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N install-base-software
-#PBS -l nodes=1:ppn=24,walltime=12:00:00,feature=haswell
+#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
 #PBS -A windsim
-#PBS -q batch-h
+#PBS -q short
 #PBS -j oe
 #PBS -W umask=002
 
@@ -103,7 +103,6 @@ fi
 
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 
 for COMPILER_NAME in gcc intel
 do
@@ -113,6 +112,9 @@ do
     COMPILER_VERSION="${INTEL_COMPILER_VERSION}"
   fi
   printf "\nInstalling base software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+
+  # Reset TRILINOS variable
+  cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 
   # Load necessary modules
   printf "\nLoading modules...\n"

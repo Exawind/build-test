@@ -2320,6 +2320,8 @@ function check_parallel
         # a MPI compiler wrapper.
         # Check if PAR_COMPILER is set & if so use that.
         #
+        unset F90
+        unset F90FLAGS
         export VISIT_MPI_COMPILER=""
         export VISIT_MPI_COMPILER_CXX=""
         if [[ "$PAR_COMPILER" != "" ]] ; then

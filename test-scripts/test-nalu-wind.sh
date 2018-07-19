@@ -24,7 +24,7 @@ test_configuration() {
   printf "openfast@${OPENFAST_BRANCH}\n"
   printf "tioga@${TIOGA_BRANCH}\n"
   printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
-  printf "at $(date).\n"
+  printf "at $(date)\n"
   printf "************************************************************\n"
   printf "\n"
 
@@ -321,7 +321,7 @@ test_configuration() {
     cmd "module list"
   fi
   cmd "ctest ${CTEST_ARGS} -DCMAKE_CONFIGURE_ARGS=\"${CMAKE_CONFIGURE_ARGS}\" -VV -S ${NALU_WIND_DIR}/reg_tests/CTestNightlyScript.cmake"
-  printf "Returned from CTest at $(date)...\n"
+  printf "Returned from CTest at $(date)\n"
 
   printf "\nUnloading Spack modules from environment...\n"
   if [ "${MACHINE_NAME}" != 'mac' ]; then
@@ -351,7 +351,7 @@ test_configuration() {
   printf "openfast@${OPENFAST_BRANCH}\n"
   printf "tioga@${TIOGA_BRANCH}\n"
   printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
-  printf "at $(date).\n"
+  printf "at $(date)\n"
   printf "************************************************************\n"
 }
 
@@ -461,7 +461,7 @@ main() {
     cmd "mkdir -p ${LOGS_DIR}"
  
     printf "============================================================\n"
-    printf "Done setting up testing directory.\n"
+    printf "Done setting up testing directory\n"
     printf "============================================================\n"
   fi
  
@@ -490,10 +490,10 @@ main() {
   done
 
   printf "============================================================\n"
-  printf "Done with testing loops.\n"
+  printf "Done with testing loops\n"
   printf "============================================================\n"
   printf "============================================================\n"
-  printf "Final Steps.\n"
+  printf "Final steps\n"
   printf "============================================================\n"
  
   if [ "${MACHINE_NAME}" == 'merlin' ]; then

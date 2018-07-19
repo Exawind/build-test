@@ -102,9 +102,10 @@ class Perl(Package):  # Perl doesn't use Autotools, it should subclass Package
 
     phases = ['configure', 'build', 'install']
 
-    def patch(self):
-        """Make pp.c user writeable before patching."""
-        filename = 'pp.c'
+    def do_stage(self, mirror_only=False):
+        super(Perl, self).do_stage(mirror_only)
+        # Make pp.c user writeable before patching
+        filename = join_path(self.stage.source_path, 'pp.c')
         perm = os.stat(filename).st_mode
         os.chmod(filename, perm | 0o200)
 

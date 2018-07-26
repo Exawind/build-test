@@ -275,7 +275,7 @@ class Trilinos(CMakePackage):
             '-DTrilinos_ENABLE_CXX11:BOOL=ON',
             '-DBUILD_SHARED_LIBS:BOOL=%s' % (
                 'ON' if '+shared' in spec else 'OFF'),
-            '-DTrilinos_EXTRA_LINK_FLAGS:STRING=-L/soft/libraries/hdf5/1.8.17/cnk-gcc/current/lib -Wl,-Bstatic -lhdf5 -L/soft/libraries/alcf/current/gcc/ZLIB/lib -Wl,-Bstatic -lz -L/soft/compilers/gcc/4.8.4/powerpc64-bgq-linux/lib -Wl,-Bstatic -ldl',
+            '-DTrilinos_EXTRA_LINK_FLAGS:STRING=-L/soft/libraries/hdf5/current/cnk-gcc/current -Wl,-Bstatic -lhdf5 -L/soft/libraries/alcf/current/gcc/ZLIB/lib -Wl,-Bstatic -lz -L/soft/compilers/gcc/4.8.4/powerpc64-bgq-linux/lib -Wl,-Bstatic -ldl',
             '-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE',
             '-DTPL_FIND_SHARED_LIBS:BOOL=%s' % (
                 'ON' if '+shared' in spec else 'OFF'),

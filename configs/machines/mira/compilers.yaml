@@ -22,10 +22,8 @@ compilers:
 - compiler:
     environment: {}
     extra_rpaths:
-     - /soft/compilers/gcc/4.8.4/lib64
-     - /soft/compilers/gcc/4.8.4/lib/gcc/powerpc64-bgq-linux/4.8.4
-     - /soft/compilers/gcc/4.8.4/libexec/gcc/powerpc64-bgq-linux/4.8.4
      - /soft/compilers/gcc/4.8.4/powerpc64-bgq-linux/lib
+     - /soft/compilers/gcc/4.8.4/lib/gcc/powerpc64-bgq-linux/4.8.4
     flags:
       cflags: -O2
       cxxflags: -O2

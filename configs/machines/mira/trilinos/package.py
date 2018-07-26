@@ -87,7 +87,7 @@ class Trilinos(CMakePackage):
             description='Compile with explicit instantiation for complex')
     variant('openmp',       default=False,
             description='Enable OpenMP')
-    variant('shared',       default=True,
+    variant('shared',       default=False,
             description='Enables the build of shared libraries')
     variant('xsdkflags',    default=False,
             description='Compile using the default xSDK configuration')
@@ -276,25 +276,12 @@ class Trilinos(CMakePackage):
             '-DTrilinos_ENABLE_CXX11:BOOL=ON',
             '-DBUILD_SHARED_LIBS:BOOL=%s' % (
                 'ON' if '+shared' in spec else 'OFF'),
-
             '-DTrilinos_EXTRA_LINK_FLAGS:STRING=-L/soft/libraries/hdf5/1.8.17/cnk-gcc/current/lib -Wl,-Bstatic -lhdf5 -L/soft/libraries/alcf/current/gcc/ZLIB/lib -Wl,-Bstatic -lz -L/soft/compilers/gcc/4.8.4/powerpc64-bgq-linux/lib -Wl,-Bstatic -ldl',
-            #'-DTrilinos_EXTRA_LINK_FLAGS:STRING=-L/soft/libraries/alcf/current/gcc/LAPACK/lib -Wl,-Bstatic -llapack -L/soft/libraries/alcf/current/gcc/BLAS/lib -Wl,-Bstatic -lblas -L/soft/libraries/hdf5/1.8.17/cnk-gcc/current/lib -Wl,-Bstatic -lhdf5 -L/soft/libraries/alcf/current/gcc/ZLIB/lib -Wl,-Bstatic -lz -L/soft/compilers/gcc/4.8.4/powerpc64-bgq-linux/lib -Wl,--no-as-needed -Wl,-Bstatic -ldl -static-libgfortran -Wl,--allow-multiple-definition',
             '-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE',
-
-            # The following can cause problems on systems that don't have
-            # static libraries available for things like dl and pthreads
-            # for example when trying to build static libs
             '-DTPL_FIND_SHARED_LIBS:BOOL=%s' % (
                 'ON' if '+shared' in spec else 'OFF'),
             '-DTrilinos_LINK_SEARCH_START_STATIC:BOOL=%s' % (
                 'OFF' if '+shared' in spec else 'ON'),
-            # The following can cause problems on systems that don't have
-            # static libraries available for things like dl and pthreads
-            # for example when trying to build static libs
-            # '-DTPL_FIND_SHARED_LIBS:BOOL=%s' % (
-            #     'ON' if '+shared' in spec else 'OFF'),
-            # '-DTrilinos_LINK_SEARCH_START_STATIC:BOOL=%s' % (
-            #     'OFF' if '+shared' in spec else 'ON'),
 
             # Force Trilinos to use the MPI wrappers instead of raw compilers
             # this is needed on Apple systems that require full resolution of

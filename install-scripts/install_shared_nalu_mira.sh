@@ -46,6 +46,6 @@ cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
 # Disable openmp on Mira
 TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
 
-cmd "nice spack install -j 8 --only dependencies nalu+hypre %gcc@4.8.4 ^${TRILINOS}@develop"
+cmd "nice spack install -j 8 nalu-wind+hypre %gcc@4.8.4 ^${TRILINOS}@develop"
 
 #cmd "chmod -R ug+rX,go-w ${INSTALL_DIR}"

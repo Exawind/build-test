@@ -56,7 +56,7 @@ class Netcdf(AutotoolsPackage):
 
     variant('mpi', default=True,
             description='Enable parallel I/O for netcdf-4')
-    variant('parallel-netcdf', default=False,
+    variant('parallel-netcdf', default=True,
             description='Enable parallel I/O for classic files')
     variant('hdf4', default=False, description='Enable HDF4 support')
     variant('shared', default=False, description='Enable shared library')
@@ -169,15 +169,15 @@ class Netcdf(AutotoolsPackage):
             config_args.append('--enable-fsync')
 
         # The flag was introduced in version 4.3.1
-        if self.spec.satisfies('@4.3.1:'):
-            config_args.append('--enable-dynamic-loading')
+        #if self.spec.satisfies('@4.3.1:'):
+        #    config_args.append('--enable-dynamic-loading')
 
         config_args += self.enable_or_disable('shared')
 
-        if '~shared' in self.spec:
-            # We don't have shared libraries but we still want it to be
-            # possible to use this library in shared builds
-            CFLAGS.append(self.compiler.pic_flag)
+        #if '~shared' in self.spec:
+        #    # We don't have shared libraries but we still want it to be
+        #    # possible to use this library in shared builds
+        #    CFLAGS.append(self.compiler.pic_flag)
 
         config_args += self.enable_or_disable('dap')
         # config_args += self.enable_or_disable('cdmremote')

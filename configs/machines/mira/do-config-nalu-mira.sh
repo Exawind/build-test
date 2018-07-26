@@ -13,10 +13,14 @@ NALU_DIR=${HOME}/exawind/nalu-wind
 #(set -x; cd ${NALU_DIR} && git checkout tpetraInitMarksChanges)
 
 # Need to apply a patch for this thing to build on Mira
-(set -x; cd ${NALU_DIR} && git apply ${BUILD_TEST_ROOT}/configs/machines/mira/nalu/mira.patch || true)
+(set -x; cd ${NALU_DIR} && git apply ${BUILD_TEST_ROOT}/configs/machines/mira/nalu-wind/mira.patch || true)
 
 export PATH=$(${SPACK_EXE} location -i cmake %${COMPILER})/bin:${PATH}
 export PATH=$(${SPACK_EXE} location -i mpich %${COMPILER})/bin:${PATH}
+
+CXX_COMPILER=mpicxx
+C_COMPILER=mpicc
+FORTRAN_COMPILER=mpifort
 
 set +e
 rm -rf CMakeFiles
@@ -27,6 +31,12 @@ set -e
 (set -x; which mpicc)
 
 (set -x; cmake \
+  -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
+  -DCMAKE_C_COMPILER:STRING=${C_COMPILER} \
+  -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
+  -DMPI_CXX_COMPILER:STRING=${CXX_COMPILER} \
+  -DMPI_C_COMPILER:STRING=${C_COMPILER} \
+  -DMPI_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
   -DTrilinos_DIR:PATH=$(${SPACK_EXE} location -i trilinos@develop build_type=Release %${COMPILER}) \
   -DYAML_DIR:PATH=$(${SPACK_EXE} location -i yaml-cpp %${COMPILER}) \
   -DENABLE_HYPRE:BOOL=ON \

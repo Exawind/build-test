@@ -122,13 +122,14 @@ if [ "${MACHINE}" == 'peregrine' ] || \
 
   #Extra stuff for mira
   if [ ${MACHINE} == 'mira' ]; then
+    (set -x; cp -R machines/${MACHINE}/libsigsegv ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/nalu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/nalu-wind ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-    (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-    (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-    (set -x; cp -R machines/${MACHINE}/yaml-cpp ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-    (set -x; cp -R machines/${MACHINE}/libsigsegv ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
     (set -x; cp -R machines/${MACHINE}/netcdf ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/parallel-netcdf ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+    (set -x; cp -R machines/${MACHINE}/yaml-cpp ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   fi
 
   #Extra stuff for theta

@@ -24,7 +24,7 @@ test_configuration() {
   printf "openfast@${OPENFAST_BRANCH}\n"
   printf "tioga@${TIOGA_BRANCH}\n"
   printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
-  printf "at $(date).\n"
+  printf "at $(date)\n"
   printf "************************************************************\n"
   printf "\n"
 
@@ -63,12 +63,12 @@ test_configuration() {
     fi
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     cmd "module purge"
-    cmd "module use /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0"
+    cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
     cmd "module load gcc/6.2.0"
-    cmd "module load python/2.7.14"
-    cmd "module load git/2.17.0"
-    cmd "module load cppcheck/1.81"
-    cmd "module load binutils/2.29.1"
+    cmd "module load python"
+    cmd "module load git"
+    cmd "module load cppcheck"
+    cmd "module load binutils"
   elif [ "${MACHINE_NAME}" == 'merlin' ]; then
     cmd "module purge"
     cmd "module load GCCcore/4.9.2"
@@ -321,7 +321,7 @@ test_configuration() {
     cmd "module list"
   fi
   cmd "ctest ${CTEST_ARGS} -DCMAKE_CONFIGURE_ARGS=\"${CMAKE_CONFIGURE_ARGS}\" -VV -S ${NALU_WIND_DIR}/reg_tests/CTestNightlyScript.cmake"
-  printf "Returned from CTest at $(date)...\n"
+  printf "Returned from CTest at $(date)\n"
 
   printf "\nUnloading Spack modules from environment...\n"
   if [ "${MACHINE_NAME}" != 'mac' ]; then
@@ -351,7 +351,7 @@ test_configuration() {
   printf "openfast@${OPENFAST_BRANCH}\n"
   printf "tioga@${TIOGA_BRANCH}\n"
   printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
-  printf "at $(date).\n"
+  printf "at $(date)\n"
   printf "************************************************************\n"
 }
 
@@ -461,7 +461,7 @@ main() {
     cmd "mkdir -p ${LOGS_DIR}"
  
     printf "============================================================\n"
-    printf "Done setting up testing directory.\n"
+    printf "Done setting up testing directory\n"
     printf "============================================================\n"
   fi
  
@@ -490,10 +490,10 @@ main() {
   done
 
   printf "============================================================\n"
-  printf "Done with testing loops.\n"
+  printf "Done with testing loops\n"
   printf "============================================================\n"
   printf "============================================================\n"
-  printf "Final Steps.\n"
+  printf "Final steps\n"
   printf "============================================================\n"
  
   if [ "${MACHINE_NAME}" == 'merlin' ]; then
@@ -513,11 +513,6 @@ main() {
      [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting permissions...\n"
     cmd "chmod -R a+rX,go-w ${NALU_WIND_TESTING_ROOT_DIR}"
-    #cmd "chmod g+w ${NALU_WIND_TESTING_ROOT_DIR}"
-    #cmd "chmod g+w ${NALU_WIND_TESTING_ROOT_DIR}/spack"
-    #cmd "chmod g+w ${NALU_WIND_TESTING_ROOT_DIR}/spack/opt"
-    #cmd "chmod g+w ${NALU_WIND_TESTING_ROOT_DIR}/spack/opt/spack"
-    #cmd "chmod -R g+w ${NALU_WIND_TESTING_ROOT_DIR}/spack/opt/spack/.spack-db"
   fi
 
   printf "============================================================\n"

@@ -6,11 +6,11 @@ COMPILER=gcc
 SPACK_ROOT=/projects/ExaWindFarm/software/spack
 SPACK_EXE=${SPACK_ROOT}/bin/spack
 BUILD_TEST_ROOT=/projects/ExaWindFarm/software/build-test
-NALU_DIR=${HOME}/Nalu
+NALU_DIR=${HOME}/exawind/nalu-wind
 
 # Matching Nalu commit for current dependencies installed on mira
 #(set -x; cd ${NALU_DIR} && git checkout 7c12601dd7fe77e399c9cbad294aec0ddd3a257b)
-(set -x; cd ${NALU_DIR} && git checkout tpetraInitMarksChanges)
+#(set -x; cd ${NALU_DIR} && git checkout tpetraInitMarksChanges)
 
 # Need to apply a patch for this thing to build on Mira
 (set -x; cd ${NALU_DIR} && git apply ${BUILD_TEST_ROOT}/configs/machines/mira/nalu/mira.patch || true)

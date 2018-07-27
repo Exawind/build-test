@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 88580a5..121060a 100644
+index c5815bb..121060a 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -1,7 +1,5 @@
@@ -138,17 +138,18 @@ index 88580a5..121060a 100644
  
  if(ENABLE_TIOGA)
    target_link_libraries(nalu ${TIOGA_LIBRARIES})
-@@ -223,37 +210,15 @@ if(ENABLE_HYPRE)
+@@ -223,32 +210,15 @@ if(ENABLE_HYPRE)
    target_link_libraries(nalu ${HYPRE_LIBRARIES})
  endif()
  
+-message("-- CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 +target_link_libraries(nalu ${HDF5_LIBRARY} ${LAPACK_LIBRARY} ${BLAS_LIBRARY} ${ZLIB_LIBRARY})
 +
 +file(GLOB UNIT_TESTS_SOURCES unit_tests/*.C unit_tests/*/*.C)
-+
- set(nalu_ex_name "naluX")
- message("-- CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
  
+ set(nalu_ex_name "naluX")
++message("-- CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
++
  add_executable(${nalu_ex_name} nalu.C)
  target_link_libraries(${nalu_ex_name} nalu)
 -if(MPI_COMPILE_FLAGS)
@@ -160,12 +161,7 @@ index 88580a5..121060a 100644
 -    LINK_FLAGS "${MPI_LINK_FLAGS}")
 -endif(MPI_LINK_FLAGS)
 -
--
 -set(utest_ex_name "unittestX")
--if(CMAKE_BUILD_TYPE STREQUAL "DEBUG")
--   set(utest_ex_name "unittestXd")
--endif()
--
 -add_executable(${utest_ex_name} unit_tests.C ${NALU_UNIT_SOURCES})
 -target_link_libraries(${utest_ex_name} nalu)
 -target_include_directories(${utest_ex_name} PUBLIC "${CMAKE_SOURCE_DIR}/unit_tests")
@@ -180,7 +176,7 @@ index 88580a5..121060a 100644
  
  set(nalu_ex_catalyst_name "naluXCatalyst")
  if(ENABLE_PARAVIEW_CATALYST)
-@@ -265,7 +230,7 @@ if(ENABLE_PARAVIEW_CATALYST)
+@@ -260,7 +230,7 @@ if(ENABLE_PARAVIEW_CATALYST)
     configure_file(cmake/naluXCatalyst.in ${nalu_ex_catalyst_name} @ONLY)
  endif()
  
@@ -189,7 +185,7 @@ index 88580a5..121060a 100644
          RUNTIME DESTINATION bin
          ARCHIVE DESTINATION lib
          LIBRARY DESTINATION lib)
-@@ -285,3 +250,5 @@ if(ENABLE_TESTS)
+@@ -280,3 +250,5 @@ if(ENABLE_TESTS)
     include(CTest)
     add_subdirectory(reg_tests)
  endif()

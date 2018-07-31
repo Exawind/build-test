@@ -89,10 +89,8 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   (set -x; cp -R custom-package-files/catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/freetype ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/paraview ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp -R custom-package-files/openmpi ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/py-numpy ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/yaml-cpp ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp -R custom-package-files/perl ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
 
   #Extra stuff for peregrine
   #if [ ${MACHINE} == 'peregrine' ]; then
@@ -110,10 +108,9 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #fi
 
   #Extra stuff for cori
-  if [ ${MACHINE} == 'cori' ]; then
-    (set -x; cp -R machines/${MACHINE}/netcdf ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-    (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  fi
+  #if [ ${MACHINE} == 'cori' ]; then
+    #nothing at the moment
+  #fi
 
   #Extra stuff for mutrino
   if [ ${MACHINE} == 'mutrino' ]; then

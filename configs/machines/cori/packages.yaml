@@ -24,31 +24,17 @@ packages:
     compiler: []
   boost:
       version: [1.60.0]
-  #    buildable: false
-  #    modules:
-  #        boost@1.63.0: boost/1.63
   hdf5:
-      version: [1.10.1]
+      version: [1.8.16]
       variants: +cxx+mpi+hl
-      buildable: false
-      modules:
-          hdf5@1.10.1+cxx+mpi+hl: cray-hdf5-parallel/1.10.1.1
   netcdf:
-      buildable: false
-      modules:
-          netcdf@4.4.1.1+mpi+parallel-netcdf: cray-netcdf-hdf5parallel/4.4.1.1.3
+      version: [4.3.3.1]
   superlu:
     version: [4.3]
   parallel-netcdf:
-      version: [1.8.0]
-      buildable: false
-      modules:
-          parallel-netcdf@1.8.0: cray-parallel-netcdf/1.8.1.3
+      version: [1.6.1]
   zlib:
       version: [1.2.8]
-      buildable: false
-      modules:
-          zlib@1.2.8: zlib/1.2.8
   intel-mkl:
       version: [17.0.2.174]
       buildable: false
@@ -56,14 +42,6 @@ packages:
           intel-mkl@17.0.2.174: /opt/intel/compilers_and_libraries_2017.2.174/linux/mkl
   netlib-lapack:
       version: [3.6.1]
-      buildable: False
-      paths:
-          netlib-lapack@3.6.1: /usr
-  openssl:
-      version: [1.0.1i]
-      buildable: False
-      paths:
-          openssl@1.0.1i: /usr
   cmake:
       version: [3.8.2]
       buildable: False
@@ -71,8 +49,5 @@ packages:
           cmake@3.8.2: /usr/common/software/cmake/3.8.2
   bzip2:
       version: [1.0.6]
-      buildable: False
-      paths:
-          bzip2@1.0.6: /usr
   yaml-cpp:
       version: [0.5.3]

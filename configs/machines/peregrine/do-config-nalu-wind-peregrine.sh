@@ -46,7 +46,7 @@ cmd "module load hypre"
 cmd "module load tioga"
 cmd "module load yaml-cpp"
 cmd "module load cmake/3.9.4"
-cmd "module load trilinos/develop"
+cmd "module load trilinos"
 cmd "module list"
 
 # Set tmpdir to the scratch filesystem so it doesn't run out of space

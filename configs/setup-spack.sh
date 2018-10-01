@@ -90,7 +90,6 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   (set -x; cp -R custom-package-files/freetype ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/paraview ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/py-numpy ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp -R custom-package-files/yaml-cpp ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
 
   #Extra stuff for peregrine
   #if [ ${MACHINE} == 'peregrine' ]; then

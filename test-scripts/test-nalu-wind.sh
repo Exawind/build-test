@@ -120,8 +120,8 @@ test_configuration() {
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
   cmd "spack uninstall -a -y trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
   #cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
-  printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
-  cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
+  #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
   #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
   #cmd "spack uninstall -a -y tioga %${COMPILER_NAME}@${COMPILER_VERSION}"
 

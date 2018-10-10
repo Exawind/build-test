@@ -10,7 +10,6 @@ compilers:
       cflags: -O2
       cxxflags: -O2
       fflags: -O2
-      fcflags: -O2
     modules: []
     operating_system: centos7
     paths:
@@ -40,7 +39,6 @@ compilers:
       cflags: -O2 -axCORE-AVX2,CORE-AVX-I
       cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I
       fflags: -O2 -axCORE-AVX2,CORE-AVX-I
-      fcflags: -O2 -axCORE-AVX2,CORE-AVX-I
     modules: []
     operating_system: centos7
     # The Intel compiler is installed using Spack and we regularly update all the

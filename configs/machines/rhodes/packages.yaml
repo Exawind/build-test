@@ -30,6 +30,8 @@ packages:
     version: [0.6.2]
   netlib-lapack:
     version: [3.8.0]
+  py-matplotlib:
+    version: [2.2.3]
   all:
     compiler: [gcc@4.8.5, gcc@4.9.4, gcc@5.5.0, gcc@6.4.0, gcc@7.3.0, gcc@8.1.0, clang@6.0.0, intel@18.1.163]
     # Spack uses build_type=RelWithDebInfo by default for CMake packages

@@ -5,7 +5,7 @@ packages:
   m4:
     version: [1.4.18]
   cmake:
-    version: [3.9.4]
+    version: [3.12.2]
   boost:
     version: [1.66.0]
   netcdf:

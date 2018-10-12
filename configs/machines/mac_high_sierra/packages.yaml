@@ -1,7 +1,7 @@
 packages:
   cmake:
     paths:
-      cmake@3.11.1: /usr/local/Cellar/cmake/3.11.1
+      cmake@3.12.2: /usr/local/Cellar/cmake/3.12.3
     buildable: False
   pkg-config:
     paths:
@@ -15,6 +15,8 @@ packages:
     paths:
       python@2.7.10: /usr
     buildable: False
+  libxml2:
+    version: [2.9.8]
   boost:
     version: [1.66.0]
   netcdf:
@@ -23,12 +25,12 @@ packages:
   parallel-netcdf:
     version: [1.8.0]
   hdf5:
-    version: [1.10.1]
+    version: [1.10.3]
     variants: +cxx+hl
   superlu:
     version: [4.3]
   openmpi:
-    version: [3.1.1]
+    version: [3.1.2]
   openfast:
     version: [develop]
   yaml-cpp:
@@ -38,6 +40,6 @@ packages:
   all:
     variants: build_type=Release
     providers:
-      mpi: [openmpi@3.1.1]
+      mpi: [openmpi@3.1.2]
       blas: [netlib-lapack@3.8.0]
       lapack: [netlib-lapack@3.8.0]

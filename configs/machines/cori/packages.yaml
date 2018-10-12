@@ -15,39 +15,27 @@ packages:
     version: []
     variants: +mpi build_type=Release
   mpich:
-    version: [7.6.2]
+    version: [7.7.0]
     buildable: false
     modules:
-        mpich@7.6.2: cray-mpich
+        mpich@7.7.0: cray-mpich
     paths: {}
     providers: {}
     compiler: []
   boost:
-      version: [1.60.0]
+      version: [1.66.0]
   hdf5:
-      version: [1.8.16]
+      version: [1.10.3]
       variants: +cxx+mpi+hl
   netcdf:
-      version: [4.3.3.1]
+      version: [4.4.1.1]
   superlu:
-    version: [4.3]
+      version: [4.3]
   parallel-netcdf:
-      version: [1.6.1]
-  zlib:
-      version: [1.2.8]
-  intel-mkl:
-      version: [17.0.2.174]
-      buildable: false
-      paths:
-          intel-mkl@17.0.2.174: /opt/intel/compilers_and_libraries_2017.2.174/linux/mkl
+      version: [1.8.0]
   netlib-lapack:
-      version: [3.6.1]
+      version: [3.8.0]
   cmake:
-      version: [3.8.2]
-      buildable: False
-      paths:
-          cmake@3.8.2: /usr/common/software/cmake/3.8.2
-  bzip2:
-      version: [1.0.6]
+      version: [3.12.2]
   yaml-cpp:
-      version: [0.5.3]
+      version: [0.6.2]

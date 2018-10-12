@@ -9,19 +9,19 @@ packages:
   boost:
     version: [1.66.0]
   cmake:
-    version: [3.9.4]
+    version: [3.12.2]
   netcdf:
     version: [4.4.1.1]
     variants: maxdims=65536 maxvars=524288
   parallel-netcdf:
     version: [1.8.0]
   hdf5:
-    version: [1.10.1]
+    version: [1.10.3]
     variants: +cxx+hl
   superlu:
     version: [4.3]
   openmpi:
-    version: [3.1.1]
+    version: [3.1.2]
     variants: fabrics=verbs schedulers=tm
   openfast:
     version: [develop]
@@ -39,6 +39,6 @@ packages:
     # and creates huge binaries unless you do this:
     variants: build_type=Release
     providers:
-      mpi: [openmpi@3.1.1, intel-mpi@2018.1.163]
+      mpi: [openmpi@3.1.2, intel-mpi@2018.1.163]
       blas: [netlib-lapack@3.8.0, intel-mkl@2018.1.163]
       lapack: [netlib-lapack@3.8.0, intel-mkl@2018.1.163]

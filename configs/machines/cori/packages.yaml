@@ -23,12 +23,12 @@ packages:
     providers: {}
     compiler: []
   boost:
-      version: [1.66.0]
+      version: [1.68.0]
   hdf5:
       version: [1.10.3]
       variants: +cxx+mpi+hl
   netcdf:
-      version: [4.4.1.1]
+      version: [4.6.1]
   superlu:
       version: [4.3]
   parallel-netcdf:

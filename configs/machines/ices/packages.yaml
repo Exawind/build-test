@@ -2,15 +2,15 @@ packages:
   cmake:
     version: [3.12.2]
   boost:
-    version: [1.66.0]
+    version: [1.68.0]
   netcdf:
-    version: [4.4.1.1]
+    version: [4.6.1]
     variants: maxdims=65536 maxvars=524288
   parallel-netcdf:
     version: [1.8.0]
   hdf5:
     version: [1.10.3]
-    variants: +cxx
+    variants: +cxx+hl
   superlu:
     version: [4.3]
   openmpi:

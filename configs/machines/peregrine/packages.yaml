@@ -7,11 +7,11 @@ packages:
   m4:
     version: [1.4.18]
   boost:
-    version: [1.66.0]
+    version: [1.68.0]
   cmake:
     version: [3.12.2]
   netcdf:
-    version: [4.4.1.1]
+    version: [4.6.1]
     variants: maxdims=65536 maxvars=524288
   parallel-netcdf:
     version: [1.8.0]

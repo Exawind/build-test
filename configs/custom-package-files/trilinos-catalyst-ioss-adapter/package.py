@@ -25,7 +25,7 @@
 from spack import *
 
 
-class CatalystIossAdapter(CMakePackage):
+class TrilinosCatalystIossAdapter(CMakePackage):
     """Adapter for Trilinos Seacas Ioss and Paraview Catalyst"""
 
     homepage = "https://trilinos.org/"

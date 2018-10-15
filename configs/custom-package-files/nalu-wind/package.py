@@ -57,7 +57,7 @@ class NaluWind(CMakePackage):
     depends_on('openfast+cxx', when='+openfast')
     depends_on('tioga', when='+tioga')
     depends_on('hypre+mpi+int64', when='+hypre')
-    depends_on('catalyst-ioss-adapter', when='+catalyst')
+    depends_on('trilinos-catalyst-ioss-adapter', when='+catalyst')
 
     def cmake_args(self):
         spec = self.spec
@@ -102,7 +102,7 @@ class NaluWind(CMakePackage):
             options.extend([
                 '-DENABLE_PARAVIEW_CATALYST:BOOL=ON',
                 '-DPARAVIEW_CATALYST_INSTALL_PATH:PATH=%s' %
-                spec['catalyst-ioss-adapter'].prefix
+                spec['trilinos-catalyst-ioss-adapter'].prefix
             ])
         else:
             options.append('-DENABLE_PARAVIEW_CATALYST:BOOL=OFF')

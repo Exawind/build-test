@@ -1,6 +1,6 @@
 packages:
   cmake:
-    version: [3.12.2]
+    version: [3.12.3]
   libxml2:
     version: [2.9.8]
   boost:

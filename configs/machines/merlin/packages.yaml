@@ -1,6 +1,6 @@
 packages:
   cmake:
-    version: [3.12.2]
+    version: [3.12.3]
   boost:
     version: [1.68.0]
   netcdf:

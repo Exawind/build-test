@@ -36,6 +36,6 @@ packages:
   netlib-lapack:
       version: [3.8.0]
   cmake:
-      version: [3.12.2]
+      version: [3.12.3]
   yaml-cpp:
       version: [0.6.2]

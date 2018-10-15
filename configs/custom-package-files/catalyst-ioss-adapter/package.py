@@ -26,25 +26,31 @@ from spack import *
 
 
 class CatalystIossAdapter(CMakePackage):
-    """Adapter for Trilinos Ioss and Paraview Catalyst"""
+    """Adapter for Trilinos Seacas Ioss and Paraview Catalyst"""
 
-    homepage = "https://github.com/exawind/build-test"
-    url      = "https://github.com/exawind/build-test.git"
+    homepage = "https://trilinos.org/"
+    url      = "https://github.com/trilinos/Trilinos/archive/trilinos-release-12-12-1.tar.gz"
+    git      = "https://github.com/trilinos/Trilinos.git"
 
-    version('develop', 'aa5266fddb8554d39c6087550d3c8b27',
-            url='https://github.com/exawind/build-test/raw/master/configs/custom-package-files/catalyst-ioss-adapter/ParaViewCatalystIossAdapter.tar.gz')
+    version('develop', branch='develop')
+    version('master', branch='master')
+    version('12.12.1', 'ecd4606fa332212433c98bf950a69cc7')
 
     depends_on('bison@2.7')
     depends_on('flex@2.5.39')
-    depends_on('paraview+mpi+python+osmesa+visit@5.4.1')
+    depends_on('catalyst+essentials+extras+python+rendering')
+
+    root_cmakelists_dir = 'packages/seacas/libraries/ioss/src/visualization/ParaViewCatalystIossAdapter'
 
     def cmake_args(self):
         spec = self.spec
         options = []
 
+        paraview_version = 'paraview-%s' % self.spec.version.up_to(2)
+
         options.extend([
             '-DParaView_DIR:PATH=%s' %
-            spec['paraview'].prefix + '/lib/cmake/paraview-5.4'
+            spec['catalyst'].prefix + '/lib/cmake/' + paraview_version
         ])
 
         return options

@@ -43,10 +43,12 @@ class NaluWind(CMakePackage):
             description='Compile with Tioga support')
     variant('hypre', default=False,
             description='Compile with Hypre support')
-    variant('shared', default=(sys.platform != 'darwin'),
-            description='Build Trilinos as shared library')
     variant('catalyst', default=False,
             description='Compile with Catalyst support')
+    variant('shared', default=(sys.platform != 'darwin'),
+            description='Build Trilinos as shared library')
+    variant('pic', default=True,
+            description='Position independent code')
 
     depends_on('mpi')
     depends_on('yaml-cpp@0.5.3:')
@@ -71,7 +73,9 @@ class NaluWind(CMakePackage):
             '-DCMAKE_Fortran_COMPILER=%s' % spec['mpi'].mpifc,
             '-DMPI_C_COMPILER=%s' % spec['mpi'].mpicc,
             '-DMPI_CXX_COMPILER=%s' % spec['mpi'].mpicxx,
-            '-DMPI_Fortran_COMPILER=%s' % spec['mpi'].mpifc
+            '-DMPI_Fortran_COMPILER=%s' % spec['mpi'].mpifc,
+            '-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=%s' % (
+                'ON' if '+pic' in spec else 'OFF'),
         ])
 
         if '+openfast' in spec:

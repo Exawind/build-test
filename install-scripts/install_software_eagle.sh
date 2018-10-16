@@ -71,7 +71,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
 
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
-  cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/"
   if [ "${MACHINE}" == 'eagle' ]; then
     # Make sure compilers.yaml is set up to point to the base compilers before this step
     cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml ${SPACK_ROOT}/etc/spack/compilers.yaml"

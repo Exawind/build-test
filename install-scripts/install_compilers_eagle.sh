@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
-#PBS -N install-base-software-eagle
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
+#PBS -N install-compilers-eagle
+#PBS -l nodes=1:ppn=24,walltime=2:00:00,feature=haswell
 #PBS -A hpcapps
 #PBS -q short
 #PBS -j oe
@@ -71,7 +71,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
 
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
-  cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/"
   if [ "${MACHINE}" == 'eagle' ]; then
     cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
     cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
@@ -99,7 +99,7 @@ do
   if [ "${MACHINE}" == 'eagle' ]; then
     cmd "module purge"
     cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-    cmd "module load gcc/6.2.0"
+    cmd "module load gcc/${COMPILER_VERSION}"
     cmd "module load git"
     cmd "module load python/2.7.15"
     cmd "module load curl"

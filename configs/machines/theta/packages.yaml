@@ -1,4 +1,6 @@
 packages:
+    binutils:
+        version: [2.29.1]
     mpich:
         modules:
             mpich@7.7.0: cray-mpich/7.7.0

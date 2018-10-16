@@ -1,4 +1,6 @@
 packages:
+  binutils:
+    version: [2.29.1]
   cmake:
     paths:
       cmake@3.12.3: /usr/local/Cellar/cmake/3.12.3

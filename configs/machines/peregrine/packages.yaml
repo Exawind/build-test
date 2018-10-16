@@ -1,4 +1,6 @@
 packages:
+  binutils:
+    version: [2.29.1]
   libxml2:
     version: [2.9.8]
     variants: +python

@@ -34,7 +34,8 @@ class TrilinosCatalystIossAdapter(CMakePackage):
 
     version('develop', branch='develop')
     version('master', branch='master')
-    version('12.12.1', 'ecd4606fa332212433c98bf950a69cc7')
+    version('12.12.1', 'ecd4606fa332212433c98bf950a69cc7',
+            url='https://github.com/trilinos/Trilinos/archive/trilinos-release-12-12-1.tar.gz')
 
     depends_on('bison@2.7')
     depends_on('flex@2.5.39')

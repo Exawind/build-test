@@ -1,7 +1,7 @@
 #!/bin/bash -l
 
 #PBS -N install-compilers-eagle
-#PBS -l nodes=1:ppn=24,walltime=2:00:00,feature=haswell
+#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
 #PBS -A hpcapps
 #PBS -q short
 #PBS -j oe
@@ -115,7 +115,7 @@ do
     # Install our own compilers
     printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"

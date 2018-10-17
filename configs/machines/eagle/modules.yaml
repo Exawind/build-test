@@ -40,4 +40,4 @@ modules:
       environment:
         set:
           '${PACKAGE}_ROOT_DIR': '${PREFIX}'
-    blacklist: ['pcre', 'environment-modules']
+    blacklist: ['autoconf', 'automake', 'bzip2', 'diffutils', 'environment-modules', 'gdbm', 'hwloc', 'libpciaccess', 'libsigsegv', 'libtool', 'libxml2', 'm4', 'ncurses', 'numactl', 'openssl', 'pcre', 'perl', 'pkgconf', 'python', 'readline', 'sqlite', 'util-macros', 'xz', 'zlib']

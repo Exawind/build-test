@@ -230,7 +230,7 @@ test_configuration() {
     fi
     if [ "${TPL}" == 'catalyst' ]; then
       cmd "spack load paraview %${COMPILER_NAME}@${COMPILER_VERSION}"
-      CATALYST_ADAPTER_DIR=$(spack location -i catalyst-ioss-adapter %${COMPILER_NAME}@${COMPILER_VERSION})
+      CATALYST_ADAPTER_DIR=$(spack location -i trilinos-catalyst-ioss-adapter %${COMPILER_NAME}@${COMPILER_VERSION})
       CMAKE_CONFIGURE_ARGS="-DENABLE_PARAVIEW_CATALYST:BOOL=ON -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_ADAPTER_DIR} ${CMAKE_CONFIGURE_ARGS}"
       printf "CATALYST_ADAPTER_DIR=${CATALYST_ADAPTER_DIR}\n"
     fi
@@ -389,7 +389,8 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:6.4.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
+    #CONFIGURATIONS[0]='gcc:6.4.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
+    CONFIGURATIONS[0]='gcc:6.4.0:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='intel:18.1.163:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[3]='clang:6.0.0:false:develop:develop:develop:openfast;tioga;hypre'

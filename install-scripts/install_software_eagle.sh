@@ -46,7 +46,7 @@ esac
 if [ "${MACHINE}" == 'eagle' ]; then
   INSTALL_DIR=${SCRATCH}/eagle_software
   GCC_COMPILER_VERSION="6.4.0"
-  INTEL_COMPILER_VERSION="18.0.3"
+  INTEL_COMPILER_VERSION="18.0.1"
 else
   printf "\nMachine name not recognized.\n"
   exit 1
@@ -87,7 +87,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc #intel
+for COMPILER_NAME in intel #gcc
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -105,8 +105,11 @@ do
     cmd "module load python/2.7.15"
     cmd "module load curl"
     cmd "module load binutils"
-    cmd "module use /scratch/jrood/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-    cmd "module load gcc/6.4.0"
+    cmd "module load /scratch/jrood/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/gcc/6.4.0"
+    if [ "${COMPILER_NAME}" == 'intel' ]; then
+      ADD_MPI='^intel-mpi %intel'
+      cmd "module load /scratch/jrood/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
+    fi
     cmd "module list"
     # Set the TMPDIR to disk so it doesn't run out of space
     printf "\nMaking and setting TMPDIR to disk...\n"
@@ -115,15 +118,17 @@ do
   fi
 
   printf "\nInstalling some tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-  cmd "spack install boost+mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install fftw %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install hdf5+mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install hdf5~mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install netcdf %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install lammps %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install openmpi@3.1.2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install openmpi@2.1.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install openmpi@1.10.7 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install boost+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install fftw %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install hdf5+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install hdf5~mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install lammps %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
 
   cmd "unset TMPDIR"
 

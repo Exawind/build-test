@@ -17,6 +17,8 @@ cmd() {
   if ${execute_cmds}; then eval "$@"; fi
 }
 
+set -e
+
 printf "============================================================\n"
 printf "$(date)\n"
 printf "============================================================\n"
@@ -46,7 +48,6 @@ esac
 if [ "${MACHINE}" == 'eagle' ]; then
   INSTALL_DIR=${SCRATCH}/eagle_compilers
   GCC_COMPILER_VERSION="6.2.0"
-  INTEL_COMPILER_VERSION="18.0.3"
 else
   printf "\nMachine name not recognized.\n"
   exit 1
@@ -72,11 +73,9 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/"
-  if [ "${MACHINE}" == 'eagle' ]; then
-    cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
-    cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
-    cmd "cp /nopt/nrel/ecom/ecp/base/active/spack/etc/spack/licenses/intel/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
-  fi
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
+  cmd "cp ${HOME}/save/intel_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -92,41 +91,42 @@ do
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
   fi
 
-  printf "\nInstalling base software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+  printf "\nInstalling with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
   # Load necessary modules
   printf "\nLoading modules...\n"
-  if [ "${MACHINE}" == 'eagle' ]; then
-    cmd "module purge"
-    cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-    cmd "module load gcc/${COMPILER_VERSION}"
-    cmd "module load git"
-    cmd "module load python/2.7.15"
-    cmd "module load curl"
-    cmd "module load binutils"
-    cmd "module list"
-    # Set the TMPDIR to disk so it doesn't run out of space
-    printf "\nMaking and setting TMPDIR to disk...\n"
-    cmd "mkdir -p /scratch/${USER}/.tmp"
-    cmd "export TMPDIR=/scratch/${USER}/.tmp"
-  fi
+  cmd "module purge"
+  cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+  cmd "module load gcc/${COMPILER_VERSION}"
+  cmd "module load git"
+  cmd "module load python/2.7.15"
+  cmd "module load curl"
+  cmd "module load binutils"
+  cmd "module list"
+  # Set the TMPDIR to disk so it doesn't run out of space
+  printf "\nMaking and setting TMPDIR to disk...\n"
+  cmd "mkdir -p /scratch/${USER}/.tmp"
+  cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
-    # Install our own compilers
     printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install intel-parallel-studio@cluster.2019.0+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"
 
-  printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+  printf "\nDone installing with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
-if [ "${MACHINE}" == 'eagle' ]; then
-  printf "\nSetting permissions...\n"
-  cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
-fi
+printf "\nSetting permissions...\n"
+cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
 
 printf "\n$(date)\n"
 printf "\nDone!\n"

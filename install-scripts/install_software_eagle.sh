@@ -17,6 +17,8 @@ cmd() {
   if ${execute_cmds}; then eval "$@"; fi
 }
 
+set -e
+
 printf "============================================================\n"
 printf "$(date)\n"
 printf "============================================================\n"
@@ -44,9 +46,9 @@ case "${NREL_CLUSTER}" in
 esac
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=${SCRATCH}/eagle_software
-  GCC_COMPILER_VERSION="6.4.0"
-  INTEL_COMPILER_VERSION="18.0.1"
+  INSTALL_DIR=${SCRATCH}/eagle/eagle_software
+  GCC_COMPILER_VERSION="7.3.0"
+  INTEL_COMPILER_VERSION="18.0.3"
 else
   printf "\nMachine name not recognized.\n"
   exit 1
@@ -72,12 +74,10 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/"
-  if [ "${MACHINE}" == 'eagle' ]; then
-    # Make sure compilers.yaml is set up to point to the base compilers before this step
-    cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml ${SPACK_ROOT}/etc/spack/compilers.yaml"
-    cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
-    cmd "cp /nopt/nrel/ecom/ecp/base/active/spack/etc/spack/licenses/intel/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
-  fi
+  # Make sure compilers.yaml is set up to point to the base compilers before this step
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
+  cmd "cp ${HOME}/save/intel_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -87,58 +87,57 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in intel #gcc
+for COMPILER_NAME in gcc #intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     COMPILER_VERSION="${INTEL_COMPILER_VERSION}"
   fi
-  printf "\nInstalling base software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+  printf "\nInstalling with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
   # Load necessary modules
   printf "\nLoading modules...\n"
-  if [ "${MACHINE}" == 'eagle' ]; then
-    cmd "module purge"
-    cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-    cmd "module load git"
-    cmd "module load python/2.7.15"
-    cmd "module load curl"
-    cmd "module load binutils"
-    cmd "module load /scratch/jrood/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/gcc/6.4.0"
-    if [ "${COMPILER_NAME}" == 'intel' ]; then
-      ADD_MPI='^intel-mpi %intel'
-      cmd "module load /scratch/jrood/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
-    fi
-    cmd "module list"
-    # Set the TMPDIR to disk so it doesn't run out of space
-    printf "\nMaking and setting TMPDIR to disk...\n"
-    cmd "mkdir -p /scratch/${USER}/.tmp"
-    cmd "export TMPDIR=/scratch/${USER}/.tmp"
+  cmd "module purge"
+  cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+  cmd "module load git"
+  cmd "module load python/2.7.15"
+  cmd "module load curl"
+  cmd "module load binutils"
+  cmd "module load /scratch/jrood/eagle/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/gcc/7.3.0"
+  if [ "${COMPILER_NAME}" == 'intel' ]; then
+    cmd "module load /scratch/jrood/eagle/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.3"
   fi
+  cmd "module list"
+  # Set the TMPDIR to disk so it doesn't run out of space
+  printf "\nMaking and setting TMPDIR to disk...\n"
+  cmd "mkdir -p /scratch/${USER}/.tmp"
+  cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
-  printf "\nInstalling some tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+  printf "\nInstalling software using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   cmd "spack install intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@3.1.2 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@2.1.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@1.10.7 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install boost+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
-  cmd "spack install fftw %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
-  cmd "spack install hdf5+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install hdf5~mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install netcdf %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
-  cmd "spack install lammps %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  if [ "${COMPILER_NAME}" == 'intel' ]; then
+    ADD_MPI='^intel-mpi %intel'
+    cmd "spack load intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+  fi
+  cmd "spack install boost+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install fftw+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install hdf5+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install netcdf+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install lammps+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
 
   cmd "unset TMPDIR"
 
-  printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+  printf "\nDone installing with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
-if [ "${MACHINE}" == 'eagle' ]; then
-  printf "\nSetting permissions...\n"
-  cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
-fi
+printf "\nSetting permissions...\n"
+cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
 
 printf "\n$(date)\n"
 printf "\nDone!\n"

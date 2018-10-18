@@ -77,7 +77,8 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   # Make sure compilers.yaml is set up to point to the base compilers before this step
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml ${SPACK_ROOT}/etc/spack/compilers.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
-  cmd "cp ${HOME}/save/intel_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
+  #cmd "cp ${HOME}/save/intel_license/old_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
+  cmd "cp ${HOME}/save/intel_license/new_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"

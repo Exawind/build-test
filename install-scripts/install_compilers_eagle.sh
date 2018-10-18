@@ -46,7 +46,7 @@ case "${NREL_CLUSTER}" in
 esac
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=${SCRATCH}/eagle_compilers
+  INSTALL_DIR=${SCRATCH}/eagle/eagle_compilers
   GCC_COMPILER_VERSION="6.2.0"
 else
   printf "\nMachine name not recognized.\n"
@@ -75,7 +75,8 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
-  cmd "cp ${HOME}/save/intel_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
+  #cmd "cp ${HOME}/save/intel_license/old_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
+  cmd "cp ${HOME}/save/intel_license/new_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -110,14 +111,14 @@ do
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install intel-parallel-studio@cluster.2019.0+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"

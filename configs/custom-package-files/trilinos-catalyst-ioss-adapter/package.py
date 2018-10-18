@@ -33,13 +33,10 @@ class TrilinosCatalystIossAdapter(CMakePackage):
     git      = "https://github.com/trilinos/Trilinos.git"
 
     version('develop', branch='develop')
-    version('master', branch='master')
-    version('12.12.1', 'ecd4606fa332212433c98bf950a69cc7',
-            url='https://github.com/trilinos/Trilinos/archive/trilinos-release-12-12-1.tar.gz')
 
-    depends_on('bison@2.7')
-    depends_on('flex@2.5.39')
-    depends_on('catalyst+essentials+extras+python+rendering')
+    depends_on('bison')
+    depends_on('flex')
+    depends_on('paraview+mpi+python+osmesa@5.4.1')
 
     root_cmakelists_dir = 'packages/seacas/libraries/ioss/src/visualization/ParaViewCatalystIossAdapter'
 
@@ -47,11 +44,11 @@ class TrilinosCatalystIossAdapter(CMakePackage):
         spec = self.spec
         options = []
 
-        paraview_version = 'paraview-%s' % self.spec.version.up_to(2)
+        paraview_version = 'paraview-%s' % spec['paraview'].version.up_to(2)
 
         options.extend([
             '-DParaView_DIR:PATH=%s' %
-            spec['catalyst'].prefix + '/lib/cmake/' + paraview_version
+            spec['paraview'].prefix + '/lib/cmake/' + paraview_version
         ])
 
         return options

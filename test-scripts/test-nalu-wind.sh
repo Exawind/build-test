@@ -432,11 +432,12 @@ main() {
   printf "============================================================\n"
  
   if [ ! -d "${NALU_WIND_TESTING_ROOT_DIR}" ]; then
+    set -e
     printf "============================================================\n"
     printf "Top level testing directory doesn't exist.\n"
     printf "Creating everything from scratch...\n"
     printf "============================================================\n"
- 
+
     printf "Creating top level testing directory...\n"
     cmd "mkdir -p ${NALU_WIND_TESTING_ROOT_DIR}"
  
@@ -463,6 +464,7 @@ main() {
     printf "============================================================\n"
     printf "Done setting up testing directory\n"
     printf "============================================================\n"
+    set +e
   fi
  
   printf "\nLoading Spack...\n"

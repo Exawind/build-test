@@ -74,6 +74,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/modules.yaml.base ${SPACK_ROOT}/etc/spack/modules.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
   #cmd "cp ${HOME}/save/intel_license/old_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
   cmd "cp ${HOME}/save/intel_license/new_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"

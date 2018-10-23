@@ -76,9 +76,8 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/"
   # Make sure compilers.yaml is set up to point to the base compilers before this step
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml ${SPACK_ROOT}/etc/spack/compilers.yaml"
-  cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
-  #cmd "cp ${HOME}/save/intel_license/old_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
-  cmd "cp ${HOME}/save/intel_license/new_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
+  #cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
+  #cmd "cp ${HOME}/save/intel_license/new_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -116,15 +115,15 @@ do
   cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
   printf "\nInstalling software using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-  cmd "spack install intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install intel-mpi@2018.3.222 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install intel-mkl@2018.3.222 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@3.1.2 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@2.1.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@1.10.7 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install hdf5~mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
   if [ "${COMPILER_NAME}" == 'intel' ]; then
     ADD_MPI='^intel-mpi %intel'
-    cmd "spack load intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack load intel-mpi@2018.3.222 %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
   cmd "spack install boost+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install fftw+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"

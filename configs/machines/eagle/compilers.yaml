@@ -21,9 +21,9 @@ compilers:
       set:
         INTEL_LICENSE_FILE: 28519@license-1.hpc.nrel.gov
     extra_rpaths:
+     - /scratch/jrood/eagle/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio-cluster.2018.3-hyyuntpc5zpzhsicb3gl56mpu3q2aa55/compilers_and_libraries_2018.3.222/linux/compiler/lib/intel64_lin
      - /scratch/jrood/eagle/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/gcc-7.3.0-xr2wbli4udl6h55smqvzrrms4vkwz75k/lib64
      - /scratch/jrood/eagle/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/gcc-7.3.0-xr2wbli4udl6h55smqvzrrms4vkwz75k/lib/gcc/x86_64-pc-linux-gnu/7.3.0
-     - /scratch/jrood/eagle/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio-cluster.2018.3-hyyuntpc5zpzhsicb3gl56mpu3q2aa55/compilers_and_libraries_2018.3.222/linux/compiler/lib/intel64
     flags:
       cflags: -O2 -axCORE-AVX2,CORE-AVX-I
       cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I

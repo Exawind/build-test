@@ -48,7 +48,7 @@ esac
 if [ "${MACHINE}" == 'eagle' ]; then
   INSTALL_DIR=${SCRATCH}/eagle/eagle_software
   GCC_COMPILER_VERSION="7.3.0"
-  INTEL_COMPILER_VERSION="19.0.0"
+  INTEL_COMPILER_VERSION="18.0.3"
 else
   printf "\nMachine name not recognized.\n"
   exit 1
@@ -106,7 +106,7 @@ do
   cmd "module load binutils"
   cmd "module load /scratch/jrood/eagle/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/gcc/7.3.0"
   if [ "${COMPILER_NAME}" == 'intel' ]; then
-    cmd "module load /scratch/jrood/eagle/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2019.0"
+    cmd "module load /scratch/jrood/eagle/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.3"
   fi
   cmd "module list"
   # Set the TMPDIR to disk so it doesn't run out of space
@@ -123,14 +123,16 @@ do
   cmd "spack install hdf5~mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
   if [ "${COMPILER_NAME}" == 'intel' ]; then
     ADD_MPI='^intel-mpi'
+    ADD_BLAS='^intel-mkl'
     cmd "spack load intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack load intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
   cmd "spack install boost+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install fftw+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install hdf5+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install netcdf+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install lammps+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
-  cmd "spack install quantum-espresso+hdf5 %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install quantum-espresso+hdf5 %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI} ${ADD_BLAS}"
 
   cmd "unset TMPDIR"
 

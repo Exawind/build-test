@@ -76,7 +76,6 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/modules.yaml.base ${SPACK_ROOT}/etc/spack/modules.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
-  #cmd "cp ${HOME}/save/intel_license/old_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
   cmd "cp ${HOME}/save/intel_license/new_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
   printf "============================================================\n"
@@ -120,6 +119,7 @@ do
     cmd "spack install intel-parallel-studio@cluster.2019.0+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"

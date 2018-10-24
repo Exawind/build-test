@@ -11,7 +11,9 @@ packages:
   boost:
     version: [1.68.0]
   cmake:
-    version: [3.12.3]
+    paths:
+      cmake@3.12.3: /scratch/jrood/eagle/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/cmake-3.12.3-4emiuret42q2kwn7qzpg3dmh4pstlmfv
+    buildable: False
   netcdf:
     version: [4.6.1]
     variants: maxdims=65536 maxvars=524288

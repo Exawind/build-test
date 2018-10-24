@@ -87,7 +87,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc #intel
+for COMPILER_NAME in gcc intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -122,14 +122,15 @@ do
   cmd "spack install openmpi@1.10.7 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install hdf5~mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
   if [ "${COMPILER_NAME}" == 'intel' ]; then
-    ADD_MPI='^intel-mpi %intel'
+    ADD_MPI='^intel-mpi@2018.3.222'
     cmd "spack load intel-mpi@2018.3.222 %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
   cmd "spack install boost+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install fftw+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install hdf5+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install netcdf+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
-  cmd "spack install lammps+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install lammps+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI} ^cmake %gcc"
+  cmd "spack install quantum-espresso+hdf5 %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
 
   cmd "unset TMPDIR"
 

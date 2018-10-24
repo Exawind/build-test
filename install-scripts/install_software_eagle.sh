@@ -48,7 +48,7 @@ esac
 if [ "${MACHINE}" == 'eagle' ]; then
   INSTALL_DIR=${SCRATCH}/eagle/eagle_software
   GCC_COMPILER_VERSION="7.3.0"
-  INTEL_COMPILER_VERSION="18.0.3"
+  INTEL_COMPILER_VERSION="19.0.0"
 else
   printf "\nMachine name not recognized.\n"
   exit 1

@@ -87,7 +87,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc
+for COMPILER_NAME in gcc intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"

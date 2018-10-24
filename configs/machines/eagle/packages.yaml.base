@@ -36,11 +36,11 @@ packages:
   netlib-lapack:
     version: [3.8.0]
   all:
-    compiler: [gcc@7.3.0, intel@18.0.3]
+    compiler: [gcc@6.2.0]
     # Spack uses build_type=RelWithDebInfo by default for CMake packages
     # and creates huge binaries unless you do this:
     variants: build_type=Release
     providers:
-      mpi: [openmpi@3.1.2, intel-mpi@2018.3.222]
-      blas: [netlib-lapack@3.8.0, intel-mkl@2018.3.222]
-      lapack: [netlib-lapack@3.8.0, intel-mkl@2018.3.222]
+      mpi: [openmpi@3.1.2]
+      blas: [netlib-lapack@3.8.0]
+      lapack: [netlib-lapack@3.8.0]

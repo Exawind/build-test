@@ -129,8 +129,8 @@ do
   cmd "spack install fftw+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install hdf5+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install netcdf+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
-  cmd "spack install lammps+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI} ^cmake %gcc"
-  cmd "spack install quantum-espresso+hdf5 %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI} ^cmake %gcc"
+  cmd "spack install lammps+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI} ^/egbpbudts" #^cmake %gcc
+  cmd "spack install quantum-espresso+hdf5 %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI} ^/egbpbudts" #^cmake %gcc
 
   cmd "unset TMPDIR"
 

@@ -36,5 +36,5 @@ modules:
       environment:
         set:
           '${PACKAGE}_ROOT_DIR': '${PREFIX}'
-    whitelist: ['boost', 'cmake', 'gcc', 'hdf5', 'intel-mkl', 'intel-mpi', 'lammps', 'netcdf', 'openmpi']
-    blacklist: ['autoconf', 'automake', 'bzip2', 'diffutils', 'environment-modules', 'gdbm', 'gmp', 'hwloc', 'libpciaccess', 'libsigsegv', 'isl', 'libtool', 'libxml2', 'm4', 'mpc', 'mpfr', 'ncurses', 'numactl', 'openssl', 'pcre', 'perl', 'pkgconf', 'python', 'readline', 'sqlite', 'util-macros', 'xz', 'zlib']
+    whitelist: ['boost', 'cmake', 'gcc', 'hdf5', 'fftw', 'intel-mkl', 'intel-mpi', 'lammps', 'netcdf', 'openmpi', 'quantum-espresso']
+    blacklist: ['autoconf', 'automake', 'bzip2', 'diffutils', 'environment-modules', 'elpa', 'gdbm', 'gmp', 'hwloc', 'libpciaccess', 'libsigsegv', 'isl', 'libtool', 'libxml2', 'm4', 'mpc', 'mpfr', 'ncurses', 'netlib-lapack', 'netlib-scalapack', 'numactl', 'openssl', 'pcre', 'perl', 'pkgconf', 'python', 'readline', 'sqlite', 'util-macros', 'xz', 'zlib']

@@ -117,9 +117,9 @@ do
     cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install intel-parallel-studio@cluster.2019.0+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2019.0+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"

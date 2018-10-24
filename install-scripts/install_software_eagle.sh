@@ -87,7 +87,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc intel
+for COMPILER_NAME in gcc
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -106,7 +106,7 @@ do
   cmd "module load binutils"
   cmd "module load /scratch/jrood/eagle/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/gcc/7.3.0"
   if [ "${COMPILER_NAME}" == 'intel' ]; then
-    cmd "module load /scratch/jrood/eagle/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.3"
+    cmd "module load /scratch/jrood/eagle/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2019.0"
   fi
   cmd "module list"
   # Set the TMPDIR to disk so it doesn't run out of space
@@ -115,22 +115,22 @@ do
   cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
   printf "\nInstalling software using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-  cmd "spack install intel-mpi@2018.3.222 %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install intel-mkl@2018.3.222 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@3.1.2 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@2.1.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@1.10.7 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install hdf5~mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
   if [ "${COMPILER_NAME}" == 'intel' ]; then
-    ADD_MPI='^intel-mpi@2018.3.222'
-    cmd "spack load intel-mpi@2018.3.222 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    ADD_MPI='^intel-mpi'
+    cmd "spack load intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
   cmd "spack install boost+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install fftw+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install hdf5+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
   cmd "spack install netcdf+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
-  cmd "spack install lammps+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI} ^/egbpbudts" #^cmake %gcc
-  cmd "spack install quantum-espresso+hdf5 %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI} ^/egbpbudts" #^cmake %gcc
+  cmd "spack install lammps+mpi %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
+  cmd "spack install quantum-espresso+hdf5 %${COMPILER_NAME}@${COMPILER_VERSION} ${ADD_MPI}"
 
   cmd "unset TMPDIR"
 
@@ -138,7 +138,7 @@ do
 done
 
 printf "\nSetting permissions...\n"
-cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
+#cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
 
 printf "\n$(date)\n"
 printf "\nDone!\n"

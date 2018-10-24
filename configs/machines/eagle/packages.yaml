@@ -28,19 +28,19 @@ packages:
   openfast:
     version: [develop]
   intel-mpi:
-    version: [2018.1.163]
+    version: [2019.0.117]
   intel-mkl:
-    version: [2018.1.163]
+    version: [2019.0.117]
   yaml-cpp:
     version: [0.6.2]
   netlib-lapack:
     version: [3.8.0]
   all:
-    compiler: [gcc@6.2.0, intel@18.1.163]
+    compiler: [gcc@7.3.0, intel@2019.0.117]
     # Spack uses build_type=RelWithDebInfo by default for CMake packages
     # and creates huge binaries unless you do this:
     variants: build_type=Release
     providers:
-      mpi: [openmpi@3.1.2, intel-mpi@2018.1.163]
-      blas: [netlib-lapack@3.8.0, intel-mkl@2018.1.163]
-      lapack: [netlib-lapack@3.8.0, intel-mkl@2018.1.163]
+      mpi: [openmpi@3.1.2, intel-mpi@2019.0.117]
+      blas: [netlib-lapack@3.8.0, intel-mkl@2019.0.117]
+      lapack: [netlib-lapack@3.8.0, intel-mkl@2019.0.117]

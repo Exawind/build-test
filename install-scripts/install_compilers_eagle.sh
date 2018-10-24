@@ -75,6 +75,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/modules.yaml.base ${SPACK_ROOT}/etc/spack/modules.yaml"
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/packages.yaml.base ${SPACK_ROOT}/etc/spack/packages.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
   cmd "cp ${HOME}/save/intel_license/new_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 

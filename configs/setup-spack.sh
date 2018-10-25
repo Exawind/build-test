@@ -88,8 +88,6 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   (set -x; cp -R custom-package-files/py-numpy ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/nalu-wind ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/trilinos-catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp -R custom-package-files/tioga ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp -R custom-package-files/openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   #(set -x; cp -R custom-package-files/paraview ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
 
   #Extra stuff for peregrine

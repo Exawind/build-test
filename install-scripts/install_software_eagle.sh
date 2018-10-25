@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N install-software-eagle
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
+#PBS -l nodes=1:ppn=24,walltime=8:00:00,feature=haswell
 #PBS -A hpcapps
-#PBS -q short
+#PBS -q batch-h
 #PBS -j oe
 #PBS -W umask=002
 
@@ -46,7 +46,7 @@ case "${NREL_CLUSTER}" in
 esac
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=${SCRATCH}/eagle/eagle_software
+  INSTALL_DIR=${SCRATCH}/eagle2/eagle_software
   GCC_COMPILER_VERSION="7.3.0"
   INTEL_COMPILER_VERSION="18.0.3"
 else
@@ -74,10 +74,6 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/"
-  # Make sure compilers.yaml is set up to point to the base compilers before this step
-  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml ${SPACK_ROOT}/etc/spack/compilers.yaml"
-  #cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
-  #cmd "cp ${HOME}/save/intel_license/new_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -104,9 +100,9 @@ do
   cmd "module load python/2.7.15"
   cmd "module load curl"
   cmd "module load binutils"
-  cmd "module load /scratch/jrood/eagle/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/gcc/7.3.0"
+  cmd "module load /scratch/jrood/eagle2/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/gcc/7.3.0"
   if [ "${COMPILER_NAME}" == 'intel' ]; then
-    cmd "module load /scratch/jrood/eagle/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.3"
+    cmd "module load /scratch/jrood/eagle2/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.3"
   fi
   cmd "module list"
   # Set the TMPDIR to disk so it doesn't run out of space
@@ -140,7 +136,7 @@ do
 done
 
 printf "\nSetting permissions...\n"
-#cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
+cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
 
 printf "\n$(date)\n"
 printf "\nDone!\n"

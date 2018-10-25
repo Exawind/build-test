@@ -1,27 +1,8 @@
-##############################################################################
-# Copyright (c) 2013-2017, Lawrence Livermore National Security, LLC.
-# Produced at the Lawrence Livermore National Laboratory.
+# Copyright 2013-2018 Lawrence Livermore National Security, LLC and other
+# Spack Project Developers. See the top-level COPYRIGHT file for details.
 #
-# This file is part of Spack.
-# Created by Todd Gamblin, tgamblin@llnl.gov, All rights reserved.
-# LLNL-CODE-647188
-#
-# For details, see https://github.com/spack/spack
-# Please also see the NOTICE and LICENSE files for our notice and the LGPL.
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License (as
-# published by the Free Software Foundation) version 2.1, February 1999.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the IMPLIED WARRANTY OF
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the terms and
-# conditions of the GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public
-# License along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-##############################################################################
+# SPDX-License-Identifier: (Apache-2.0 OR MIT)
+
 from spack import *
 import glob
 import os
@@ -72,12 +53,9 @@ class Superlu(Package):
         config.extend([
             'PLAT       = _x86_64',
             'SuperLUroot = %s' % self.stage.source_path,
-            # 'SUPERLULIB = $(SuperLUroot)/lib/libsuperlu$(PLAT).a',
             'SUPERLULIB = $(SuperLUroot)/lib/libsuperlu_{0}.a' \
             .format(self.spec.version),
             'BLASDEF    = -DUSE_VENDOR_BLAS',
-            #'BLASLIB    = {0}'.format(spec['blas'].libs.ld_flags),
-            #'BLASLIB    = -L/soft/libraries/alcf/current/xl/BLAS/lib -L/soft/compilers/ibmcmp-may2016/xlmass/bg/7.3/bglib64 -lmassv -lmass -L/soft/libraries/alcf/current/xl/LAPACK/lib -llapack -L/soft/libraries/essl/current/essl/5.1/lib64 -lesslsmpbg -L/soft/compilers/ibmcmp-may2016/xlf/bg/14.1/bglib64 -lxlf90_r -L/soft/compilers/ibmcmp-may2016/xlsmp/bg/3.1/bglib64 -lxlsmp -lxlopt -lxlfmath -lxl -Wl,--allow-multiple-definition',
             'BLASLIB    = -L/soft/libraries/alcf/current/gcc/BLAS/lib -Wl,-Bstatic -lblas -L/soft/libraries/alcf/current/gcc/LAPACK/lib -Wl,-Bstatic -llapack -L/soft/compilers/gcc/4.8.4/powerpc64-bgq-linux/lib -Wl,-Bstatic -lgfortran -Wl,--allow-multiple-definition',
             'TMGLIB     = libtmglib.a',
             'LIBS       = $(SUPERLULIB) $(BLASLIB)',

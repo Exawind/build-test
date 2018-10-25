@@ -1,16 +1,14 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c5815bb..121060a 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -1,7 +1,5 @@
+diff -Naru nalu-wind.orig/CMakeLists.txt nalu-wind/CMakeLists.txt
+--- nalu-wind.orig/CMakeLists.txt	2018-10-25 14:06:46.945931000 +0000
++++ nalu-wind/CMakeLists.txt	2018-10-25 14:06:56.398285000 +0000
+@@ -1,6 +1,5 @@
  ############################ BASE ######################################
  cmake_minimum_required (VERSION 3.1)
 -project(Nalu CXX C Fortran)
--
+ 
  set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
  
- ########################## OPTIONS #####################################
-@@ -22,33 +20,31 @@ set(CMAKE_CXX_STANDARD 11)       # Set nalu-wind C++11 standard
+@@ -22,13 +21,6 @@
  set(CMAKE_CXX_EXTENSIONS OFF)    # Do not enable GNU extensions
  set(CMAKE_CXX_STANDARD_REQUIRED) # Force error if C++11 standard is not supported
  
@@ -22,37 +20,29 @@ index c5815bb..121060a 100644
 -find_package(OpenMP)
 -
  ########################## TRILINOS ####################################
-+message("   Trilinos_DIR = ${Trilinos_DIR}")
  set(CMAKE_PREFIX_PATH ${Trilinos_DIR} ${CMAKE_PREFIX_PATH})
  set(CMAKE_PREFIX_PATH ${Trilinos_PATH} ${CMAKE_PREFIX_PATH})
- find_package(Trilinos REQUIRED)
--if(Trilinos_FOUND)
--  message("-- Found Trilinos = ${Trilinos_DIR}")
--endif()
+@@ -38,6 +30,9 @@
+ endif()
  include_directories(SYSTEM ${Trilinos_INCLUDE_DIRS})
  include_directories(SYSTEM ${Trilinos_TPL_INCLUDE_DIRS})
- 
-+message("Setting and checking of compilers:")
 +set(CMAKE_CXX_COMPILER ${Trilinos_CXX_COMPILER} )
 +set(CMAKE_C_COMPILER ${Trilinos_C_COMPILER} )
 +set(CMAKE_Fortran_COMPILER ${Trilinos_Fortran_COMPILER} )
-+
+ 
  # Build Nalu as shared libraries if that is how Trilinos was built
  if(Trilinos_BUILD_SHARED_LIBS)
-   set(Nalu_LIBRARY_TYPE SHARED)
-   set(BUILD_SHARED_LIBS ON)
-+  message("-- Building Nalu with shared libraries")
- else(Trilinos_BUILD_SHARED_LIBS)
+@@ -47,8 +42,7 @@
    set(Nalu_LIBRARY_TYPE STATIC)
  endif(Trilinos_BUILD_SHARED_LIBS)
  
- # Set Nalu's compilers, CMAKE_FIND_LIBRARY_PREFIXES
- # and CMAKE_FIND_LIBRARY_SUFFIXES, etc, after inheriting settings from Trilinos
-+project(Nalu CXX Fortran)
+-# Set Nalu's compilers, CMAKE_FIND_LIBRARY_PREFIXES
+-# and CMAKE_FIND_LIBRARY_SUFFIXES, etc, after inheriting settings from Trilinos
++project(Nalu CXX C Fortran)
  
  ############################ YAML ######################################
  set(CMAKE_PREFIX_PATH ${YAML_DIR} ${CMAKE_PREFIX_PATH})
-@@ -105,7 +101,16 @@ if(ENABLE_TIOGA)
+@@ -105,6 +99,14 @@
    add_definitions("-DNALU_USES_TIOGA")
  endif()
  
@@ -65,11 +55,9 @@ index c5815bb..121060a 100644
 +find_library(ZLIB_LIBRARY NAMES libz.a PATHS /soft/libraries/alcf/current/gcc/ZLIB/lib)
 +
  ########################### NALU #####################################
-+
  # Add any extra flags based on compiler and/or OS
  message("-- CMAKE_SYSTEM_NAME = ${CMAKE_SYSTEM_NAME}")
- message("-- CMAKE_CXX_COMPILER_ID = ${CMAKE_CXX_COMPILER_ID}")
-@@ -132,13 +137,8 @@ if(ENABLE_EXTRA_WARNINGS)
+@@ -132,13 +134,8 @@
    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Wextra -pedantic")
  endif()
  
@@ -85,71 +73,58 @@ index c5815bb..121060a 100644
  
  message("-- CMAKE_CXX_FLAGS = ${CMAKE_CXX_FLAGS}")
  message("-- CMAKE_Fortran_FLAGS = ${CMAKE_Fortran_FLAGS}")
-@@ -154,7 +154,7 @@ if(ENABLE_HYPRE)
+@@ -146,12 +143,20 @@
+ if(ENABLE_HYPRE)
+   include(CheckSymbolExists)
+   set(CMAKE_REQUIRED_INCLUDES "${HYPRE_INCLUDE_DIRS}")
++  set(CMAKE_REQUIRED_LIBRARIES "${HYPRE_LIBRARIES}")
+   check_symbol_exists(
+     HYPRE_BIGINT "${HYPRE_INCLUDE_DIRS}/HYPRE_config.h" NALU_HYPRE_BIGINT)
++  check_symbol_exists(
++    hypre_KRYLOV_COGMRES_HEADER "${HYPRE_INCLUDE_DIRS}/krylov.h" NALU_HYPRE_COGMRES)
+   if(NOT NALU_HYPRE_BIGINT)
+     message(WARNING
+       "HYPRE does not enable 64-bit integer support; will fail on large problems!")
    endif()
++  if (NALU_HYPRE_COGMRES)
++    add_definitions(-DHYPRE_COGMRES)
++  else()
++    message("-- Disabling HYPRE CO-GMRES interface")
++  endif()
  endif()
  
--########################### TAG VERSIONS #####################################
-+################################# TAG VERSIONS #####################################
- include(GetGitRevisionDescription)
- get_git_head_revision(NALU_GITREFSPEC NALU_GIT_COMMIT_SHA)
- if (NALU_GIT_COMMIT_SHA)
-@@ -185,35 +185,22 @@ configure_file("${CMAKE_SOURCE_DIR}/cmake/NaluVersionInfo.h.in"
-   "${CMAKE_BINARY_DIR}/include/NaluVersionInfo.h" @ONLY)
- #### END TAG VERSIONS
- 
--# Add all source files from source subdirectories
--function(add_sources target_list)
--   foreach(_source IN ITEMS ${ARGN})
--       if (IS_ABSOLUTE "${_source}")
--           set(_source_abs "${_source}")
--       else()
--           get_filename_component(_source_abs "${_source}" ABSOLUTE)
--       endif()
--       set_property(GLOBAL APPEND PROPERTY "${target_list}" "${_source_abs}")
--   endforeach()
--endfunction(add_sources)
--add_subdirectory(src)
--add_subdirectory(include)
+ ########################### TAG VERSIONS #####################################
+@@ -198,18 +203,17 @@
+ endfunction(add_sources)
+ add_subdirectory(src)
+ add_subdirectory(include)
 -add_subdirectory(unit_tests)
--get_property(NALU_SOURCES GLOBAL PROPERTY GlobalSourceList)
--get_property(NALU_HEADERS GLOBAL PROPERTY GlobalHeaderList)
++#add_subdirectory(unit_tests)
+ get_property(NALU_SOURCES GLOBAL PROPERTY GlobalSourceList)
+ get_property(NALU_HEADERS GLOBAL PROPERTY GlobalHeaderList)
 -get_property(NALU_UNIT_SOURCES GLOBAL PROPERTY GlobalUnitSourceList)
 -get_property(NALU_UNIT_HEADERS GLOBAL PROPERTY GlobalUnitHeaderList)
-+file(GLOB SOURCE src/*.C src/*/*.C src/*/*.F)
-+file(GLOB HEADER include/*.h include/*/*.h
-+  ${CMAKE_CURRENT_BINARY_DIR}/include/*.h)
-+
-+set(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "-L/soft/compilers/gcc/4.8.4/powerpc64-bgq-linux/lib -Wl,-Bstatic -lgfortran -lstdc++ -ldl -Wl,--no-as-needed -Wl,--allow-multiple-definition")
-+set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "-L/soft/compilers/gcc/4.8.4/powerpc64-bgq-linux/lib -Wl,-Bstatic -lgfortran -lstdc++ -ldl -Wl,--no-as-needed -Wl,--allow-multiple-definition")
++#get_property(NALU_UNIT_SOURCES GLOBAL PROPERTY GlobalUnitSourceList)
++#get_property(NALU_UNIT_HEADERS GLOBAL PROPERTY GlobalUnitHeaderList)
  
  include_directories(${CMAKE_SOURCE_DIR}/include)
  include_directories(${CMAKE_BINARY_DIR}/include)
--add_library(nalu ${NALU_SOURCES})
-+add_library(nalu ${SOURCE} ${HEADER})
+ add_library(nalu ${NALU_SOURCES})
  target_link_libraries(nalu ${Trilinos_LIBRARIES})
  target_link_libraries(nalu ${YAML_CPP_LIBRARIES})
 -target_link_libraries(nalu ${MPI_CXX_LIBRARIES} ${MPI_Fortran_LIBRARIES} ${MPI_C_LIBRARIES})
  
  if(ENABLE_OPENFAST)
    target_link_libraries(nalu ${OpenFAST_LIBRARIES} ${OpenFAST_CPP_LIBRARIES})
--endif()
-+endif (ENABLE_OPENFAST)
- 
- if(ENABLE_TIOGA)
-   target_link_libraries(nalu ${TIOGA_LIBRARIES})
-@@ -223,32 +210,15 @@ if(ENABLE_HYPRE)
+@@ -223,32 +227,13 @@
    target_link_libraries(nalu ${HYPRE_LIBRARIES})
  endif()
  
--message("-- CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 +target_link_libraries(nalu ${HDF5_LIBRARY} ${LAPACK_LIBRARY} ${BLAS_LIBRARY} ${ZLIB_LIBRARY})
 +
-+file(GLOB UNIT_TESTS_SOURCES unit_tests/*.C unit_tests/*/*.C)
+ message("-- CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
  
  set(nalu_ex_name "naluX")
-+message("-- CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
-+
  add_executable(${nalu_ex_name} nalu.C)
  target_link_libraries(${nalu_ex_name} nalu)
 -if(MPI_COMPILE_FLAGS)
@@ -176,25 +151,9 @@ index c5815bb..121060a 100644
  
  set(nalu_ex_catalyst_name "naluXCatalyst")
  if(ENABLE_PARAVIEW_CATALYST)
-@@ -260,7 +230,7 @@ if(ENABLE_PARAVIEW_CATALYST)
-    configure_file(cmake/naluXCatalyst.in ${nalu_ex_catalyst_name} @ONLY)
- endif()
- 
--install(TARGETS ${utest_ex_name} ${nalu_ex_name} nalu
-+install(TARGETS ${nalu_ex_name} nalu
-         RUNTIME DESTINATION bin
-         ARCHIVE DESTINATION lib
-         LIBRARY DESTINATION lib)
-@@ -280,3 +250,5 @@ if(ENABLE_TESTS)
-    include(CTest)
-    add_subdirectory(reg_tests)
- endif()
-+
-+message("\nAnd CMake says...:")
-diff --git a/reg_tests/CTestList.cmake b/reg_tests/CTestList.cmake
-index e7ed33f..628c32d 100644
---- a/reg_tests/CTestList.cmake
-+++ b/reg_tests/CTestList.cmake
+diff -Naru nalu-wind.orig/reg_tests/CTestList.cmake nalu-wind/reg_tests/CTestList.cmake
+--- nalu-wind.orig/reg_tests/CTestList.cmake	2018-10-25 14:06:47.173057000 +0000
++++ nalu-wind/reg_tests/CTestList.cmake	2018-10-25 14:07:01.992584000 +0000
 @@ -4,49 +4,49 @@
  
  # Standard regression test
@@ -252,7 +211,7 @@ index e7ed33f..628c32d 100644
      set_tests_properties(${testname} PROPERTIES TIMEOUT 1000 PROCESSORS ${np} WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/test_files/${testname}" LABELS "unit")
      file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test_files/${testname})
  endfunction(add_test_u)
-@@ -55,7 +55,7 @@ endfunction(add_test_u)
+@@ -55,7 +55,7 @@
  function(add_test_r_cat testname np ncat)
      if(ENABLE_PARAVIEW_CATALYST)
        if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/test_files/${testname}/${testname}.i.in)
@@ -261,11 +220,10 @@ index e7ed33f..628c32d 100644
          set_tests_properties(${testname} PROPERTIES TIMEOUT 1000 PROCESSORS ${np} WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/test_files/${testname}" LABELS "regression")
          file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test_files/${testname})
          set(CATALYST_FILE_INPUT_DECK_COMMAND "catalyst_file_name: catalyst.txt")       
-diff --git a/unit_tests/UnitTestSimdBasic.C b/unit_tests/UnitTestSimdBasic.C
-index b99be1c..9bb44b0 100644
---- a/unit_tests/UnitTestSimdBasic.C
-+++ b/unit_tests/UnitTestSimdBasic.C
-@@ -87,10 +87,10 @@ TEST(Simd, Views)
+diff -Naru nalu-wind.orig/unit_tests/UnitTestSimdBasic.C nalu-wind/unit_tests/UnitTestSimdBasic.C
+--- nalu-wind.orig/unit_tests/UnitTestSimdBasic.C	2018-10-25 14:06:47.447545000 +0000
++++ nalu-wind/unit_tests/UnitTestSimdBasic.C	2018-10-25 14:08:37.477258000 +0000
+@@ -87,10 +87,10 @@
        }
     }
  

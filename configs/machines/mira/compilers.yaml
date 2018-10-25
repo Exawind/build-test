@@ -28,7 +28,6 @@ compilers:
       cflags: -O2
       cxxflags: -O2
       fflags: -O2
-      fcflags: -O2
     modules: []
     operating_system: cnk
     paths:

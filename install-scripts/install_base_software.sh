@@ -53,13 +53,13 @@ case "${MYHOSTNAME}" in
 esac
  
 if [ "${MACHINE}" == 'peregrine' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/ecp/base/a
+  INSTALL_DIR=/nopt/nrel/ecom/ecp/base/b
   GCC_COMPILER_VERSION="6.2.0"
-  INTEL_COMPILER_VERSION="18.1.163"
+  INTEL_COMPILER_VERSION="18.0.3"
 elif [ "${MACHINE}" == 'rhodes' ]; then
-  INSTALL_DIR=/opt/software/a
+  INSTALL_DIR=/opt/software/b
   GCC_COMPILER_VERSION="4.8.5"
-  INTEL_COMPILER_VERSION="18.1.163"
+  INTEL_COMPILER_VERSION="18.0.3"
 else
   printf "\nMachine name not recognized.\n"
   exit 1
@@ -86,15 +86,9 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
-  if [ "${MACHINE}" == 'rhodes' ]; then
-    cmd "cp ${BUILD_TEST_DIR}/configs/machines/rhodes/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
-    cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
-    cmd "cp /opt/software/active/spack/etc/spack/licenses/intel/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
-  elif [ "${MACHINE}" == 'peregrine' ]; then
-    cmd "cp ${BUILD_TEST_DIR}/configs/machines/peregrine/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
-    cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
-    cmd "cp /nopt/nrel/ecom/ecp/base/active/spack/etc/spack/licenses/intel/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
-  fi
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
+  cmd "cp ${HOME}/save/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -104,7 +98,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc intel
+for COMPILER_NAME in gcc #intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -247,13 +241,13 @@ do
 
     # Install our own compilers
     printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install gcc@8.1.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2018.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install flang %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -269,7 +263,8 @@ do
     cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
 
     printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.4.1.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
+    #(set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.4.1.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
+    (set -x; spack --color never install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.4.1.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}'))
 
     printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"

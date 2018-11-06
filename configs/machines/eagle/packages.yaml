@@ -3,7 +3,7 @@ packages:
     version: [2.29.1]
   cmake:
     paths:
-      cmake@3.12.3: /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/cmake-3.12.3-4emiuret42q2kwn7qzpg3dmh4pstlmfv
+      cmake@3.12.3: /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/cmake-3.12.3-qd2xkvdfpka7dsq46omrtp6xo25ffqtf
     buildable: False
   netcdf:
     variants: maxdims=65536 maxvars=524288

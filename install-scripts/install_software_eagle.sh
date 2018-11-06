@@ -39,14 +39,14 @@ if [ ! -z "${PBS_JOBID}" ]; then
 fi
 
 # Find machine we're on
-case "${NREL_CLUSTER}" in
-  peregrine)
-    MACHINE=eagle
-  ;;
-esac
+#case "${NREL_CLUSTER}" in
+#  peregrine)
+MACHINE=eagle
+#  ;;
+#esac
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=${HOME}/eagle/eagle_software
+  INSTALL_DIR=/nopt/nrel/apps/base
   GCC_COMPILER_VERSION="7.3.0"
   INTEL_COMPILER_VERSION="18.0.3"
 else
@@ -83,7 +83,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc intel
+for COMPILER_NAME in gcc #intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -95,25 +95,20 @@ do
   # Load necessary modules
   printf "\nLoading modules...\n"
   cmd "module purge"
-  cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-  cmd "module load git"
-  cmd "module load python/2.7.15"
-  cmd "module load curl"
-  cmd "module load binutils"
-  cmd "module load /scratch/jrood/eagle2/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/gcc/7.3.0"
+  cmd "module load /nopt/nrel/apps/compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-4.8.5/gcc/7.3.0"
   if [ "${COMPILER_NAME}" == 'intel' ]; then
-    cmd "module load /scratch/jrood/eagle2/eagle_compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio/cluster.2018.3"
+    cmd "module load /nopt/nrel/apps/compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio/cluster.2018.3"
   fi
   cmd "module list"
   # Set the TMPDIR to disk so it doesn't run out of space
   printf "\nMaking and setting TMPDIR to disk...\n"
-  cmd "mkdir -p /scratch/${USER}/.tmp"
-  cmd "export TMPDIR=/scratch/${USER}/.tmp"
+  cmd "mkdir -p ${HOME}/.tmp"
+  cmd "export TMPDIR=${HOME}/.tmp"
 
   printf "\nInstalling software using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
   cmd "spack install intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install intel-mkl %${COMPILER_NAME}@${COMPILER_VERSION}"
-  cmd "spack install openmpi@3.1.2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack install openmpi@3.1.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@2.1.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install openmpi@1.10.7 %${COMPILER_NAME}@${COMPILER_VERSION}"
   cmd "spack install hdf5~mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -136,7 +131,7 @@ do
 done
 
 printf "\nSetting permissions...\n"
-cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
+cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 
 printf "\n$(date)\n"
 printf "\nDone!\n"

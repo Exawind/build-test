@@ -51,7 +51,7 @@ MACHINE=eagle
 #esac
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=${HOME}/eagle/eagle_compilers
+  INSTALL_DIR=/nopt/nrel/apps/compilers
   GCC_COMPILER_VERSION="4.8.5"
 else
   printf "\nMachine name not recognized.\n"
@@ -102,18 +102,12 @@ do
 
   # Load necessary modules
   printf "\nLoading modules...\n"
-  #cmd "module purge"
-  #cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-  #cmd "module load gcc/${COMPILER_VERSION}"
-  #cmd "module load git"
-  #cmd "module load python/2.7.15"
-  #cmd "module load curl"
-  #cmd "module load binutils"
-  #cmd "module list"
+  cmd "module purge"
+
   # Set the TMPDIR to disk so it doesn't run out of space
-  #printf "\nMaking and setting TMPDIR to disk...\n"
-  #cmd "mkdir -p /scratch/${USER}/.tmp"
-  #cmd "export TMPDIR=/scratch/${USER}/.tmp"
+  printf "\nMaking and setting TMPDIR to disk...\n"
+  cmd "mkdir -p ${HOME}/.tmp"
+  cmd "export TMPDIR=${HOME}/.tmp"
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -124,6 +118,7 @@ do
     cmd "nice spack install -j 8 gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "nice spack install -j 8 gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "nice spack install -j 8 intel-parallel-studio@cluster.2018.3+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "nice spack install -j 8 intel-parallel-studio@cluster.2017.7+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"
@@ -132,7 +127,7 @@ do
 done
 
 printf "\nSetting permissions...\n"
-cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
+cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 
 printf "\n$(date)\n"
 printf "\nDone!\n"

@@ -1,8 +1,8 @@
 compilers:
 - compiler:
     extra_rpaths:
-     - /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/gcc-7.3.0-xr2wbli4udl6h55smqvzrrms4vkwz75k/lib64
-     - /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/gcc-7.3.0-xr2wbli4udl6h55smqvzrrms4vkwz75k/lib/gcc/x86_64-pc-linux-gnu/7.3.0
+     - /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-vydnujncq3lpwhhnxmauinsqxkhxy4gn/lib64
+     - /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-vydnujncq3lpwhhnxmauinsqxkhxy4gn/lib/gcc/x86_64-pc-linux-gnu/7.3.0
     flags:
       cflags: -O2
       cxxflags: -O2
@@ -10,10 +10,10 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc:  /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/gcc-7.3.0-xr2wbli4udl6h55smqvzrrms4vkwz75k/bin/gcc
-      cxx: /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/gcc-7.3.0-xr2wbli4udl6h55smqvzrrms4vkwz75k/bin/g++
-      f77: /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/gcc-7.3.0-xr2wbli4udl6h55smqvzrrms4vkwz75k/bin/gfortran
-      fc:  /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/gcc-7.3.0-xr2wbli4udl6h55smqvzrrms4vkwz75k/bin/gfortran
+      cc:  /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-vydnujncq3lpwhhnxmauinsqxkhxy4gn/bin/gcc
+      cxx: /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-vydnujncq3lpwhhnxmauinsqxkhxy4gn/bin/g++
+      f77: /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-vydnujncq3lpwhhnxmauinsqxkhxy4gn/bin/gfortran
+      fc:  /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-vydnujncq3lpwhhnxmauinsqxkhxy4gn/bin/gfortran
     spec: gcc@7.3.0
     target: x86_64
 - compiler:
@@ -21,19 +21,19 @@ compilers:
       set:
         INTEL_LICENSE_FILE: 28519@license-1.hpc.nrel.gov
     extra_rpaths:
-     - /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio-cluster.2018.3-hyyuntpc5zpzhsicb3gl56mpu3q2aa55/compilers_and_libraries_2018.3.222/linux/compiler/lib/intel64_lin
-     - /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/gcc-7.3.0-xr2wbli4udl6h55smqvzrrms4vkwz75k/lib64
-     - /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/gcc-7.3.0-xr2wbli4udl6h55smqvzrrms4vkwz75k/lib/gcc/x86_64-pc-linux-gnu/7.3.0
+     - /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.3-6wq2vvslzhamadvc66fecse5bgcdhjzt/compilers_and_libraries_2018.3.222/linux/compiler/lib/intel64_lin
+     - /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-vydnujncq3lpwhhnxmauinsqxkhxy4gn/lib64
+     - /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-vydnujncq3lpwhhnxmauinsqxkhxy4gn/lib/gcc/x86_64-pc-linux-gnu/7.3.0
     flags:
-      cflags: -O2 -axCORE-AVX2,CORE-AVX-I
-      cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I
-      fflags: -O2 -axCORE-AVX2,CORE-AVX-I
+      cflags: -O2 -xSKYLAKE-AVX512
+      cxxflags: -O2 -xSKYLAKE-AVX512
+      fflags: -O2 -xSKYLAKE-AVX512
     modules: []
     operating_system: centos7
     paths:
-      cc:  /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio-cluster.2018.3-hyyuntpc5zpzhsicb3gl56mpu3q2aa55/compilers_and_libraries_2018.3.222/linux/bin/intel64/icc
-      cxx: /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio-cluster.2018.3-hyyuntpc5zpzhsicb3gl56mpu3q2aa55/compilers_and_libraries_2018.3.222/linux/bin/intel64/icpc
-      f77: /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio-cluster.2018.3-hyyuntpc5zpzhsicb3gl56mpu3q2aa55/compilers_and_libraries_2018.3.222/linux/bin/intel64/ifort
-      fc:  /scratch/jrood/eagle2/eagle_compilers/spack/opt/spack/linux-centos7-x86_64/gcc-6.2.0/intel-parallel-studio-cluster.2018.3-hyyuntpc5zpzhsicb3gl56mpu3q2aa55/compilers_and_libraries_2018.3.222/linux/bin/intel64/ifort
+      cc:  /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.3-6wq2vvslzhamadvc66fecse5bgcdhjzt/compilers_and_libraries_2018.3.222/linux/bin/intel64/icc
+      cxx: /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.3-6wq2vvslzhamadvc66fecse5bgcdhjzt/compilers_and_libraries_2018.3.222/linux/bin/intel64/icpc
+      f77: /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.3-6wq2vvslzhamadvc66fecse5bgcdhjzt/compilers_and_libraries_2018.3.222/linux/bin/intel64/ifort
+      fc:  /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.3-6wq2vvslzhamadvc66fecse5bgcdhjzt/compilers_and_libraries_2018.3.222/linux/bin/intel64/ifort
     spec: intel@18.0.3
     target: x86_64

@@ -46,7 +46,7 @@ case "${NREL_CLUSTER}" in
 esac
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=${SCRATCH}/eagle2/eagle_software
+  INSTALL_DIR=${HOME}/eagle/eagle_software
   GCC_COMPILER_VERSION="7.3.0"
   INTEL_COMPILER_VERSION="18.0.3"
 else

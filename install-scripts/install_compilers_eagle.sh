@@ -1,11 +1,16 @@
 #!/bin/bash -l
 
-#PBS -N install-compilers-eagle
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
-#PBS -A hpcapps
-#PBS -q short
-#PBS -j oe
-#PBS -W umask=002
+#SBATCH -J install-eagle-compilers
+#SBATCH -o %x.o%j
+#SBATCH -t 600
+#SBATCH -N 1
+
+##PBS -N install-compilers-eagle
+##PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
+##PBS -A hpcapps
+##PBS -q short
+##PBS -j oe
+##PBS -W umask=002
 
 # Control over printing and executing commands
 print_cmds=true
@@ -39,15 +44,15 @@ if [ ! -z "${PBS_JOBID}" ]; then
 fi
 
 # Find machine we're on
-case "${NREL_CLUSTER}" in
-  peregrine)
-    MACHINE=eagle
-  ;;
-esac
+#case "${NREL_CLUSTER}" in
+#  eagle)
+MACHINE=eagle
+#  ;;
+#esac
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=${SCRATCH}/eagle2/eagle_compilers
-  GCC_COMPILER_VERSION="6.2.0"
+  INSTALL_DIR=${HOME}/eagle/eagle_compilers
+  GCC_COMPILER_VERSION="4.8.5"
 else
   printf "\nMachine name not recognized.\n"
   exit 1
@@ -77,7 +82,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/modules.yaml.base ${SPACK_ROOT}/etc/spack/modules.yaml"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/packages.yaml.base ${SPACK_ROOT}/etc/spack/packages.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
-  cmd "cp ${HOME}/save/intel_license/new_license/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
+  cmd "cp ${HOME}/save/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
   printf "============================================================\n"
   printf "Done setting up install directory.\n"
@@ -97,30 +102,28 @@ do
 
   # Load necessary modules
   printf "\nLoading modules...\n"
-  cmd "module purge"
-  cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-  cmd "module load gcc/${COMPILER_VERSION}"
-  cmd "module load git"
-  cmd "module load python/2.7.15"
-  cmd "module load curl"
-  cmd "module load binutils"
-  cmd "module list"
+  #cmd "module purge"
+  #cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+  #cmd "module load gcc/${COMPILER_VERSION}"
+  #cmd "module load git"
+  #cmd "module load python/2.7.15"
+  #cmd "module load curl"
+  #cmd "module load binutils"
+  #cmd "module list"
   # Set the TMPDIR to disk so it doesn't run out of space
-  printf "\nMaking and setting TMPDIR to disk...\n"
-  cmd "mkdir -p /scratch/${USER}/.tmp"
-  cmd "export TMPDIR=/scratch/${USER}/.tmp"
+  #printf "\nMaking and setting TMPDIR to disk...\n"
+  #cmd "mkdir -p /scratch/${USER}/.tmp"
+  #cmd "export TMPDIR=/scratch/${USER}/.tmp"
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install intel-parallel-studio@cluster.2019.0+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "nice spack install -j 8 cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "nice spack install -j 8 gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "nice spack install -j 8 gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "nice spack install -j 8 gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "nice spack install -j 8 gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "nice spack install -j 8 gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "nice spack install -j 8 intel-parallel-studio@cluster.2018.3+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"

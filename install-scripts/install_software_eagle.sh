@@ -95,9 +95,13 @@ do
   # Load necessary modules
   printf "\nLoading modules...\n"
   cmd "module purge"
-  cmd "module load /nopt/nrel/apps/compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-4.8.5/gcc/7.3.0"
+  cmd "module unuse /nopt/modulefiles"
+  cmd "module unuse /usr/share/Modules/modulefiles"
+  cmd "module use /nopt/nrel/apps/compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-4.8.5"
+  cmd "module load gcc/7.3.0"
+  cmd "which gcc"
   if [ "${COMPILER_NAME}" == 'intel' ]; then
-    cmd "module load /nopt/nrel/apps/compilers/spack/share/spack/modules/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio/cluster.2018.3"
+    cmd "module load intel-parallel-studio/cluster.2018.3"
   fi
   cmd "module list"
   # Set the TMPDIR to disk so it doesn't run out of space

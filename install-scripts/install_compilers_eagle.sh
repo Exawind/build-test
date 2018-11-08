@@ -111,14 +111,14 @@ do
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "nice spack install -j 8 cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "nice spack install -j 8 gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "nice spack install -j 8 gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "nice spack install -j 8 gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "nice spack install -j 8 gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "nice spack install -j 8 gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "nice spack install -j 8 intel-parallel-studio@cluster.2018.3+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "nice spack install -j 8 intel-parallel-studio@cluster.2017.7+advisor+inspector~mkl~mpi~itac+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector+vtune~mkl~mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector+vtune~mkl~mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"

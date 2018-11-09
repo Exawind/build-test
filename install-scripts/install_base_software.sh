@@ -58,7 +58,7 @@ if [ "${MACHINE}" == 'eagle' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/2018-11-09
   GCC_COMPILER_VERSION="7.3.0"
   INTEL_COMPILER_VERSION="18.0.3"
-if [ "${MACHINE}" == 'peregrine' ]; then
+elif [ "${MACHINE}" == 'peregrine' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/ecp/base/b
   GCC_COMPILER_VERSION="6.2.0"
   INTEL_COMPILER_VERSION="18.0.3"
@@ -321,7 +321,7 @@ done
 printf "\nSetting permissions...\n"
 if [ "${MACHINE}" == 'eagle' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
-if [ "${MACHINE}" == 'peregrine' ]; then
+elif [ "${MACHINE}" == 'peregrine' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then
   cmd "chgrp windsim /opt"

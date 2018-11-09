@@ -1,21 +1,39 @@
 packages:
   binutils:
     version: [2.29.1]
+  libxml2:
+    version: [2.9.8]
+    variants: +python
+  boost:
+    version: [1.68.0]
   cmake:
+    version: [3.12.3]
     paths:
       cmake@3.12.3: /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/cmake-3.12.3-qd2xkvdfpka7dsq46omrtp6xo25ffqtf
     buildable: False
   netcdf:
+    version: [4.6.1]
     variants: maxdims=65536 maxvars=524288
+  parallel-netcdf:
+    version: [1.8.0]
   hdf5:
+    version: [1.10.4]
     variants: +cxx+hl
   openmpi:
     version: [3.1.3]
     variants: fabrics=verbs
+  superlu:
+    version: [4.3]
+  openfast:
+    version: [develop]
   intel-mpi:
     version: [2018.3.222]
   intel-mkl:
     version: [2018.3.222]
+  yaml-cpp:
+    version: [0.6.2]
+  netlib-lapack:
+    version: [3.8.0]
   all:
     compiler: [gcc@7.3.0, intel@18.0.3]
     # Spack uses build_type=RelWithDebInfo by default for CMake packages

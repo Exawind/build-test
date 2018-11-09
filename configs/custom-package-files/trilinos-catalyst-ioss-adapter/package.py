@@ -17,7 +17,7 @@ class TrilinosCatalystIossAdapter(CMakePackage):
 
     depends_on('bison')
     depends_on('flex')
-    depends_on('paraview+mpi+python+osmesa@5.4.1')
+    depends_on('paraview+mpi+python+osmesa')
 
     root_cmakelists_dir = 'packages/seacas/libraries/ioss/src/visualization/ParaViewCatalystIossAdapter'
 

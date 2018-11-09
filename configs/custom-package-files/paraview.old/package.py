@@ -15,7 +15,6 @@ class Paraview(CMakePackage):
     url      = "http://www.paraview.org/files/v5.3/ParaView-v5.3.0.tar.gz"
     _urlfmt  = 'http://www.paraview.org/files/v{0}/ParaView-v{1}{2}.tar.gz'
 
-    version('5.6.0', sha256='cb8c4d752ad9805c74b4a08f8ae6e83402c3f11e38b274dba171b99bb6ac2460')
     version('5.5.2', '7eb93c31a1e5deb7098c3b4275e53a4a')
     version('5.5.1', 'a7d92a45837b67c3371006cc45163277')
     version('5.5.0', 'a8f2f41edadffdcc89b37fdc9aa7f005')
@@ -36,6 +35,8 @@ class Paraview(CMakePackage):
     variant('opengl2', default=True, description='Enable OpenGL2 backend')
     variant('examples', default=False, description="Build examples")
     variant('hdf5', default=False, description="Use external HDF5")
+    variant('visit', default=False, description="Use VisIt bridge")
+    variant('boxlib', default=False, description="Enable Boxlib support")
 
     depends_on('python@2:2.8', when='+python')
     depends_on('py-numpy', when='+python', type='run')
@@ -44,11 +45,8 @@ class Paraview(CMakePackage):
     depends_on('qt+opengl', when='@5.3.0:+qt+opengl2')
     depends_on('qt~opengl', when='@5.3.0:+qt~opengl2')
     depends_on('qt@:4', when='@:5.2.0+qt')
-
     depends_on('mesa+swrender', when='+osmesa')
     depends_on('libxt', when='+qt')
-    conflicts('+qt', when='+osmesa')
-
     depends_on('bzip2')
     depends_on('freetype')
     # depends_on('hdf5+mpi', when='+mpi')
@@ -65,14 +63,19 @@ class Paraview(CMakePackage):
     # depends_on('sqlite') # external version not supported
     depends_on('zlib')
     depends_on('cmake@3.3:', type='build')
+    depends_on('boost', when='+visit')
+    depends_on('boxlib', when='+boxlib')
+
+    conflicts('+qt', when='+osmesa')
+    conflicts('+boxlib', when='~visit')
 
     patch('stl-reader-pv440.patch', when='@4.4.0')
-
     # Broken gcc-detection - improved in 5.1.0, redundant later
     patch('gcc-compiler-pv501.patch', when='@:5.0.1')
-
     # Broken installation (ui_pqExportStateWizard.h) - fixed in 5.2.0
     patch('ui_pqExportStateWizard.patch', when='@:5.1.2')
+    # Broken vtkexpat where arc4random symbols are undefined
+    patch('vtkexpat_arc4random.patch', when='@5.5.0:')
 
     def url_for_version(self, version):
         """Handle ParaView version-based custom URLs."""
@@ -149,6 +152,31 @@ class Paraview(CMakePackage):
         if '+qt' in spec:
             cmake_args.extend([
                 '-DPARAVIEW_QT_VERSION=%s' % spec['qt'].version[0],
+            ])
+
+        if '+visit' in spec:
+            cmake_args.extend([
+                '-DPARAVIEW_USE_VISITBRIDGE:BOOL=ON',
+                '-DBOOST_ROOT:PATH=%s' % spec['boost'].prefix
+            ])
+
+        if '+boxlib' in spec:
+            if self.spec.satisfies('%gcc'):
+                mpifc = Executable(spec['mpi'].mpifc)
+                libfortran = LibraryList(mpifc('--print-file-name',
+                                                'libgfortran.%s' % dso_suffix,
+                                                output=str).strip())
+                libquadmath = LibraryList(mpifc('--print-file-name',
+                                                'libquadmath.%s' % dso_suffix,
+                                                output=str).strip())
+
+            cmake_args.extend([
+                '-DVISIT_BUILD_READER_Boxlib3D:BOOL=ON',
+                '-DBoxlib_INCLUDE_DIR:PATH=%s' % spec['boxlib'].prefix.include,
+                '-DBoxlib_C_LIBRARY:PATH=%s' % join_path(spec['boxlib'].prefix.lib,'libcboxlib.a'),
+                '-DBoxlib_Fortran_LIBRARY:PATH=%s' % join_path(spec['boxlib'].prefix.lib,'libfboxlib.a'),
+                '-Dgfortran_LIBRARY:PATH=%s' % libfortran.libraries[0],
+                '-Dquadmath_LIBRARY:PATH=%s' % libquadmath.libraries[0],
             ])
 
         if '+python' in spec:

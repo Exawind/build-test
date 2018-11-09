@@ -39,10 +39,12 @@ if [ ! -z "${PBS_JOBID}" ]; then
 fi
 
 # Find machine we're on
-MYHOSTNAME=$(hostname -d)
-case "${MYHOSTNAME}" in
-  hpc.nrel.gov)
+case "${NREL_CLUSTER}" in
+  peregrine)
     MACHINE=peregrine
+  ;;
+  eagle)
+    MACHINE=eagle
   ;;
 esac
 MYHOSTNAME=$(hostname -s)
@@ -52,7 +54,11 @@ case "${MYHOSTNAME}" in
   ;;
 esac
  
-if [ "${MACHINE}" == 'peregrine' ]; then
+if [ "${MACHINE}" == 'eagle' ]; then
+  INSTALL_DIR=/nopt/nrel/ecom/hpacf/2018-11-09
+  GCC_COMPILER_VERSION="7.3.0"
+  INTEL_COMPILER_VERSION="18.0.3"
+elif [ "${MACHINE}" == 'peregrine' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/ecp/base/b
   GCC_COMPILER_VERSION="6.2.0"
   INTEL_COMPILER_VERSION="18.0.3"
@@ -86,7 +92,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
-  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  #cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
   cmd "cp ${HOME}/save/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
@@ -112,7 +118,15 @@ do
 
   # Load necessary modules
   printf "\nLoading modules...\n"
-  if [ "${MACHINE}" == 'peregrine' ]; then
+  if [ "${MACHINE}" == 'eagle' ]; then
+    cmd "module purge"
+    cmd "module load gcc/7.3.0"
+    cmd "module list"
+    # Set the TMPDIR to disk so it doesn't run out of space
+    printf "\nMaking and setting TMPDIR to disk...\n"
+    cmd "mkdir -p ${HOME}/.tmp"
+    cmd "export TMPDIR=${HOME}/.tmp"
+  elif [ "${MACHINE}" == 'peregrine' ]; then
     cmd "module purge"
     cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
     cmd "module load gcc/6.2.0"
@@ -161,13 +175,13 @@ do
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     # Install our own python
-    printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    for PYTHON_VERSION in '2.7.15' '3.6.5'; do
-      cmd "spack install python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
-      for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf py-scipy py-yt; do
-        cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
-      done
-    done
+    #printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    #for PYTHON_VERSION in '2.7.15' '3.6.5'; do
+    #  cmd "spack install python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #  for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf py-scipy py-yt; do
+    #    cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #  done
+    #done
 
     printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -180,16 +194,16 @@ do
     cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gnuplot+X+wx %${COMPILER_NAME}@${COMPILER_VERSION} ^pango+X"
+    #cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install gnuplot+X+wx %${COMPILER_NAME}@${COMPILER_VERSION} ^pango+X"
     cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install image-magick %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install image-magick %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     # Rhodes specific
     if [ "${MACHINE}" == 'rhodes' ]; then
@@ -240,37 +254,39 @@ do
     fi
 
     # Install our own compilers
-    printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    #cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install flang %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     # Install Nalu-Wind dependencies with everything turned on
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+    #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+    #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
     # Install Nalu-Wind with Trilinos debug
-    cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+    #cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
     # Turn off OpenMP
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
     # Install Nalu-Wind dependencies with everything turned on
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+    #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
     # Install Nalu-Wind with Trilinos debug
-    cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+    #cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
 
-    printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    #printf "\nInstalling NetCDF Fortran using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     #(set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.4.1.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
-    (set -x; spack --color never install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.4.1.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}'))
+    #(set -x; spack --color never install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.4.1.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}'))
 
-    printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
+    #printf "\nInstalling Percept using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    #cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
 
-    printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #printf "\nInstalling Valgrind using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    #cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     #Already installed due to catalyst
     #printf "\nInstalling Paraview server using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -282,16 +298,16 @@ do
     #printf "\nInstalling Paraview GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     #cmd "spack install paraview+mpi+python+qt+visit+boxlib@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
 
-    printf "\nInstalling Amrvis using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install amrvis+mpi dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #printf "\nInstalling Amrvis using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    #cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install amrvis+mpi dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     # Need to update compilers.yaml to point to newest intel-parallel-studio built by gcc before installing with intel
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
-    # Turn off OpenMP
-    TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
+    #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
+    ## Turn off OpenMP
+    #TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
+    #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
   fi
 
   cmd "unset TMPDIR"
@@ -299,11 +315,12 @@ do
   printf "\nDone installing shared software with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
-if [ "${MACHINE}" == 'peregrine' ]; then
-  printf "\nSetting permissions...\n"
-  #cmd "chmod -R a+rX,o-w,g+w ${INSTALL_DIR}"
+printf "\nSetting permissions...\n"
+if [ "${MACHINE}" == 'eagle' ]; then
+  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
+elif [ "${MACHINE}" == 'peregrine' ]; then
+  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then
-  printf "\nSetting permissions...\n"
   cmd "chgrp windsim /opt"
   cmd "chgrp windsim /opt/software"
   cmd "chgrp -R windsim ${INSTALL_DIR}"

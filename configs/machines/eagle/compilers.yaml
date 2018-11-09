@@ -4,9 +4,9 @@ compilers:
      - /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-vydnujncq3lpwhhnxmauinsqxkhxy4gn/lib64
      - /nopt/nrel/apps/compilers/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-vydnujncq3lpwhhnxmauinsqxkhxy4gn/lib/gcc/x86_64-pc-linux-gnu/7.3.0
     flags:
-      cflags: -O2
-      cxxflags: -O2
-      fflags: -O2
+      cflags: -O2 -mtune=skylake-avx512 -march=skylake-avx512
+      cxxflags: -O2 -mtune=skylake-avx512 -march=skylake-avx512
+      fflags: -O2 -mtune=skylake-avx512 -march=skylake-avx512
     modules: []
     operating_system: centos7
     paths:

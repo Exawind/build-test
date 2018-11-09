@@ -33,11 +33,16 @@ elif [ ${OS} == 'Linux' ]; then
       if [ -f "/etc/nrel" ]; then 
         MACHINE=merlin
       else
-        MYHOSTNAME=$(hostname -d)
-        case "${MYHOSTNAME}" in
-          hpc.nrel.gov)
+        case "${NREL_CLUSTER}" in
+          eagle)
+            MACHINE=eagle
+          ;;
+          peregrine)
             MACHINE=peregrine
           ;;
+        esac
+        MYHOSTNAME=$(hostname -d)
+        case "${MYHOSTNAME}" in
           mcp.alcf.anl.gov)
             MACHINE=mira
           ;;
@@ -70,6 +75,7 @@ fi
 
 # Copy machine-specific configuration for Spack if we recognize the machine
 if [ "${MACHINE}" == 'peregrine' ] || \
+   [ "${MACHINE}" == 'eagle' ] || \
    [ "${MACHINE}" == 'rhodes' ] || \
    [ "${MACHINE}" == 'merlin' ] || \
    [ "${MACHINE}" == 'cori' ] || \
@@ -89,6 +95,11 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   (set -x; cp -R custom-package-files/nalu-wind ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/trilinos-catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/paraview/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/paraview/package.py)
+
+  #Extra stuff for eagle
+  #if [ ${MACHINE} == 'eagle' ]; then
+    #nothing at the moment
+  #fi
 
   #Extra stuff for peregrine
   #if [ ${MACHINE} == 'peregrine' ]; then

@@ -33,11 +33,16 @@ elif [ ${OS} == 'Linux' ]; then
       if [ -f "/etc/nrel" ]; then 
         MACHINE=merlin
       else
-        MYHOSTNAME=$(hostname -d)
-        case "${MYHOSTNAME}" in
-          hpc.nrel.gov)
+        case "${NREL_CLUSTER}" in
+          eagle)
+            MACHINE=eagle
+          ;;
+          peregrine)
             MACHINE=peregrine
           ;;
+        esac
+        MYHOSTNAME=$(hostname -d)
+        case "${MYHOSTNAME}" in
           mcp.alcf.anl.gov)
             MACHINE=mira
           ;;

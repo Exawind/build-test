@@ -92,7 +92,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
-  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  #cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
   cmd "cp ${HOME}/save/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 

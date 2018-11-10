@@ -21,6 +21,9 @@ class TrilinosCatalystIossAdapter(CMakePackage):
 
     root_cmakelists_dir = 'packages/seacas/libraries/ioss/src/visualization/ParaViewCatalystIossAdapter'
 
+    def setup_environment(self, spack_env, run_env):
+        run_env.set('PYTHONPATH', join_path(self.prefix, 'python'))
+
     def cmake_args(self):
         spec = self.spec
         options = []

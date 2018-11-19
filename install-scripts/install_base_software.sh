@@ -53,19 +53,21 @@ case "${MYHOSTNAME}" in
     MACHINE=rhodes
   ;;
 esac
+
+DATE=2018-11-19
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/hpacf/2018-11-09
+  INSTALL_DIR=/nopt/nrel/ecom/hpacf/${DATE}
   GCC_COMPILER_VERSION="7.3.0"
-  INTEL_COMPILER_VERSION="18.0.3"
+  INTEL_COMPILER_VERSION="19.0.1"
 elif [ "${MACHINE}" == 'peregrine' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/ecp/base/b
-  GCC_COMPILER_VERSION="6.2.0"
-  INTEL_COMPILER_VERSION="18.0.3"
+  INSTALL_DIR=/nopt/nrel/ecom/ecp/base/${DATE}
+  GCC_COMPILER_VERSION="7.3.0"
+  INTEL_COMPILER_VERSION="19.0.1"
 elif [ "${MACHINE}" == 'rhodes' ]; then
-  INSTALL_DIR=/opt/software/b
+  INSTALL_DIR=/opt/software/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
-  INTEL_COMPILER_VERSION="18.0.3"
+  INTEL_COMPILER_VERSION="19.0.1"
 else
   printf "\nMachine name not recognized.\n"
   exit 1
@@ -131,7 +133,7 @@ do
     cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
     cmd "module load gcc/6.2.0"
     cmd "module load git"
-    cmd "module load python/2.7.14"
+    cmd "module load python/2.7.15"
     cmd "module load curl"
     cmd "module load binutils"
     cmd "module load texinfo"
@@ -261,7 +263,7 @@ do
     #cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install intel-parallel-studio@cluster.2018.3+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install intel-parallel-studio@cluster.2019.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install flang %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -291,12 +293,12 @@ do
     #Already installed due to catalyst
     #printf "\nInstalling Paraview server using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     #if [ "${MACHINE}" == 'rhodes' ]; then
-    #  cmd "spack install paraview+mpi+python+osmesa+visit@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #  cmd "spack install paraview+mpi+python+osmesa+visit %${COMPILER_NAME}@${COMPILER_VERSION}"
     #elif [ "${MACHINE}" == 'peregrine' ]; then
-    #  cmd "spack install paraview+mpi+python+osmesa+visit+boxlib@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #  cmd "spack install paraview+mpi+python+osmesa+visit+boxlib %${COMPILER_NAME}@${COMPILER_VERSION}"
     #fi
     #printf "\nInstalling Paraview GUI using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install paraview+mpi+python+qt+visit+boxlib@5.4.1 %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
+    #cmd "spack install paraview+mpi+python+qt+visit+boxlib %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
 
     #printf "\nInstalling Amrvis using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     #cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"

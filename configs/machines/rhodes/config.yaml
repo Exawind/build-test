@@ -11,6 +11,6 @@ config:
   # site-wide Spack source cache for all users though.
   source_cache: ~/.spack/downloads
   misc_cache: ~/.spack/cache
-  verify_ssl: false
+  verify_ssl: true
   checksum: true
   dirty: false

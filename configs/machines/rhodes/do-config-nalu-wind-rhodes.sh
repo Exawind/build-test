@@ -29,9 +29,9 @@ cmd "module load bison"
 cmd "module load wget"
 cmd "module load bc"
 cmd "module load binutils"
-cmd "module load python/2.7.14"
+cmd "module load python"
 cmd "module load openmpi"
-cmd "module load catalyst-ioss-adapter"
+cmd "module load trilinos-catalyst-ioss-adapter"
 cmd "module load trilinos"
 cmd "module load tioga"
 cmd "module load yaml-cpp"
@@ -67,5 +67,5 @@ cmd "which mpirun"
   -DENABLE_TIOGA:BOOL=ON \
   -DTIOGA_DIR:PATH=${TIOGA_ROOT_DIR} \
   -DENABLE_PARAVIEW_CATALYST:BOOL=ON \
-  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_IOSS_ADAPTER_ROOT_DIR} \
-  .. && nice make -j32)
+  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${TRILINOS_CATALYST_IOSS_ADAPTER_ROOT_DIR} \
+  .. && nice make -j64)

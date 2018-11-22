@@ -1,7 +1,6 @@
 packages:
   libxml2:
     version: [2.9.8]
-    variants: +python
   freetype:
     version: [2.7.1]
   binutils:

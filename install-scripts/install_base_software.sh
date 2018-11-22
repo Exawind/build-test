@@ -142,8 +142,6 @@ do
     cmd "module load python/2.7.15"
     cmd "module load curl"
     cmd "module load binutils"
-    cmd "module load texinfo"
-    cmd "module load texlive"
     cmd "module list"
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"

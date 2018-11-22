@@ -1,13 +1,13 @@
 #!/bin/bash -l
 
-#PBS -N install-base-compilers
+#PBS -N install-base-utilities
 #PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
 #PBS -A windsim
 #PBS -q short
 #PBS -j oe
 #PBS -W umask=002
 
-# Script for installation of ECP related compilers on Eagle, Peregrine, and Rhodes
+# Script for shared installation of ECP related utilities on Eagle, Peregrine, and Rhodes
 
 # Control over printing and executing commands
 print_cmds=true
@@ -57,20 +57,19 @@ esac
 DATE=2018-11-21
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/hpacf/compilers/${DATE}
+  INSTALL_DIR=/nopt/nrel/ecom/hpacf/utilities/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 elif [ "${MACHINE}" == 'peregrine' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/hpacf/compilers/${DATE}
+  INSTALL_DIR=/nopt/nrel/ecom/hpacf/utilities/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 elif [ "${MACHINE}" == 'rhodes' ]; then
-  INSTALL_DIR=/opt/compilers/${DATE}
+  INSTALL_DIR=/opt/utilities/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 else
   printf "\nMachine name not recognized.\n"
   exit 1
 fi
 
-TRILINOS_BRANCH=develop
 BUILD_TEST_DIR=$(pwd)/..
 
 # Set spack location
@@ -89,6 +88,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   cmd "git clone https://github.com/spack/spack.git ${SPACK_ROOT}"
 
   printf "\nConfiguring Spack...\n"
+  cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
   cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
@@ -107,12 +107,12 @@ do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
   fi
-  printf "\nInstalling compilers with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+  printf "\nInstalling base utilities with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
-  # Load necessary modules
   printf "\nLoading modules...\n"
   if [ "${MACHINE}" == 'eagle' ]; then
     cmd "module purge"
+    cmd "module load gcc/7.3.0"
     cmd "module list"
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p ${HOME}/.tmp"
@@ -120,10 +120,13 @@ do
   elif [ "${MACHINE}" == 'peregrine' ]; then
     cmd "module purge"
     cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+    cmd "module load gcc/6.2.0"
     cmd "module load git"
-    cmd "module load python"
+    cmd "module load python/2.7.15"
     cmd "module load curl"
     cmd "module load binutils"
+    cmd "module load texinfo"
+    cmd "module load texlive"
     cmd "module list"
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
@@ -147,21 +150,41 @@ do
   fi
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
-    printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2018.4+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2019.1+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install flang %${COMPILER_NAME}@${COMPILER_VERSION}"
+    if [ "${MACHINE}" == 'rhodes' ]; then
+      printf "\nInstalling utilities needed on rhodes with ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+      cmd "spack install environment-modules %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install unzip %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install bc %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install patch %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install bzip2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install flex %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
+    fi
+
+    printf "\nInstalling utilities using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gnuplot+X+wx %${COMPILER_NAME}@${COMPILER_VERSION} ^pango+X"
+    cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install image-magick %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"
 
-  printf "\nDone installing compilers with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+  printf "\nDone installing utilities with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
 printf "\nSetting permissions...\n"
@@ -171,15 +194,12 @@ elif [ "${MACHINE}" == 'peregrine' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then
   cmd "chgrp windsim /opt"
-  cmd "chgrp windsim /opt/compilers"
+  cmd "chgrp windsim /opt/utilities"
   cmd "chgrp -R windsim ${INSTALL_DIR}"
   cmd "chmod a+rX,go-w /opt"
-  cmd "chmod a+rX,go-w /opt/compilers"
+  cmd "chmod a+rX,go-w /opt/utilities"
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 fi
 
 printf "\n$(date)\n"
 printf "\nDone!\n"
-
-# Last step
-# Edit compilers.yaml to point to all compilers this script installed

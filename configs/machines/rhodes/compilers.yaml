@@ -83,9 +83,9 @@ compilers:
      - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-ewgozmxdrcyfpa6hxjis7bm6kcwk2pzh/libexec/gcc/x86_64-pc-linux-gnu/7.3.0
      - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-ewgozmxdrcyfpa6hxjis7bm6kcwk2pzh/lib64
     flags:
-      cflags: -O2
-      cxxflags: -O2
-      fflags: -O2
+      cflags: -O2 -march=native -mtune=native
+      cxxflags: -O2 -march=native -mtune=native
+      fflags: -O2 -march=native -mtune=native
     modules: []
     operating_system: centos7
     paths:
@@ -101,9 +101,9 @@ compilers:
      - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.1.0-lssteahl4wjwdsgxvigff7ynbtlqie2a/libexec/gcc/x86_64-pc-linux-gnu/8.1.0
      - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.1.0-lssteahl4wjwdsgxvigff7ynbtlqie2a/lib64
     flags:
-      cflags: -O2
-      cxxflags: -O2
-      fflags: -O2
+      cflags: -O2 -march=native -mtune=native
+      cxxflags: -O2 -march=native -mtune=native
+      fflags: -O2 -march=native -mtune=native
     modules: []
     operating_system: centos7
     paths:
@@ -140,9 +140,9 @@ compilers:
      - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-6cgvvb2vrmccbahcyg2y43eqbmrmco3s/libexec/gcc/x86_64-pc-linux-gnu/6.4.0
      - /opt/software/a/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-6cgvvb2vrmccbahcyg2y43eqbmrmco3s/lib64
     flags:
-      cflags: -O2
-      cxxflags: -O2
-      fflags: -O2
+      cflags: -O2 -march=native -mtune=native
+      cxxflags: -O2 -march=native -mtune=native
+      fflags: -O2 -march=native -mtune=native
     modules: []
     operating_system: centos7
     paths:

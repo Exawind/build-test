@@ -116,7 +116,6 @@ do
   printf "\nLoading modules...\n"
   if [ "${MACHINE}" == 'eagle' ]; then
     cmd "module purge"
-    cmd "module load gcc/7.3.0"
     cmd "module list"
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p ${HOME}/.tmp"
@@ -124,7 +123,6 @@ do
   elif [ "${MACHINE}" == 'peregrine' ]; then
     cmd "module purge"
     cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-    cmd "module load gcc/6.2.0"
     cmd "module load git"
     cmd "module load python"
     cmd "module load curl"
@@ -134,7 +132,7 @@ do
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
-    module use /opt/software/modules
+    cmd "module use /opt/software/modules"
     cmd "module purge"
     cmd "module load unzip"
     cmd "module load patch"

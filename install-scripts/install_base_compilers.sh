@@ -186,3 +186,4 @@ printf "\nDone!\n"
 
 # Last step
 # Edit compilers.yaml to point to all compilers this script installed
+# Edit intel-parallel-studio modules to set INTEL_LICENSE_FILE correctly

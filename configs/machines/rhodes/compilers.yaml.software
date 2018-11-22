@@ -98,7 +98,27 @@ compilers:
 - compiler:
     environment:
       set:
-        INTEL_LICENSE_FILE: 28518@hpc-admin1.hpc.nrel.gov
+        INTEL_LICENSE_FILE: 28519@license-1.hpc.nrel.gov
+    extra_rpaths:
+     - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/lib/intel64
+     - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/lib64
+    flags:
+      cflags: -O2 -xCORE-AVX2
+      cxxflags: -O2 -xCORE-AVX2
+      fflags: -O2 -xCORE-AVX2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc:  /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/icc
+      cxx: /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/icpc
+      f77: /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/ifort
+      fc:  /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/ifort
+    spec: intel@18.0.4
+    target: x86_64
+- compiler:
+    environment:
+      set:
+        INTEL_LICENSE_FILE: 28519@license-1.hpc.nrel.gov
     extra_rpaths:
      - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.1-bkdetdp6wel62rzy3574ehw7vwitcv6u/compilers_and_libraries/linux/lib/intel64
      - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/lib64

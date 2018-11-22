@@ -139,7 +139,7 @@ do
     cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
     cmd "module load gcc/6.2.0"
     cmd "module load git"
-    cmd "module load python/2.7.15"
+    cmd "module load python"
     cmd "module load curl"
     cmd "module load binutils"
     cmd "module list"
@@ -147,8 +147,10 @@ do
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
-    module use /opt/${TYPE}/modules
+    module use /opt/compilers/modules
+    module use /opt/utilities/modules
     cmd "module purge"
+    cmd "module load gcc/7.3.0"
     cmd "module load unzip"
     cmd "module load patch"
     cmd "module load bzip2"

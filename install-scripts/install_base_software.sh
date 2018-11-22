@@ -54,7 +54,7 @@ case "${MYHOSTNAME}" in
   ;;
 esac
 
-DATE=2018-11-19
+DATE=2018-11-21
  
 if [ "${MACHINE}" == 'eagle' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${DATE}
@@ -66,7 +66,7 @@ elif [ "${MACHINE}" == 'peregrine' ]; then
   INTEL_COMPILER_VERSION="19.0.1"
 elif [ "${MACHINE}" == 'rhodes' ]; then
   INSTALL_DIR=/opt/software/${DATE}
-  GCC_COMPILER_VERSION="4.8.5"
+  GCC_COMPILER_VERSION="7.3.0"
   INTEL_COMPILER_VERSION="19.0.1"
 else
   printf "\nMachine name not recognized.\n"
@@ -74,7 +74,7 @@ else
 fi
 
 TRILINOS_BRANCH=develop
-BUILD_TEST_DIR=${INSTALL_DIR}/build-test
+BUILD_TEST_DIR=$(pwd)/..
 
 # Set spack location
 export SPACK_ROOT=${INSTALL_DIR}/spack
@@ -94,7 +94,7 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
-  #cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
   cmd "cp ${HOME}/save/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
@@ -106,7 +106,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc #intel
+for COMPILER_NAME in gcc intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -144,16 +144,6 @@ do
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
-    #Rhodes has almost *nothing* installed on it besides python and gcc
-    #so we are relying on Spack heavily as a non-root package manager here.
-    #Kind of annoying to use Spack to build tools Spack needs, but after
-    #the initial bootstrapping, we can now just rely on pure modules sans Spack
-    #to set up our environment and tools we need to build with Spack.
-    
-    #Pure modules sans Spack (assuming the module init is alreay in .bashrc)
-    #export MODULE_PREFIX=/opt/software/module_prefix
-    #export PATH=${MODULE_PREFIX}/Modules/bin:${PATH}
-    #module() { eval $(${MODULE_PREFIX}/Modules/bin/modulecmd $(basename ${SHELL}) $*); }
     module use /opt/software/modules
     cmd "module purge"
     cmd "module load unzip"
@@ -166,16 +156,14 @@ do
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
-    cmd "module load texlive"
     cmd "module load python"
     cmd "module list"
-    printf "\nBootstrapping Spack with environment-modules...\n"
-    #cmd "spack bootstrap"
-    cmd "spack install environment-modules %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
   fi
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
+    cmd "spack install environment-modules %${COMPILER_NAME}@${COMPILER_VERSION}"
+
     # Install our own python
     #printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     #for PYTHON_VERSION in '2.7.15' '3.6.5'; do
@@ -185,20 +173,20 @@ do
     #  done
     #done
 
-    printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #printf "\nInstalling other tools using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    #cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install gnuplot+X+wx %${COMPILER_NAME}@${COMPILER_VERSION} ^pango+X"
-    cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -208,26 +196,26 @@ do
     #cmd "spack install image-magick %${COMPILER_NAME}@${COMPILER_VERSION}"
 
     # Rhodes specific
-    if [ "${MACHINE}" == 'rhodes' ]; then
-      cmd "spack install unzip %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install bc %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install patch %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install bzip2 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install flex %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
-      printf "\nInstalling stuff needed for Visit ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-      cmd "spack install libxrender %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install libxml2 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install libxrandr %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install libxi %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install libxft %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install libxcursor %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install libxt %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install glib %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install glproto %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install libxt %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install mesa %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install mesa-glu %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #if [ "${MACHINE}" == 'rhodes' ]; then
+      #cmd "spack install unzip %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install bc %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install patch %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install bzip2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install flex %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #printf "\nInstalling stuff needed for Visit ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+      #cmd "spack install libxrender %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxml2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxrandr %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxi %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxft %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxcursor %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxt %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install glib %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install glproto %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install libxt %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install mesa %${COMPILER_NAME}@${COMPILER_VERSION}"
+      #cmd "spack install mesa-glu %${COMPILER_NAME}@${COMPILER_VERSION}"
       #cmd "spack install xproto %${COMPILER_NAME}@${COMPILER_VERSION}"
       #cmd "spack install inputproto %${COMPILER_NAME}@${COMPILER_VERSION}"
       #cmd "spack install xextproto %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -253,30 +241,19 @@ do
       #cmd "spack install libxshmfence %${COMPILER_NAME}@${COMPILER_VERSION}"
       #cmd "spack install libxv %${COMPILER_NAME}@${COMPILER_VERSION}"
       #cmd "spack install libxvmc %${COMPILER_NAME}@${COMPILER_VERSION}"
-    fi
+    #fi
 
-    # Install our own compilers
-    #printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install intel-parallel-studio@cluster.2019.1+advisor+inspector+mkl+mpi+vtune threads=openmp %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install flang %${COMPILER_NAME}@${COMPILER_VERSION}"
-
-    printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    #printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     # Install Nalu-Wind dependencies with everything turned on
     #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
     #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
     # Install Nalu-Wind with Trilinos debug
     #cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
     # Turn off OpenMP
-    TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
+    #TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
     # Install Nalu-Wind dependencies with everything turned on
     #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+    #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
     # Install Nalu-Wind with Trilinos debug
     #cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
 
@@ -301,8 +278,8 @@ do
     #cmd "spack install paraview+mpi+python+qt+visit+boxlib %${COMPILER_NAME}@${COMPILER_VERSION}" # Use downloadable paraview
 
     #printf "\nInstalling Amrvis using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install amrvis+mpi dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install amrvis+mpi+profiling dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    #cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     # Need to update compilers.yaml to point to newest intel-parallel-studio built by gcc before installing with intel
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"

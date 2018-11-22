@@ -94,8 +94,6 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   (set -x; cp -R custom-package-files/py-numpy ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/nalu-wind ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/trilinos-catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp custom-package-files/paraview/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/paraview/package.py)
-  (set -x; cp custom-package-files/intel-parallel-studio/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/intel-parallel-studio/package.py)
 
   #Extra stuff for eagle
   #if [ ${MACHINE} == 'eagle' ]; then

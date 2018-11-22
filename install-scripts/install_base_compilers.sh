@@ -9,6 +9,8 @@
 
 # Script for installation of ECP related compilers on Eagle, Peregrine, and Rhodes
 
+set -e
+
 # Control over printing and executing commands
 print_cmds=true
 execute_cmds=true
@@ -153,10 +155,10 @@ do
     cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2018.4+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2019.1+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install flang %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2019.1+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2018.4+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"

@@ -9,6 +9,8 @@
 
 # Script for shared installation of ECP related utilities on Eagle, Peregrine, and Rhodes
 
+set -e
+
 # Control over printing and executing commands
 print_cmds=true
 execute_cmds=true

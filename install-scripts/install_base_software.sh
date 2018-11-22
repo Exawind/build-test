@@ -124,7 +124,7 @@ do
   printf "\nInstalling base ${TYPE} with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
   # Reset TRILINOS variable
-  cmd "source ${INSTALL_DIR}/build-test/configs/shared-constraints.sh"
+  cmd "source ${BUILD_TEST_DIR}/configs/shared-constraints.sh"
 
   printf "\nLoading modules...\n"
   if [ "${MACHINE}" == 'eagle' ]; then

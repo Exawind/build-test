@@ -19,6 +19,8 @@ class TrilinosCatalystIossAdapter(CMakePackage):
     depends_on('flex')
     depends_on('paraview+mpi+python+osmesa')
 
+    patch('phactor.patch')
+
     root_cmakelists_dir = 'packages/seacas/libraries/ioss/src/visualization/ParaViewCatalystIossAdapter'
 
     def setup_environment(self, spack_env, run_env):

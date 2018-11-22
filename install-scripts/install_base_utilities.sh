@@ -161,7 +161,6 @@ do
     fi
 
     printf "\nInstalling ${TYPE} using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"

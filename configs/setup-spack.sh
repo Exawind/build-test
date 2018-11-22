@@ -92,6 +92,7 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #All machines do this
   (set -x; cp machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/)
   (set -x; cp -R custom-package-files/py-numpy ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+  (set -x; cp -R custom-package-files/py-rope ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/nalu-wind ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/trilinos-catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
 

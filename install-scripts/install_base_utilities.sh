@@ -10,6 +10,7 @@
 # Script for shared installation of ECP related utilities on Eagle, Peregrine, and Rhodes
 
 set -e
+TYPE=utilities
 
 # Control over printing and executing commands
 print_cmds=true
@@ -59,13 +60,13 @@ esac
 DATE=2018-11-21
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/hpacf/utilities/${DATE}
+  INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 elif [ "${MACHINE}" == 'peregrine' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/hpacf/utilities/${DATE}
+  INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 elif [ "${MACHINE}" == 'rhodes' ]; then
-  INSTALL_DIR=/opt/utilities/${DATE}
+  INSTALL_DIR=/opt/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 else
   printf "\nMachine name not recognized.\n"
@@ -92,7 +93,8 @@ if [ ! -d "${INSTALL_DIR}" ]; then
   printf "\nConfiguring Spack...\n"
   cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
   cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
-  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.${TYPE} ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/modules.yaml.${TYPE} ${SPACK_ROOT}/etc/spack/modules.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
   cmd "cp ${HOME}/save/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
@@ -109,7 +111,7 @@ do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
   fi
-  printf "\nInstalling base utilities with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+  printf "\nInstalling base ${TYPE} with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
   printf "\nLoading modules...\n"
   if [ "${MACHINE}" == 'eagle' ]; then
@@ -124,11 +126,9 @@ do
     cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
     cmd "module load gcc/6.2.0"
     cmd "module load git"
-    cmd "module load python/2.7.15"
+    cmd "module load python"
     cmd "module load curl"
     cmd "module load binutils"
-    cmd "module load texinfo"
-    cmd "module load texlive"
     cmd "module list"
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
@@ -153,7 +153,7 @@ do
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     if [ "${MACHINE}" == 'rhodes' ]; then
-      printf "\nInstalling utilities needed on rhodes with ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+      printf "\nInstalling ${TYPE} needed on rhodes with ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       cmd "spack install environment-modules %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install unzip %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install bc %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -163,7 +163,7 @@ do
       cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
 
-    printf "\nInstalling utilities using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    printf "\nInstalling ${TYPE} using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -186,7 +186,7 @@ do
 
   cmd "unset TMPDIR"
 
-  printf "\nDone installing utilities with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+  printf "\nDone installing ${TYPE} with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
 printf "\nSetting permissions...\n"
@@ -196,10 +196,10 @@ elif [ "${MACHINE}" == 'peregrine' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then
   cmd "chgrp windsim /opt"
-  cmd "chgrp windsim /opt/utilities"
+  cmd "chgrp windsim /opt/${TYPE}"
   cmd "chgrp -R windsim ${INSTALL_DIR}"
   cmd "chmod a+rX,go-w /opt"
-  cmd "chmod a+rX,go-w /opt/utilities"
+  cmd "chmod a+rX,go-w /opt/${TYPE}"
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 fi
 

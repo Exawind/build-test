@@ -10,6 +10,7 @@
 # Script for installation of ECP related compilers on Eagle, Peregrine, and Rhodes
 
 set -e
+TYPE=compilers
 
 # Control over printing and executing commands
 print_cmds=true
@@ -59,13 +60,13 @@ esac
 DATE=2018-11-21
  
 if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/hpacf/compilers/${DATE}
+  INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 elif [ "${MACHINE}" == 'peregrine' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/hpacf/compilers/${DATE}
+  INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 elif [ "${MACHINE}" == 'rhodes' ]; then
-  INSTALL_DIR=/opt/compilers/${DATE}
+  INSTALL_DIR=/opt/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 else
   printf "\nMachine name not recognized.\n"
@@ -92,7 +93,8 @@ if [ ! -d "${INSTALL_DIR}" ]; then
 
   printf "\nConfiguring Spack...\n"
   cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
-  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.base ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/compilers.yaml.${TYPE} ${SPACK_ROOT}/etc/spack/compilers.yaml"
+  cmd "cp ${BUILD_TEST_DIR}/configs/machines/${MACHINE}/modules.yaml.${TYPE} ${SPACK_ROOT}/etc/spack/modules.yaml"
   cmd "mkdir -p ${SPACK_ROOT}/etc/spack/licenses/intel"
   cmd "cp ${HOME}/save/license.lic ${SPACK_ROOT}/etc/spack/licenses/intel/"
 
@@ -109,7 +111,7 @@ do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
   fi
-  printf "\nInstalling compilers with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+  printf "\nInstalling ${TYPE} with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
   # Load necessary modules
   printf "\nLoading modules...\n"
@@ -149,7 +151,7 @@ do
   fi
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
-    printf "\nInstalling compilers using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    printf "\nInstalling ${TYPE} using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -162,7 +164,7 @@ do
 
   cmd "unset TMPDIR"
 
-  printf "\nDone installing compilers with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
+  printf "\nDone installing ${TYPE} with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
 printf "\nSetting permissions...\n"
@@ -172,10 +174,10 @@ elif [ "${MACHINE}" == 'peregrine' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then
   cmd "chgrp windsim /opt"
-  cmd "chgrp windsim /opt/compilers"
+  cmd "chgrp windsim /opt/${TYPE}"
   cmd "chgrp -R windsim ${INSTALL_DIR}"
   cmd "chmod a+rX,go-w /opt"
-  cmd "chmod a+rX,go-w /opt/compilers"
+  cmd "chmod a+rX,go-w /opt/${TYPE}"
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
 fi
 

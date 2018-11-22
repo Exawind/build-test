@@ -1,11 +1,3 @@
-# Rhodes is a single node machine used for testing software so it has
-# a lot of compilers installed in a system Spack installation that 
-# we get the compilers from here.
-# The base software is installed using an A/B system where only one
-# set of software A or B is active at a time so that the adminstrator
-# can work on the inactive set of software in preparation for making it active.
-# Therefore since these are direct paths to the compilers, these paths can 
-# change regularly and the hashes might change as well.
 compilers:
 - compiler:
     environment: {}

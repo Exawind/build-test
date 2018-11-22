@@ -1,37 +1,12 @@
 modules:
   enable:
     - tcl
-  prefix_inspections:
-    bin:
-      - PATH
-    man:
-      - MANPATH
-    share/man:
-      - MANPATH
-    share/aclocal:
-      - ACLOCAL_PATH
-    lib:
-      - LIBRARY_PATH
-      - LD_LIBRARY_PATH
-    lib64:
-      - LIBRARY_PATH
-      - LD_LIBRARY_PATH
-    include:
-      - CPATH
-    lib/pkgconfig:
-      - PKG_CONFIG_PATH
-    lib64/pkgconfig:
-      - PKG_CONFIG_PATH
-    '':
-      - CMAKE_PREFIX_PATH
-
-  lmod:
-    hierarchy:
-      - mpi
 
   tcl:
     naming_scheme: '${COMPILERNAME}-${COMPILERVER}/${PACKAGE}/${VERSION}'
     hash_length: 0
+    ^python:
+      autoload: 'direct'
     all:
       suffixes:
         '^python@2.7.15': 'py2'

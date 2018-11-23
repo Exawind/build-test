@@ -15,6 +15,10 @@ modules:
         'trilinos build_type=Debug': 'dbg'
         'boost+mpi': 'mpi'
         'yaml-cpp~shared': 'static'
+        'amrvis dims=3': '3d'
+        'amrvis dims=2': '2d'
+        'matio ^hdf5@1.8.16': 'hdf5-1.8.16'
+        'py-matplotlib ^py-setuptools@25.2.0': 'setuptools-25.2.0'
       conflict:
         - '${PACKAGE}'
       environment:

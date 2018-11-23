@@ -114,7 +114,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc #intel #clang
+for COMPILER_NAME in gcc intel #clang
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -229,7 +229,7 @@ do
     cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
     cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
 
-    (set -x; spack --color never install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.4.1.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}'))
+    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.6.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
     cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
     cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"

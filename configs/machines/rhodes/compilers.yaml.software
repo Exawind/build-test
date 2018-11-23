@@ -120,12 +120,17 @@ compilers:
       set:
         INTEL_LICENSE_FILE: 28519@license-1.hpc.nrel.gov
     extra_rpaths:
+     #- /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.1-bkdetdp6wel62rzy3574ehw7vwitcv6u/compilers_and_libraries_2019.1.144/linux/mpi/intel64/lib
+     #- /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.1-bkdetdp6wel62rzy3574ehw7vwitcv6u/compilers_and_libraries_2019.1.144/linux/mpi/intel64/lib/release
+     #- /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.1-bkdetdp6wel62rzy3574ehw7vwitcv6u/compilers_and_libraries_2019.1.144/linux/mpi/intel64/libfabric/lib
+     #- /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.1-bkdetdp6wel62rzy3574ehw7vwitcv6u/compilers_and_libraries_2019.1.144/linux/mpi/intel64/libfabric/lib/prov
      - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.1-bkdetdp6wel62rzy3574ehw7vwitcv6u/compilers_and_libraries/linux/lib/intel64
      - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/lib64
     flags:
       cflags: -O2 -xCORE-AVX2
       cxxflags: -O2 -xCORE-AVX2
       fflags: -O2 -xCORE-AVX2
+      #ldlags: -lfabric
     modules: []
     operating_system: centos7
     paths:

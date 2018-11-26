@@ -149,6 +149,7 @@ do
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
+    module unuse /opt/software/modules
     module use /opt/compilers/modules
     module use /opt/utilities/modules
     cmd "module purge"

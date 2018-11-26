@@ -48,7 +48,7 @@ config:
 
   # Cache directory already downloaded source tarballs and archived
   # repositories. This can be purged with `spack purge --downloads`.
-  source_cache: ~/.spack/cached_archives
+  source_cache: ~/.spack/downloads
 
 
   # Cache directory for miscellaneous files, like the package index.

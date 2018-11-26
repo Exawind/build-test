@@ -5,13 +5,18 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
 #Pure modules sans Spack
-export MODULE_PREFIX=/opt/software/module_prefix
+export MODULE_PREFIX=/opt/utilities/module_prefix
 export PATH=${MODULE_PREFIX}/Modules/bin:${PATH}
 module() { eval $(${MODULE_PREFIX}/Modules/bin/modulecmd $(basename ${SHELL}) $*); }
 
 #Load some base modules
-module use /opt/software/modules
+module use /opt/compilers/modules
+module use /opt/utilities/modules
+module use /opt/software/modules/gcc-7.3.0
 module load unzip
 module load patch
 module load bzip2
@@ -21,9 +26,10 @@ module load flex
 module load bison
 module load wget
 module load bc
-module load python/2.7.14
+module load binutils
+module load python/2.7.15
 
-# Need to uncomment all this for using Visit
+# Visit stuff
 #module load makedepend
 #module load libxml2/2.9.4-py2
 #module load autoconf

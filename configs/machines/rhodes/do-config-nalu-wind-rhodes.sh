@@ -13,12 +13,11 @@ FORTRAN_COMPILER=mpifort
 
 # Set up environment on Rhodes
 #Pure modules sans Spack
-export MODULE_PREFIX=/opt/software/module_prefix
+export MODULE_PREFIX=/opt/utilties/module_prefix
 export PATH=${MODULE_PREFIX}/Modules/bin:${PATH}
 module() { eval $(${MODULE_PREFIX}/Modules/bin/modulecmd $(basename ${SHELL}) $*); }
 
 #Load some base modules
-cmd "module use /opt/software/modules"
 cmd "module load unzip"
 cmd "module load patch"
 cmd "module load bzip2"

@@ -352,8 +352,8 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:master:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[1]='gcc:7.3.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
+    CONFIGURATIONS[1]='gcc:7.3.0:false:master:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[4]='clang:7.0.0:false:develop:develop:develop:openfast;tioga;hypre'

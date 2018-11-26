@@ -42,6 +42,8 @@ test_configuration() {
   printf "\nLoading modules...\n"
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     cmd "module purge"
+    cmd "module use /opt/compiler/modules"
+    cmd "module use /opt/utilities/modules"
     cmd "module use /opt/software/modules"
     cmd "module load unzip"
     cmd "module load patch"
@@ -51,8 +53,6 @@ test_configuration() {
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
-    cmd "module load texinfo"
-    cmd "module load texlive"
     cmd "module load python"
     cmd "module load cppcheck"
     cmd "module load binutils"
@@ -60,18 +60,23 @@ test_configuration() {
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'clang' ]; then
       cmd "module load llvm/${COMPILER_VERSION}"
+    elif [ "${COMPILER_NAME}" == 'intel' ]; then
+      cmd "module load ${INTEL_COMPILER_MODULE}"
     fi
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     cmd "module purge"
     cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-    cmd "module load gcc/6.2.0"
     cmd "module load python"
     cmd "module load git"
     cmd "module load cppcheck"
     cmd "module load binutils"
-  elif [ "${MACHINE_NAME}" == 'merlin' ]; then
+    if [ "${COMPILER_NAME}" == 'gcc' ]; then
+      cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
+    elif [ "${COMPILER_NAME}" == 'intel' ]; then
+      cmd "module load ${INTEL_COMPILER_MODULE}"
+    fi
+  elif [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "module purge"
-    cmd "module load GCCcore/4.9.2"
   fi
 
   # Enable or disable OpenMP
@@ -93,24 +98,7 @@ test_configuration() {
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
-  elif [ "${MACHINE_NAME}" == 'merlin' ]; then
-    printf "\nSetting TMPDIR to RAM...\n"
-    cmd "export TMPDIR=/dev/shm"
   fi
-
-  # Set Intel compiler license and include rpath to its own libraries
-  #if [ "${COMPILER_NAME}" == 'intel' ]; then
-  #  if [ "${MACHINE_NAME}" == 'peregrine' ] || \
-  #     [ "${MACHINE_NAME}" == 'merlin' ] || \
-  #     [ "${MACHINE_NAME}" == 'rhodes' ]; then
-  #    printf "\nSetting up license and rpath for Intel...\n"
-  #    cmd "export INTEL_LICENSE_FILE=28518@hpc-admin1.hpc.nrel.gov"
-  #    for i in ICCCFG ICPCCFG IFORTCFG
-  #    do
-  #      cmd "export $i=${SPACK_ROOT}/etc/spack/intel.cfg.${COMPILER_VERSION}"
-  #    done
-  #  fi
-  #fi
 
   # Fix for Peregrine's broken linker
   #if [ "${MACHINE_NAME}" == 'peregrine' ]; then
@@ -178,26 +166,6 @@ test_configuration() {
     #find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;
   fi
 
-  # Since we are building outside of Spack during CTest we need to load the correct Intel compiler modules
-  if [ "${COMPILER_NAME}" == 'intel' ]; then
-    printf "\nLoading Intel compiler module for CTest...\n"
-    if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-      cmd "module load intel-parallel-studio/cluster.2018.1"
-    elif [ "${MACHINE_NAME}" == 'merlin' ]; then
-      cmd "module purge"
-      cmd "module load iccifort/2017.2.174-GCC-6.3.0-2.27"
-      cmd "module unload GCCcore/6.3.0"
-      cmd "module unload binutils/2.27-GCCcore-6.3.0"
-      cmd "module load GCCcore/4.9.2"
-    elif [ "${MACHINE_NAME}" == 'rhodes' ]; then
-      if [ "${COMPILER_VERSION}" == '18.1.163' ]; then
-        cmd "module load intel-parallel-studio/cluster.2018.1"
-      elif [ "${COMPILER_VERSION}" == '17.0.5' ]; then
-        cmd "module load intel-parallel-studio/cluster.2017.5"
-      fi
-    fi
-  fi
-
   # Refresh available modules (this is only really necessary on the first run of this script
   # because cmake and openmpi will already have been built and module files registered in subsequent runs)
   cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
@@ -207,12 +175,10 @@ test_configuration() {
     cmd "export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
     cmd "export PATH=$(spack location -i openmpi %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
   else
-    if [ "${COMPILER_NAME}" == 'gcc' ] || \
-       [ "${COMPILER_NAME}" == 'clang' ]; then
-      cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+    if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
       cmd "spack load openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
-      cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack load intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
   fi
@@ -248,7 +214,6 @@ test_configuration() {
   done
 
   # Set the extra identifiers for CDash build description
-  #EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-tr_${TRILINOS_BRANCH}-omp_${OPENMP_ENABLED}"
   EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}-tr_${TRILINOS_BRANCH}"
 
   if [ ! -z "${NALU_WIND_DIR}" ]; then
@@ -275,7 +240,7 @@ test_configuration() {
   fi
 
   # Unset the TMPDIR variable after building but before testing during ctest nightly script
-  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'merlin' ]; then
+  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
     CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE ${CTEST_ARGS}"
   fi
 
@@ -283,20 +248,17 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DENABLE_WARNINGS:BOOL=TRUE -DENABLE_EXTRA_WARNINGS:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
 
   # Turn on address sanitizer for clang build on rhodes
-  if [ "${COMPILER_NAME}" == 'clang' ]; then
-    if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-      export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer"
-      cmd "export ASAN_OPTIONS=detect_container_overflow=0"
-      (set -x; printf "leak:libopen-pal\nleak:libmpi\nleak:libnetcdf" > ${NALU_WIND_DIR}/build/asan.supp)
-      cmd "export LSAN_OPTIONS=suppressions=${NALU_WIND_DIR}/build/asan.supp"
-      #CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_FLAGS:STRING=-fsanitize=address\ -fno-omit-frame-pointer ${CMAKE_CONFIGURE_ARGS}"
-      #CMAKE_CONFIGURE_ARGS="-DCMAKE_LINKER=clang++ -DCMAKE_CXX_LINK_EXECUTABLE=clang++ -DCMAKE_CXX_FLAGS:STRING=\'-fsanitize=address -fno-omit-frame-pointer\' -DCMAKE_EXE_LINKER_FLAGS:STRING=-fsanitize=address ${CMAKE_CONFIGURE_ARGS}"
-    fi
+  if [ "${COMPILER_NAME}" == 'clang' ] && [ "${MACHINE_NAME}" == 'rhodes' ]; then
+    export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+    cmd "export ASAN_OPTIONS=detect_container_overflow=0"
+    (set -x; printf "leak:libopen-pal\nleak:libmpi\nleak:libnetcdf" > ${NALU_WIND_DIR}/build/asan.supp)
+    cmd "export LSAN_OPTIONS=suppressions=${NALU_WIND_DIR}/build/asan.supp"
+    #CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_FLAGS:STRING=-fsanitize=address\ -fno-omit-frame-pointer ${CMAKE_CONFIGURE_ARGS}"
+    #CMAKE_CONFIGURE_ARGS="-DCMAKE_LINKER=clang++ -DCMAKE_CXX_LINK_EXECUTABLE=clang++ -DCMAKE_CXX_FLAGS:STRING=\'-fsanitize=address -fno-omit-frame-pointer\' -DCMAKE_EXE_LINKER_FLAGS:STRING=-fsanitize=address ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Explicitly set compilers to MPI compilers
-  if [ "${COMPILER_NAME}" == 'gcc' ] || \
-     [ "${COMPILER_NAME}" == 'clang' ]; then
+  if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
     MPI_CXX_COMPILER=mpicxx
     MPI_C_COMPILER=mpicc
     MPI_FORTRAN_COMPILER=mpifort
@@ -331,19 +293,14 @@ test_configuration() {
 
   printf "\nUnloading Spack modules from environment...\n"
   if [ "${MACHINE_NAME}" != 'mac' ]; then
-    if [ "${COMPILER_NAME}" == 'gcc' ] || \
-       [ "${COMPILER_NAME}" == 'clang' ]; then
-      cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
+    if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
       cmd "spack unload openmpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
-      cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack unload intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
   fi
-  #if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-  #  cmd "spack unload binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-  #  #unset TMPDIR
-  #fi
+
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "module list"
   fi
@@ -395,25 +352,21 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    #CONFIGURATIONS[0]='gcc:6.4.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
-    CONFIGURATIONS[0]='gcc:6.4.0:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[1]='intel:18.1.163:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:master:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[1]='gcc:7.3.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
     CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[3]='clang:6.0.0:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[4]='clang:7.0.0:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
+    INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     CONFIGURATIONS[0]='gcc:6.2.0:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='intel:18.1.163:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/windsim/exawind/nalu-wind-testing
-  elif [ "${MACHINE_NAME}" == 'merlin' ]; then
-    CONFIGURATIONS[0]='gcc:4.9.2:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[1]='intel:17.0.2:false:develop:develop:develop:openfast;tioga;hypre'
-    NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
+    INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:master:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[1]='clang:9.0.0-apple:false:master:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[2]='gcc:7.3.0:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[3]='clang:9.0.0-apple:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[1]='clang:9.0.0-apple:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else
     printf "\nMachine name not recognized.\n"
@@ -505,21 +458,20 @@ main() {
   printf "Final steps\n"
   printf "============================================================\n"
  
-  if [ "${MACHINE_NAME}" == 'merlin' ]; then
-    if [ ! -z "${TMPDIR}" ]; then
-      printf "\nCleaning TMPDIR directory...\n"
-      cmd "cd /dev/shm && rm -rf /dev/shm/* &> /dev/null"
-      cmd "unset TMPDIR"
-    fi
-  fi
+  #if [ "${MACHINE_NAME}" == 'merlin' ]; then
+  #  if [ ! -z "${TMPDIR}" ]; then
+  #    printf "\nCleaning TMPDIR directory...\n"
+  #    cmd "cd /dev/shm && rm -rf /dev/shm/* &> /dev/null"
+  #    cmd "unset TMPDIR"
+  #  fi
+  #fi
 
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting group...\n"
     cmd "chgrp -R windsim ${NALU_WIND_TESTING_ROOT_DIR}"
   fi
 
-  if [ "${MACHINE_NAME}" == 'peregrine' ] || \
-     [ "${MACHINE_NAME}" == 'rhodes' ]; then
+  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting permissions...\n"
     cmd "chmod -R a+rX,go-w ${NALU_WIND_TESTING_ROOT_DIR}"
   fi

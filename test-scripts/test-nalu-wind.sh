@@ -354,8 +354,8 @@ main() {
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     CONFIGURATIONS[0]='gcc:7.3.0:false:master:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[1]='gcc:7.3.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
-    CONFIGURATIONS[2]='intel:18.0.4:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[3]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:develop:openfast;tioga;hypre'
     CONFIGURATIONS[4]='clang:7.0.0:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4

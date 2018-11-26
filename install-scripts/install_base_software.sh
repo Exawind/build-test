@@ -62,19 +62,19 @@ DATE=2018-11-21
 if [ "${MACHINE}" == 'eagle' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="7.3.0"
-  INTEL_COMPILER_VERSION="19.0.1"
+  INTEL_COMPILER_VERSION="18.0.4"
   CLANG_COMPILER_VERSION="7.0.0"
 elif [ "${MACHINE}" == 'peregrine' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="7.3.0"
-  INTEL_COMPILER_VERSION="19.0.1"
+  INTEL_COMPILER_VERSION="18.0.4"
   CLANG_COMPILER_VERSION="7.0.0"
 elif [ "${MACHINE}" == 'rhodes' ]; then
   INSTALL_DIR=/opt/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="7.3.0"
   GCC_COMPILER_MODULE="gcc/7.3.0"
-  INTEL_COMPILER_VERSION="19.0.1"
-  INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2019.1"
+  INTEL_COMPILER_VERSION="18.0.4"
+  INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.4"
   CLANG_COMPILER_VERSION="7.0.0"
 else
   printf "\nMachine name not recognized.\n"

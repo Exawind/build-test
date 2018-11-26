@@ -82,6 +82,12 @@ test_configuration() {
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
   fi
 
+  # Can't build STK as shared on Mac
+  if [ "${MACHINE_NAME}" == 'mac' ]; then
+    printf "\nDisabling shared build in Trilinos because STK doesn't build as shared on Mac...\n"
+    TRILINOS=$(sed 's/+shared/~shared/g' <<<"${TRILINOS}")
+  fi
+
   # Set the TMPDIR to disk so it doesn't run out of space
   if [ "${MACHINE_NAME}" == 'peregrine' ]; then
     printf "\nMaking and setting TMPDIR to disk...\n"

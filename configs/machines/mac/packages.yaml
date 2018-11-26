@@ -2,7 +2,7 @@ packages:
   binutils:
     version: [2.29.1]
   cmake:
-    version: [3.12.3]
+    version: [3.12.4]
   libxml2:
     version: [2.9.8]
   boost:
@@ -13,12 +13,12 @@ packages:
   parallel-netcdf:
     version: [1.8.0]
   hdf5:
-    version: [1.10.3]
+    version: [1.10.4]
     variants: +cxx+hl
   superlu:
     version: [4.3]
   openmpi:
-    version: [3.1.2]
+    version: [3.1.3]
   openfast:
     version: [develop]
   yaml-cpp:
@@ -28,6 +28,6 @@ packages:
   all:
     variants: build_type=Release
     providers:
-      mpi: [openmpi@3.1.2]
+      mpi: [openmpi@3.1.3]
       blas: [netlib-lapack@3.8.0]
       lapack: [netlib-lapack@3.8.0]

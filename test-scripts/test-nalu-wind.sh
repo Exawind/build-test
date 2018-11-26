@@ -42,7 +42,7 @@ test_configuration() {
   printf "\nLoading modules...\n"
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     cmd "module purge"
-    cmd "module use /opt/compiler/modules"
+    cmd "module use /opt/compilers/modules"
     cmd "module use /opt/utilities/modules"
     cmd "module use /opt/software/modules"
     cmd "module load unzip"
@@ -65,7 +65,9 @@ test_configuration() {
     fi
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
     cmd "module purge"
-    cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+    cmd "module use /nopt/nrel/ecom/ecp/hpacf/compilers/modules"
+    cmd "module use /nopt/nrel/ecom/ecp/hpacf/utilities/modules"
+    cmd "module use /nopt/nrel/ecom/ecp/hpacf/software/modules"
     cmd "module load python"
     cmd "module load git"
     cmd "module load cppcheck"

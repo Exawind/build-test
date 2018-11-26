@@ -9,7 +9,7 @@ config:
   # Use a common source archive for each user across all Spack installations
   # to avoid downloading more than once. Probably would be better to have a 
   # site-wide Spack source cache for all users though.
-  source_cache: ~/.spack/cached_archives
+  source_cache: ~/.spack/downloads
   misc_cache: ~/.spack/cache
   verify_ssl: false
   checksum: true

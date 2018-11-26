@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 print_cmds=true
 execute_cmds=true
 
@@ -21,6 +23,10 @@ cmd "chmod g+w /projects/ecp/exawind"
 #/opt
 cmd "chgrp windsim /opt"
 cmd "chgrp -R windsim /opt/software"
+cmd "chgrp -R windsim /opt/compilers"
+cmd "chgrp -R windsim /opt/utilities"
 
 cmd "chmod a+rX,go-w /opt"
 cmd "chmod -R a+rX,go-w /opt/software"
+cmd "chmod -R a+rX,go-w /opt/compilers"
+cmd "chmod -R a+rX,go-w /opt/utilities"

@@ -17,7 +17,7 @@ compilers:
     target: x86_64
 - compiler:
     extra_rpaths:
-     - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-3gsuwvehtxr66cs3ycmj5jsnbi2aha73/lib64
+     - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-6qy5hf3zewdfsrhfdtccm6c75nybbzer/lib64
     flags:
       cflags: -O2
       cxxflags: -O2
@@ -25,10 +25,10 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc:  /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-3gsuwvehtxr66cs3ycmj5jsnbi2aha73/bin/gcc
-      cxx: /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-3gsuwvehtxr66cs3ycmj5jsnbi2aha73/bin/g++
-      f77: /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-3gsuwvehtxr66cs3ycmj5jsnbi2aha73/bin/gfortran
-      fc:  /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-3gsuwvehtxr66cs3ycmj5jsnbi2aha73/bin/gfortran
+      cc:  /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-6qy5hf3zewdfsrhfdtccm6c75nybbzer/bin/gcc
+      cxx: /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-6qy5hf3zewdfsrhfdtccm6c75nybbzer/bin/g++
+      f77: /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-6qy5hf3zewdfsrhfdtccm6c75nybbzer/bin/gfortran
+      fc:  /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-6qy5hf3zewdfsrhfdtccm6c75nybbzer/bin/gfortran
     spec: gcc@4.9.4
     target: x86_64
 - compiler:

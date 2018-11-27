@@ -98,7 +98,9 @@ class Paraview(CMakePackage):
         paraview_version = 'paraview-%s' % self.spec.version.up_to(2)
         run_env.set('PARAVIEW_VTK_DIR',
                     join_path(lib_dir, 'cmake', paraview_version))
+        # Some python locations changed from 5.4 to 5.5
         if self.spec.satisfies('@:5.4.99'):
+            # Only need this nonstandard library path in <= 5.4
             run_env.prepend_path('LIBRARY_PATH', join_path(lib_dir,
                                  paraview_version))
             run_env.prepend_path('LD_LIBRARY_PATH', join_path(lib_dir,

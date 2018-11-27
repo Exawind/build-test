@@ -28,19 +28,21 @@ test_configuration() {
   printf "************************************************************\n"
   printf "\n"
 
-  # OpenMPI 3.1.3 hangs at run time unless it was built with GCC > 7.3.0
-  # so we use an older OpenMPI for GCC 4.9.4
-  cmd "unset OPENMPI_VERSION"
-  if [ "${COMPILER_NAME}" == 'gcc' ] && [ "${COMPILER_VERSION}" == '4.9.4' ]; then
-    OPENMPI_VERSION="@1.10.4"
-  fi
-
   # Define TRILINOS from a single location for all scripts
   cmd "unset GENERAL_CONSTRAINTS"
   cmd "source ${BUILD_TEST_DIR}/configs/shared-constraints.sh"
-  # For intel, we want to build against intel-mpi and intel-mkl
-  if [ "${COMPILER_NAME}" == 'intel' ]; then
-    GENERAL_CONSTRAINTS="^intel-mpi ^intel-mkl"
+  # OpenMPI 3.1.3 hangs at run time unless it was built with GCC > 7.3.0
+  # so we use an older OpenMPI for GCC 4.9.4
+  cmd "unset MPI_CONSTRAINTS"
+  if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
+    MPI_CONSTRAINTS="openmpi"
+    if [ "${COMPILER_VERSION}" == '4.9.4' ]; then
+      MPI_CONSTRAINTS="openmpi@1.10.7"
+    fi
+  elif [ "${COMPILER_NAME}" == 'intel' ]; then
+    # For intel, we want to build against intel-mpi and intel-mkl
+    MPI_CONSTRAINTS="intel-mpi"
+    GENERAL_CONSTRAINTS="^${MPI_CONSTRAINTS} ^intel-mkl"
   fi
   printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
@@ -163,7 +165,7 @@ test_configuration() {
   fi
 
   printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-  cmd "spack install --dont-restage --keep-stage --only dependencies nalu-wind ${TPL_VARIANTS} %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS}"
+  cmd "spack install --dont-restage --keep-stage --only dependencies nalu-wind ${TPL_VARIANTS} %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS} ^${MPI_CONSTRAINTS}"
 
   STAGE_DIR=$(spack location -S)
   if [ ! -z "${STAGE_DIR}" ]; then
@@ -182,14 +184,10 @@ test_configuration() {
   printf "\nLoading Spack modules into environment for CMake and MPI to use during CTest...\n"
   if [ "${MACHINE_NAME}" == 'mac' ]; then
     cmd "export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
-    cmd "export PATH=$(spack location -i openmpi${OPENMPI_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
+    cmd "export PATH=$(spack location -i ${MPI_CONSTRAINTS} %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
   else
     cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-    if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
-      cmd "spack load openmpi${OPENMPI_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
-    elif [ "${COMPILER_NAME}" == 'intel' ]; then
-      cmd "spack load intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
-    fi
+    cmd "spack load ${MPI_CONSTRAINTS} %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   printf "\nSetting variables to pass to CTest...\n"
@@ -304,11 +302,7 @@ test_configuration() {
   printf "\nUnloading Spack modules from environment...\n"
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-    if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
-      cmd "spack unload openmpi${OPENMPI_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
-    elif [ "${COMPILER_NAME}" == 'intel' ]; then
-      cmd "spack unload intel-mpi %${COMPILER_NAME}@${COMPILER_VERSION}"
-    fi
+    cmd "spack unload ${MPI_CONSTRAINTS} %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   if [ "${MACHINE_NAME}" != 'mac' ]; then

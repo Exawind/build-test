@@ -100,18 +100,21 @@ if [ "${MACHINE}" == 'peregrine' ] || \
 
   #Extra stuff for eagle
   #if [ ${MACHINE} == 'eagle' ]; then
-    #nothing at the moment
+  #  (set -x; cp machines/${MACHINE}/compilers.yaml.software ${SPACK_ROOT}/etc/spack/compilers.yaml)
+  #  (set -x; cp machines/${MACHINE}/modules.yaml.software ${SPACK_ROOT}/etc/spack/modules.yaml)
   #fi
 
   #Extra stuff for peregrine
   #if [ ${MACHINE} == 'peregrine' ]; then
-    #nothing at the moment
+  #  (set -x; cp machines/${MACHINE}/compilers.yaml.software ${SPACK_ROOT}/etc/spack/compilers.yaml)
+  #  (set -x; cp machines/${MACHINE}/modules.yaml.software ${SPACK_ROOT}/etc/spack/modules.yaml)
   #fi
 
   #Extra stuff for rhodes
-  #if [ ${MACHINE} == 'rhodes' ]; then
-    #nothing at the moment
-  #fi
+  if [ ${MACHINE} == 'rhodes' ]; then
+    (set -x; cp machines/${MACHINE}/compilers.yaml.software ${SPACK_ROOT}/etc/spack/compilers.yaml)
+    (set -x; cp machines/${MACHINE}/modules.yaml.software ${SPACK_ROOT}/etc/spack/modules.yaml)
+  fi
 
   #Extra stuff for merlin
   #if [ ${MACHINE} == 'merlin' ]; then

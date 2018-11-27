@@ -1,6 +1,8 @@
 packages:
   binutils:
     version: [2.29.1]
+  freetype:
+    version: [2.7.1]
   libxml2:
     version: [2.9.8]
   glib:

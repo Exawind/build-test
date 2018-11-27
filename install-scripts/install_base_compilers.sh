@@ -123,7 +123,7 @@ do
     cmd "export TMPDIR=${HOME}/.tmp"
   elif [ "${MACHINE}" == 'peregrine' ]; then
     cmd "module purge"
-    cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
+    cmd "module use /nopt/nrel/ecom/ecp/base/a/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
     cmd "module load git"
     cmd "module load python"
     cmd "module load curl"

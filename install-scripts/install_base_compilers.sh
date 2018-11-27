@@ -133,7 +133,7 @@ do
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
-    module use /opt/software/modules
+    module use /opt/utilities/modules
     cmd "module purge"
     cmd "module load unzip"
     cmd "module load patch"
@@ -158,6 +158,7 @@ do
     cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install llvm@6.0.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2019.1+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2018.4+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"

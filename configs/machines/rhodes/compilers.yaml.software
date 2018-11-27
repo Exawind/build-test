@@ -142,6 +142,24 @@ compilers:
     target: x86_64
 - compiler:
     extra_rpaths:
+     - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-a2eph7eqyz4acltoo2ufgblua6f5sruq/lib
+     - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-a2eph7eqyz4acltoo2ufgblua6f5sruq/lib/clang/6.0.1/lib/linux
+     - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/lib64
+    flags:
+      cflags: -O2 -march=native -mtune=native
+      cxxflags: -O2 -march=native -mtune=native
+      fflags: -O2 -march=native -mtune=native
+    modules: []
+    operating_system: centos7
+    paths:
+      cc:  /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-a2eph7eqyz4acltoo2ufgblua6f5sruq/bin/clang
+      cxx: /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-a2eph7eqyz4acltoo2ufgblua6f5sruq/bin/clang++
+      f77: /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/gfortran
+      fc:  /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/gfortran
+    spec: clang@6.0.1
+    target: x86_64
+- compiler:
+    extra_rpaths:
      - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-7.0.0-bvwp6psssttk6rie4y6h5jgrerh4zb33/lib
      - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-7.0.0-bvwp6psssttk6rie4y6h5jgrerh4zb33/lib/clang/7.0.0/lib/linux
      - /opt/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/lib64

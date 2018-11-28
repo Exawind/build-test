@@ -16,9 +16,10 @@ cmd() {
 
 # Function for testing a single configuration
 test_configuration() {
+  COMPILER_ID="${COMPILER_NAME}@${COMPILER_VERSION}"
   printf "************************************************************\n"
   printf "Testing Nalu-Wind with:\n"
-  printf "${COMPILER_NAME}@${COMPILER_VERSION}\n"
+  printf "${COMPILER_ID}\n"
   printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
   printf "trilinos@${TRILINOS_BRANCH}\n"
   printf "openfast@${OPENFAST_BRANCH}\n"
@@ -28,23 +29,35 @@ test_configuration() {
   printf "************************************************************\n"
   printf "\n"
 
-  # Define TRILINOS from a single location for all scripts
+  # Logic for building up some constraints for use on Spack commands
   cmd "unset GENERAL_CONSTRAINTS"
-  cmd "source ${BUILD_TEST_DIR}/configs/shared-constraints.sh"
-  # OpenMPI 3.1.3 hangs at run time unless it was built with GCC > 7.3.0
-  # so we use an older OpenMPI for GCC 4.9.4
+  cmd "unset MPI_ID"
   cmd "unset MPI_CONSTRAINTS"
+  cmd "unset BLAS_ID"
+  cmd "unset BLAS_CONSTRAINTS"
   if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
-    MPI_CONSTRAINTS="openmpi"
+    # OpenMPI 3.1.3 hangs at run time unless it was built with GCC > 7.3.0
+    # so we use an older OpenMPI for GCC 4.9.4.
+    MPI_ID="openmpi"
     if [ "${COMPILER_VERSION}" == '4.9.4' ]; then
-      MPI_CONSTRAINTS="openmpi@1.10.7"
+      MPI_ID="openmpi@1.10.7"
     fi
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     # For intel, we want to build against intel-mpi and intel-mkl
-    MPI_CONSTRAINTS="intel-mpi"
-    GENERAL_CONSTRAINTS="^${MPI_CONSTRAINTS} ^intel-mkl"
+    MPI_ID="intel-mpi"
+    BLAS_ID="intel-mkl"
   fi
+  if [ ! -z "${MPI_ID}" ]; then
+    MPI_CONSTRAINTS="^${MPI_ID}"
+  fi
+  if [ ! -z "${BLAS_ID}" ]; then
+    BLAS_CONSTRAINTS="^${BLAS_ID}"
+  fi
+  GENERAL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MPI_CONSTRAINTS} ${BLAS_CONSTRAINTS}"
   printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
+
+  # Define TRILINOS constraints and preferred variants from a single location for all scripts.
+  cmd "source ${BUILD_TEST_DIR}/configs/shared-constraints.sh"
 
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}"
 
@@ -114,29 +127,28 @@ test_configuration() {
   # Fix for Peregrine's broken linker
   #if [ "${MACHINE_NAME}" == 'peregrine' ]; then
   #  printf "\nInstalling binutils...\n"
-  #  cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #  cmd "spack install binutils %${COMPILER_ID}"
   #  printf "\nReloading Spack...\n"
   #  cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
   #  printf "\nLoading binutils...\n"
-  #  cmd "spack load binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #  cmd "spack load binutils %${COMPILER_ID}"
   #fi
 
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
-  cmd "spack uninstall -a -y trilinos@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
-  #cmd "spack uninstall -a -y ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION}"
+  cmd "spack uninstall -a -y trilinos@${TRILINOS_BRANCH} %${COMPILER_ID}"
   #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
-  #cmd "spack uninstall -a -y openfast %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #cmd "spack uninstall -a -y openfast %${COMPILER_ID}"
   #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
-  #cmd "spack uninstall -a -y tioga %${COMPILER_NAME}@${COMPILER_VERSION}"
+  #cmd "spack uninstall -a -y tioga %${COMPILER_ID}"
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating Trilinos (this is fine to error when tests are first run)...\n"
-  cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
+  cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
   #printf "\nUpdating OpenFAST (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno"
+  #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno"
   #printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno"
+  #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno"
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}" # Change directories to avoid any stale file handles
 
   TPL_VARIANTS=''
@@ -164,8 +176,8 @@ test_configuration() {
     cmd "module list"
   fi
 
-  printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-  cmd "spack install --dont-restage --keep-stage --only dependencies nalu-wind ${TPL_VARIANTS} %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS} ^${MPI_CONSTRAINTS}"
+  printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_ID}...\n"
+  cmd "spack install --dont-restage --keep-stage --only dependencies nalu-wind ${TPL_VARIANTS} %${COMPILER_ID} ^${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} ${TPL_CONSTRAINTS}"
 
   STAGE_DIR=$(spack location -S)
   if [ ! -z "${STAGE_DIR}" ]; then
@@ -183,39 +195,39 @@ test_configuration() {
 
   printf "\nLoading Spack modules into environment for CMake and MPI to use during CTest...\n"
   if [ "${MACHINE_NAME}" == 'mac' ]; then
-    cmd "export PATH=$(spack location -i cmake %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
-    cmd "export PATH=$(spack location -i ${MPI_CONSTRAINTS} %${COMPILER_NAME}@${COMPILER_VERSION})/bin:${PATH}"
+    cmd "export PATH=$(spack location -i cmake %${COMPILER_ID})/bin:${PATH}"
+    cmd "export PATH=$(spack location -i ${MPI_ID} %${COMPILER_ID})/bin:${PATH}"
   else
-    cmd "spack load cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack load ${MPI_CONSTRAINTS} %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack load cmake %${COMPILER_ID}"
+    cmd "spack load ${MPI_ID} %${COMPILER_ID}"
   fi
 
   printf "\nSetting variables to pass to CTest...\n"
-  TRILINOS_DIR=$(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_NAME}@${COMPILER_VERSION} ${GENERAL_CONSTRAINTS})
-  YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_NAME}@${COMPILER_VERSION})
+  TRILINOS_DIR=$(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS})
+  YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_ID})
   printf "TRILINOS_DIR=${TRILINOS_DIR}\n"
   printf "YAML_DIR=${YAML_DIR}\n"
   CMAKE_CONFIGURE_ARGS=''
   for TPL in ${TPLS[*]}; do
     if [ "${TPL}" == 'openfast' ]; then
-      OPENFAST_DIR=$(spack location -i openfast %${COMPILER_NAME}@${COMPILER_VERSION})
+      OPENFAST_DIR=$(spack location -i openfast %${COMPILER_ID})
       CMAKE_CONFIGURE_ARGS="-DENABLE_OPENFAST:BOOL=ON -DOpenFAST_DIR:PATH=${OPENFAST_DIR} ${CMAKE_CONFIGURE_ARGS}"
       printf "OPENFAST_DIR=${OPENFAST_DIR}\n"
     fi
     if [ "${TPL}" == 'tioga' ]; then
-      TIOGA_DIR=$(spack location -i tioga %${COMPILER_NAME}@${COMPILER_VERSION})
+      TIOGA_DIR=$(spack location -i tioga %${COMPILER_ID})
       CMAKE_CONFIGURE_ARGS="-DENABLE_TIOGA:BOOL=ON -DTIOGA_DIR:PATH=${TIOGA_DIR} ${CMAKE_CONFIGURE_ARGS}"
       printf "TIOGA_DIR=${TIOGA_DIR}\n"
     fi
     if [ "${TPL}" == 'catalyst' ]; then
-      cmd "spack load paraview %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack load trilinos-catalyst-ioss-adapter %${COMPILER_NAME}@${COMPILER_VERSION}"
-      CATALYST_ADAPTER_DIR=$(spack location -i trilinos-catalyst-ioss-adapter %${COMPILER_NAME}@${COMPILER_VERSION})
+      cmd "spack load paraview %${COMPILER_ID}"
+      cmd "spack load trilinos-catalyst-ioss-adapter %${COMPILER_ID}"
+      CATALYST_ADAPTER_DIR=$(spack location -i trilinos-catalyst-ioss-adapter %${COMPILER_ID})
       CMAKE_CONFIGURE_ARGS="-DENABLE_PARAVIEW_CATALYST:BOOL=ON -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_ADAPTER_DIR} ${CMAKE_CONFIGURE_ARGS}"
       printf "CATALYST_ADAPTER_DIR=${CATALYST_ADAPTER_DIR}\n"
     fi
     if [ "${TPL}" == 'hypre' ]; then
-      HYPRE_DIR=$(spack location -i hypre %${COMPILER_NAME}@${COMPILER_VERSION})
+      HYPRE_DIR=$(spack location -i hypre %${COMPILER_ID})
       CMAKE_CONFIGURE_ARGS="-DENABLE_HYPRE:BOOL=ON -DHYPRE_DIR:PATH=${HYPRE_DIR} ${CMAKE_CONFIGURE_ARGS}"
       printf "HYPRE_DIR=${HYPRE_DIR}\n"
     fi
@@ -301,8 +313,8 @@ test_configuration() {
 
   printf "\nUnloading Spack modules from environment...\n"
   if [ "${MACHINE_NAME}" != 'mac' ]; then
-    cmd "spack unload cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack unload ${MPI_CONSTRAINTS} %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack unload cmake %${COMPILER_ID}"
+    cmd "spack unload ${MPI_ID} %${COMPILER_ID}"
   fi
 
   if [ "${MACHINE_NAME}" != 'mac' ]; then
@@ -312,7 +324,7 @@ test_configuration() {
   printf "\n"
   printf "************************************************************\n"
   printf "Done testing Nalu-Wind with:\n"
-  printf "${COMPILER_NAME}@${COMPILER_VERSION}\n"
+  printf "${COMPILER_ID}\n"
   printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
   printf "trilinos@${TRILINOS_BRANCH}\n"
   printf "openfast@${OPENFAST_BRANCH}\n"

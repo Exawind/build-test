@@ -48,12 +48,12 @@ test_configuration() {
     BLAS_ID="intel-mkl"
   fi
   if [ ! -z "${MPI_ID}" ]; then
-    MPI_CONSTRAINTS="^${MPI_ID}"
+    MPI_CONSTRAINTS=" ^${MPI_ID}"
   fi
   if [ ! -z "${BLAS_ID}" ]; then
-    BLAS_CONSTRAINTS="^${BLAS_ID}"
+    BLAS_CONSTRAINTS=" ^${BLAS_ID}"
   fi
-  GENERAL_CONSTRAINTS="${GENERAL_CONSTRAINTS} ${MPI_CONSTRAINTS} ${BLAS_CONSTRAINTS}"
+  GENERAL_CONSTRAINTS="${GENERAL_CONSTRAINTS}${MPI_CONSTRAINTS}${BLAS_CONSTRAINTS}"
   printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
   # Define TRILINOS constraints and preferred variants from a single location for all scripts.

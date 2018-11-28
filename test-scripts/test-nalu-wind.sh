@@ -139,19 +139,19 @@ test_configuration() {
 
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
-  cmd "spack uninstall -a -y trilinos@${TRILINOS_BRANCH} %${COMPILER_ID}"
+  cmd "spack uninstall -a -y trilinos@${TRILINOS_BRANCH} %${COMPILER_ID} || true"
   #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
-  #cmd "spack uninstall -a -y openfast %${COMPILER_ID}"
+  #cmd "spack uninstall -a -y openfast %${COMPILER_ID} || true"
   #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
-  #cmd "spack uninstall -a -y tioga %${COMPILER_ID}"
+  #cmd "spack uninstall -a -y tioga %${COMPILER_ID} || true"
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating Trilinos (this is fine to error when tests are first run)...\n"
-  cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno"
+  cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno || true"
   #printf "\nUpdating OpenFAST (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno"
+  #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno || true"
   #printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno"
+  #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno || true"
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}" # Change directories to avoid any stale file handles
 
   TPL_VARIANTS=''

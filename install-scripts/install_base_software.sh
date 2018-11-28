@@ -137,11 +137,12 @@ do
     cmd "mkdir -p ${HOME}/.tmp"
     cmd "export TMPDIR=${HOME}/.tmp"
   elif [ "${MACHINE}" == 'peregrine' ]; then
-    cmd "module purge"
-    cmd "module use /nopt/nrel/ecom/ecp/base/c/spack/share/spack/modules/linux-centos7-x86_64/gcc-6.2.0"
-    cmd "module load gcc/6.2.0"
+    cmd "module unuse /opt/software/modules"
+    cmd "module use /opt/compilers/modules"
+    cmd "module use /opt/utilities/modules"
+    cmd "module load gcc/7.3.0"
     cmd "module load git"
-    cmd "module load python"
+    cmd "module load python/2.7.15"
     cmd "module load curl"
     cmd "module load binutils"
     cmd "module list"
@@ -149,9 +150,9 @@ do
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
-    module unuse /opt/software/modules
-    module use /opt/compilers/modules
-    module use /opt/utilities/modules
+    cmd "module unuse /opt/software/modules"
+    cmd "module use /opt/compilers/modules"
+    cmd "module use /opt/utilities/modules"
     cmd "module purge"
     cmd "module load ${GCC_COMPILER_MODULE}"
     if [ ${COMPILER_NAME} == 'intel' ]; then
@@ -167,7 +168,7 @@ do
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
-    cmd "module load python"
+    cmd "module load python/2.7.15"
     cmd "module list"
     cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
   fi

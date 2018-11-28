@@ -64,11 +64,12 @@ if [ "${MACHINE}" == 'eagle' ]; then
   GCC_COMPILER_VERSION="7.3.0"
   GCC_COMPILER_MODULE="gcc/7.3.0"
   INTEL_COMPILER_VERSION="18.0.4"
-  INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.3"
+  INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.4"
   CLANG_COMPILER_VERSION="6.0.1"
 elif [ "${MACHINE}" == 'peregrine' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="7.3.0"
+  GCC_COMPILER_MODULE="gcc/7.3.0"
   INTEL_COMPILER_VERSION="18.0.4"
   INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.4"
   CLANG_COMPILER_VERSION="6.0.1"

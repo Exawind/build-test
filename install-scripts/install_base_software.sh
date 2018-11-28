@@ -62,20 +62,23 @@ DATE=2018-11-21
 if [ "${MACHINE}" == 'eagle' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="7.3.0"
+  GCC_COMPILER_MODULE="gcc/7.3.0"
   INTEL_COMPILER_VERSION="18.0.4"
-  CLANG_COMPILER_VERSION="7.0.0"
+  INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.3"
+  CLANG_COMPILER_VERSION="6.0.1"
 elif [ "${MACHINE}" == 'peregrine' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="7.3.0"
   INTEL_COMPILER_VERSION="18.0.4"
-  CLANG_COMPILER_VERSION="7.0.0"
+  INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.4"
+  CLANG_COMPILER_VERSION="6.0.1"
 elif [ "${MACHINE}" == 'rhodes' ]; then
   INSTALL_DIR=/opt/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="7.3.0"
   GCC_COMPILER_MODULE="gcc/7.3.0"
   INTEL_COMPILER_VERSION="18.0.4"
   INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.4"
-  CLANG_COMPILER_VERSION="7.0.0"
+  CLANG_COMPILER_VERSION="6.0.1"
 else
   printf "\nMachine name not recognized.\n"
   exit 1
@@ -131,21 +134,26 @@ do
   printf "\nLoading modules...\n"
   if [ "${MACHINE}" == 'eagle' ]; then
     cmd "module purge"
-    cmd "module load gcc/7.3.0"
-    cmd "module list"
+    cmd "module load ${GCC_COMPILER_MODULE}"
+    if [ ${COMPILER_NAME} == 'intel' ]; then
+      cmd "module load ${INTEL_COMPILER_MODULE}"
+    fi
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p ${HOME}/.tmp"
     cmd "export TMPDIR=${HOME}/.tmp"
   elif [ "${MACHINE}" == 'peregrine' ]; then
-    cmd "module unuse /opt/software/modules"
-    cmd "module use /opt/compilers/modules"
-    cmd "module use /opt/utilities/modules"
-    cmd "module load gcc/7.3.0"
+    #cmd "module unuse /nopt/nrel/ecom/hpacf/software/modules"
+    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
+    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
+    cmd "module purge"
+    cmd "module load ${GCC_COMPILER_MODULE}"
+    if [ ${COMPILER_NAME} == 'intel' ]; then
+      cmd "module load ${INTEL_COMPILER_MODULE}"
+    fi
     cmd "module load git"
     cmd "module load python/2.7.15"
     cmd "module load curl"
     cmd "module load binutils"
-    cmd "module list"
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
@@ -169,9 +177,9 @@ do
     cmd "module load wget"
     cmd "module load bc"
     cmd "module load python/2.7.15"
-    cmd "module list"
     cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
   fi
+  cmd "module list"
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     #if [ "${MACHINE}" == 'rhodes' ]; then

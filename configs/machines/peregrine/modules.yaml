@@ -22,4 +22,4 @@ modules:
       environment:
         set:
           '${PACKAGE}_ROOT_DIR': '${PREFIX}'
-    blacklist: ['pcre', 'environment-modules']
+    blacklist: ['pcre', 'environment-modules', 'perl']

@@ -103,9 +103,9 @@ compilers:
      - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/lib/intel64
      - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/lib64
     flags:
-      cflags: -O2 -xCORE-AVX2
-      cxxflags: -O2 -xCORE-AVX2
-      fflags: -O2 -xCORE-AVX2
+      cflags: -O2 -axCORE-AVX2,CORE-AVX-I
+      cxxflags: -O2 -axCORE-AVX2,CORE-AVX-I
+      fflags: -O2 -axCORE-AVX2,CORE-AVX-I
     modules: []
     operating_system: centos7
     paths:

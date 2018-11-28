@@ -5,8 +5,6 @@ modules:
   tcl:
     naming_scheme: '${COMPILERNAME}-${COMPILERVER}/${PACKAGE}/${VERSION}'
     hash_length: 0
-    ^python:
-      autoload: 'direct'
     all:
       suffixes:
         '^python@2.7.15': 'py2'

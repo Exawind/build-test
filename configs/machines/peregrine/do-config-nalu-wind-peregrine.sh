@@ -25,27 +25,27 @@ cmd() {
 }
 
 # Set up environment on Peregrine
+cmd "module unuse /nopt/nrel/apps/modules/centos7/modulefiles"
+cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
+cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
+cmd "module use /nopt/nrel/ecom/hpacf/software/modules/gcc-7.3.0"
 cmd "module purge"
+cmd "module load gcc/7.3.0"
+cmd "module load python"
+cmd "module load git"
+cmd "module load binutils"
 if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "module use /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0"
-  cmd "module load git"
-  cmd "module load python"
-  cmd "module load binutils"
   cmd "module load openmpi"
   cmd "module load netlib-lapack"
-  cmd "module load catalyst-ioss-adapter"
 elif [ "${COMPILER}" == 'intel' ]; then
-  cmd "module use /nopt/nrel/ecom/ecp/base/modules/intel-18.1.163"
-  cmd "module load /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0/intel-parallel-studio/cluster.2018.1"
-  cmd "module load intel-mpi/2018.1.163"
-  cmd "module load intel-mkl/2018.1.163"
+  cmd "module load intel-mpi/2018.4.274"
+  cmd "module load intel-mkl/2018.4.274"
 fi
-cmd "module load gcc/6.2.0"
 cmd "module load openfast"
 cmd "module load hypre"
 cmd "module load tioga"
 cmd "module load yaml-cpp"
-cmd "module load cmake/3.9.4"
+cmd "module load cmake"
 cmd "module load trilinos"
 cmd "module list"
 

@@ -9,12 +9,12 @@ fi
 
 # User specific environment and startup programs
 
+#Module stuff
+module unuse /nopt/nrel/apps/modules/centos7/modulefiles
+module use /nopt/nrel/ecom/hpacf/compilers/modules
+module use /nopt/nrel/ecom/hpacf/utilities/modules
+module use /nopt/nrel/ecom/hpacf/software/modules/gcc-7.3.0
 module purge
-module use /nopt/nrel/ecom/ecp/base/modules/gcc-6.2.0
-#module use /nopt/nrel/ecom/ecp/base/modules/intel-18.1.163
-module load gcc/6.2.0
-module load git/2.15.1
-module load python/2.7.14
-
-export SPACK_ROOT=${HOME}/spack
-. ${SPACK_ROOT}/share/spack/setup-env.sh
+module load gcc/7.3.0
+module load python
+module load git

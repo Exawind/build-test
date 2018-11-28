@@ -319,6 +319,9 @@ test_configuration() {
   cmd "ctest ${CTEST_ARGS} -DCMAKE_CONFIGURE_ARGS=\"${CMAKE_CONFIGURE_ARGS}\" -VV -S ${NALU_WIND_DIR}/reg_tests/CTestNightlyScript.cmake"
   printf "Returned from CTest at $(date)\n"
 
+  printf "\nSaving norms...\n"
+  (set -x; find ${NALU_WIND_DIR}/build/reg_tests/test_files -type f -name *.norm | tar -czf ${NORMS_DIR}/norms-${EXTRA_BUILD_NAME}-$(date +"%Y-%m-%d-%H-%M").tar.gz -T -)
+
   printf "\nUnloading Spack modules from environment...\n"
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "spack unload cmake %${COMPILER_ID}"
@@ -399,6 +402,7 @@ main() {
   NALU_WIND_DIR=${NALU_WIND_TESTING_ROOT_DIR}/nalu-wind
   BUILD_TEST_DIR=${NALU_WIND_TESTING_ROOT_DIR}/build-test
   LOGS_DIR=${NALU_WIND_TESTING_ROOT_DIR}/logs
+  NORMS_DIR=${NALU_WIND_TESTING_ROOT_DIR}/norms
   cmd "export SPACK_ROOT=${NALU_WIND_TESTING_ROOT_DIR}/spack"
  
   printf "============================================================\n"
@@ -407,6 +411,7 @@ main() {
   printf "NALU_WIND_DIR: ${NALU_WIND_DIR}\n"
   printf "BUILD_TEST_DIR: ${BUILD_TEST_DIR}\n"
   printf "LOGS_DIR: ${LOGS_DIR}\n"
+  printf "NORMS_DIR: ${NORMS_DIR}\n"
   printf "SPACK_ROOT: ${SPACK_ROOT}\n"
   printf "Testing configurations:\n"
   printf " compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls\n"
@@ -444,6 +449,9 @@ main() {
  
     printf "\nMaking job output directory...\n"
     cmd "mkdir -p ${LOGS_DIR}"
+
+    printf "\nMaking norm archive directory...\n"
+    cmd "mkdir -p ${NORMS_DIR}"
  
     printf "============================================================\n"
     printf "Done setting up testing directory\n"

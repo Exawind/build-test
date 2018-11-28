@@ -190,8 +190,10 @@ done
 printf "\nSetting permissions...\n"
 if [ "${MACHINE}" == 'eagle' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
+  cmd "chgrp -R n-ecom ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'peregrine' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
+  cmd "chgrp -R n-ecom ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then
   cmd "chgrp windsim /opt"
   cmd "chgrp windsim /opt/${TYPE}"

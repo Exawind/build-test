@@ -30,11 +30,11 @@ test_configuration() {
   printf "\n"
 
   # Logic for building up some constraints for use on Spack commands
-  cmd "unset GENERAL_CONSTRAINTS"
-  cmd "unset MPI_ID"
-  cmd "unset MPI_CONSTRAINTS"
-  cmd "unset BLAS_ID"
-  cmd "unset BLAS_CONSTRAINTS"
+  GENERAL_CONSTRAINTS=''
+  MPI_ID=''
+  MPI_CONSTRAINTS=''
+  BLAS_ID=''
+  BLAS_CONSTRAINTS=''
   if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
     # OpenMPI 3.1.3 hangs at run time unless it was built with GCC > 7.3.0
     # so we use an older OpenMPI for GCC 4.9.4.
@@ -48,12 +48,12 @@ test_configuration() {
     BLAS_ID="intel-mkl"
   fi
   if [ ! -z "${MPI_ID}" ]; then
-    MPI_CONSTRAINTS=" ^${MPI_ID}"
+    MPI_CONSTRAINTS="^${MPI_ID}"
   fi
   if [ ! -z "${BLAS_ID}" ]; then
-    BLAS_CONSTRAINTS=" ^${BLAS_ID}"
+    BLAS_CONSTRAINTS="^${BLAS_ID}"
   fi
-  GENERAL_CONSTRAINTS="${MPI_CONSTRAINTS}${BLAS_CONSTRAINTS}"
+  GENERAL_CONSTRAINTS="${MPI_CONSTRAINTS} ${BLAS_CONSTRAINTS}"
   printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
   # Define TRILINOS constraints and preferred variants from a single location for all scripts.

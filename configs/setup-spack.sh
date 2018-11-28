@@ -98,9 +98,6 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   (set -x; cp -R custom-package-files/nalu-wind ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/paraview ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/trilinos-catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp -R custom-package-files/voropp ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp -R custom-package-files/latte ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  (set -x; cp custom-package-files/lammps/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/lammps/package.py)
 
   #Extra stuff for eagle
   #if [ ${MACHINE} == 'eagle' ]; then

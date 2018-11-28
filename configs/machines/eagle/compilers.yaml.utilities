@@ -1,0 +1,15 @@
+compilers:
+- compiler:
+    flags:
+      cflags: -O2
+      cxxflags: -O2
+      fflags: -O2
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /usr/bin/gcc
+      cxx: /usr/bin/g++
+      f77: /usr/bin/gfortran
+      fc: /usr/bin/gfortran
+    spec: gcc@4.8.5
+    target: x86_64

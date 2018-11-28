@@ -75,7 +75,7 @@ test_configuration() {
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
-    cmd "module load python"
+    cmd "module load python/2.7.15"
     cmd "module load cppcheck"
     cmd "module load binutils"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
@@ -90,7 +90,7 @@ test_configuration() {
     cmd "module use /nopt/nrel/ecom/ecp/hpacf/compilers/modules"
     cmd "module use /nopt/nrel/ecom/ecp/hpacf/utilities/modules"
     cmd "module use /nopt/nrel/ecom/ecp/hpacf/software/modules"
-    cmd "module load python"
+    cmd "module load python/2.7.15"
     cmd "module load git"
     cmd "module load cppcheck"
     cmd "module load binutils"

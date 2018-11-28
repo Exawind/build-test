@@ -170,6 +170,8 @@ do
     cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install python@2.7.15 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install python@3.6.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install gnuplot+X+wx %${COMPILER_NAME}@${COMPILER_VERSION} ^pango+X"
     cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"

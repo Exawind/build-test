@@ -8,7 +8,5 @@ cmd() {
   if ${execute_cmds}; then eval "$@"; fi
 }
 
-for TYPE in compilers utilities software; do
-  cmd "chmod -R a+rX,go-w /nopt/nrel/ecom/hpacf/${TYPE}"
-  cmd "chgrp -R n-ecom /nopt/nrel/ecom/hpacf/${TYPE}"
-done
+cmd "chmod -R a+rX,go-w /nopt/nrel/ecom/hpacf"
+cmd "chgrp -R n-ecom /nopt/nrel/ecom/hpacf"

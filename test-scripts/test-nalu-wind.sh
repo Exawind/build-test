@@ -306,6 +306,11 @@ test_configuration() {
   # Set essential arguments for the ctest cmake configure step
   CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DCMAKE_BUILD_TYPE=RelWithDebInfo ${CMAKE_CONFIGURE_ARGS}"
 
+  # Set looser diff tolerance for GCC 7.3.0 cases that have more optimization flags on
+  if [ "${COMPILER_ID}" == 'gcc@7.3.0' ]; then
+    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.000001 ${CMAKE_CONFIGURE_ARGS}"
+  fi
+
   printf "\nRunning CTest at $(date)...\n"
   cmd "cd ${NALU_WIND_DIR}/build"
   if [ "${MACHINE_NAME}" != 'mac' ]; then

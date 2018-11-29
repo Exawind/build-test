@@ -173,6 +173,10 @@ test_configuration() {
     #if [ "${TPL}" == 'hypre' ] ; then
     #  TPL_CONSTRAINTS="${TPL_CONSTRAINTS}"
     #fi
+    # Currently don't need any extra constraints for fftw
+    #if [ "${TPL}" == 'fftw' ] ; then
+    #  TPL_CONSTRAINTS="${TPL_CONSTRAINTS}"
+    #fi
   done
 
   if [ "${MACHINE_NAME}" != 'mac' ]; then
@@ -234,6 +238,11 @@ test_configuration() {
       HYPRE_DIR=$(spack location -i hypre %${COMPILER_ID})
       CMAKE_CONFIGURE_ARGS="-DENABLE_HYPRE:BOOL=ON -DHYPRE_DIR:PATH=${HYPRE_DIR} ${CMAKE_CONFIGURE_ARGS}"
       printf "HYPRE_DIR=${HYPRE_DIR}\n"
+    fi
+    if [ "${TPL}" == 'fftw' ]; then
+      FFTW_DIR=$(spack location -i fftw %${COMPILER_ID})
+      CMAKE_CONFIGURE_ARGS="-DENABLE_FFTW:BOOL=ON -DFFTW_DIR:PATH=${FFTW_DIR} ${CMAKE_CONFIGURE_ARGS}"
+      printf "FFTW_DIR=${FFTW_DIR}\n"
     fi
   done
 

@@ -33,6 +33,8 @@ class NaluWind(CMakePackage):
             description='Compile with Hypre support')
     variant('catalyst', default=False,
             description='Compile with Catalyst support')
+    variant('fftw', default=False,
+            description='Compile with FFTW support')
 
     # Required dependencies
     depends_on('mpi')
@@ -46,6 +48,7 @@ class NaluWind(CMakePackage):
     depends_on('tioga', when='+tioga')
     depends_on('hypre+mpi+int64', when='+hypre')
     depends_on('trilinos-catalyst-ioss-adapter', when='+catalyst')
+    depends_on('fftw+mpi', when='+fftw')
 
     def cmake_args(self):
         spec = self.spec
@@ -96,5 +99,13 @@ class NaluWind(CMakePackage):
             ])
         else:
             options.append('-DENABLE_PARAVIEW_CATALYST:BOOL=OFF')
+
+        if '+fftw' in spec:
+            options.extend([
+                '-DENABLE_FFTW:BOOL=ON',
+                '-DFFTW_DIR:PATH=%s' % spec['fftw'].prefix
+            ])
+        else:
+            options.append('-DENABLE_HYPRE:BOOL=OFF')
 
         return options

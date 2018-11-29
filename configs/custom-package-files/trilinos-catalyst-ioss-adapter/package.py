@@ -18,6 +18,7 @@ class TrilinosCatalystIossAdapter(CMakePackage):
     depends_on('bison')
     depends_on('flex')
     depends_on('paraview+mpi+python+osmesa')
+    depends_on('py-numpy')
 
     patch('phactor.patch')
 

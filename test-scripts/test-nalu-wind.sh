@@ -323,16 +323,6 @@ test_configuration() {
   printf "\nSaving norms...\n"
   (set -x; find ${NALU_WIND_DIR}/build/reg_tests/test_files -type f -name *.norm | tar -czf ${NORMS_DIR}/norms${EXTRA_BUILD_NAME}-$(date +"%Y-%m-%d-%H-%M").tar.gz -T -)
 
-  printf "\nUnloading Spack modules from environment...\n"
-  if [ "${MACHINE_NAME}" != 'mac' ]; then
-    cmd "spack unload cmake %${COMPILER_ID}"
-    cmd "spack unload ${MPI_ID} %${COMPILER_ID}"
-  fi
-
-  if [ "${MACHINE_NAME}" != 'mac' ]; then
-    cmd "module list"
-  fi
-
   printf "\n"
   printf "************************************************************\n"
   printf "Done testing Nalu-Wind with:\n"
@@ -381,10 +371,10 @@ main() {
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
-    CONFIGURATIONS[1]='gcc:7.3.0:false:master:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[4]='clang:6.0.1:false:develop:develop:develop:openfast;tioga;hypre'
+    #CONFIGURATIONS[1]='gcc:7.3.0:false:master:develop:develop:openfast;tioga;hypre'
+    #CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
+    #CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:develop:openfast;tioga;hypre'
+    #CONFIGURATIONS[4]='clang:6.0.1:false:develop:develop:develop:openfast;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then

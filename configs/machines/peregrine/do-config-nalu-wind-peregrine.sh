@@ -12,6 +12,7 @@ if [ "${COMPILER}" == 'gcc' ]; then
   C_COMPILER=mpicc
   FORTRAN_COMPILER=mpifort
   FLAGS="-O2 -march=native -mtune=native"
+  OVERSUBSCRIBE_FLAGS="--use-hwthread-cpus --oversubscribe"
 elif [ "${COMPILER}" == 'intel' ]; then
   CXX_COMPILER=mpiicpc
   C_COMPILER=mpiicc
@@ -78,6 +79,7 @@ cmd "which mpirun"
   -DMPI_CXX_COMPILER:STRING=${CXX_COMPILER} \
   -DMPI_C_COMPILER:STRING=${C_COMPILER} \
   -DMPI_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
+  -DMPIEXEC_PREFLAGS:STRING=${OVERSUBSCRIBE_FLAGS} \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
   -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
   -DENABLE_OPENFAST:BOOL=ON \

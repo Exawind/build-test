@@ -225,6 +225,7 @@ test_configuration() {
     if [ "${TPL}" == 'catalyst' ]; then
       cmd "spack load paraview %${COMPILER_ID}"
       cmd "spack load trilinos-catalyst-ioss-adapter %${COMPILER_ID}"
+      cmd "spack load py-numpy %${COMPILER_ID}"
       CATALYST_ADAPTER_DIR=$(spack location -i trilinos-catalyst-ioss-adapter %${COMPILER_ID})
       CMAKE_CONFIGURE_ARGS="-DENABLE_PARAVIEW_CATALYST:BOOL=ON -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_ADAPTER_DIR} ${CMAKE_CONFIGURE_ARGS}"
       printf "CATALYST_ADAPTER_DIR=${CATALYST_ADAPTER_DIR}\n"

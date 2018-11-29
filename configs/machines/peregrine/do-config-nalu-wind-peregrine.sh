@@ -11,10 +11,12 @@ if [ "${COMPILER}" == 'gcc' ]; then
   CXX_COMPILER=mpicxx
   C_COMPILER=mpicc
   FORTRAN_COMPILER=mpifort
+  FLAGS="-O2 -march=native -mtune=native"
 elif [ "${COMPILER}" == 'intel' ]; then
   CXX_COMPILER=mpiicpc
   C_COMPILER=mpiicc
   FORTRAN_COMPILER=mpiifort
+  FLAGS="-O2 -axCORE-AVX2,CORE-AVX-I"
 fi
   
 set -e
@@ -68,8 +70,11 @@ cmd "which mpirun"
 
 (set -x; cmake \
   -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
+  -DCMAKE_CXX_FLAGS:STRING=${FLAGS} \
   -DCMAKE_C_COMPILER:STRING=${C_COMPILER} \
+  -DCMAKE_C_FLAGS:STRING=${FLAGS} \
   -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
+  -DCMAKE_Fortran_FLAGS:STRING=${FLAGS} \
   -DMPI_CXX_COMPILER:STRING=${CXX_COMPILER} \
   -DMPI_C_COMPILER:STRING=${C_COMPILER} \
   -DMPI_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
@@ -86,4 +91,4 @@ cmd "which mpirun"
   -DENABLE_TESTS:BOOL=ON \
   ..)
 
-cmd "nice make -j 8"
+(set -x; nice make -j 8)

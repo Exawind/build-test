@@ -11,6 +11,7 @@ if [ "${COMPILER}" == 'gcc' ]; then
   CXX_COMPILER=mpicxx
   C_COMPILER=mpicc
   FORTRAN_COMPILER=mpifort
+  FLAGS="-O2 -march=native -mtune=native"
 fi
   
 set -e
@@ -53,8 +54,11 @@ cmd "which mpirun"
 
 (set -x; cmake \
   -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
+  -DCMAKE_CXX_FLAGS:STRING=${FLAGS} \
   -DCMAKE_C_COMPILER:STRING=${C_COMPILER} \
+  -DCMAKE_C_FLAGS:STRING=${FLAGS} \
   -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
+  -DCMAKE_Fortran_FLAGS:STRING=${FLAGS} \
   -DMPI_CXX_COMPILER:STRING=${CXX_COMPILER} \
   -DMPI_C_COMPILER:STRING=${C_COMPILER} \
   -DMPI_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \

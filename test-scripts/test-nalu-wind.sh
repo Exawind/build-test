@@ -308,7 +308,7 @@ test_configuration() {
 
   # Set looser diff tolerance for GCC 7.3.0 cases that have more optimization flags on
   if [ "${COMPILER_ID}" == 'gcc@7.3.0' ]; then
-    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.000001 ${CMAKE_CONFIGURE_ARGS}"
+    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.00001 ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   printf "\nRunning CTest at $(date)...\n"
@@ -320,7 +320,7 @@ test_configuration() {
   printf "Returned from CTest at $(date)\n"
 
   printf "\nSaving norms...\n"
-  (set -x; find ${NALU_WIND_DIR}/build/reg_tests/test_files -type f -name *.norm | tar -czf ${NORMS_DIR}/norms-${EXTRA_BUILD_NAME}-$(date +"%Y-%m-%d-%H-%M").tar.gz -T -)
+  (set -x; find ${NALU_WIND_DIR}/build/reg_tests/test_files -type f -name *.norm | tar -czf ${NORMS_DIR}/norms${EXTRA_BUILD_NAME}-$(date +"%Y-%m-%d-%H-%M").tar.gz -T -)
 
   printf "\nUnloading Spack modules from environment...\n"
   if [ "${MACHINE_NAME}" != 'mac' ]; then

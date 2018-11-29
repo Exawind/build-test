@@ -33,6 +33,8 @@ packages:
     version: [3.8.0]
   py-matplotlib:
     version: [2.2.3]
+  fftw:
+    variants: +mpi+fma simd=avx2
   all:
     compiler: [gcc@4.8.5, gcc@4.9.4, gcc@5.5.0, gcc@6.4.0, gcc@7.3.0, gcc@8.2.0, clang@7.0.0, intel@18.0.4]
     variants: build_type=Release

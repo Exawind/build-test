@@ -321,7 +321,7 @@ test_configuration() {
   printf "Returned from CTest at $(date)\n"
 
   printf "\nSaving norms...\n"
-  (set -x; find ${NALU_WIND_DIR}/build/reg_tests/test_files -type f -name *.norm | tar -czf ${NORMS_DIR}/norms${EXTRA_BUILD_NAME}-$(date +"%Y-%m-%d-%H-%M").tar.gz -T -)
+  (set -x; find ${NALU_WIND_DIR}/build/reg_tests/test_files -type f -name *.norm | tar -czf ${NORMS_DIR}/norms${EXTRA_BUILD_NAME}-$(date +%Y-%m-%d-%H-%M).tar.gz -T -)
 
   printf "\n"
   printf "************************************************************\n"

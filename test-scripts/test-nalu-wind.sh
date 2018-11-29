@@ -147,7 +147,7 @@ test_configuration() {
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating Trilinos (this is fine to error when tests are first run)...\n"
-  cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno || true"
+  cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno || true"
   #printf "\nUpdating OpenFAST (this is fine to error when tests are first run)...\n"
   #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno || true"
   #printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"

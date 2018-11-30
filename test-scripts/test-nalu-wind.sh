@@ -321,6 +321,9 @@ test_configuration() {
     CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.00001 ${CMAKE_CONFIGURE_ARGS}"
   fi
 
+  # Allow OpenMPI to consider hardware threads as cpus and allow for oversubscription
+  CMAKE_CONFIGURE_ARGS="-DMPIEXEC_PREFLAGS:STRING='--use-hwthread-cpus --oversubscribe' ${CMAKE_CONFIGURE_ARGS}"
+
   printf "\nRunning CTest at $(date)...\n"
   cmd "cd ${NALU_WIND_DIR}/build"
   if [ "${MACHINE_NAME}" != 'mac' ]; then

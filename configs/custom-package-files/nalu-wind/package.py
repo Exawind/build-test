@@ -108,4 +108,7 @@ class NaluWind(CMakePackage):
         else:
             options.append('-DENABLE_HYPRE:BOOL=OFF')
 
+        if sys.platform == 'darwin':
+            options.append('-DCMAKE_MACOSX_RPATH:BOOL=ON')
+
         return options

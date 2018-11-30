@@ -444,6 +444,7 @@ main() {
     # Checkout Nalu-Wind and meshes submodule outside of Spack so ctest can build it itself
     printf "\nCloning Nalu-Wind repo...\n"
     cmd "git clone --recursive https://github.com/exawind/nalu-wind.git ${NALU_WIND_DIR}"
+    cmd "mkdir -p ${NALU_WIND_DIR}/build"
     # Nalu-Wind v1.2.0 tag
     #cmd "cd ${NALU_WIND_DIR} && git checkout v1.2.0"
  

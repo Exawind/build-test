@@ -11,7 +11,7 @@ if [ "${COMPILER}" == 'gcc' ]; then
   CXX_COMPILER=mpicxx
   C_COMPILER=mpicc
   FORTRAN_COMPILER=mpifort
-  FLAGS="-O2 -march=native -mtune=native"
+  FLAGS="-O2 -march=skylake-avx512 -mtune=skylake-avx512"
   OVERSUBSCRIBE_FLAGS="--use-hwthread-cpus --oversubscribe"
 fi
   
@@ -81,4 +81,4 @@ cmd "which mpirun"
   -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${OPENFAST_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
   ..)
 
-cmd "nice make -j 20"
+(set -x; nice make -j 16)

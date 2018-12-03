@@ -20,8 +20,6 @@ class NaluWind(CMakePackage):
     version('master', branch='master')
 
     # Options
-    variant('shared', default=(sys.platform != 'darwin'),
-            description='Build Trilinos as shared library')
     variant('pic', default=True,
             description='Position independent code')
     # Third party libraries
@@ -39,10 +37,7 @@ class NaluWind(CMakePackage):
     # Required dependencies
     depends_on('mpi')
     depends_on('yaml-cpp@0.5.3:')
-    depends_on('trilinos+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards~hypre@master,develop', when='+shared')
-    # Cannot build Trilinos as a shared library with STK on Darwin
-    # https://github.com/trilinos/Trilinos/issues/2994
-    depends_on('trilinos~shared+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards~hypre@master,develop', when='~shared')
+    depends_on('trilinos+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards~hypre@master,develop')
     # Optional dependencies
     depends_on('openfast+cxx', when='+openfast')
     depends_on('tioga', when='+tioga')

@@ -317,7 +317,7 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DCMAKE_BUILD_TYPE=RelWithDebInfo ${CMAKE_CONFIGURE_ARGS}"
 
   # Set looser diff tolerance for GCC 7.3.0 cases that have more optimization flags on
-  if [ "${COMPILER_ID}" == 'gcc@7.3.0' ]; then
+  if [ "${COMPILER_ID}" == 'gcc@7.3.0' ] && [ "${MACHINE_NAME}" != 'mac' ]; then
     CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.00001 ${CMAKE_CONFIGURE_ARGS}"
   fi
 

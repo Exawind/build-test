@@ -180,6 +180,8 @@ do
     cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install image-magick %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install stow %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install zsh %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"

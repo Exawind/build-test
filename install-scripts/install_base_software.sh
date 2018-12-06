@@ -134,16 +134,23 @@ do
 
   printf "\nLoading modules...\n"
   if [ "${MACHINE}" == 'eagle' ]; then
+    cmd "module unuse /nopt/nrel/ecom/hpacf/software/modules"
+    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
+    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
     cmd "module purge"
     cmd "module load ${GCC_COMPILER_MODULE}"
     if [ ${COMPILER_NAME} == 'intel' ]; then
       cmd "module load ${INTEL_COMPILER_MODULE}"
     fi
+    cmd "module load git"
+    cmd "module load python/2.7.15"
+    cmd "module load curl"
+    cmd "module load binutils"
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p ${HOME}/.tmp"
     cmd "export TMPDIR=${HOME}/.tmp"
   elif [ "${MACHINE}" == 'peregrine' ]; then
-    #cmd "module unuse /nopt/nrel/ecom/hpacf/software/modules"
+    cmd "module unuse /nopt/nrel/ecom/hpacf/software/modules"
     cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
     cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
     cmd "module purge"
@@ -247,11 +254,13 @@ do
     cmd "spack install paraview+mpi+python+osmesa %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install osu-micro-benchmarks %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
     cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
+    cmd "spack install osu-micro-benchmarks %${COMPILER_NAME}@${COMPILER_VERSION} ^intel-mpi"
   fi
 
   cmd "unset TMPDIR"

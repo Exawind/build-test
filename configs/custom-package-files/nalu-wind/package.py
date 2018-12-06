@@ -24,7 +24,6 @@ class NaluWind(CMakePackage):
              description='Build Trilinos as shared library')
     variant('pic', default=True,
             description='Position independent code')
-            description='Position independent code')
     # Third party libraries
     variant('openfast', default=False,
             description='Compile with OpenFAST support')

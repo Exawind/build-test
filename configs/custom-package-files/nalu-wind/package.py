@@ -38,13 +38,17 @@ class NaluWind(CMakePackage):
 
     # Required dependencies
     depends_on('mpi')
-    depends_on('yaml-cpp@0.5.3:')
+    depends_on('yaml-cpp@0.5.3:', when='+shared')
+    depends_on('yaml-cpp~shared@0.5.3:', when='~shared')
     depends_on('trilinos+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards~hypre@master,develop', when='+shared')
     depends_on('trilinos~shared+exodus+tpetra+muelu+belos+ifpack2+amesos2+zoltan+stk+boost~superlu-dist+superlu+hdf5+zlib+pnetcdf+shards~hypre@master,develop', when='~shared')
     # Optional dependencies
-    depends_on('openfast+cxx', when='+openfast')
-    depends_on('tioga', when='+tioga')
-    depends_on('hypre+mpi+int64', when='+hypre')
+    depends_on('openfast+cxx', when='+openfast+shared')
+    depends_on('openfast+cxx~shared', when='+openfast~shared')
+    depends_on('tioga', when='+tioga+shared')
+    depends_on('tioga~shared', when='+tioga~shared')
+    depends_on('hypre+mpi+int64', when='+hypre+shared')
+    depends_on('hypre+mpi+int64~shared', when='+hypre~shared')
     depends_on('trilinos-catalyst-ioss-adapter', when='+catalyst')
     depends_on('fftw+mpi', when='+fftw')
 

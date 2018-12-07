@@ -100,6 +100,7 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   (set -x; cp -R custom-package-files/trilinos-catalyst-ioss-adapter ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/tioga ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   (set -x; cp -R custom-package-files/openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
+  (set -x; cp custom-package-files/openmpi/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/openmpi/package.py)
 
   #Extra stuff for eagle
   #if [ ${MACHINE} == 'eagle' ]; then

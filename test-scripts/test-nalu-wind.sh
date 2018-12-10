@@ -253,6 +253,9 @@ test_configuration() {
     printf "\nCleaning Nalu-Wind directory...\n"
     cmd "cd ${NALU_WIND_DIR} && git reset --hard origin/master && git clean -df && git status -uno"
     cmd "cd ${NALU_WIND_DIR}/build && rm -rf ${NALU_WIND_DIR}/build/*"
+    # Probably need something like these lines to deal with updates to submodules
+    #cmd "cd ${NALU_WIND_DIR}/reg_tests/mesh && git checkout master && git pull"
+    #cmd "cd ${NALU_WIND_DIR}/wind-utils && git checkout master && git pull"
   fi
 
   if [ "${OPENMP_ENABLED}" == 'true' ]; then

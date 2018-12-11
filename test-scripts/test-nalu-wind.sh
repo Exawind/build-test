@@ -386,16 +386,16 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:develop:openfast;tioga;hypre;catalyst'
-    CONFIGURATIONS[1]='gcc:7.3.0:false:master:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[4]='clang:6.0.1:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:develop:fftw;tioga;hypre;catalyst'
+    CONFIGURATIONS[1]='gcc:7.3.0:false:master:develop:develop:fftw;tioga;hypre'
+    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:develop:fftw;tioga;hypre'
+    CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:develop:fftw;tioga;hypre'
+    CONFIGURATIONS[4]='clang:6.0.1:false:develop:develop:develop:fftw;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:develop:openfast;tioga;hypre'
-    CONFIGURATIONS[1]='intel:18.0.4:false:develop:develop:develop:openfast;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:develop:tioga;hypre'
+    CONFIGURATIONS[1]='intel:18.0.4:false:develop:develop:develop:tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/windsim/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then

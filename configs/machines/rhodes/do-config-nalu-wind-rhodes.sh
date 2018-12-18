@@ -12,9 +12,9 @@ cmd() {
 # Copy this script to that directory and edit the
 # options below to your own needs and run it.
 
-COMPILER=gcc #or intel
+COMPILER=gcc #intel, clang
 
-if [ "${COMPILER}" == 'gcc' ]; then
+if [ "${COMPILER}" == 'gcc' ] || [ "${COMPILER}" == 'clang' ]; then
   CXX_COMPILER=mpicxx
   C_COMPILER=mpicc
   FORTRAN_COMPILER=mpifort
@@ -36,7 +36,25 @@ module() { eval $(${MODULE_PREFIX}/Modules/bin/modulecmd $(basename ${SHELL}) $*
 #Load some base modules
 cmd "module use /opt/compilers/modules"
 cmd "module use /opt/utilities/modules"
-cmd "module use /opt/software/modules/gcc-7.3.0"
+
+#Choose software stack
+if [ "${COMPILER}" == 'gcc' ]; then
+  #Choose from main modules
+  #cmd "module use /opt/software/modules/gcc-7.3.0"
+  #GCC 4.9.4 testing stack
+  #cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/gcc-4.9.4"
+  #GCC 7.3.0 testing stack
+  cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/gcc-7.3.0"
+elif [ "${COMPILER}" == 'clang' ]; then
+  #Clang 6.0.1 testing stack
+  cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/clang-6.0.1"
+elif [ "${COMPILER}" == 'intel' ]; then
+  #Choose from main modules
+  #cmd "module use /opt/software/modules/intel-18.0.4"
+  #Intel 18.0.4 testing stack
+  cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/intel-18.0.4"
+fi
+
 cmd "module purge"
 cmd "module load unzip"
 cmd "module load patch"
@@ -50,9 +68,16 @@ cmd "module load bc"
 cmd "module load binutils"
 cmd "module load python/2.7.15"
 if [ "${COMPILER}" == 'gcc' ]; then
+  cmd "module load gcc/7.3.0"
+  cmd "module load openmpi"
+  cmd "module load netlib-lapack"
+elif [ "${COMPILER}" == 'clang' ]; then
+  cmd "module load gcc/7.3.0"
+  cmd "module load llvm/6.0.1"
   cmd "module load openmpi"
   cmd "module load netlib-lapack"
 elif [ "${COMPILER}" == 'intel' ]; then
+  cmd "module load intel-parallel-studio/cluster.2018.4"
   cmd "module load intel-mpi/2018.4.274"
   cmd "module load intel-mkl/2018.4.274"
 fi
@@ -62,6 +87,7 @@ cmd "module load tioga"
 cmd "module load yaml-cpp"
 cmd "module load hypre"
 cmd "module load openfast"
+#cmd "module load fftw"
 cmd "module list"
 
 # Clean before cmake configure

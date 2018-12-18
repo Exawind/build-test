@@ -13,6 +13,8 @@ cmd() {
 # options below to your own needs and run it.
 
 COMPILER=gcc #intel, clang
+COMPILER_VERSION=7.3.0
+GCC_COMPILER_VERSION=7.3.0
 
 if [ "${COMPILER}" == 'gcc' ] || [ "${COMPILER}" == 'clang' ]; then
   CXX_COMPILER=mpicxx
@@ -36,24 +38,10 @@ module() { eval $(${MODULE_PREFIX}/Modules/bin/modulecmd $(basename ${SHELL}) $*
 #Load some base modules
 cmd "module use /opt/compilers/modules"
 cmd "module use /opt/utilities/modules"
-
-#Choose software stack
-if [ "${COMPILER}" == 'gcc' ]; then
-  #Choose from main modules
-  #cmd "module use /opt/software/modules/gcc-7.3.0"
-  #GCC 4.9.4 testing stack
-  #cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/gcc-4.9.4"
-  #GCC 7.3.0 testing stack
-  cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/gcc-7.3.0"
-elif [ "${COMPILER}" == 'clang' ]; then
-  #Clang 6.0.1 testing stack
-  cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/clang-6.0.1"
-elif [ "${COMPILER}" == 'intel' ]; then
-  #Choose from main modules
-  #cmd "module use /opt/software/modules/intel-18.0.4"
-  #Intel 18.0.4 testing stack
-  cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/intel-18.0.4"
-fi
+#Main software stack
+cmd "module use /opt/software/modules/${COMPILER}-${COMPILER_VERSION}"
+#Testing software stack
+#cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/${COMPILER}-${COMPILER_VERSION}"
 
 cmd "module purge"
 cmd "module load unzip"
@@ -68,15 +56,16 @@ cmd "module load bc"
 cmd "module load binutils"
 cmd "module load python/2.7.15"
 if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "module load gcc/7.3.0"
+  cmd "module load gcc/${COMPILER_VERSION}"
   cmd "module load openmpi"
   cmd "module load netlib-lapack"
 elif [ "${COMPILER}" == 'clang' ]; then
-  cmd "module load gcc/7.3.0"
-  cmd "module load llvm/6.0.1"
+  cmd "module load gcc/${GCC_COMPILER_VERSION}"
+  cmd "module load llvm/${COMPILER_VERSION}"
   cmd "module load openmpi"
   cmd "module load netlib-lapack"
 elif [ "${COMPILER}" == 'intel' ]; then
+  cmd "module load gcc/${GCC_COMPILER_VERSION}"
   cmd "module load intel-parallel-studio/cluster.2018.4"
   cmd "module load intel-mpi/2018.4.274"
   cmd "module load intel-mkl/2018.4.274"
@@ -87,7 +76,7 @@ cmd "module load tioga"
 cmd "module load yaml-cpp"
 cmd "module load hypre"
 cmd "module load openfast"
-#cmd "module load fftw"
+cmd "module load fftw"
 cmd "module list"
 
 # Clean before cmake configure
@@ -106,6 +95,7 @@ cmd "which mpirun"
 #  -DOpenFAST_DIR:PATH=${OPENFAST_ROOT_DIR} \
 #  -DENABLE_FFTW:BOOL=ON \
 #  -DFFTW_DIR:PATH=${FFTW_ROOT_DIR} \
+#  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${OPENFAST_ROOT_DIR}/lib;${FFTW_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
 
 (set -x; cmake \
   -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
@@ -130,7 +120,7 @@ cmd "which mpirun"
   -DCMAKE_SKIP_BUILD_RPATH:BOOL=FALSE \
   -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=FALSE \
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=TRUE \
-  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${OPENFAST_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
+  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
   ..)
 
 (set -x; nice make -j 64)

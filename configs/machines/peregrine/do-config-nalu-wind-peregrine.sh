@@ -31,7 +31,11 @@ cmd() {
 cmd "module unuse /nopt/nrel/apps/modules/centos7/modulefiles"
 cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
 cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
-cmd "module use /nopt/nrel/ecom/hpacf/software/modules/gcc-7.3.0"
+if [ "${COMPILER}" == 'gcc' ]; then
+  cmd "module use /nopt/nrel/ecom/hpacf/software/modules/gcc-7.3.0"
+elif [ "${COMPILER}" == 'intel' ]; then
+  cmd "module use /nopt/nrel/ecom/hpacf/software/modules/intel-18.0.4"
+fi
 cmd "module purge"
 cmd "module load gcc/7.3.0"
 cmd "module load python"
@@ -41,6 +45,7 @@ if [ "${COMPILER}" == 'gcc' ]; then
   cmd "module load openmpi"
   cmd "module load netlib-lapack"
 elif [ "${COMPILER}" == 'intel' ]; then
+  cmd "module load intel-parallel-studio/cluster.2018.4"
   cmd "module load intel-mpi/2018.4.274"
   cmd "module load intel-mkl/2018.4.274"
 fi
@@ -73,6 +78,7 @@ cmd "which mpirun"
 #  -DOpenFAST_DIR:PATH=${OPENFAST_ROOT_DIR} \
 #  -DENABLE_FFTW:BOOL=ON \
 #  -DFFTW_DIR:PATH=${FFTW_ROOT_DIR} \
+#  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${OPENFAST_ROOT_DIR}/lib;${FFTW_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
 
 (set -x; cmake \
   -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
@@ -97,7 +103,7 @@ cmd "which mpirun"
   -DCMAKE_SKIP_BUILD_RPATH:BOOL=FALSE \
   -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=FALSE \
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=TRUE \
-  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${OPENFAST_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
+  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
   ..)
 
 (set -x; nice make -j 12)

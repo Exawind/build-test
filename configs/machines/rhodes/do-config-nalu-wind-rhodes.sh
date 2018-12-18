@@ -12,8 +12,10 @@ cmd() {
 # Copy this script to that directory and edit the
 # options below to your own needs and run it.
 
-COMPILER=gcc #intel, clang
+#gcc 7.3.0, gcc 4.9.4, intel 18.0.4, clang 6.0.1
+COMPILER=gcc
 COMPILER_VERSION=7.3.0
+#For Intel compiler front end and Clang fortran compiler
 GCC_COMPILER_VERSION=7.3.0
 
 if [ "${COMPILER}" == 'gcc' ] || [ "${COMPILER}" == 'clang' ]; then
@@ -38,10 +40,10 @@ module() { eval $(${MODULE_PREFIX}/Modules/bin/modulecmd $(basename ${SHELL}) $*
 #Load some base modules
 cmd "module use /opt/compilers/modules"
 cmd "module use /opt/utilities/modules"
-#Main software stack
-cmd "module use /opt/software/modules/${COMPILER}-${COMPILER_VERSION}"
-#Testing software stack
-#cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/${COMPILER}-${COMPILER_VERSION}"
+#Use main software stack
+#cmd "module use /opt/software/modules/${COMPILER}-${COMPILER_VERSION}"
+#Use testing software stack
+cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/${COMPILER}-${COMPILER_VERSION}"
 
 cmd "module purge"
 cmd "module load unzip"

@@ -5,13 +5,14 @@
 # Copy this script to that directory and edit the
 # options below to your own needs and run it.
 
-COMPILER=gcc #intel
+COMPILER=gcc #or intel
 
 if [ "${COMPILER}" == 'gcc' ]; then
   CXX_COMPILER=mpicxx
   C_COMPILER=mpicc
   FORTRAN_COMPILER=mpifort
-  FLAGS="-O2 -march=skylake-avx512 -mtune=skylake-avx512"
+  #FLAGS="-O2 -march=skylake-avx512 -mtune=skylake-avx512"
+  FLAGS="-O2 -march=skylake -mtune=skylake"
   OVERSUBSCRIBE_FLAGS="--use-hwthread-cpus --oversubscribe"
 elif [ "${COMPILER}" == 'intel' ]; then
   CXX_COMPILER=mpiicpc
@@ -71,7 +72,11 @@ cmd "rm -f CMakeCache.txt"
 set -e
 
 cmd "which cmake"
-cmd "which mpirun"
+if [ "${COMPILER}" == 'gcc' ]; then
+  cmd "which orterun"
+elif [ "${COMPILER}" == 'intel' ]; then
+  cmd "which mpirun"
+fi
 
 # Extra TPLs that can be included in the cmake configure:
 #  -DENABLE_PARAVIEW_CATALYST:BOOL=ON \

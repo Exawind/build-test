@@ -108,7 +108,7 @@ class NaluWind(CMakePackage):
                 '-DFFTW_DIR:PATH=%s' % spec['fftw'].prefix
             ])
         else:
-            options.append('-DENABLE_HYPRE:BOOL=OFF')
+            options.append('-DENABLE_FFTW:BOOL=OFF')
 
         if sys.platform == 'darwin':
             options.append('-DCMAKE_MACOSX_RPATH:BOOL=ON')

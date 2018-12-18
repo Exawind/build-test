@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/bash -l
 
 # Instructions:
 # Make a directory in the Nalu-Wind directory for building,
 # Copy this script to that directory and edit the
 # options below to your own needs and run it.
 
-COMPILER=gcc
+COMPILER=gcc #intel
 
 if [ "${COMPILER}" == 'gcc' ]; then
   CXX_COMPILER=mpicxx
@@ -13,6 +13,11 @@ if [ "${COMPILER}" == 'gcc' ]; then
   FORTRAN_COMPILER=mpifort
   FLAGS="-O2 -march=skylake-avx512 -mtune=skylake-avx512"
   OVERSUBSCRIBE_FLAGS="--use-hwthread-cpus --oversubscribe"
+elif [ "${COMPILER}" == 'intel' ]; then
+  CXX_COMPILER=mpiicpc
+  C_COMPILER=mpiicc
+  FORTRAN_COMPILER=mpiifort
+  FLAGS="-O2 -xSKYLAKE-AVX512"
 fi
   
 set -e
@@ -23,21 +28,35 @@ cmd() {
 }
 
 # Set up environment on Eagle
-cmd "module purge"
+cmd "module unuse /nopt/nrel/apps/modules/default/modulefiles"
+cmd "module unuse /usr/share/Modules/modulefiles"
+cmd "module unuse /nopt/modulefiles"
+cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
+cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
 if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "module use /nopt/nrel/ecom/hpacf/2018-11-09/spack/share/spack/modules/linux-centos7-x86_64/gcc-7.3.0"
-  cmd "module load git"
-  cmd "module load python"
+  cmd "module use /nopt/nrel/ecom/hpacf/software/modules/gcc-7.3.0"
+elif [ "${COMPILER}" == 'intel' ]; then
+  cmd "module use /nopt/nrel/ecom/hpacf/software/modules/intel-18.0.4"
+fi
+cmd "module purge"
+cmd "module load gcc/7.3.0"
+cmd "module load python/2.7.15"
+cmd "module load git"
+cmd "module load binutils"
+if [ "${COMPILER}" == 'gcc' ]; then
   cmd "module load openmpi"
   cmd "module load netlib-lapack"
+elif [ "${COMPILER}" == 'intel' ]; then
+  cmd "module load intel-mpi/2018.4.274"
+  cmd "module load intel-mkl/2018.4.274"
 fi
-cmd "module load gcc/7.3.0"
 cmd "module load openfast"
 cmd "module load hypre"
 cmd "module load tioga"
 cmd "module load yaml-cpp"
 cmd "module load cmake"
 cmd "module load trilinos"
+cmd "module load fftw"
 cmd "module list"
 
 # Set tmpdir to the scratch filesystem so it doesn't run out of space
@@ -53,6 +72,14 @@ set -e
 cmd "which cmake"
 cmd "which mpirun"
 
+# Extra TPLs that can be included in the cmake configure:
+#  -DENABLE_PARAVIEW_CATALYST:BOOL=ON \
+#  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_IOSS_ADAPTER_ROOT_DIR} \
+#  -DENABLE_OPENFAST:BOOL=ON \
+#  -DOpenFAST_DIR:PATH=${OPENFAST_ROOT_DIR} \
+#  -DENABLE_FFTW:BOOL=ON \
+#  -DFFTW_DIR:PATH=${FFTW_ROOT_DIR} \
+
 (set -x; cmake \
   -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
   -DCMAKE_CXX_FLAGS:STRING="${FLAGS}" \
@@ -66,8 +93,6 @@ cmd "which mpirun"
   -DMPIEXEC_PREFLAGS:STRING="${OVERSUBSCRIBE_FLAGS}" \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
   -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
-  -DENABLE_OPENFAST:BOOL=ON \
-  -DOpenFAST_DIR:PATH=${OPENFAST_ROOT_DIR} \
   -DENABLE_HYPRE:BOOL=ON \
   -DHYPRE_DIR:PATH=${HYPRE_ROOT_DIR} \
   -DENABLE_TIOGA:BOOL=ON \

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 
 # Instructions:
 # Make a directory in the Nalu-Wind directory for building,

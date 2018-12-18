@@ -50,6 +50,7 @@ cmd "module load tioga"
 cmd "module load yaml-cpp"
 cmd "module load cmake"
 cmd "module load trilinos"
+cmd "module load fftw"
 cmd "module list"
 
 # Set tmpdir to the scratch filesystem so it doesn't run out of space
@@ -68,6 +69,10 @@ cmd "which mpirun"
 # Extra TPLs that can be included in the cmake configure:
 #  -DENABLE_PARAVIEW_CATALYST:BOOL=ON \
 #  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_IOSS_ADAPTER_ROOT_DIR} \
+#  -DENABLE_OPENFAST:BOOL=ON \
+#  -DOpenFAST_DIR:PATH=${OPENFAST_ROOT_DIR} \
+#  -DENABLE_FFTW:BOOL=ON \
+#  -DFFTW_DIR:PATH=${FFTW_ROOT_DIR} \
 
 (set -x; cmake \
   -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
@@ -82,8 +87,6 @@ cmd "which mpirun"
   -DMPIEXEC_PREFLAGS:STRING="${OVERSUBSCRIBE_FLAGS}" \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
   -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
-  -DENABLE_OPENFAST:BOOL=ON \
-  -DOpenFAST_DIR:PATH=${OPENFAST_ROOT_DIR} \
   -DENABLE_HYPRE:BOOL=ON \
   -DHYPRE_DIR:PATH=${HYPRE_ROOT_DIR} \
   -DENABLE_TIOGA:BOOL=ON \

@@ -11,7 +11,8 @@ cmd() {
 # Get general preferred Nalu constraints from a single location
 cmd "source ../configs/shared-constraints.sh"
 
-# Disable openmp on osx
+# Disable openmp and shared on osx
 TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
+TRILINOS=$(sed 's/+shared/~shared/g' <<<"${TRILINOS}")
 
-cmd "spack install nalu-wind+openfast+tioga+hypre %gcc@7.3.0 ^${TRILINOS}@develop"
+cmd "spack install nalu-wind+fftw+tioga+hypre %gcc ^${TRILINOS}@develop"

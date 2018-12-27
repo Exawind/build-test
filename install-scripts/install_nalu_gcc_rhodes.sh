@@ -8,4 +8,4 @@ cmd() {
 set -e
 
 cmd "source ../configs/shared-constraints.sh"
-cmd "spack install nalu-wind+hypre+tioga+catalyst %gcc@6.4.0 ^${TRILINOS}@develop"
+cmd "spack install nalu-wind+fftw+hypre+tioga+catalyst %gcc@7.3.0 ^${TRILINOS}@develop"

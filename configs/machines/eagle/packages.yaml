@@ -28,7 +28,7 @@ packages:
       cuda@10.0.130: /nopt/nrel/apps/cuda/10.0.130
     buildable: False
   openmpi:
-    version: [3.1.3]
+    version: [1.10.7]
     variants: +pmi +cuda fabrics=verbs schedulers=slurm
   hwloc:
     variants: +cuda ~nvml ~gl
@@ -52,6 +52,6 @@ packages:
     # and creates huge binaries unless you do this:
     variants: build_type=Release
     providers:
-      mpi: [openmpi@3.1.3, intel-mpi@2018.4.274]
+      mpi: [openmpi@1.10.7, intel-mpi@2018.4.274]
       blas: [netlib-lapack@3.8.0, intel-mkl@2018.4.274]
       lapack: [netlib-lapack@3.8.0, intel-mkl@2018.1.163]

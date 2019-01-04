@@ -182,7 +182,10 @@ do
     cmd "spack install image-magick %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install stow %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install zsh %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gnutls %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack load texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack load texlive %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack load flex %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install flex@2.5.39 %${COMPILER_NAME}@${COMPILER_VERSION}"
     (set -x; spack install gnutls %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L autoconf %${COMPILER_NAME}@${COMPILER_VERSION} | grep autoconf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
   fi
 

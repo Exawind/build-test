@@ -100,10 +100,11 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   (set -x; cp -R custom-package-files/openfast ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
 
   #Extra stuff for eagle
-  #if [ ${MACHINE} == 'eagle' ]; then
-  #  (set -x; cp machines/${MACHINE}/compilers.yaml.software ${SPACK_ROOT}/etc/spack/compilers.yaml)
-  #  (set -x; cp machines/${MACHINE}/modules.yaml.software ${SPACK_ROOT}/etc/spack/modules.yaml)
-  #fi
+  if [ ${MACHINE} == 'eagle' ]; then
+    (set -x; cp custom-package-files/mpich/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/mpich/package.py)
+    #(set -x; cp machines/${MACHINE}/compilers.yaml.software ${SPACK_ROOT}/etc/spack/compilers.yaml)
+    #(set -x; cp machines/${MACHINE}/modules.yaml.software ${SPACK_ROOT}/etc/spack/modules.yaml)
+  fi
 
   #Extra stuff for peregrine
   #if [ ${MACHINE} == 'peregrine' ]; then

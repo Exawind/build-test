@@ -182,6 +182,7 @@ do
     cmd "spack install image-magick %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install stow %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install zsh %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack load texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack load texlive %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack load flex %${COMPILER_NAME}@${COMPILER_VERSION}"

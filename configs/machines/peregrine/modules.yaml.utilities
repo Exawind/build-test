@@ -6,6 +6,8 @@ modules:
     naming_scheme: '${COMPILERNAME}-${COMPILERVER}/${PACKAGE}/${VERSION}'
     hash_length: 0
     all:
+      suffixes:
+        'libxml2 ^python': 'py2'
       conflict:
         - '${PACKAGE}'
       environment:

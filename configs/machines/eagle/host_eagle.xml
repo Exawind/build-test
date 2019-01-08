@@ -21,17 +21,17 @@
     <Field name="maximumProcessors" type="int">1</Field>
     <Object name="LaunchProfile">
         <Field name="timeout" type="int">240</Field>
-        <Field name="numProcessors" type="int">24</Field>
+        <Field name="numProcessors" type="int">36</Field>
         <Field name="numNodesSet" type="bool">true</Field>
         <Field name="numNodes" type="int">1</Field>
         <Field name="partitionSet" type="bool">true</Field>
         <Field name="partition" type="string">short</Field>
         <Field name="bankSet" type="bool">true</Field>
-        <Field name="bank" type="string">windsim</Field>
+        <Field name="bank" type="string">hpcapps</Field>
         <Field name="timeLimitSet" type="bool">true</Field>
         <Field name="timeLimit" type="string">1:00:00</Field>
         <Field name="launchMethodSet" type="bool">true</Field>
-        <Field name="launchMethod" type="string">sbatch/srun</Field>
+        <Field name="launchMethod" type="string">sbatch/mpiexec</Field>
         <Field name="forceStatic" type="bool">true</Field>
         <Field name="forceDynamic" type="bool">false</Field>
         <Field name="active" type="bool">false</Field>
@@ -41,8 +41,8 @@
         <Field name="launchArgs" type="string">"-o %x.o%j -J visit_job"</Field>
         <Field name="sublaunchArgsSet" type="bool">false</Field>
         <Field name="sublaunchArgs" type="string"></Field>
-        <Field name="sublaunchPreCmdSet" type="bool">false</Field>
-        <Field name="sublaunchPreCmd" type="string"></Field>
+        <Field name="sublaunchPreCmdSet" type="bool">true</Field>
+        <Field name="sublaunchPreCmd" type="string">"export PATH=/nopt/nrel/ecom/hpacf/software/2019-01-02/visit/server/visit/mpich/3.0.4/linux-x86_64_gcc-4.9/bin:${PATH}"</Field>
         <Field name="sublaunchPostCmdSet" type="bool">false</Field>
         <Field name="sublaunchPostCmd" type="string"></Field>
         <Field name="machinefileSet" type="bool">false</Field>

@@ -4,7 +4,7 @@
     <Field name="host" type="string">el1.hpc.nrel.gov</Field>
     <Field name="userName" type="string">jrood</Field>
     <Field name="hostAliases" type="string">el#</Field>
-    <Field name="directory" type="string">/nopt/nrel/ecom/hpacf/software/2019-01-02/visit/server/visit/install</Field>
+    <Field name="directory" type="string">/nopt/nrel/ecom/hpacf/software/2019-01-02/visit/server/install</Field>
     <Field name="shareOneBatchJob" type="bool">false</Field>
     <Field name="sshPortSpecified" type="bool">false</Field>
     <Field name="sshPort" type="int">22</Field>

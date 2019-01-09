@@ -17,5 +17,5 @@ modules:
           INTEL_LICENSE_FILE: '28519@license-1.hpc.nrel.gov'
       filter:
         environment_blacklist: ['INTEL_LICENSE_FILE']
-    whitelist: ['gcc', 'llvm', 'intel-parallel-studio', 'binutils']
+    whitelist: ['gcc', 'llvm', 'intel-parallel-studio', 'binutils', 'pgi']
     blacklist: ['%gcc@4.8.5']

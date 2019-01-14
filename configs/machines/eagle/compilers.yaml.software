@@ -151,3 +151,20 @@ compilers:
       fc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/gfortran
     spec: clang@7.0.0
     target: x86_64
+- compiler:
+    environment: {}
+    extra_rpaths:
+      - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/lib
+    flags:
+      cflags: -fast -tp=skylake
+      cxxflags: -fast -tp=skylake
+      fflags: -fast -tp=skylake
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgc++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgf77
+      fc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgf90
+    spec: pgi@18.10
+    target: x86_64

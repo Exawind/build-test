@@ -152,7 +152,9 @@ compilers:
     spec: clang@7.0.0
     target: x86_64
 - compiler:
-    environment: {}
+    environment:
+      set:
+        PGROUPD_LICENSE_FILE: 27001@license-1.hpc.nrel.gov
     extra_rpaths:
       - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/lib
     flags:

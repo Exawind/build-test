@@ -28,7 +28,7 @@ cmd() {
 }
 
 # Set up environment on Peregrine
-cmd "module unuse /nopt/nrel/apps/modules/centos7/modulefiles"
+cmd "module unuse ${MODULEPATH}"
 cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
 cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
 if [ "${COMPILER}" == 'gcc' ]; then

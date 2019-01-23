@@ -1,7 +1,8 @@
 compilers:
 - compiler:
     environment: {}
-    extra_rpaths: []
+    extra_rpaths:
+     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/lib64
     flags:
       cflags: -O2
       cxxflags: -O2
@@ -9,10 +10,10 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc: /usr/bin/gcc
-      cxx: /usr/bin/g++
-      f77: /usr/bin/gfortran
-      fc: /usr/bin/gfortran
+      cc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/bin/gcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/bin/g++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/gfortran
+      fc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/gfortran
     spec: gcc@4.8.5
     target: x86_64
 - compiler:

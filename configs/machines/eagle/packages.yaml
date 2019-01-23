@@ -26,6 +26,7 @@ packages:
   cuda:
     paths:
       cuda@10.0.130: /nopt/nrel/apps/cuda/10.0.130
+      cuda@9.2.88: /nopt/nrel/apps/cuda/9.2.88
     buildable: False
   openmpi:
     version: [3.1.3]

@@ -12,8 +12,8 @@ compilers:
     paths:
       cc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/bin/gcc
       cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/bin/g++
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/gfortran
-      fc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/gfortran
+      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/bin/gfortran
+      fc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/bin/gfortran
     spec: gcc@4.8.5
     target: x86_64
 - compiler:

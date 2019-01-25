@@ -62,7 +62,6 @@ if [ "${COMPILER}" == 'gcc' ]; then
   cmd "module load openmpi"
   cmd "module load netlib-lapack"
 elif [ "${COMPILER}" == 'clang' ]; then
-  cmd "module load gcc/${GCC_COMPILER_VERSION}"
   cmd "module load llvm/${COMPILER_VERSION}"
   cmd "module load openmpi"
   cmd "module load netlib-lapack"

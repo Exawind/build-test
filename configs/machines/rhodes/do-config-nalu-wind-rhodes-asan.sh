@@ -122,3 +122,10 @@ cmd "which mpiexec"
   ..)
 
 (set -x; nice make -j 64)
+
+#To run with asan use this same script to set up the same environment as building and replace cmake and make with:
+#export ASAN_OPTIONS=detect_container_overflow=0
+#printf "leak:libopen-pal\nleak:libmpi\nleak:libnetcdf" > /home/jrood/exawind/nalu-wind/build/asan.supp
+#export LSAN_OPTIONS=suppressions=/home/jrood/exawind/nalu-wind/build/asan.supp
+#(set -x; ctest -VV -R unit)
+

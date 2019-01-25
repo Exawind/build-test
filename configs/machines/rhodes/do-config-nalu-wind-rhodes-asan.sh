@@ -13,8 +13,8 @@ cmd() {
 # options below to your own needs and run it.
 
 #gcc 7.3.0, gcc 4.9.4, intel 18.0.4, clang 6.0.1
-COMPILER=gcc
-COMPILER_VERSION=7.3.0
+COMPILER=clang
+COMPILER_VERSION=6.0.1
 #For Intel compiler front end
 GCC_COMPILER_VERSION=7.3.0
 
@@ -22,7 +22,7 @@ if [ "${COMPILER}" == 'gcc' ] || [ "${COMPILER}" == 'clang' ]; then
   CXX_COMPILER=mpicxx
   C_COMPILER=mpicc
   FORTRAN_COMPILER=mpifort
-  FLAGS="-O2 -march=native -mtune=native"
+  export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer -O2 -march=native -mtune=native"
   OVERSUBSCRIBE_FLAGS="--use-hwthread-cpus --oversubscribe"
 elif [ "${COMPILER}" == 'intel' ]; then
   CXX_COMPILER=mpiicpc
@@ -100,11 +100,8 @@ cmd "which mpiexec"
 
 (set -x; cmake \
   -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
-  -DCMAKE_CXX_FLAGS:STRING="${FLAGS}" \
   -DCMAKE_C_COMPILER:STRING=${C_COMPILER} \
-  -DCMAKE_C_FLAGS:STRING="${FLAGS}" \
   -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
-  -DCMAKE_Fortran_FLAGS:STRING="${FLAGS}" \
   -DMPI_CXX_COMPILER:STRING=${CXX_COMPILER} \
   -DMPI_C_COMPILER:STRING=${C_COMPILER} \
   -DMPI_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
@@ -115,7 +112,7 @@ cmd "which mpiexec"
   -DHYPRE_DIR:PATH=${HYPRE_ROOT_DIR} \
   -DENABLE_TIOGA:BOOL=ON \
   -DTIOGA_DIR:PATH=${TIOGA_ROOT_DIR} \
-  -DCMAKE_BUILD_TYPE:STRING=RELEASE \
+  -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
   -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \
   -DCMAKE_SKIP_BUILD_RPATH:BOOL=FALSE \

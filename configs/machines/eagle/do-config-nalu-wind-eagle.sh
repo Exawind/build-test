@@ -5,7 +5,7 @@
 # Copy this script to that directory and edit the
 # options below to your own needs and run it.
 
-COMPILER=gcc #or intel
+COMPILER=gcc #intel
 
 if [ "${COMPILER}" == 'gcc' ]; then
   CXX_COMPILER=mpicxx
@@ -29,9 +29,8 @@ cmd() {
 }
 
 # Set up environment on Eagle
-cmd "module unuse /nopt/nrel/apps/modules/default/modulefiles"
-cmd "module unuse /usr/share/Modules/modulefiles"
-cmd "module unuse /nopt/modulefiles"
+cmd "module purge"
+cmd "module unuse ${MODULEPATH}"
 cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
 cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
 if [ "${COMPILER}" == 'gcc' ]; then
@@ -39,7 +38,6 @@ if [ "${COMPILER}" == 'gcc' ]; then
 elif [ "${COMPILER}" == 'intel' ]; then
   cmd "module use /nopt/nrel/ecom/hpacf/software/modules/intel-18.0.4"
 fi
-cmd "module purge"
 cmd "module load gcc/7.3.0"
 cmd "module load python/2.7.15"
 cmd "module load git"
@@ -86,6 +84,11 @@ fi
 #  -DENABLE_FFTW:BOOL=ON \
 #  -DFFTW_DIR:PATH=${FFTW_ROOT_DIR} \
 #  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${OPENFAST_ROOT_DIR}/lib;${FFTW_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
+# Rpath stuff I don't have fully working
+#  -DCMAKE_SKIP_BUILD_RPATH:BOOL=FALSE \
+#  -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=FALSE \
+#  -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=TRUE \
+#  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
 
 (set -x; cmake \
   -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
@@ -107,10 +110,6 @@ fi
   -DCMAKE_BUILD_TYPE:STRING=RELEASE \
   -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \
-  -DCMAKE_SKIP_BUILD_RPATH:BOOL=FALSE \
-  -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=FALSE \
-  -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=TRUE \
-  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
   ..)
 
 (set -x; nice make -j 16)

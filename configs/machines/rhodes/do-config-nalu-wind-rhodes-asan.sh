@@ -67,7 +67,7 @@ elif [ "${COMPILER}" == 'clang' ]; then
   cmd "module load openmpi"
   cmd "module load netlib-lapack"
 elif [ "${COMPILER}" == 'intel' ]; then
-  cmd "module load gcc/${GCC_COMPILER_VERSION}"
+  #cmd "module load gcc/${GCC_COMPILER_VERSION}"
   cmd "module load intel-parallel-studio/cluster.2018.4"
   cmd "module load intel-mpi/2018.4.274"
   cmd "module load intel-mkl/2018.4.274"

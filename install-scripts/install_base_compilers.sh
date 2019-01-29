@@ -1,12 +1,5 @@
 #!/bin/bash -l
 
-#PBS -N install-base-compilers
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
-#PBS -A windsim
-#PBS -q short
-#PBS -j oe
-#PBS -W umask=002
-
 # Script for installation of ECP related compilers on Eagle, Peregrine, and Rhodes
 
 set -e
@@ -27,19 +20,6 @@ printf "$(date)\n"
 printf "============================================================\n"
 printf "Job is running on ${HOSTNAME}\n"
 printf "============================================================\n"
-if [ ! -z "${PBS_JOBID}" ]; then
-  printf "PBS: Qsub is running on ${PBS_O_HOST}\n"
-  printf "PBS: Originating queue is ${PBS_O_QUEUE}\n"
-  printf "PBS: Executing queue is ${PBS_QUEUE}\n"
-  printf "PBS: Working directory is ${PBS_O_WORKDIR}\n"
-  printf "PBS: Execution mode is ${PBS_ENVIRONMENT}\n"
-  printf "PBS: Job identifier is ${PBS_JOBID}\n"
-  printf "PBS: Job name is ${PBS_JOBNAME}\n"
-  printf "PBS: Node file is ${PBS_NODEFILE}\n"
-  printf "PBS: Current home directory is ${PBS_O_HOME}\n"
-  printf "PBS: PATH = ${PBS_O_PATH}\n"
-  printf "============================================================\n"
-fi
 
 # Find machine we're on
 case "${NREL_CLUSTER}" in
@@ -59,10 +39,7 @@ esac
 
 DATE=2018-11-21
  
-if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
-  GCC_COMPILER_VERSION="4.8.5"
-elif [ "${MACHINE}" == 'peregrine' ]; then
+if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 elif [ "${MACHINE}" == 'rhodes' ]; then
@@ -73,7 +50,6 @@ else
   exit 1
 fi
 
-TRILINOS_BRANCH=develop
 BUILD_TEST_DIR=$(pwd)/..
 
 # Set spack location
@@ -115,15 +91,10 @@ do
 
   # Load necessary modules
   printf "\nLoading modules...\n"
-  if [ "${MACHINE}" == 'eagle' ]; then
+  if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
     cmd "module purge"
-    cmd "module list"
-    printf "\nMaking and setting TMPDIR to disk...\n"
-    cmd "mkdir -p ${HOME}/.tmp"
-    cmd "export TMPDIR=${HOME}/.tmp"
-  elif [ "${MACHINE}" == 'peregrine' ]; then
+    cmd "module unuse ${MODULEPATH}"
     cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
-    cmd "module purge"
     cmd "module load git"
     cmd "module load python/2.7.15"
     cmd "module load curl"
@@ -133,8 +104,9 @@ do
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
-    cmd "module use /opt/utilities/modules"
     cmd "module purge"
+    cmd "module unuse ${MODULEPATH}"
+    cmd "module use /opt/utilities/modules"
     cmd "module load unzip"
     cmd "module load patch"
     cmd "module load bzip2"
@@ -174,10 +146,7 @@ do
 done
 
 printf "\nSetting permissions...\n"
-if [ "${MACHINE}" == 'eagle' ]; then
-  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
-  cmd "chgrp -R n-ecom ${INSTALL_DIR}"
-elif [ "${MACHINE}" == 'peregrine' ]; then
+if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
   cmd "chgrp -R n-ecom ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then

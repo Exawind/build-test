@@ -1,12 +1,5 @@
 #!/bin/bash -l
 
-#PBS -N install-base-utilities
-#PBS -l nodes=1:ppn=24,walltime=4:00:00,feature=haswell
-#PBS -A windsim
-#PBS -q short
-#PBS -j oe
-#PBS -W umask=002
-
 # Script for shared installation of ECP related utilities on Eagle, Peregrine, and Rhodes
 
 set -e
@@ -59,10 +52,7 @@ esac
 
 DATE=2018-11-21
  
-if [ "${MACHINE}" == 'eagle' ]; then
-  INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
-  GCC_COMPILER_VERSION="4.8.5"
-elif [ "${MACHINE}" == 'peregrine' ]; then
+if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 elif [ "${MACHINE}" == 'rhodes' ]; then
@@ -113,15 +103,10 @@ do
   printf "\nInstalling base ${TYPE} with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
   printf "\nLoading modules...\n"
-  if [ "${MACHINE}" == 'eagle' ]; then
+  if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'eagle' ]; then
     cmd "module purge"
-    cmd "module list"
-    printf "\nMaking and setting TMPDIR to disk...\n"
-    cmd "mkdir -p ${HOME}/.tmp"
-    cmd "export TMPDIR=${HOME}/.tmp"
-  elif [ "${MACHINE}" == 'peregrine' ]; then
+    cmd "module unuse ${MODULEPATH}"
     cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
-    cmd "module purge"
     cmd "module load git"
     cmd "module load python/2.7.15"
     cmd "module load curl"
@@ -131,8 +116,9 @@ do
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
-    cmd "module use /opt/utilities/modules"
     cmd "module purge"
+    cmd "module unuse ${MODULEPATH}"
+    cmd "module use /opt/utilities/modules"
     cmd "module load unzip"
     cmd "module load patch"
     cmd "module load bzip2"
@@ -184,6 +170,7 @@ do
     cmd "spack install zsh %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install strace %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install ninja@kitware %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack load texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack load texlive %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack load flex %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -197,10 +184,7 @@ do
 done
 
 printf "\nSetting permissions...\n"
-if [ "${MACHINE}" == 'eagle' ]; then
-  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
-  cmd "chgrp -R n-ecom ${INSTALL_DIR}"
-elif [ "${MACHINE}" == 'peregrine' ]; then
+if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
   cmd "chgrp -R n-ecom ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then

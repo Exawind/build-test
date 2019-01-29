@@ -160,7 +160,7 @@ do
     cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install strace %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install ninja@kitware %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gdb~python %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gdb %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack load texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack load texlive %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack load flex %${COMPILER_NAME}@${COMPILER_VERSION}"

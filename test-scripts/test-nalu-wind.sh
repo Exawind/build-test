@@ -280,7 +280,7 @@ test_configuration() {
   fi
 
   # Turn on all warnings
-  CMAKE_CONFIGURE_ARGS="-DENABLE_WARNINGS:BOOL=TRUE -DENABLE_EXTRA_WARNINGS:BOOL=TRUE ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DENABLE_ALL_WARNINGS:BOOL=TRUE ${CMAKE_CONFIGURE_ARGS}"
 
   # Turn on address sanitizer for clang build on rhodes
   if [ "${COMPILER_NAME}" == 'clang' ] && [ "${MACHINE_NAME}" == 'rhodes' ]; then

@@ -89,7 +89,7 @@ test_configuration() {
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
       cmd "module load ${INTEL_COMPILER_MODULE}"
     fi
-  elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
+  elif [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "module purge"
     cmd "module use /nopt/nrel/ecom/ecp/hpacf/compilers/modules"
     cmd "module use /nopt/nrel/ecom/ecp/hpacf/utilities/modules"
@@ -102,8 +102,6 @@ test_configuration() {
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
       cmd "module load ${INTEL_COMPILER_MODULE}"
     fi
-  elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    cmd "module purge"
   fi
 
   # Enable or disable OpenMP
@@ -121,21 +119,11 @@ test_configuration() {
   fi
 
   # Set the TMPDIR to disk so it doesn't run out of space
-  if [ "${MACHINE_NAME}" == 'peregrine' ]; then
+  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   fi
-
-  # Fix for Peregrine's broken linker
-  #if [ "${MACHINE_NAME}" == 'peregrine' ]; then
-  #  printf "\nInstalling binutils...\n"
-  #  cmd "spack install binutils %${COMPILER_ID}"
-  #  printf "\nReloading Spack...\n"
-  #  cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
-  #  printf "\nLoading binutils...\n"
-  #  cmd "spack load binutils %${COMPILER_ID}"
-  #fi
 
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
@@ -401,6 +389,10 @@ main() {
     CONFIGURATIONS[1]='intel:18.0.4:false:develop:develop:master:fftw;tioga;hypre'
     NALU_WIND_TESTING_ROOT_DIR=/projects/windsim/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
+  elif [ "${MACHINE_NAME}" == 'eagle' ]; then
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:tioga;hypre'
+    NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
+    INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
     CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:fftw;tioga;hypre'
     CONFIGURATIONS[1]='clang:9.0.0-apple:false:develop:develop:master:fftw;tioga;hypre'
@@ -501,22 +493,16 @@ main() {
   printf "Final steps\n"
   printf "============================================================\n"
  
-  #if [ "${MACHINE_NAME}" == 'merlin' ]; then
-  #  if [ ! -z "${TMPDIR}" ]; then
-  #    printf "\nCleaning TMPDIR directory...\n"
-  #    cmd "cd /dev/shm && rm -rf /dev/shm/* &> /dev/null"
-  #    cmd "unset TMPDIR"
-  #  fi
-  #fi
+  if [ "${MACHINE_NAME}" == 'peregrine' ] || \
+     [ "${MACHINE_NAME}" == 'eagle' ] || \
+     [ "${MACHINE_NAME}" == 'rhodes' ]; then
+    printf "\nSetting permissions...\n"
+    cmd "chmod -R a+rX,go-w ${NALU_WIND_TESTING_ROOT_DIR}"
+  fi
 
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting group...\n"
     cmd "chgrp -R windsim ${NALU_WIND_TESTING_ROOT_DIR}"
-  fi
-
-  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    printf "\nSetting permissions...\n"
-    cmd "chmod -R a+rX,go-w ${NALU_WIND_TESTING_ROOT_DIR}"
   fi
 
   printf "============================================================\n"

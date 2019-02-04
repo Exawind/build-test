@@ -42,6 +42,9 @@ test_configuration() {
     if [ "${COMPILER_VERSION}" == '4.9.4' ]; then
       MPI_ID="openmpi@1.10.7"
     fi
+    if [ "${MACHINE_NAME}" == 'eagle' ]; then
+      MPI_ID="openmpi@3.1.3"
+    fi
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     # For intel, we want to build against intel-mpi and intel-mkl
     MPI_ID="intel-mpi"
@@ -69,6 +72,7 @@ test_configuration() {
   printf "\nLoading modules...\n"
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     cmd "module purge"
+    cmd "module unuse ${MODULEPATH}"
     cmd "module use /opt/compilers/modules"
     cmd "module use /opt/utilities/modules"
     cmd "module load unzip"
@@ -91,6 +95,7 @@ test_configuration() {
     fi
   elif [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "module purge"
+    cmd "module unuse ${MODULEPATH}"
     cmd "module use /nopt/nrel/ecom/ecp/hpacf/compilers/modules"
     cmd "module use /nopt/nrel/ecom/ecp/hpacf/utilities/modules"
     cmd "module load python/2.7.15"

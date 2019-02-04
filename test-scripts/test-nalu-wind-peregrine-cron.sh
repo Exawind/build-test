@@ -10,5 +10,5 @@ qsub \
 -q batch-h \
 -j oe \
 -W umask=002 \
-/projects/windsim/exawind/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-peregrine.sh
+/projects/windsim/exawind/nalu-wind-testing/build-test/test-scripts/test-nalu-wind.sh
 

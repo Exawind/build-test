@@ -350,27 +350,19 @@ main() {
   printf "============================================================\n"
   printf "Job is running on ${HOSTNAME}\n"
   printf "============================================================\n"
-  if [ ! -z "${PBS_JOBID}" ]; then
-    printf "PBS: Qsub is running on ${PBS_O_HOST}\n"
-    printf "PBS: Originating queue is ${PBS_O_QUEUE}\n"
-    printf "PBS: Executing queue is ${PBS_QUEUE}\n"
-    printf "PBS: Working directory is ${PBS_O_WORKDIR}\n"
-    printf "PBS: Execution mode is ${PBS_ENVIRONMENT}\n"
-    printf "PBS: Job identifier is ${PBS_JOBID}\n"
-    printf "PBS: Job name is ${PBS_JOBNAME}\n"
-    printf "PBS: Node file is ${PBS_NODEFILE}\n"
-    printf "PBS: Current home directory is ${PBS_O_HOME}\n"
-    printf "PBS: PATH = ${PBS_O_PATH}\n"
-    printf "============================================================\n"
+
+  # Decide what machine we are on
+  if [ "${NREL_CLUSTER}" == 'peregrine' ]; then
+    MACHINE_NAME=peregrine
+  elif [ "${NREL_CLUSTER}" == 'eagle' ]; then
+    MACHINE_NAME=eagle
   fi
- 
-  if [ $# -ne 1 ]; then
-      printf "$0: usage: $0 <machine>\n"
-      exit 1
-  else
-    MACHINE_NAME="$1"
+  if [ $(hostname) == 'rhodes.hpc.nrel.gov' ]; then
+    MACHINE_NAME=rhodes
+  elif [ $(hostname) == 'jrood-31712s.nrel.gov' ]; then
+    MACHINE_NAME=mac
   fi
- 
+    
   HOST_NAME="${MACHINE_NAME}.hpc.nrel.gov"
  
   # Set configurations to test for each machine

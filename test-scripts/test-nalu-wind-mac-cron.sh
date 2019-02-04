@@ -5,4 +5,4 @@
 set -e
 
 cd /Users/jrood/nalu-wind-testing/logs && \
-/Users/jrood/nalu-wind-testing/build-test/test-scripts/test-nalu-wind.sh mac &> "test-nalu-wind-$(date +%Y-%m-%d).log"
+/Users/jrood/nalu-wind-testing/build-test/test-scripts/test-nalu-wind.sh &> "test-nalu-wind-$(date +%Y-%m-%d).log"

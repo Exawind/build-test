@@ -130,8 +130,8 @@ do
     cmd "module load curl"
     cmd "module load binutils"
     printf "\nMaking and setting TMPDIR to disk...\n"
-    cmd "mkdir -p ${HOME}/.tmp"
-    cmd "export TMPDIR=${HOME}/.tmp"
+    cmd "mkdir -p /scratch/${USER}/.tmp"
+    cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
     cmd "module unuse /opt/software/modules"
     cmd "module use /opt/compilers/modules"

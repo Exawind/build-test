@@ -96,8 +96,8 @@ test_configuration() {
   elif [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
-    cmd "module use /nopt/nrel/ecom/ecp/hpacf/compilers/modules"
-    cmd "module use /nopt/nrel/ecom/ecp/hpacf/utilities/modules"
+    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
+    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
     cmd "module load python/2.7.15"
     cmd "module load git"
     cmd "module load cppcheck"

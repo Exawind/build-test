@@ -134,6 +134,7 @@ do
     cmd "spack install llvm@6.0.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2019.1+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2018.4+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install pgi+nvidia %${COMPILER_NAME}@${COMPILER_VERSION}"
     # The PGI compilers need a libnuma.so.1.0.0 copied into its lib directory and symlinked to libnuma.so and libnuma.so.1

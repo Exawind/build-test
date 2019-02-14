@@ -133,8 +133,8 @@ test_configuration() {
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
   cmd "spack uninstall -a -y trilinos@${TRILINOS_BRANCH} %${COMPILER_ID} || true"
-  #printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
-  #cmd "spack uninstall -a -y openfast %${COMPILER_ID} || true"
+  printf "\nUninstalling OpenFAST (this is fine to error when tests are first run or building OpenFAST has previously failed)...\n"
+  cmd "spack uninstall -a -y openfast %${COMPILER_ID} || true"
   #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
   #cmd "spack uninstall -a -y tioga %${COMPILER_ID} || true"
 
@@ -378,16 +378,16 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:fftw;tioga;hypre;catalyst'
-    CONFIGURATIONS[1]='gcc:7.3.0:false:master:develop:master:fftw;tioga;hypre'
-    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:master:fftw;tioga;hypre'
-    CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:master:fftw;tioga;hypre'
-    CONFIGURATIONS[4]='clang:6.0.1:false:develop:develop:master:fftw;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:fftw;tioga;hypre;openfast;catalyst'
+    CONFIGURATIONS[1]='gcc:7.3.0:false:master:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[4]='clang:6.0.1:false:develop:develop:master:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:fftw;tioga;hypre'
-    CONFIGURATIONS[1]='intel:18.0.4:false:develop:develop:master:fftw;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[1]='intel:18.0.4:false:develop:develop:master:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/windsim/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
@@ -395,8 +395,8 @@ main() {
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:fftw;tioga;hypre'
-    CONFIGURATIONS[1]='clang:9.0.0-apple:false:develop:develop:master:fftw;tioga;hypre'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[1]='clang:9.0.0-apple:false:develop:develop:master:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else
     printf "\nMachine name not recognized.\n"

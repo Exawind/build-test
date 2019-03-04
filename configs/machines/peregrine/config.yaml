@@ -1,16 +1,19 @@
 config:
   install_tree: $spack/opt/spack
+  template_dirs:
+    - $spack/share/spack/templates
+  install_path_scheme: "${ARCHITECTURE}/${COMPILERNAME}-${COMPILERVER}/${PACKAGE}-${VERSION}-${HASH}"
   module_roots:
     tcl:    $spack/share/spack/modules
     lmod:   $spack/share/spack/lmod
     dotkit: $spack/share/spack/dotkit
   build_stage:
     - $spack/var/spack/stage
-  # Use a common source archive for each user across all Spack installations
-  # to avoid downloading more than once. Probably would be better to have a 
-  # site-wide Spack source cache for all users though.
+  # Use single source cache per user to avoid unnecessary downloading across spack installations
   source_cache: ~/.spack/downloads
   misc_cache: ~/.spack/cache
-  verify_ssl: false
+  verify_ssl: true
   checksum: true
   dirty: false
+  locks: true
+  # build_jobs: 4

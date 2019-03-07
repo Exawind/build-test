@@ -5,6 +5,6 @@
 set -e
 
 cd /projects/ecp/exawind/nalu-wind-testing/logs && \
-nice -n19 ionice -c2 -n7 \
+nice -n19 ionice -c3 \
 /projects/ecp/exawind/nalu-wind-testing/build-test/test-scripts/test-nalu-wind.sh &> \
 "test-nalu-wind-$(date +%Y-%m-%d).log"

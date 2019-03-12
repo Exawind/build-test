@@ -393,7 +393,7 @@ main() {
     NALU_WIND_TESTING_ROOT_DIR=/projects/windsim/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:tioga;hypre'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:tioga'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then

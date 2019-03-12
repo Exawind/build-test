@@ -10,6 +10,6 @@ sbatch \
 -A hfm \
 -p standard \
 -o "%x.o%j" \
---gres=gpu:2 \
+--gres=gpu:1 \
 /projects/hfm/exawind/nalu-wind-testing/build-test/test-scripts/test-nalu-wind.sh
 

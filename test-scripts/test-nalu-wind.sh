@@ -124,10 +124,18 @@ test_configuration() {
   fi
 
   # Set the TMPDIR to disk so it doesn't run out of space
+  # On the Mac this might help avoid a race condition with OpenMPI vader shared memory protocol
   if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
+  elif [ "${MACHINE_NAME}" == 'mac' ]
+    printf "\nMaking and setting TMPDIR to disk...\n"
+    if [ ! -z "${HOME}" ]; then
+      cmd "mkdir -p ${HOME}/tmp"
+      cmd "cd ${HOME}/tmp && rm -rf * && cd - || true"
+      cmd "export TMPDIR=${HOME}/tmp"
+    fi
   fi
 
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error

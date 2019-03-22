@@ -129,7 +129,7 @@ test_configuration() {
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
-  elif [ "${MACHINE_NAME}" == 'mac' ]
+  elif [ "${MACHINE_NAME}" == 'mac' ]; then
     printf "\nMaking and setting TMPDIR to disk...\n"
     if [ ! -z "${HOME}" ]; then
       cmd "mkdir -p ${HOME}/tmp"

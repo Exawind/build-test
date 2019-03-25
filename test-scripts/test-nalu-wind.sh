@@ -128,14 +128,16 @@ test_configuration() {
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
+  elif [ "${MACHINE_NAME}" == 'mac' ]; then
+    #printf "\nMaking and setting TMPDIR to disk...\n"
+    #if [ ! -z "${HOME}" ]; then
+    #  cmd "mkdir -p ${HOME}/tmp"
+    #  cmd "cd ${HOME}/tmp && rm -rf * && cd - || true"
+    #  cmd "export TMPDIR=${HOME}/tmp"
+    #fi
+    printf "\nDisabling vader shared memory protocol in OpenMPI...\n"
+    cmd "export OMPI_MCA_btl=self,tcp"
   fi
-  #elif [ "${MACHINE_NAME}" == 'mac' ]; then
-  #  printf "\nMaking and setting TMPDIR to disk...\n"
-  #  if [ ! -z "${HOME}" ]; then
-  #    cmd "mkdir -p ${HOME}/tmp"
-  #    cmd "cd ${HOME}/tmp && rm -rf * && cd - || true"
-  #    cmd "export TMPDIR=${HOME}/tmp"
-  #  fi
 
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"

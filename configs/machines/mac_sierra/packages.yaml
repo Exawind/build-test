@@ -3,7 +3,7 @@ packages:
     version: [2.29.1]
   cmake:
     paths:
-      cmake@3.13.0: /usr/local/Cellar/cmake/3.13.0
+      cmake@3.14.0: /usr/local/Cellar/cmake/3.14.0
     buildable: False
   pkg-config:
     paths:

@@ -324,7 +324,7 @@ test_configuration() {
 
   # Set looser diff tolerance for GCC 7.3.0 cases that have more optimization flags on
   if [ "${COMPILER_ID}" == 'gcc@7.3.0' ] && [ "${MACHINE_NAME}" != 'mac' ]; then
-    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.00001 ${CMAKE_CONFIGURE_ARGS}"
+    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.00005 ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Allow OpenMPI to consider hardware threads as cpus and allow for oversubscription

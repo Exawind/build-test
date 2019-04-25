@@ -107,6 +107,9 @@ test_configuration() {
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
       cmd "module load ${INTEL_COMPILER_MODULE}"
     fi
+    if [ "${MACHINE_NAME}" == 'eagle' ]; then
+      cmd "module load cuda"
+    fi
   fi
 
   # Enable or disable OpenMP in Trilinos
@@ -120,6 +123,12 @@ test_configuration() {
   # Can't build STK as shared on Mac
   if [ "${MACHINE_NAME}" == 'mac' ]; then
     printf "\nDisabling shared build in Trilinos because STK doesn't build as shared on Mac...\n"
+    TRILINOS=$(sed 's/+shared/~shared/g' <<<"${TRILINOS}")
+  fi
+
+  # Can't build Trilinos as shared with CUDA
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    printf "\nDisabling shared build in Trilinos because we're testing with CUDA on Eagle...\n"
     TRILINOS=$(sed 's/+shared/~shared/g' <<<"${TRILINOS}")
   fi
 
@@ -168,6 +177,10 @@ test_configuration() {
     #fi
     # Currently don't need any extra constraints for fftw
     #if [ "${TPL}" == 'fftw' ] ; then
+    #  TPL_CONSTRAINTS="${TPL_CONSTRAINTS}"
+    #fi
+    # Currently don't need any extra constraints for cuda
+    #if [ "${TPL}" == 'cuda' ] ; then
     #  TPL_CONSTRAINTS="${TPL_CONSTRAINTS}"
     #fi
   done
@@ -237,6 +250,9 @@ test_configuration() {
       CMAKE_CONFIGURE_ARGS="-DENABLE_FFTW:BOOL=ON -DFFTW_DIR:PATH=${FFTW_DIR} ${CMAKE_CONFIGURE_ARGS}"
       printf "FFTW_DIR=${FFTW_DIR}\n"
     fi
+    if [ "${TPL}" == 'cuda' ]; then
+      CMAKE_CONFIGURE_ARGS="-DENABLE_CUDA:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
+    fi
   done
 
   # Set the extra identifiers for CDash build description
@@ -258,6 +274,18 @@ test_configuration() {
   elif [ "${OPENMP_ENABLED}" == 'false' ]; then
     printf "Disabling OpenMP in Nalu-Wind...\n"
     CMAKE_CONFIGURE_ARGS="-DENABLE_OPENMP:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
+  fi
+
+  # CUDA stuff for testing on Eagle
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    export OMPI_MCA_opal_cuda_support=1
+    export EXAWIND_CUDA_WRAPPER=${TRILINOS_DIR}/bin/nvcc_wrapper
+    export CUDA_LAUNCH_BLOCKING=1
+    export CUDA_MANAGED_FORCE_DEVICE_ALLOC=1
+    export KOKKOS_ARCH="SKX;Volta70"
+    export NVCC_WRAPPER_DEFAULT_COMPILER=mpicxx
+    export OMPI_CXX=${EXAWIND_CUDA_WRAPPER}
+    export CUDACXX=$(which nvcc)
   fi
 
   # Run static analysis and let ctest know we have static analysis output
@@ -308,11 +336,17 @@ test_configuration() {
   fi
 
   printf "\nListing cmake and compilers that will be used in ctest...\n"
+  cmd "which cmake"
   cmd "which ${MPI_CXX_COMPILER}"
   cmd "which ${MPI_C_COMPILER}"
   cmd "which ${MPI_FORTRAN_COMPILER}"
-  cmd "which mpiexec"
-  cmd "which cmake"
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    cmd "which orterun"
+    ORTERUN=$(which orterun)
+    CMAKE_CONFIGURE_ARGS="-DMPIEXEC_EXECUTABLE:STRING=${ORTERUN} -DMPIEXEC_NUMPROC_FLAG:STRING=-np ${CMAKE_CONFIGURE_ARGS}"
+  else
+    cmd "which mpiexec"
+  fi
 
   CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${MPI_C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} -DMPI_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DMPI_C_COMPILER:STRING=${MPI_C_COMPILER} -DMPI_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
 
@@ -395,7 +429,7 @@ main() {
     NALU_WIND_TESTING_ROOT_DIR=/projects/windsim/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:tioga'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:cuda'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then

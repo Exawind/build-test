@@ -457,7 +457,7 @@ class Trilinos(CMakePackage):
         if '+cuda' in spec:
             #NREL-specific
             options.extend([
-                '-DKOKKOS_ARCH:STRING=SKX;Volta72',
+                '-DKOKKOS_ARCH:STRING=SKX;Volta70',
             ])
             options.extend([
                 '-DMPI_USE_COMPILER_WRAPPERS:BOOL=ON',

@@ -284,7 +284,7 @@ test_configuration() {
     cmd "export CUDA_LAUNCH_BLOCKING=1"
     cmd "export CUDA_MANAGED_FORCE_DEVICE_ALLOC=1"
     cmd "export KOKKOS_ARCH=SKX;Volta70"
-    cmd "export NVCC_WRAPPER_DEFAULT_COMPILER=mpicxx"
+    cmd "export NVCC_WRAPPER_DEFAULT_COMPILER=${CXX}"
     cmd "export OMPI_CXX=${EXAWIND_CUDA_WRAPPER}"
     cmd "export CUDACXX=$(which nvcc)"
   fi

@@ -272,20 +272,21 @@ test_configuration() {
     cmd "export OMP_NUM_THREADS=1"
     cmd "export OMP_PROC_BIND=false"
   elif [ "${OPENMP_ENABLED}" == 'false' ]; then
-    printf "Disabling OpenMP in Nalu-Wind...\n"
+    printf "\nDisabling OpenMP in Nalu-Wind...\n"
     CMAKE_CONFIGURE_ARGS="-DENABLE_OPENMP:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # CUDA stuff for testing on Eagle
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    export OMPI_MCA_opal_cuda_support=1
-    export EXAWIND_CUDA_WRAPPER=${TRILINOS_DIR}/bin/nvcc_wrapper
-    export CUDA_LAUNCH_BLOCKING=1
-    export CUDA_MANAGED_FORCE_DEVICE_ALLOC=1
-    export KOKKOS_ARCH="SKX;Volta70"
-    export NVCC_WRAPPER_DEFAULT_COMPILER=mpicxx
-    export OMPI_CXX=${EXAWIND_CUDA_WRAPPER}
-    export CUDACXX=$(which nvcc)
+    printf "\nSetting environment variables for Kokkos/CUDA...\n"
+    cmd "export OMPI_MCA_opal_cuda_support=1"
+    cmd "export EXAWIND_CUDA_WRAPPER=${TRILINOS_DIR}/bin/nvcc_wrapper"
+    cmd "export CUDA_LAUNCH_BLOCKING=1"
+    cmd "export CUDA_MANAGED_FORCE_DEVICE_ALLOC=1"
+    cmd "export KOKKOS_ARCH=SKX,Volta70"
+    cmd "export NVCC_WRAPPER_DEFAULT_COMPILER=${CXX}"
+    cmd "export OMPI_CXX=${EXAWIND_CUDA_WRAPPER}"
+    cmd "export CUDACXX=$(which nvcc)"
   fi
 
   # Run static analysis and let ctest know we have static analysis output

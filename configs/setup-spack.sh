@@ -95,6 +95,8 @@ if [ "${MACHINE}" == 'peregrine' ] || \
   #Extra stuff for eagle
   if [ ${MACHINE} == 'eagle' ]; then
     (set -x; cp custom-package-files/mpich/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/mpich/package.py)
+    (set -x; cp custom-package-files/gcc/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/gcc/package.py)
+    (set -x; cp custom-package-files/pgi/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/pgi/package.py)
     (set -x; cp custom-package-files/trilinos/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py)
     (set -x; cp custom-package-files/nalu-wind/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/nalu-wind/package.py)
     (set -x; cp machines/${MACHINE}/compilers.yaml.software ${SPACK_ROOT}/etc/spack/compilers.yaml)

@@ -1,8 +1,6 @@
 packages:
   binutils:
     version: [2.29.1]
-  freetype:
-    version: [2.7.1]
   libxml2:
     version: [2.9.8]
   boost:
@@ -19,7 +17,7 @@ packages:
     version: [4.3]
   slurm:
     paths:
-      slurm@18-08-0-3: /nopt/slurm/current
+      slurm@18.08.3: /nopt/slurm/current
     buildable: False
   cuda:
     paths:
@@ -31,7 +29,7 @@ packages:
     variants: +pmi +cuda fabrics=verbs schedulers=slurm
   mpich:
     version: [3.3]
-    variants: netmod=mxm +hydra
+    variants: netmod=mxm +hydra +slurm
   hwloc:
     variants: +cuda ~nvml ~gl
   openfast:

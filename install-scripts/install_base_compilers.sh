@@ -37,7 +37,7 @@ case "${MYHOSTNAME}" in
   ;;
 esac
 
-DATE=2018-11-21
+DATE=2019-05-08
  
 if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
@@ -124,19 +124,22 @@ do
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     printf "\nInstalling ${TYPE} using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install gcc@8.2.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@7.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install gcc@6.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@9.1.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@8.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@7.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install gcc@6.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@4.8.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install llvm %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install llvm@8.0.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install llvm@7.0.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install llvm@6.0.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install intel-parallel-studio@cluster.2019.1+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install intel-parallel-studio@cluster.2019.3+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2018.4+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install pgi@19.4+nvidia %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install pgi@18.10+nvidia %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install pgi+nvidia %${COMPILER_NAME}@${COMPILER_VERSION}"
     # The PGI compilers need a libnuma.so.1.0.0 copied into its lib directory and symlinked to libnuma.so and libnuma.so.1
     cmd "spack install numactl %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi

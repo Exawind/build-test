@@ -170,3 +170,4 @@ printf "\nDone!\n"
 # Edit intel-parallel-studio modules to set INTEL_LICENSE_FILE correctly
 # Edit pgi modules to set PGROUPD_LICENSE_FILE correctly
 # Copy libnuma.so.1.0.0 into PGI lib directory and symlink to libnuma.so and libnuma.so.1
+# Run makelocalrc for all PGI compilers (I think this sets a GCC to use as a frontend)

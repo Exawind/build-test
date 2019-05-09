@@ -122,8 +122,8 @@ do
   if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
-    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
-    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
+    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-${DATE}"
+    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules-${DATE}"
     cmd "module load ${GCC_COMPILER_MODULE}"
     if [ ${COMPILER_NAME} == 'intel' ]; then
       cmd "module load ${INTEL_COMPILER_MODULE}"
@@ -136,9 +136,9 @@ do
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
-    cmd "module unuse /opt/software/modules"
-    cmd "module use /opt/compilers/modules"
-    cmd "module use /opt/utilities/modules"
+    cmd "module unuse ${MODULEPATH}"
+    cmd "module use /opt/compilers/modules-${DATE}"
+    cmd "module use /opt/utilities/modules-${DATE}"
     cmd "module purge"
     cmd "module load ${GCC_COMPILER_MODULE}"
     if [ ${COMPILER_NAME} == 'intel' ]; then
@@ -224,7 +224,8 @@ do
     cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install osu-micro-benchmarks %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install cuda %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install cuda@10.0.130 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install cuda@9.2.88 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install cudnn %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install paraview+mpi+python+osmesa %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install petsc %${COMPILER_NAME}@${COMPILER_VERSION}"

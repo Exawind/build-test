@@ -37,8 +37,11 @@ case "${MYHOSTNAME}" in
   ;;
 esac
 
+#el3 - mpich 3.3
+DATE=2019-05-08
+
 #el1 - mpich 3.3
-DATE=2019-01-10
+#DATE=2019-01-10
 
 #ed1 - ompi 1.10.7
 #DATE=2019-01-02
@@ -51,18 +54,18 @@ DATE=2019-01-10
  
 if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
-  GCC_COMPILER_VERSION="7.3.0"
-  GCC_COMPILER_MODULE="gcc/7.3.0"
+  GCC_COMPILER_VERSION="7.4.0"
+  GCC_COMPILER_MODULE="gcc/7.4.0"
   INTEL_COMPILER_VERSION="18.0.4"
   INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.4"
-  CLANG_COMPILER_VERSION="6.0.1"
+  CLANG_COMPILER_VERSION="7.0.1"
 elif [ "${MACHINE}" == 'rhodes' ]; then
   INSTALL_DIR=/opt/${TYPE}/${DATE}
-  GCC_COMPILER_VERSION="7.3.0"
-  GCC_COMPILER_MODULE="gcc/7.3.0"
+  GCC_COMPILER_VERSION="7.4.0"
+  GCC_COMPILER_MODULE="gcc/7.4.0"
   INTEL_COMPILER_VERSION="18.0.4"
   INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.4"
-  CLANG_COMPILER_VERSION="6.0.1"
+  CLANG_COMPILER_VERSION="7.0.1"
 else
   printf "\nMachine name not recognized.\n"
   exit 1
@@ -126,7 +129,7 @@ do
       cmd "module load ${INTEL_COMPILER_MODULE}"
     fi
     cmd "module load git"
-    cmd "module load python/2.7.15"
+    cmd "module load python/2.7.16"
     cmd "module load curl"
     cmd "module load binutils"
     printf "\nMaking and setting TMPDIR to disk...\n"
@@ -151,7 +154,7 @@ do
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
-    cmd "module load python/2.7.15"
+    cmd "module load python/2.7.16"
     cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
   fi
   cmd "module list"
@@ -200,7 +203,7 @@ do
 
     # Install our own python
     printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    for PYTHON_VERSION in '2.7.15' '3.6.5'; do
+    for PYTHON_VERSION in '2.7.16' '3.7.3'; do
       cmd "spack install python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
       for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf py-scipy py-yt; do
         cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -208,7 +211,7 @@ do
     done
 
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
+    #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
     #cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
     cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
@@ -227,9 +230,9 @@ do
     #cmd "spack install petsc %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
+    #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
     TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
     cmd "spack install osu-micro-benchmarks %${COMPILER_NAME}@${COMPILER_VERSION} ^intel-mpi"
   fi
 

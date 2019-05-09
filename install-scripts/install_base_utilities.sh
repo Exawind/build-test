@@ -37,7 +37,7 @@ case "${MYHOSTNAME}" in
   ;;
 esac
 
-DATE=2018-11-21
+DATE=2019-05-08
  
 if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
@@ -96,9 +96,8 @@ do
     cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
     cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
     cmd "module load git"
-    cmd "module load python/2.7.15"
+    cmd "module load python/2.7.16"
     cmd "module load curl"
-    cmd "module load binutils"
     cmd "module list"
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
@@ -118,7 +117,7 @@ do
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
-    cmd "module load python/2.7.15"
+    cmd "module load python/2.7.16"
     cmd "module list"
     cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
   fi
@@ -145,8 +144,8 @@ do
     cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install python@2.7.15 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install python@3.6.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install python@2.7.16 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install python@3.7.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install gnuplot+X+wx %${COMPILER_NAME}@${COMPILER_VERSION} ^pango+X"
     cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"

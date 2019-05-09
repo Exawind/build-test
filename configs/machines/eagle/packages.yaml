@@ -45,7 +45,7 @@ packages:
   fftw:
     variants: +mpi+fma simd=avx512
   all:
-    compiler: [gcc@7.3.0, intel@18.0.4]
+    compiler: [gcc@7.4.0, intel@18.0.4]
     # Spack uses build_type=RelWithDebInfo by default for CMake packages
     # and creates huge binaries unless you do this:
     variants: build_type=Release

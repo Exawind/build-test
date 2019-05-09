@@ -18,3 +18,4 @@ modules:
       filter:
         environment_blacklist: ['INTEL_LICENSE_FILE']
     whitelist: ['gcc', 'llvm', 'intel-parallel-studio', 'binutils', 'pgi']
+    blacklist: ['%gcc@4.8.5']

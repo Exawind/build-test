@@ -96,7 +96,7 @@ do
     cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
     cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
     cmd "module load git"
-    cmd "module load python/2.7.16"
+    cmd "module load python/2.7.15"
     cmd "module load curl"
     cmd "module list"
     printf "\nMaking and setting TMPDIR to disk...\n"
@@ -117,7 +117,7 @@ do
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
-    cmd "module load python/2.7.16"
+    cmd "module load python/2.7.15"
     cmd "module list"
     cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
   fi
@@ -147,12 +147,12 @@ do
     cmd "spack install python@2.7.16 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install python@3.7.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #cmd "spack install gnuplot+X+wx %${COMPILER_NAME}@${COMPILER_VERSION} ^pango+X"
     cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
+    # Remove gtkplus dependency from ghostscript
     cmd "spack install image-magick %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install stow %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install zsh %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -161,11 +161,12 @@ do
     cmd "spack install ninja@kitware %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gdb %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install rsync %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack load texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack load texlive %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack load flex %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "module load texinfo"
+    cmd "module load texlive"
+    cmd "module load flex"
     cmd "spack install flex@2.5.39 %${COMPILER_NAME}@${COMPILER_VERSION}"
     (set -x; spack install gnutls %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L autoconf %${COMPILER_NAME}@${COMPILER_VERSION} | grep autoconf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
+    cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
 
   cmd "unset TMPDIR"

@@ -2,7 +2,7 @@ compilers:
 - compiler:
     environment: {}
     extra_rpaths:
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/lib64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-gx6m5da7edwvdvomnkvedzsvw2f3ec7z/lib64
     flags:
       cflags: -O2
       cxxflags: -O2
@@ -10,15 +10,15 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/bin/gcc
-      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/bin/g++
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/bin/gfortran
-      fc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-kw3lkdq5l5yaasewjnk4lb7zpbbzq42u/bin/gfortran
+      cc: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-gx6m5da7edwvdvomnkvedzsvw2f3ec7z/bin/gcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-gx6m5da7edwvdvomnkvedzsvw2f3ec7z/bin/g++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-gx6m5da7edwvdvomnkvedzsvw2f3ec7z/bin/gfortran
+      fc: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.8.5-gx6m5da7edwvdvomnkvedzsvw2f3ec7z/bin/gfortran
     spec: gcc@4.8.5
     target: x86_64
 - compiler:
     extra_rpaths:
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-3gsuwvehtxr66cs3ycmj5jsnbi2aha73/lib64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4vihnutljp2qbyez2xyugng3rsszbmex/lib64
     flags:
       cflags: -O2
       cxxflags: -O2
@@ -26,15 +26,15 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-3gsuwvehtxr66cs3ycmj5jsnbi2aha73/bin/gcc
-      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-3gsuwvehtxr66cs3ycmj5jsnbi2aha73/bin/g++
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-3gsuwvehtxr66cs3ycmj5jsnbi2aha73/bin/gfortran
-      fc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-3gsuwvehtxr66cs3ycmj5jsnbi2aha73/bin/gfortran
+      cc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4vihnutljp2qbyez2xyugng3rsszbmex/bin/gcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4vihnutljp2qbyez2xyugng3rsszbmex/bin/g++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4vihnutljp2qbyez2xyugng3rsszbmex/bin/gfortran
+      fc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-4.9.4-4vihnutljp2qbyez2xyugng3rsszbmex/bin/gfortran
     spec: gcc@4.9.4
     target: x86_64
 - compiler:
     extra_rpaths:
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-ivulnxaay2wzu4oqyvy6dhl7ptv6h4iw/lib64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-7yw3ecfhsrxzcx3xfqlvtjuuvanlzgs7/lib64
     flags:
       cflags: -O2 -mtune=native -march=native
       cxxflags: -O2 -mtune=native -march=native
@@ -42,15 +42,15 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-ivulnxaay2wzu4oqyvy6dhl7ptv6h4iw/bin/gcc
-      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-ivulnxaay2wzu4oqyvy6dhl7ptv6h4iw/bin/g++
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-ivulnxaay2wzu4oqyvy6dhl7ptv6h4iw/bin/gfortran
-      fc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-ivulnxaay2wzu4oqyvy6dhl7ptv6h4iw/bin/gfortran
+      cc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-7yw3ecfhsrxzcx3xfqlvtjuuvanlzgs7/bin/gcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-7yw3ecfhsrxzcx3xfqlvtjuuvanlzgs7/bin/g++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-7yw3ecfhsrxzcx3xfqlvtjuuvanlzgs7/bin/gfortran
+      fc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-5.5.0-7yw3ecfhsrxzcx3xfqlvtjuuvanlzgs7/bin/gfortran
     spec: gcc@5.5.0
     target: x86_64
 - compiler:
     extra_rpaths:
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-4ig5kzzntaqlb6ismllhlu7osczzfpsy/lib64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.5.0-m4lhgw5rrbzz245xgdsxfrm725sh7d5r/lib64
     flags:
       cflags: -O2 -mtune=skylake-avx512 -march=skylake-avx512
       cxxflags: -O2 -mtune=skylake-avx512 -march=skylake-avx512
@@ -58,15 +58,15 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-4ig5kzzntaqlb6ismllhlu7osczzfpsy/bin/gcc
-      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-4ig5kzzntaqlb6ismllhlu7osczzfpsy/bin/g++
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-4ig5kzzntaqlb6ismllhlu7osczzfpsy/bin/gfortran
-      fc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.4.0-4ig5kzzntaqlb6ismllhlu7osczzfpsy/bin/gfortran
-    spec: gcc@6.4.0
+      cc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.5.0-m4lhgw5rrbzz245xgdsxfrm725sh7d5r/bin/gcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.5.0-m4lhgw5rrbzz245xgdsxfrm725sh7d5r/bin/g++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.5.0-m4lhgw5rrbzz245xgdsxfrm725sh7d5r/bin/gfortran
+      fc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-6.5.0-m4lhgw5rrbzz245xgdsxfrm725sh7d5r/bin/gfortran
+    spec: gcc@6.5.0
     target: x86_64
 - compiler:
     extra_rpaths:
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/lib64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/lib64
     flags:
       cflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
       cxxflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
@@ -74,15 +74,15 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/gcc
-      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/g++
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/gfortran
-      fc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/gfortran
-    spec: gcc@7.3.0
+      cc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/bin/gcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/bin/g++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/bin/gfortran
+      fc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/bin/gfortran
+    spec: gcc@7.4.0
     target: x86_64
 - compiler:
     extra_rpaths:
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.2.0-naakxqdmnn5of2zdzetxjgonqz2nw2ke/lib64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.3.0-xtx5c6of6tov6eu3ummso2csbvjuz6z7/lib64
     flags:
       cflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
       cxxflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
@@ -90,19 +90,35 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.2.0-naakxqdmnn5of2zdzetxjgonqz2nw2ke/bin/gcc
-      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.2.0-naakxqdmnn5of2zdzetxjgonqz2nw2ke/bin/g++
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.2.0-naakxqdmnn5of2zdzetxjgonqz2nw2ke/bin/gfortran
-      fc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.2.0-naakxqdmnn5of2zdzetxjgonqz2nw2ke/bin/gfortran
-    spec: gcc@8.2.0
+      cc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.3.0-xtx5c6of6tov6eu3ummso2csbvjuz6z7/bin/gcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.3.0-xtx5c6of6tov6eu3ummso2csbvjuz6z7/bin/g++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.3.0-xtx5c6of6tov6eu3ummso2csbvjuz6z7/bin/gfortran
+      fc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-8.3.0-xtx5c6of6tov6eu3ummso2csbvjuz6z7/bin/gfortran
+    spec: gcc@8.3.0
+    target: x86_64
+- compiler:
+    extra_rpaths:
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-9.1.0-djxriliqdub3h3t34qe4kqjesxylrfut/lib64
+    flags:
+      cflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
+      cxxflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
+      fflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
+    modules: []
+    operating_system: centos7
+    paths:
+      cc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-9.1.0-djxriliqdub3h3t34qe4kqjesxylrfut/bin/gcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-9.1.0-djxriliqdub3h3t34qe4kqjesxylrfut/bin/g++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-9.1.0-djxriliqdub3h3t34qe4kqjesxylrfutn/bin/gfortran
+      fc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-9.1.0-djxriliqdub3h3t34qe4kqjesxylrfut/bin/gfortran
+    spec: gcc@9.1.0
     target: x86_64
 - compiler:
     environment:
       set:
         INTEL_LICENSE_FILE: 28519@license-1.hpc.nrel.gov
     extra_rpaths:
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/lib/intel64
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/lib64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/lib/intel64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/lib64
     flags:
       cflags: -O2 -xSKYLAKE-AVX512
       cxxflags: -O2 -xSKYLAKE-AVX512 
@@ -110,17 +126,37 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/icc
-      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/icpc
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/ifort
-      fc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/ifort
+      cc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/icc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/icpc
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/ifort
+      fc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2018.4-3j7jzdulz4afhdn72kyo72yxrq3blshb/compilers_and_libraries/linux/bin/intel64/ifort
     spec: intel@18.0.4
     target: x86_64
 - compiler:
+    environment:
+      set:
+        INTEL_LICENSE_FILE: 28519@license-1.hpc.nrel.gov
     extra_rpaths:
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-k3sgcdkuh4wyc234ffyjmugq63lhxmur/lib
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-k3sgcdkuh4wyc234ffyjmugq63lhxmur/lib/clang/6.0.1/lib/linux
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/lib64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.3-fjzmokzceyuwryrvreuulk44ps2rnwf5/compilers_and_libraries/linux/lib/intel64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/lib64
+    flags:
+      cflags: -O2 -xSKYLAKE-AVX512
+      cxxflags: -O2 -xSKYLAKE-AVX512
+      fflags: -O2 -xSKYLAKE-AVX512
+    modules: []
+    operating_system: centos7
+    paths:
+      cc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.3-fjzmokzceyuwryrvreuulk44ps2rnwf5/compilers_and_libraries/linux/bin/intel64/icc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.3-fjzmokzceyuwryrvreuulk44ps2rnwf5/compilers_and_libraries/linux/bin/intel64/icpc
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.3-fjzmokzceyuwryrvreuulk44ps2rnwf5/compilers_and_libraries/linux/bin/intel64/ifort
+      fc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/intel-parallel-studio-cluster.2019.3-fjzmokzceyuwryrvreuulk44ps2rnwf5/compilers_and_libraries/linux/bin/intel64/ifort
+    spec: intel@19.0.3
+    target: x86_64
+- compiler:
+    extra_rpaths:
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-njhtt6ei3oil72he6qasyasqytteccqz/lib
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-njhtt6ei3oil72he6qasyasqytteccqz/lib/clang/6.0.1/lib/linux
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/lib64
     flags:
       cflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
       cxxflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
@@ -128,17 +164,17 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-k3sgcdkuh4wyc234ffyjmugq63lhxmur/bin/clang
-      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-k3sgcdkuh4wyc234ffyjmugq63lhxmur/bin/clang++
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/gfortran
-      fc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/gfortran
+      cc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-njhtt6ei3oil72he6qasyasqytteccqz/bin/clang
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-6.0.1-njhtt6ei3oil72he6qasyasqytteccqz/bin/clang++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/bin/gfortran
+      fc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/bin/gfortran
     spec: clang@6.0.1
     target: x86_64
 - compiler:
     extra_rpaths:
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-7.0.0-tlihgelpjceul66ggqsp3cixt3apqcaj/lib
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-7.0.0-tlihgelpjceul66ggqsp3cixt3apqcaj/lib/clang/7.0.0/lib/linux
-     - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/lib64
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-7.0.1-rlu5fddo5qfmxswn7ddy5akprklbguvi/lib
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-7.0.1-rlu5fddo5qfmxswn7ddy5akprklbguvi/lib/clang/7.0.1/lib/linux
+     - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/lib64
     flags:
       cflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
       cxxflags: -O2 -march=skylake-avx512 -mtune=skylake-avx512
@@ -146,18 +182,18 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-7.0.0-tlihgelpjceul66ggqsp3cixt3apqcaj/bin/clang
-      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-7.0.0-tlihgelpjceul66ggqsp3cixt3apqcaj/bin/clang++
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/gfortran
-      fc:  /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.3.0-6xrl2ywol6kblox5myhllykoe67y7a5e/bin/gfortran
-    spec: clang@7.0.0
+      cc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-7.0.1-rlu5fddo5qfmxswn7ddy5akprklbguvi/bin/clang
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/llvm-7.0.1-rlu5fddo5qfmxswn7ddy5akprklbguvi/bin/clang++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/bin/gfortran
+      fc:  /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/bin/gfortran
+    spec: clang@7.0.1
     target: x86_64
 - compiler:
     environment:
       set:
         PGROUPD_LICENSE_FILE: 27001@license-1.hpc.nrel.gov
     extra_rpaths:
-      - /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/lib
+      - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/lib
     flags:
       cflags: -fast -tp=skylake -fPIC -c11
       cxxflags: -fast -tp=skylake -fPIC
@@ -165,9 +201,28 @@ compilers:
     modules: []
     operating_system: centos7
     paths:
-      cc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgcc
-      cxx: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgc++
-      f77: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgfortran
-      fc: /nopt/nrel/ecom/hpacf/compilers/2018-11-21/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgfortran
+      cc: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgc++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgfortran
+      fc: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgfortran
     spec: pgi@18.10
+    target: x86_64
+- compiler:
+    environment:
+      set:
+        PGROUPD_LICENSE_FILE: 27001@license-1.hpc.nrel.gov
+    extra_rpaths:
+      - /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-19.4-7jsiydxi4kpmkl2prdv53un56zusqacj/linux86-64/19.4/lib
+    flags:
+      cflags: -fast -tp=skylake -fPIC -c11
+      cxxflags: -fast -tp=skylake -fPIC
+      fflags: -fast -tp=skylake -fPIC
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-19.4-7jsiydxi4kpmkl2prdv53un56zusqacj/linux86-64/19.4/bin/pgcc
+      cxx: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-19.4-7jsiydxi4kpmkl2prdv53un56zusqacj/linux86-64/19.4/bin/pgc++
+      f77: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-19.4-7jsiydxi4kpmkl2prdv53un56zusqacj/linux86-64/19.4/bin/pgfortran
+      fc: /nopt/nrel/ecom/hpacf/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-19.4-7jsiydxi4kpmkl2prdv53un56zusqacj/linux86-64/19.4/bin/pgfortran
+    spec: pgi@19.4
     target: x86_64

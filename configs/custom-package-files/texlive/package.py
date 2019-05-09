@@ -26,7 +26,7 @@ class Texlive(Package):
     # itself is stable.  Don't let that fool you though, it's still
     # installing TeX **LIVE** from e.g. ctan.math.... below, which is
     # not reproducible.
-    version('live', sha256='44aa41b5783e345b7021387f19ac9637ff1ce5406a59754230c666642dfe7750,
+    version('live', sha256='44aa41b5783e345b7021387f19ac9637ff1ce5406a59754230c666642dfe7750',
             url='ftp://tug.org/historic/systems/texlive/2019/install-tl-unx.tar.gz')
 
     # There does not seem to be a complete list of schemes.

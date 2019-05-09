@@ -98,7 +98,6 @@ do
     cmd "module load git"
     cmd "module load python/2.7.15"
     cmd "module load curl"
-    cmd "module load binutils"
     cmd "module list"
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
@@ -124,6 +123,7 @@ do
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     printf "\nInstalling ${TYPE} using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
+    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@9.1.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@8.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@7.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -131,7 +131,8 @@ do
     cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gcc@4.8.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install llvm@8.0.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
+    # LLVM 8 requires > GCC 4 and we currently build the compilers with the system GCC 4.8.5
+    #cmd "spack install llvm@8.0.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install llvm@7.0.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install llvm@6.0.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install intel-parallel-studio@cluster.2019.3+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -139,7 +140,6 @@ do
     cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install pgi@19.4+nvidia %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install pgi@18.10+nvidia %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
     # The PGI compilers need a libnuma.so.1.0.0 copied into its lib directory and symlinked to libnuma.so and libnuma.so.1
     cmd "spack install numactl %${COMPILER_NAME}@${COMPILER_VERSION}"
   fi
@@ -166,5 +166,7 @@ printf "\n$(date)\n"
 printf "\nDone!\n"
 
 # Last step
-# Edit compilers.yaml to point to all compilers this script installed
+# Edit compilers.yaml.software to point to all compilers this script installed
 # Edit intel-parallel-studio modules to set INTEL_LICENSE_FILE correctly
+# Edit pgi modules to set PGROUPD_LICENSE_FILE correctly
+# Copy libnuma.so.1.0.0 into PGI lib directory and symlink to libnuma.so and libnuma.so.1

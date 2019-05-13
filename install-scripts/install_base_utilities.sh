@@ -161,6 +161,7 @@ do
     cmd "spack install ninja@kitware %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install gdb %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install rsync %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install xterm %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "module load texinfo"
     cmd "module load texlive"
     cmd "module load flex"

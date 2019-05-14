@@ -8,6 +8,8 @@ packages:
     variants: maxdims=65536 maxvars=524288
   parallel-netcdf:
     version: [1.8.1]
+  mesa:
+    variants: swr=skx
   hdf5:
     version: [1.10.5]
     variants: +cxx+hl

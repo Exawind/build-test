@@ -4,7 +4,7 @@
     <Field name="host" type="string">el1.hpc.nrel.gov</Field>
     <Field name="userName" type="string">notset</Field>
     <Field name="hostAliases" type="string">el#</Field>
-    <Field name="directory" type="string">/nopt/nrel/ecom/hpacf/software/2019-05-08/visit/gui-mesa/visit2_13_3.linux-x86_64</Field>
+    <Field name="directory" type="string">/nopt/nrel/ecom/hpacf/software/2019-05-08/visit/server/visit2_13_3.linux-x86_64</Field>
     <Field name="shareOneBatchJob" type="bool">false</Field>
     <Field name="sshPortSpecified" type="bool">false</Field>
     <Field name="sshPort" type="int">22</Field>
@@ -42,7 +42,7 @@
         <Field name="sublaunchArgsSet" type="bool">false</Field>
         <Field name="sublaunchArgs" type="string"></Field>
         <Field name="sublaunchPreCmdSet" type="bool">true</Field>
-        <Field name="sublaunchPreCmd" type="string">"export PATH=/nopt/nrel/ecom/hpacf/software/2019-05-08/visit/gui-mesa/visit2_13_3.linux-x86_64/2.13.3/linux-x86_64/bin:${PATH}"</Field>
+        <Field name="sublaunchPreCmd" type="string">"export PATH=/nopt/nrel/ecom/hpacf/software/2019-05-08/visit/server/visit2_13_3.linux-x86_64/2.13.3/linux-x86_64/bin:${PATH}"</Field>
         <Field name="sublaunchPostCmdSet" type="bool">false</Field>
         <Field name="sublaunchPostCmd" type="string"></Field>
         <Field name="machinefileSet" type="bool">false</Field>

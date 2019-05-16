@@ -7,10 +7,8 @@ modules:
     hash_length: 0
     all:
       suffixes:
-        '^python@2.7.15': 'py2'
-        '^python@3.6.5': 'py3'
-        'trilinos+openmp': 'omp'
-        'trilinos build_type=Debug': 'dbg'
+        '^python@2.7.16': 'py2'
+        '^python@3.7.3': 'py3'
         'boost+mpi': 'mpi'
         'yaml-cpp~shared': 'static'
         'amrvis dims=3': '3d'

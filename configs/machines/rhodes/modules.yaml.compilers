@@ -12,10 +12,14 @@ modules:
         set:
           '${PACKAGE}_ROOT_DIR': '${PREFIX}'
     intel-parallel-studio:
+      filter:
+        environment_blacklist: ['INTEL_LICENSE_FILE']
       environment:
         set:
           INTEL_LICENSE_FILE: '28519@license-1.hpc.nrel.gov'
-      filter:
-        environment_blacklist: ['INTEL_LICENSE_FILE']
-    whitelist: ['gcc', 'llvm', 'intel-parallel-studio', 'binutils']
+    pgi:
+      environment:
+        set:
+          PGROUPD_LICENSE_FILE: '27001@license-1.hpc.nrel.gov'
+    whitelist: ['gcc', 'llvm', 'intel-parallel-studio', 'binutils', 'pgi']
     blacklist: ['%gcc@4.8.5']

@@ -1,4 +1,6 @@
 packages:
+  binutils:
+    version: [2.29.1]
   mesa:
     variants: swr=skx
   libxml2:

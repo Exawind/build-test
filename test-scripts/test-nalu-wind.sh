@@ -83,7 +83,7 @@ test_configuration() {
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
-    cmd "module load python/2.7.15"
+    cmd "module load python"
     cmd "module load cppcheck"
     cmd "module load binutils"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
@@ -417,11 +417,11 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:fftw;tioga;hypre;openfast;catalyst'
-    CONFIGURATIONS[1]='gcc:7.3.0:false:master:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[1]='gcc:7.4.0:false:master:develop:master:fftw;tioga;hypre;openfast'
     CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:master:fftw;tioga;hypre;openfast'
     CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[4]='clang:6.0.1:false:develop:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[4]='clang:7.0.1:false:develop:develop:master:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then

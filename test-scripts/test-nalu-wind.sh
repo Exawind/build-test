@@ -121,13 +121,17 @@ test_configuration() {
     printf "\nOpenMP is enabled in Trilinos...\n"
   elif [ "${OPENMP_ENABLED}" == 'false' ]; then
     printf "\nOpenMP is disabled in Trilinos...\n"
-    TRILINOS="${TRILINOS}~openmp"
+    if [ "${MACHINE_NAME}" != 'mac' ]; then
+      TRILINOS="${TRILINOS}~openmp"
+    else
+      TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
+    fi
   fi
 
   if [ "${MACHINE_NAME}" == 'mac' ]; then
     # Can't build STK as shared on Mac
     printf "\nDisabling shared build in Trilinos because STK doesn't build as shared on Mac...\n"
-    TRILINOS="${TRILINOS}~shared"
+    TRILINOS=$(sed 's/+shared/~shared/g' <<<"${TRILINOS}")
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
     # Can't build Trilinos as shared with CUDA
     printf "\nDisabling shared build in Trilinos because we're testing with CUDA on Eagle...\n"

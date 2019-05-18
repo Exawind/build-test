@@ -196,3 +196,41 @@ compilers:
       fc:  /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-7.4.0-srw2azby5tn7wozbchryvj5ak3zlfz3r/bin/gfortran
     spec: clang@7.0.1
     target: x86_64
+- compiler:
+    environment:
+      set:
+        PGROUPD_LICENSE_FILE: 27001@license-1.hpc.nrel.gov
+    extra_rpaths:
+      - /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/lib
+    flags:
+      cflags: -fast -tp=haswell -fPIC -c11
+      cxxflags: -fast -tp=haswell -fPIC
+      fflags: -fast -tp=haswell -fPIC
+    modules: []
+    operating_system: centos7
+    paths:
+      cc:  /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgcc
+      cxx: /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgc++
+      f77: /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgfortran
+      fc:  /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-18.10-n4xurlqoldnrqaoslued3rxcdtpq6opo/linux86-64/18.10/bin/pgfortran
+    spec: pgi@18.10
+    target: x86_64
+- compiler:
+    environment:
+      set:
+        PGROUPD_LICENSE_FILE: 27001@license-1.hpc.nrel.gov
+    extra_rpaths:
+      - /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-19.4-7jsiydxi4kpmkl2prdv53un56zusqacj/linux86-64/19.4/lib
+    flags:
+      cflags: -fast -tp=haswell -fPIC -c11
+      cxxflags: -fast -tp=haswell -fPIC
+      fflags: -fast -tp=haswell -fPIC
+    modules: []
+    operating_system: centos7
+    paths:
+      cc:  /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-19.4-7jsiydxi4kpmkl2prdv53un56zusqacj/linux86-64/19.4/bin/pgcc
+      cxx: /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-19.4-7jsiydxi4kpmkl2prdv53un56zusqacj/linux86-64/19.4/bin/pgc++
+      f77: /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-19.4-7jsiydxi4kpmkl2prdv53un56zusqacj/linux86-64/19.4/bin/pgfortran
+      fc:  /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/pgi-19.4-7jsiydxi4kpmkl2prdv53un56zusqacj/linux86-64/19.4/bin/pgfortran
+    spec: pgi@19.4
+    target: x86_64

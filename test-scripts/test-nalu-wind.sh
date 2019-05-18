@@ -64,8 +64,12 @@ test_configuration() {
   GENERAL_CONSTRAINTS="${MPI_CONSTRAINTS}${BLAS_CONSTRAINTS}"
   printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
-  # Define TRILINOS constraints and preferred variants from a single location for all scripts.
-  cmd "source ${BUILD_TEST_DIR}/configs/shared-constraints.sh"
+  if [ "${MACHINE_NAME}" == 'rhodes' ]; then
+    TRILINOS="trilinos"
+  else
+    # Define TRILINOS constraints and preferred variants from a single location for all scripts.
+    cmd "source ${BUILD_TEST_DIR}/configs/shared-constraints.sh"
+  fi
 
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}"
 
@@ -117,20 +121,19 @@ test_configuration() {
     printf "\nOpenMP is enabled in Trilinos...\n"
   elif [ "${OPENMP_ENABLED}" == 'false' ]; then
     printf "\nOpenMP is disabled in Trilinos...\n"
-    TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
+    TRILINOS="${TRILINOS}~openmp"
   fi
 
-  # Can't build STK as shared on Mac
   if [ "${MACHINE_NAME}" == 'mac' ]; then
+    # Can't build STK as shared on Mac
     printf "\nDisabling shared build in Trilinos because STK doesn't build as shared on Mac...\n"
-    TRILINOS=$(sed 's/+shared/~shared/g' <<<"${TRILINOS}")
+    TRILINOS="${TRILINOS}~shared"
+  elif [ "${MACHINE_NAME}" == 'eagle' ]; then
+    # Can't build Trilinos as shared with CUDA
+    printf "\nDisabling shared build in Trilinos because we're testing with CUDA on Eagle...\n"
+    TRILINOS="${TRILINOS}~shared"
   fi
 
-  # Can't build Trilinos as shared with CUDA
-  if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    printf "\nDisabling shared build in Trilinos because we're testing with CUDA on Eagle...\n"
-    TRILINOS=$(sed 's/+shared/~shared/g' <<<"${TRILINOS}")
-  fi
 
   # Set the TMPDIR to disk so it doesn't run out of space
   if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
@@ -358,7 +361,7 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DCMAKE_BUILD_TYPE=RelWithDebInfo ${CMAKE_CONFIGURE_ARGS}"
 
   # Set looser diff tolerance for GCC 7.3.0 cases that have more optimization flags on
-  if [ "${COMPILER_ID}" == 'gcc@7.3.0' ] && [ "${MACHINE_NAME}" != 'mac' ]; then
+  if [ "${COMPILER_ID}" == 'gcc@7.4.0' ] && [ "${MACHINE_NAME}" != 'mac' ]; then
     CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.0005 ${CMAKE_CONFIGURE_ARGS}"
   fi
 

@@ -91,6 +91,7 @@ if [ "${MACHINE}" == 'peregrine' ] || \
 
   #All machines do this
   (set -x; cp machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/)
+  (set -x; cp custom-package-files/parallel-netcdf/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/parallel-netcdf/package.py)
 
   #Extra stuff for eagle
   if [ ${MACHINE} == 'eagle' ]; then

@@ -71,7 +71,6 @@ else
   exit 1
 fi
 
-TRILINOS_BRANCH=develop
 BUILD_TEST_DIR=$(pwd)/..
 
 # Set spack location
@@ -104,7 +103,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc intel #clang
+for COMPILER_NAME in gcc intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -115,7 +114,7 @@ do
   fi
   printf "\nInstalling base ${TYPE} with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 
-  # Reset TRILINOS variable
+  # Reset TRILINOS_PERCEPT variable
   cmd "source ${BUILD_TEST_DIR}/configs/shared-constraints.sh"
 
   printf "\nLoading modules...\n"
@@ -160,47 +159,6 @@ do
   cmd "module list"
 
   if [ ${COMPILER_NAME} == 'gcc' ]; then
-    #if [ "${MACHINE}" == 'rhodes' ]; then
-      #printf "\nInstalling stuff needed for Visit ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-      #cmd "spack install libxrender %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxml2 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxrandr %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxi %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxft %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxcursor %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxt %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install glib %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install glproto %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxt %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install mesa %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install mesa-glu %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install xproto %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install inputproto %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install xextproto %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install xcb-proto %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install xtrans %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install fontconfig %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install freetype %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install randrproto %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install renderproto %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libx11 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxau %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxcb %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxcursor %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxdamage %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxdmcp %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxext %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxfixes %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxft %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxi %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxpm %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxrandr %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxrender %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxshmfence %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxv %${COMPILER_NAME}@${COMPILER_VERSION}"
-      #cmd "spack install libxvmc %${COMPILER_NAME}@${COMPILER_VERSION}"
-    #fi
-
     # Install our own python
     printf "\nInstalling Python using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
     for PYTHON_VERSION in '2.7.16' '3.7.3'; do
@@ -211,15 +169,11 @@ do
     done
 
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH}"
-    #cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
-    TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^python@3.7.3"
-    #cmd "spack install --only dependencies --keep-stage nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} build_type=Debug ^${TRILINOS}@${TRILINOS_BRANCH} build_type=Debug"
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION}"
 
-    #(set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.6.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
-    (set -x; spack install netcdf-fortran@4.4.4 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.6.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
-    cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
+    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.6.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
+    # It seems something has changed in the percept repo, and I need to update percept in spack
+    #cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
     cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -232,9 +186,7 @@ do
     #cmd "spack install petsc %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
-    TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS}@${TRILINOS_BRANCH} ^intel-mpi ^intel-mkl"
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^intel-mpi ^intel-mkl"
     cmd "spack install osu-micro-benchmarks %${COMPILER_NAME}@${COMPILER_VERSION} ^intel-mpi"
   fi
 

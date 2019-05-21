@@ -322,9 +322,14 @@ test_configuration() {
   # Turn on address sanitizer for clang build on rhodes
   if [ "${COMPILER_NAME}" == 'clang' ] && [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting up address sanitizer in Clang...\n"
-    export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+    # Create blacklist for suppressing impl.h file in Yaml-CPP library
+    printf "\nBlacklisting file in Yaml-CPP...\n"
+    (set -x; printf "src:$(spack location -i yaml-cpp %${COMPILER_ID})/include/yaml-cpp/node/impl.h" > ${NALU_WIND_DIR}/build/asan_blacklist.txt)
+    export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer -fsanitize-blacklist=${NALU_WIND_DIR}/build/asan_blacklist.txt"
     printf "export CXXFLAGS=${CXX_FLAGS}\n"
+    # Probably should try to solve the Nalu-Wind container overflow errors sometime, but we currently ignore them
     cmd "export ASAN_OPTIONS=detect_container_overflow=0"
+    # Suppress leak errors from some TPLs
     printf "Writing asan.supp file...\n"
     (set -x; printf "leak:libopen-pal\nleak:libmpi\nleak:libnetcdf" > ${NALU_WIND_DIR}/build/asan.supp)
     cmd "export LSAN_OPTIONS=suppressions=${NALU_WIND_DIR}/build/asan.supp"

@@ -103,7 +103,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc intel
+for COMPILER_NAME in gcc #intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -176,12 +176,14 @@ do
     #cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
     cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install valgrind %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
     cmd "spack install osu-micro-benchmarks %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install cuda@10.0.130 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install cuda@9.2.88 %${COMPILER_NAME}@${COMPILER_VERSION}"
-    cmd "spack install cudnn %${COMPILER_NAME}@${COMPILER_VERSION}"
+    if [ "${MACHINE}" == 'eagle' ]; then
+      cmd "spack install amrvis+mpi dims=3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install cuda@10.0.130 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install cuda@9.2.88 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install cudnn %${COMPILER_NAME}@${COMPILER_VERSION}"
+    fi
     #cmd "spack install paraview+mpi+python+osmesa %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install petsc %${COMPILER_NAME}@${COMPILER_VERSION}"
   elif [ ${COMPILER_NAME} == 'intel' ]; then

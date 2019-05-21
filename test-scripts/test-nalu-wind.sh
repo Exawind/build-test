@@ -186,10 +186,9 @@ test_configuration() {
     #if [ "${TPL}" == 'fftw' ] ; then
     #  TPL_CONSTRAINTS="${TPL_CONSTRAINTS}"
     #fi
-    # Currently don't need any extra constraints for cuda
-    #if [ "${TPL}" == 'cuda' ] ; then
-    #  TPL_CONSTRAINTS="${TPL_CONSTRAINTS}"
-    #fi
+    if [ "${TPL}" == 'cuda' ] ; then
+      TPL_VARIANTS+="~shared"
+    fi
   done
 
   if [ "${MACHINE_NAME}" != 'mac' ]; then

@@ -64,7 +64,7 @@ test_configuration() {
   GENERAL_CONSTRAINTS="${MPI_CONSTRAINTS}${BLAS_CONSTRAINTS}"
   printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
-  if [ "${MACHINE_NAME}" == 'rhodes' ]; then
+  if [ "${MACHINE_NAME}" == 'rhodes' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
     TRILINOS="trilinos"
   else
     # Define TRILINOS constraints and preferred variants from a single location for all scripts.
@@ -121,7 +121,7 @@ test_configuration() {
     printf "\nOpenMP is enabled in Trilinos...\n"
   elif [ "${OPENMP_ENABLED}" == 'false' ]; then
     printf "\nOpenMP is disabled in Trilinos...\n"
-    if [ "${MACHINE_NAME}" == 'rhodes' ]; then
+    if [ "${MACHINE_NAME}" == 'rhodes' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
       TRILINOS="${TRILINOS}~openmp"
     else
       TRILINOS=$(sed 's/+openmp/~openmp/g' <<<"${TRILINOS}")
@@ -132,10 +132,10 @@ test_configuration() {
     # Can't build STK as shared on Mac
     printf "\nDisabling shared build in Trilinos because STK doesn't build as shared on Mac...\n"
     TRILINOS=$(sed 's/+shared/~shared/g' <<<"${TRILINOS}")
-  #elif [ "${MACHINE_NAME}" == 'eagle' ]; then
+  elif [ "${MACHINE_NAME}" == 'eagle' ]; then
     # Can't build Trilinos as shared with CUDA
-    #printf "\nDisabling shared build in Trilinos because we're testing with CUDA on Eagle...\n"
-    #TRILINOS="${TRILINOS}~shared"
+    printf "\nDisabling shared build in Trilinos because we're testing with CUDA on Eagle...\n"
+    TRILINOS="${TRILINOS}~shared"
   fi
 
 

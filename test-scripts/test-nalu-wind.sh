@@ -132,10 +132,10 @@ test_configuration() {
     # Can't build STK as shared on Mac
     printf "\nDisabling shared build in Trilinos because STK doesn't build as shared on Mac...\n"
     TRILINOS=$(sed 's/+shared/~shared/g' <<<"${TRILINOS}")
-  elif [ "${MACHINE_NAME}" == 'eagle' ]; then
+  #elif [ "${MACHINE_NAME}" == 'eagle' ]; then
     # Can't build Trilinos as shared with CUDA
-    printf "\nDisabling shared build in Trilinos because we're testing with CUDA on Eagle...\n"
-    TRILINOS="${TRILINOS}~shared"
+    #printf "\nDisabling shared build in Trilinos because we're testing with CUDA on Eagle...\n"
+    #TRILINOS="${TRILINOS}~shared"
   fi
 
 

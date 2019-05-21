@@ -155,12 +155,12 @@ test_configuration() {
   #cmd "spack uninstall -a -y tioga %${COMPILER_ID} || true"
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
-  printf "\nUpdating Trilinos (this is fine to error when tests are first run)...\n"
-  cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno || true"
+  printf "\nUpdating and clean Trilinos stage directory (this is fine to error when tests are first run)...\n"
+  cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
   #printf "\nUpdating OpenFAST (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno || true"
+  #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
   #printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno || true"
+  #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}" # Change directories to avoid any stale file handles
 
   TPL_VARIANTS=''
@@ -428,11 +428,7 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[1]='gcc:7.4.0:false:master:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[4]='clang:7.0.1:false:develop:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[0]='clang:7.0.1:false:develop:develop:master:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'peregrine' ]; then

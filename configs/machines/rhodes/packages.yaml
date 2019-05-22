@@ -2,7 +2,7 @@ packages:
   binutils:
     version: [2.29.1]
   mesa:
-    variants: swr=skx
+    variants: swr=avx2
   libxml2:
     version: [2.9.8]
   boost:

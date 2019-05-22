@@ -14,9 +14,9 @@ cmd() {
 
 #gcc 7.3.0, gcc 4.9.4, intel 18.0.4, clang 6.0.1
 COMPILER=gcc
-COMPILER_VERSION=7.3.0
+COMPILER_VERSION=7.4.0
 #For Intel compiler front end
-GCC_COMPILER_VERSION=7.3.0
+GCC_COMPILER_VERSION=7.4.0
 
 if [ "${COMPILER}" == 'gcc' ] || [ "${COMPILER}" == 'clang' ]; then
   CXX_COMPILER=mpicxx
@@ -33,9 +33,9 @@ fi
 
 # Set up environment on Rhodes
 #Pure modules sans Spack
-export MODULE_PREFIX=/opt/utilities/module_prefix
-export PATH=${MODULE_PREFIX}/Modules/bin:${PATH}
-module() { eval $(${MODULE_PREFIX}/Modules/bin/modulecmd $(basename ${SHELL}) $*); }
+export MODULE_PREFIX=/opt/utilities/modules_prefix
+export PATH=${MODULE_PREFIX}/bin:${PATH}
+module() { eval $(${MODULE_PREFIX}/bin/modulecmd $(basename ${SHELL}) $*); }
 
 #Load some base modules
 cmd "module purge"
@@ -55,7 +55,7 @@ cmd "module load flex"
 cmd "module load bison"
 cmd "module load wget"
 cmd "module load bc"
-cmd "module load python/2.7.15"
+cmd "module load python"
 cmd "module load binutils"
 cmd "module load cmake"
 if [ "${COMPILER}" == 'gcc' ]; then

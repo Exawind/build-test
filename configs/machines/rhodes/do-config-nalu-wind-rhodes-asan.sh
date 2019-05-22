@@ -56,7 +56,7 @@ cmd "module load flex"
 cmd "module load bison"
 cmd "module load wget"
 cmd "module load bc"
-cmd "module load python/2.7.16"
+cmd "module load python"
 cmd "module load binutils"
 cmd "module load cmake"
 if [ "${COMPILER}" == 'gcc' ]; then
@@ -79,7 +79,7 @@ cmd "module load yaml-cpp"
 cmd "module load hypre"
 cmd "module load openfast"
 cmd "module load fftw"
-#cmd "module load trilinos-catalyst-ioss-adapter"
+cmd "module load trilinos-catalyst-ioss-adapter"
 cmd "module list"
 
 # Clean before cmake configure

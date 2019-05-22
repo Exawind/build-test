@@ -1,10 +1,12 @@
 packages:
-  binutils:
-    version: [2.29.1]
-  mesa:
-    variants: swr=avx2
   libxml2:
     version: [2.9.8]
+  binutils:
+    version: [2.29.1]
+  cmake:
+    version: [3.13.4]
+  mesa:
+    variants: swr=avx2
   boost:
     version: [1.68.0]
   netcdf:

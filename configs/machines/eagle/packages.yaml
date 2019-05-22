@@ -1,6 +1,10 @@
 packages:
   libxml2:
     version: [2.9.8]
+  cmake:
+    version: [3.13.4]
+  mesa:
+    variants: swr=skx
   boost:
     version: [1.68.0]
   netcdf:
@@ -8,8 +12,6 @@ packages:
     variants: maxdims=65536 maxvars=524288
   parallel-netcdf:
     version: [1.8.0]
-  mesa:
-    variants: swr=skx
   hdf5:
     version: [1.10.4]
     variants: +cxx+hl

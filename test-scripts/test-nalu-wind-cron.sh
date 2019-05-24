@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-#Script that runs the nightly Nalu-Wind tests at NREL on a Mac
+#Script that runs the nightly Nalu-Wind test script at NREL on multiple machines
 
 set -e
 

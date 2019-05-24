@@ -476,7 +476,7 @@ main() {
     # cmd "cd ${SPACK_ROOT} && git checkout d3e4e88bae2b3ddf71bf56da18fe510e74e020b2"
  
     printf "\nConfiguring Spack...\n"
-    cmd "git clone https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
+    cmd "git clone --recursive https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
     # Nalu-Wind v1.2.0 matching tag for build-test
     #cmd "cd ${BUILD_TEST_DIR} && git checkout v1.2.0"
     cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"

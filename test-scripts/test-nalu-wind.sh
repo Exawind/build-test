@@ -22,8 +22,6 @@ test_configuration() {
   printf "${COMPILER_ID}\n"
   printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
   printf "trilinos@${TRILINOS_BRANCH}\n"
-  printf "openfast@${OPENFAST_BRANCH}\n"
-  printf "tioga@${TIOGA_BRANCH}\n"
   printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date)\n"
   printf "************************************************************\n"
@@ -97,7 +95,7 @@ test_configuration() {
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
       cmd "module load ${INTEL_COMPILER_MODULE}"
     fi
-  elif [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
+  elif [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
     cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
@@ -138,9 +136,8 @@ test_configuration() {
     TRILINOS="${TRILINOS}~shared"
   fi
 
-
   # Set the TMPDIR to disk so it doesn't run out of space
-  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
@@ -158,9 +155,9 @@ test_configuration() {
   printf "\nUpdating and clean Trilinos stage directory (this is fine to error when tests are first run)...\n"
   cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
   #printf "\nUpdating OpenFAST (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd openfast@${OPENFAST_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${OPENFAST_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
+  #cmd "spack cd openfast@develop %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/develop && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
   #printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd tioga@${TIOGA_BRANCH} %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/${TIOGA_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
+  #cmd "spack cd tioga@master %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}" # Change directories to avoid any stale file handles
 
   TPL_VARIANTS=''
@@ -169,10 +166,10 @@ test_configuration() {
   for TPL in ${TPLS[*]}; do
     TPL_VARIANTS+="+${TPL}"
     if [ "${TPL}" == 'openfast' ] ; then
-      TPL_CONSTRAINTS="^openfast@${OPENFAST_BRANCH} ${TPL_CONSTRAINTS}"
+      TPL_CONSTRAINTS="^openfast@develop ${TPL_CONSTRAINTS}"
     fi
     if [ "${TPL}" == 'tioga' ] ; then
-      TPL_CONSTRAINTS="^tioga@${TIOGA_BRANCH} ${TPL_CONSTRAINTS}"
+      TPL_CONSTRAINTS="^tioga@master ${TPL_CONSTRAINTS}"
     fi
     # Currently don't need any extra constraints for catalyst
     #if [ "${TPL}" == 'catalyst' ] ; then
@@ -296,9 +293,7 @@ test_configuration() {
   fi
 
   # Run static analysis and let ctest know we have static analysis output
-  if [ "${MACHINE_NAME}" == 'peregrine' ] || \
-     [ "${MACHINE_NAME}" == 'mac' ] || \
-     [ "${MACHINE_NAME}" == 'rhodes' ]; then
+  if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nRunning cppcheck static analysis (Nalu-Wind not updated until after this step)...\n"
     cmd "rm ${LOGS_DIR}/nalu-wind-static-analysis.txt"
     cmd "cppcheck --enable=all --quiet -j 8 --output-file=${LOGS_DIR}/nalu-wind-static-analysis.txt -I ${NALU_WIND_DIR}/include ${NALU_WIND_DIR}/src"
@@ -307,7 +302,7 @@ test_configuration() {
   fi
 
   # Unset the TMPDIR variable after building but before testing during ctest nightly script
-  if [ "${MACHINE_NAME}" == 'peregrine' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
     CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE ${CTEST_ARGS}"
   fi
 
@@ -397,8 +392,6 @@ test_configuration() {
   printf "${COMPILER_ID}\n"
   printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
   printf "trilinos@${TRILINOS_BRANCH}\n"
-  printf "openfast@${OPENFAST_BRANCH}\n"
-  printf "tioga@${TIOGA_BRANCH}\n"
   printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date)\n"
   printf "************************************************************\n"
@@ -413,12 +406,9 @@ main() {
   printf "============================================================\n"
 
   # Decide what machine we are on
-  if [ "${NREL_CLUSTER}" == 'peregrine' ]; then
-    MACHINE_NAME=peregrine
-  elif [ "${NREL_CLUSTER}" == 'eagle' ]; then
+  if [ "${NREL_CLUSTER}" == 'eagle' ]; then
     MACHINE_NAME=eagle
-  fi
-  if [ $(hostname) == 'rhodes.hpc.nrel.gov' ]; then
+  elif [ $(hostname) == 'rhodes.hpc.nrel.gov' ]; then
     MACHINE_NAME=rhodes
   elif [ $(hostname) == 'jrood-31712s.nrel.gov' ]; then
     MACHINE_NAME=mac
@@ -428,27 +418,22 @@ main() {
  
   # Set configurations to test for each machine
   declare -a CONFIGURATIONS
-  #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls'
+  #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[1]='gcc:7.4.0:false:master:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[3]='intel:18.0.4:false:develop:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[4]='clang:7.0.1:false:develop:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[1]='gcc:7.4.0:false:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[3]='intel:18.0.4:false:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[4]='clang:7.0.1:false:develop:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
-  elif [ "${MACHINE_NAME}" == 'peregrine' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[1]='intel:18.0.4:false:develop:develop:master:fftw;tioga;hypre;openfast'
-    NALU_WIND_TESTING_ROOT_DIR=/projects/windsim/exawind/nalu-wind-testing
-    INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:cuda'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:cuda'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:develop:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[1]='clang:9.0.0-apple:false:develop:develop:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[1]='clang:9.0.0-apple:false:develop:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else
     printf "\nMachine name not recognized.\n"
@@ -469,7 +454,7 @@ main() {
   printf "NORMS_DIR: ${NORMS_DIR}\n"
   printf "SPACK_ROOT: ${SPACK_ROOT}\n"
   printf "Testing configurations:\n"
-  printf " compiler_name:compiler_version:openmp_enabled:trilinos_branch:openfast_branch:tioga_branch:list_of_tpls\n"
+  printf " compiler_name:compiler_version:openmp_enabled:trilinos_branch:list_of_tpls\n"
   for CONFIGURATION in "${CONFIGURATIONS[@]}"; do
     printf " ${CONFIGURATION}\n"
   done
@@ -530,9 +515,7 @@ main() {
     COMPILER_VERSION=${CONFIG[1]}
     OPENMP_ENABLED=${CONFIG[2]}
     TRILINOS_BRANCH=${CONFIG[3]}
-    OPENFAST_BRANCH=${CONFIG[4]}
-    TIOGA_BRANCH=${CONFIG[5]}
-    LIST_OF_TPLS=${CONFIG[6]}
+    LIST_OF_TPLS=${CONFIG[4]}
  
     printf "\nRemoving previous test log for uploading to CDash...\n"
     cmd "rm ${LOGS_DIR}/nalu-wind-test-log.txt"
@@ -546,9 +529,7 @@ main() {
   printf "Final steps\n"
   printf "============================================================\n"
  
-  if [ "${MACHINE_NAME}" == 'peregrine' ] || \
-     [ "${MACHINE_NAME}" == 'eagle' ] || \
-     [ "${MACHINE_NAME}" == 'rhodes' ]; then
+  if [ "${MACHINE_NAME}" == 'eagle' ] || [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting permissions...\n"
     cmd "chmod -R a+rX,go-w ${NALU_WIND_TESTING_ROOT_DIR}"
   fi

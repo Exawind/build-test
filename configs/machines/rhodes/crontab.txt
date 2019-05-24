@@ -3,14 +3,14 @@ SHELL=/bin/bash
 #PeleC tests
 0 6 * * * /projects/ecp/combustion/pelec-testing/PeleRegressionTesting/NREL/test-cron-script.sh > /dev/null 2>&1
 #PeleC verification
-0 8 * * 0 /projects/ecp/combustion/pelec-testing/PeleRegressionTesting/NREL/pelec-mms/verify-cron-script.sh > /dev/null 2>&1
+#0 8 * * 0 /projects/ecp/combustion/pelec-testing/PeleRegressionTesting/NREL/pelec-mms/verify-cron-script.sh > /dev/null 2>&1
 
 #PeleC update PeleRegressionTesting
 0 0 * * * /bin/bash -c "cd /projects/ecp/combustion/pelec-testing-2/PeleRegressionTesting && ./NREL/ctest/update-regression-test-repo.sh > /projects/ecp/combustion/pelec-testing-2/logs/last-pele-regression-testing-repo-update.txt 2>&1"
 #PeleC CTest
-0 7 * * * /projects/ecp/combustion/pelec-testing-2/PeleRegressionTesting/NREL/ctest/test-pelec-rhodes-cron.sh > /dev/null 2>&1
+0 7 * * * /projects/ecp/combustion/pelec-testing-2/PeleRegressionTesting/NREL/ctest/test-pelec-cron.sh > /dev/null 2>&1
 
-#Nalu update NaluSpack
+#Nalu update build-test
 0 0 * * * /bin/bash -c "cd /projects/ecp/exawind/nalu-wind-testing/build-test && ./test-scripts/update-build-test-repo.sh > /projects/ecp/exawind/nalu-wind-testing/logs/last-nalu-wind-build-test-repo-update.txt 2>&1"
 #Nalu tests
-0 1 * * * /projects/ecp/exawind/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-rhodes-cron.sh 2>&1
+0 1 * * * /projects/ecp/exawind/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-cron.sh 2>&1

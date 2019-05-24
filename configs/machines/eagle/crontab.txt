@@ -1,0 +1,5 @@
+SHELL=/bin/bash
+#Nalu-Wind update build-test repo
+0 0 * * * /bin/bash -c "cd /projects/hfm/exawind/nalu-wind-testing/build-test && ./test-scripts/update-build-test-repo.sh > /projects/hfm/exawind/nalu-wind-testing/logs/last-update-build-test-rep.txt 2>&1"
+#Nalu-Wind tests
+0 1 * * * /projects/hfm/exawind/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-cron.sh > /projects/hfm/exawind/nalu-wind-testing/logs/last-nalu-wind-test-job.txt 2>&1

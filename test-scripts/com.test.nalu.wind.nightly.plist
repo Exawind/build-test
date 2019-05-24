@@ -7,7 +7,7 @@
 
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/jrood/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-mac-cron.sh</string>
+    <string>/Users/jrood/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-cron.sh</string>
   </array>
 
   <key>UserName</key>

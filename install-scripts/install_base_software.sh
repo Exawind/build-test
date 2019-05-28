@@ -38,7 +38,10 @@ case "${MYHOSTNAME}" in
 esac
 
 #el3 - mpich 3.3
-DATE=2019-05-08
+DATE=2019-05-23
+
+#el3 - mpich 3.3
+#DATE=2019-05-08
 
 #el1 - mpich 3.3
 #DATE=2019-01-10
@@ -169,9 +172,10 @@ do
     done
 
     printf "\nInstalling Nalu-Wind stuff using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION}"
+    cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_NAME}@${COMPILER_VERSION} ^python@3.7.3"
 
-    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.6.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
+    (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack --color never find -L netcdf@4.6.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | cut -d " " -f1))
+    #(set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L netcdf@4.6.1 %${COMPILER_NAME}@${COMPILER_VERSION} ^hdf5+cxx+hl | grep netcdf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
     # It seems something has changed in the percept repo, and I need to update percept in spack
     #cmd "spack install percept %${COMPILER_NAME}@${COMPILER_VERSION} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
     cmd "spack install masa %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -182,7 +186,7 @@ do
       cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install cuda@10.0.130 %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install cuda@9.2.88 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install cudnn %${COMPILER_NAME}@${COMPILER_VERSION}"
+      cmd "spack install cudnn@7.5.1-10.0-x86_64 %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
     #cmd "spack install paraview+mpi+python+osmesa %${COMPILER_NAME}@${COMPILER_VERSION}"
     #cmd "spack install petsc %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -215,6 +219,3 @@ printf "\nDone!\n"
 
 # Other final manual customizations:
 # - Rename necessary module files and set defaults
-# - Use downloadable Paraview for dav node; add module
-# - Use downloadable Visit for dav node; add module
-# - Add visit server module manually, and add ld_library_path stuff to internallauncher

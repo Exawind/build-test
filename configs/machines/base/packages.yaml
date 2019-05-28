@@ -1,0 +1,42 @@
+packages:
+  libxml2:
+    version: [2.9.8]
+  cmake:
+    version: [3.13.4]
+  boost:
+    version: [1.68.0]
+  netcdf:
+    version: [4.6.1]
+    variants: maxdims=65536 maxvars=524288
+  parallel-netcdf:
+    version: [1.8.0]
+  hdf5:
+    version: [1.10.4]
+    variants: +cxx+hl
+  superlu:
+    version: [4.3]
+  openmpi:
+    version: [3.1.4]
+  mpich:
+    version: [3.3]
+  openfast:
+    version: [develop]
+  intel-mpi:
+    version: [2018.4.274]
+  intel-mkl:
+    version: [2018.4.274]
+  yaml-cpp:
+    version: [0.6.2]
+  netlib-lapack:
+    version: [3.8.0]
+  trilinos:
+    variants: ~python~complex+explicit_template_instantiation~float~fortran~openmp+shared~xsdkflags+boost~cgns+exodus+gtest+hdf5~hypre~metis~mumps+pnetcdf~suite-sparse~superlu-dist+superlu~x11+zlib~alloptpkgs~amesos+amesos2~anasazi~aztec+belos~epetra~epetraext~ifpack+ifpack2~intrepid~intrepid2~isorropia+kokkos~ml~minitensor+muelu~nox~piro~phalanx~rol~rythmos~sacado~shylu+stk+shards~teko~tempus+teuchos+tpetra+zoltan+zoltan2~dtk~fortrilinos
+  all:
+    compiler: [gcc, intel, clang]
+    # Spack uses build_type=RelWithDebInfo by default for CMake packages
+    # and creates huge binaries unless you do this:
+    variants: build_type=Release
+    providers:
+      mpi: [mpich, openmpi, intel-mpi]
+      blas: [netlib-lapack, intel-mkl]
+      lapack: [netlib-lapack, intel-mkl]

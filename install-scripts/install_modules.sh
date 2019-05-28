@@ -90,105 +90,54 @@ do
 
   # Load necessary modules
   printf "\nLoading modules...\n"
+  cmd "module purge"
+  cmd "module unuse ${MODULEPATH}"
   if [ "${MACHINE}" == 'eagle' ]; then
-    cmd "module purge"
-    cmd "module unuse ${MODULEPATH}"
     cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
-    cmd "module load git"
-    cmd "module load python"
-    cmd "module load curl"
-    cmd "module list"
+    for MODULE in git python curl; do
+      cmd "module load ${MODULE}"
+    done
     printf "\nMaking and setting TMPDIR to disk...\n"
     cmd "mkdir -p /scratch/${USER}/.tmp"
     cmd "export TMPDIR=/scratch/${USER}/.tmp"
   elif [ "${MACHINE}" == 'rhodes' ]; then
-    cmd "module purge"
-    cmd "module unuse ${MODULEPATH}"
     cmd "module use /opt/utilities/modules"
-    cmd "module load unzip"
-    cmd "module load patch"
-    cmd "module load bzip2"
-    cmd "module load cmake"
-    cmd "module load git"
-    cmd "module load texinfo"
-    cmd "module load flex"
-    cmd "module load bison"
-    cmd "module load wget"
-    cmd "module load bc"
-    cmd "module load python"
-    cmd "module list"
+    for MODULE in unzip patch bzip2 cmake git texinfo flex bison wget bc python; do
+      cmd "module load ${MODULE}"
+    done
     cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
   fi
+  cmd "module list"
 
   if [ "${TYPE}" == 'compilers' ]; then
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling ${TYPE} using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-      cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install gcc@9.1.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install gcc@8.3.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install gcc@7.4.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install gcc@6.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install gcc@5.5.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install gcc@4.9.4 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install gcc@4.8.5 %${COMPILER_NAME}@${COMPILER_VERSION}"
       # LLVM 8 requires > GCC 4 and we currently build the compilers with the system GCC 4.8.5
-      #cmd "spack install llvm@8.0.0 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install llvm@7.0.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install llvm@6.0.1 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      for PACKAGE in binutils gcc@9.1.0 gcc@8.3.0 gcc@7.4.0 gcc@6.5.0 gcc@5.5.0 gcc@4.9.4 gcc@4.8.5 llvm llvm@7.0.1 llvm@6.0.1 numactl; do
+        cmd "spack install ${PACKAGE} %${COMPILER_NAME}@${COMPILER_VERSION}"
+      done
       cmd "spack install intel-parallel-studio@cluster.2019.3+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install intel-parallel-studio@cluster.2018.4+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector+mkl+mpi+vtune %${COMPILER_NAME}@${COMPILER_VERSION}"
+      # The PGI compilers need a libnuma.so.1.0.0 copied into its lib directory and symlinked to libnuma.so and libnuma.so.1
       cmd "spack install pgi@19.4+nvidia %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install pgi@18.10+nvidia %${COMPILER_NAME}@${COMPILER_VERSION}"
-      # The PGI compilers need a libnuma.so.1.0.0 copied into its lib directory and symlinked to libnuma.so and libnuma.so.1
-      cmd "spack install numactl %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
   elif [ "${TYPE}" == 'utilities' ]; then
     if [ ${COMPILER_NAME} == 'gcc' ]; then
-      if [ "${MACHINE}" == 'rhodes' ]; then
-        printf "\nInstalling ${TYPE} needed on rhodes with ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-        cmd "spack install environment-modules %${COMPILER_NAME}@${COMPILER_VERSION}"
-        cmd "spack install unzip %${COMPILER_NAME}@${COMPILER_VERSION}"
-        cmd "spack install bc %${COMPILER_NAME}@${COMPILER_VERSION}"
-        cmd "spack install patch %${COMPILER_NAME}@${COMPILER_VERSION}"
-        cmd "spack install bzip2 %${COMPILER_NAME}@${COMPILER_VERSION}"
-        cmd "spack install flex %${COMPILER_NAME}@${COMPILER_VERSION}"
-        cmd "spack install bison %${COMPILER_NAME}@${COMPILER_VERSION}"
-      fi
-
       printf "\nInstalling ${TYPE} using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
-      cmd "spack install curl %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install wget %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install cmake %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install emacs %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install vim %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install git %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install tmux %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install screen %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install global %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install python@2.7.16 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install python@3.7.3 %${COMPILER_NAME}@${COMPILER_VERSION}"
+      for PACKAGE in environment-modules unzip bc patch bzip2 flex bison curl wget cmake emacs vim git tmux screen global python@2.7.16 python@3.7.3 htop makedepend cppcheck texinfo stow zsh strace gdb rsync xterm ninja@kitware gnuplot; do
+        cmd "spack install ${PACKAGE} %${COMPILER_NAME}@${COMPILER_VERSION}"
+      done
       cmd "spack install texlive scheme=full %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install htop %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install makedepend %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install cppcheck %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install texinfo %${COMPILER_NAME}@${COMPILER_VERSION}"
       # Remove gtkplus dependency from ghostscript
       cmd "spack install image-magick %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install stow %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install zsh %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "spack install libxml2+python %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install strace %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install ninja@kitware %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install gdb %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install rsync %${COMPILER_NAME}@${COMPILER_VERSION}"
-      cmd "spack install xterm %${COMPILER_NAME}@${COMPILER_VERSION}"
       cmd "module load texinfo"
       cmd "module load texlive"
       cmd "module load flex"
       cmd "spack install flex@2.5.39 %${COMPILER_NAME}@${COMPILER_VERSION}"
-      (set -x; spack install gnutls %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack find -L autoconf %${COMPILER_NAME}@${COMPILER_VERSION} | grep autoconf | awk -F" " '{print $1}' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"))
-      cmd "spack install gnuplot %${COMPILER_NAME}@${COMPILER_VERSION}"
+      (set -x; spack install gnutls %${COMPILER_NAME}@${COMPILER_VERSION} ^/$(spack --color never find -L autoconf %${COMPILER_NAME}@${COMPILER_VERSION} | grep autoconf | cut -d " " -f1))
       if [ "${MACHINE}" != 'rhodes' ]; then
         cmd "spack install likwid %${COMPILER_NAME}@${COMPILER_VERSION}"
       fi
@@ -200,18 +149,18 @@ do
   printf "\nDone installing ${TYPE} with ${COMPILER_NAME}@${COMPILER_VERSION} at $(date).\n"
 done
 
-printf "\nSetting permissions...\n"
-if [ "${MACHINE}" == 'eagle' ]; then
-  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
-  cmd "chgrp -R n-ecom ${INSTALL_DIR}"
-elif [ "${MACHINE}" == 'rhodes' ]; then
-  cmd "chgrp windsim /opt"
-  cmd "chgrp windsim /opt/${TYPE}"
-  cmd "chgrp -R windsim ${INSTALL_DIR}"
-  cmd "chmod a+rX,go-w /opt"
-  cmd "chmod a+rX,go-w /opt/${TYPE}"
-  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
-fi
+#printf "\nSetting permissions...\n"
+#if [ "${MACHINE}" == 'eagle' ]; then
+#  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
+#  cmd "chgrp -R n-ecom ${INSTALL_DIR}"
+#elif [ "${MACHINE}" == 'rhodes' ]; then
+#  cmd "chgrp windsim /opt"
+#  cmd "chgrp windsim /opt/${TYPE}"
+#  cmd "chgrp -R windsim ${INSTALL_DIR}"
+#  cmd "chmod a+rX,go-w /opt"
+#  cmd "chmod a+rX,go-w /opt/${TYPE}"
+#  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
+#fi
 
 printf "\n$(date)\n"
 printf "\nDone!\n"

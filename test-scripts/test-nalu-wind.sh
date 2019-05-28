@@ -40,9 +40,9 @@ test_configuration() {
     if [ "${COMPILER_VERSION}" == '4.9.4' ]; then
       MPI_ID="openmpi@1.10.7"
     fi
-    if [ "${MACHINE_NAME}" == 'eagle' ]; then
-      MPI_ID="openmpi@3.1.3"
-    fi
+    #if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    #  MPI_ID="openmpi@3.1.3"
+    #fi
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     # For intel, we want to build against intel-mpi and intel-mkl
     MPI_ID="intel-mpi"

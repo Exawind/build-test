@@ -38,7 +38,7 @@ case "${MYHOSTNAME}" in
   ;;
 esac
 
-if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
+if [ "${MACHINE}" == 'eagle' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="4.8.5"
 elif [ "${MACHINE}" == 'rhodes' ]; then
@@ -90,7 +90,7 @@ do
 
   # Load necessary modules
   printf "\nLoading modules...\n"
-  if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
+  if [ "${MACHINE}" == 'eagle' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
     cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
@@ -121,7 +121,6 @@ do
   fi
 
   if [ "${TYPE}" == 'compilers' ]; then
-    printf "\nInstalling compilers...\n"
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling ${TYPE} using ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
       cmd "spack install binutils %${COMPILER_NAME}@${COMPILER_VERSION}"
@@ -144,9 +143,7 @@ do
       # The PGI compilers need a libnuma.so.1.0.0 copied into its lib directory and symlinked to libnuma.so and libnuma.so.1
       cmd "spack install numactl %${COMPILER_NAME}@${COMPILER_VERSION}"
     fi
-  fi
-
-  if [ "${TYPE}" == 'utilities' ]; then
+  elif [ "${TYPE}" == 'utilities' ]; then
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       if [ "${MACHINE}" == 'rhodes' ]; then
         printf "\nInstalling ${TYPE} needed on rhodes with ${COMPILER_NAME}@${COMPILER_VERSION}...\n"
@@ -204,7 +201,7 @@ do
 done
 
 printf "\nSetting permissions...\n"
-if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
+if [ "${MACHINE}" == 'eagle' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
   cmd "chgrp -R n-ecom ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then

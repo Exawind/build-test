@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-# Script for installation of ECP related software on Eagle, Peregrine, and Rhodes
+# Script for installation of ECP related software on Eagle and Rhodes
 
 set -e
 TYPE=software
@@ -23,9 +23,6 @@ printf "============================================================\n"
 
 # Find machine we're on
 case "${NREL_CLUSTER}" in
-  peregrine)
-    MACHINE=peregrine
-  ;;
   eagle)
     MACHINE=eagle
   ;;
@@ -55,7 +52,7 @@ DATE=2019-05-23
 #ed1 - ompi 3.1.3
 #DATE=2018-11-21
  
-if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
+if [ "${MACHINE}" == 'eagle' ]; then
   INSTALL_DIR=/nopt/nrel/ecom/hpacf/${TYPE}/${DATE}
   GCC_COMPILER_VERSION="7.4.0"
   GCC_COMPILER_MODULE="gcc/7.4.0"
@@ -121,7 +118,7 @@ do
   cmd "source ${BUILD_TEST_DIR}/configs/shared-constraints.sh"
 
   printf "\nLoading modules...\n"
-  if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
+  if [ "${MACHINE}" == 'eagle' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
     cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-${DATE}"
@@ -202,7 +199,7 @@ do
 done
 
 printf "\nSetting permissions...\n"
-if [ "${MACHINE}" == 'eagle' ] || [ "${MACHINE}" == 'peregrine' ]; then
+if [ "${MACHINE}" == 'eagle' ]; then
   cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
   cmd "chgrp -R n-ecom ${INSTALL_DIR}"
 elif [ "${MACHINE}" == 'rhodes' ]; then

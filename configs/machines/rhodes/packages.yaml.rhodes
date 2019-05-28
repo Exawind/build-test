@@ -1,0 +1,13 @@
+packages:
+  binutils:
+    version: [2.29.1]
+  mesa:
+    variants: swr=avx2
+  fftw:
+    variants: +mpi+fma simd=avx2
+  all:
+    compiler: [gcc, clang, intel]
+    providers:
+      mpi: [openmpi, intel-mpi]
+      blas: [netlib-lapack, intel-mkl]
+      lapack: [netlib-lapack, intel-mkl]

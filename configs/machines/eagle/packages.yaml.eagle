@@ -1,0 +1,20 @@
+packages:
+  mesa:
+    variants: swr=skx
+  slurm:
+    paths:
+      slurm@18.08.3: /nopt/slurm/current
+    buildable: False
+  cuda:
+    paths:
+      cuda@10.0.130: /nopt/nrel/apps/cuda/10.0.130
+      cuda@9.2.88: /nopt/nrel/apps/cuda/9.2.88
+    buildable: False
+  openmpi:
+    variants: +pmi +cuda fabrics=verbs schedulers=slurm
+  mpich:
+    variants: netmod=mxm +hydra +slurm
+  hwloc:
+    variants: +cuda ~nvml ~gl
+  fftw:
+    variants: +mpi+fma simd=avx512

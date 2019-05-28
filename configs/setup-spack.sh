@@ -17,10 +17,10 @@ if [ ${OS} == 'Darwin' ]; then
   OSX=$(sw_vers -productVersion)
   case "${OSX}" in
     10.12*)
-      MACHINE=mac_sierra
+      MACHINE=mac
     ;;
     10.13*)
-      MACHINE=mac_high_sierra
+      MACHINE=mac
     ;;
   esac
 elif [ ${OS} == 'Linux' ]; then
@@ -40,18 +40,20 @@ fi
 # Copy machine-specific configuration for Spack if we recognize the machine
 if [ "${MACHINE}" == 'eagle' ] || \
    [ "${MACHINE}" == 'rhodes' ] || \
-   [ "${MACHINE}" == 'mac_sierra' ] || \
-   [ "${MACHINE}" == 'mac_high_sierra' ]; then
+   [ "${MACHINE}" == 'mac' ]; then
 
   printf "Machine is detected as ${MACHINE}.\n"
 
   #All machines do this
-  (set -x; cp machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/)
+  (set -x; cp machines/base/*.yaml ${SPACK_ROOT}/etc/spack/)
+  #(set -x; cp machines/${MACHINE}/*.yaml ${SPACK_ROOT}/etc/spack/)
   (set -x; cp custom-package-files/parallel-netcdf/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/parallel-netcdf/package.py)
   (set -x; cp custom-package-files/paraview/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/paraview/package.py)
 
   #Extra stuff for eagle
   if [ ${MACHINE} == 'eagle' ]; then
+    (set -x; mkdir ${SPACK_ROOT}/etc/spack/linux)
+    (set -x; cp machines/${MACHINE}/packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/linux/packages.yaml)
     (set -x; cp custom-package-files/mpich/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/mpich/package.py)
     (set -x; cp custom-package-files/trilinos/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py)
     (set -x; cp custom-package-files/nalu-wind/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/nalu-wind/package.py)
@@ -61,8 +63,15 @@ if [ "${MACHINE}" == 'eagle' ] || \
 
   #Extra stuff for rhodes
   if [ ${MACHINE} == 'rhodes' ]; then
+    (set -x; mkdir ${SPACK_ROOT}/etc/spack/linux)
+    (set -x; cp machines/${MACHINE}/packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/linux/packages.yaml)
     (set -x; cp machines/${MACHINE}/compilers.yaml.software ${SPACK_ROOT}/etc/spack/compilers.yaml)
     (set -x; cp machines/${MACHINE}/modules.yaml.software ${SPACK_ROOT}/etc/spack/modules.yaml)
+  fi
+
+  if [ "${MACHINE}" == 'mac' ]; then
+    (set -x; mkdir ${SPACK_ROOT}/etc/spack/darwin)
+    (set -x; cp machines/${MACHINE}/packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/darwin/packages.yaml)
   fi
 
   #Extra stuff for mira
@@ -75,10 +84,6 @@ if [ "${MACHINE}" == 'eagle' ] || \
   #  (set -x; cp -R machines/${MACHINE}/superlu ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   #  (set -x; cp -R machines/${MACHINE}/trilinos ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
   #  (set -x; cp -R machines/${MACHINE}/yaml-cpp ${SPACK_ROOT}/var/spack/repos/builtin/packages/)
-  #fi
-
-  #if [ "${MACHINE}" == 'mac_sierra' ] || [ "${MACHINE}" == 'mac_high_sierra' ]; then
-    #nothing at the moment
   #fi
 else
   printf "\nMachine name not found.\n"

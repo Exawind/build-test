@@ -40,9 +40,9 @@ test_configuration() {
     if [ "${COMPILER_VERSION}" == '4.9.4' ]; then
       MPI_ID="openmpi@1.10.7"
     fi
-    #if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    #  MPI_ID="openmpi@3.1.3"
-    #fi
+    if [ "${MACHINE_NAME}" == 'eagle' ]; then
+      MPI_ID="openmpi@3.1.3"
+    fi
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     # For intel, we want to build against intel-mpi and intel-mkl
     MPI_ID="intel-mpi"
@@ -152,12 +152,11 @@ test_configuration() {
   #cmd "spack uninstall -a -y tioga %${COMPILER_ID} || true"
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
-  printf "\nUpdating and clean Trilinos stage directory (this is fine to error when tests are first run)...\n"
-  cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
-  #printf "\nUpdating OpenFAST (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd openfast@develop %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/develop && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
-  #printf "\nUpdating TIOGA (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd tioga@master %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
+  printf "\nUpdating and cleaning Trilinos stage directory (this is fine to error when tests are first run)...\n"
+  # Rather than trying to get the exact spec for `spack cd` to work, we use `spack find` which is more forgiving for finding the hash for the specific trilinos stage we need
+  TRILINOS_HASH=$(spack --color never find -L ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} | grep trilinos | cut -d " " -f1)
+  cmd "spack cd /${TRILINOS_HASH} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
+  #cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}" # Change directories to avoid any stale file handles
 
   TPL_VARIANTS=''

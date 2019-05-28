@@ -38,9 +38,9 @@ packages:
   trilinos:
     variants: ~python~complex+explicit_template_instantiation~float~fortran~openmp+shared~xsdkflags+boost~cgns+exodus+gtest+hdf5~hypre~metis~mumps+pnetcdf~suite-sparse~superlu-dist+superlu~x11+zlib~alloptpkgs~amesos+amesos2~anasazi~aztec+belos~epetra~epetraext~ifpack+ifpack2~intrepid~intrepid2~isorropia+kokkos~ml~minitensor+muelu~nox~piro~phalanx~rol~rythmos~sacado~shylu+stk+shards~teko~tempus+teuchos+tpetra+zoltan+zoltan2~dtk~fortrilinos
   all:
-    compiler: [gcc@4.8.5, gcc@4.9.4, gcc@5.5.0, gcc@6.5.0, gcc@7.4.0, gcc@8.3.0, clang@7.0.1, clang@6.0.1, intel@18.0.4]
+    compiler: [gcc, clang, intel]
     variants: build_type=Release
     providers:
-      mpi: [openmpi@3.1.4, intel-mpi@2018.4.274]
-      blas: [netlib-lapack@3.8.0, intel-mkl@s2018.4.274]
-      lapack: [netlib-lapack@3.8.0, intel-mkl@2018.4.274]
+      mpi: [openmpi, intel-mpi]
+      blas: [netlib-lapack, intel-mkl]
+      lapack: [netlib-lapack, intel-mkl]

@@ -9,11 +9,15 @@ config:
     dotkit: $spack/share/spack/dotkit
   build_stage:
     - $spack/var/spack/stage
-  # Use single source cache per user to avoid unnecessary downloading across spack installations
   source_cache: ~/.spack/downloads
   misc_cache: ~/.spack/cache
   verify_ssl: true
+  install_missing_compilers: False
   checksum: true
   dirty: false
+  build_language: C
   locks: true
   # build_jobs: 4
+  ccache: false
+  db_lock_timeout: 120
+  package_lock_timeout: null

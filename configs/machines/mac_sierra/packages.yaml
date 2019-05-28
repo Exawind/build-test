@@ -38,6 +38,6 @@ packages:
   all:
     variants: build_type=Release
     providers:
-      mpi: [openmpi@3.1.3]
-      blas: [netlib-lapack@3.8.0]
-      lapack: [netlib-lapack@3.8.0]
+      mpi: [openmpi]
+      blas: [netlib-lapack]
+      lapack: [netlib-lapack]

@@ -1,6 +1,0 @@
-SHELL=/bin/bash
-
-#Nalu-Wind update build-test
-0 0 * * * /bin/bash -c "cd /home/jrood/nalu-wind-testing/build-test && ./test-scripts/update-build-test.sh > /home/jrood/nalu-wind-testing/logs/last-build-test-update.txt 2>&1"
-#Nalu-Wind tests
-0 1 * * * /home/jrood/nalu-wind-testing/build-test/test-scripts/test-nalu-wind-merlin-cron.sh > /home/jrood/nalu-wind-testing/logs/last-nalu-wind-test-job.txt 2>&1

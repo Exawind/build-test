@@ -154,6 +154,7 @@ test_configuration() {
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating and cleaning Trilinos stage directory (this is fine to error when tests are first run)...\n"
   # Rather than trying to get the exact spec for `spack cd` to work, we use `spack find` which is more forgiving for finding the hash for the specific trilinos stage we need
+  (set -x; spack --color never find -L ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} | grep trilinos | cut -d " " -f1)
   TRILINOS_HASH=$(spack --color never find -L ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} | grep trilinos | cut -d " " -f1)
   cmd "spack cd /${TRILINOS_HASH} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
   #cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"

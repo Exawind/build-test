@@ -34,15 +34,7 @@ test_configuration() {
   BLAS_ID=''
   BLAS_CONSTRAINTS=''
   if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
-    # OpenMPI 3.1.3 hangs at run time unless it was built with GCC > 7.3.0
-    # so we use an older OpenMPI for GCC 4.9.4.
-    MPI_ID="openmpi"
-    if [ "${COMPILER_VERSION}" == '4.9.4' ]; then
-      MPI_ID="openmpi@1.10.7"
-    fi
-    if [ "${MACHINE_NAME}" == 'eagle' ]; then
-      MPI_ID="openmpi@3.1.3"
-    fi
+    MPI_ID="openmpi@3.1.4"
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     # For intel, we want to build against intel-mpi and intel-mkl
     MPI_ID="intel-mpi"
@@ -93,11 +85,10 @@ test_configuration() {
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
-    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-2018-11-21"
-    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules-2018-11-21"
+    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-2019-05-23"
+    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules-2019-05-23"
     cmd "module load python"
     cmd "module load git"
-    cmd "module load cppcheck"
     cmd "module load binutils"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
@@ -290,7 +281,7 @@ test_configuration() {
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nRunning cppcheck static analysis (Nalu-Wind not updated until after this step)...\n"
     cmd "rm ${LOGS_DIR}/nalu-wind-static-analysis.txt"
-    cmd "cppcheck --enable=all --quiet -j 8 --output-file=${LOGS_DIR}/nalu-wind-static-analysis.txt -I ${NALU_WIND_DIR}/include ${NALU_WIND_DIR}/src"
+    cmd "cppcheck --enable=all --quiet -j 16 --output-file=${LOGS_DIR}/nalu-wind-static-analysis.txt -I ${NALU_WIND_DIR}/include ${NALU_WIND_DIR}/src"
     cmd "printf \"%s warnings\n\" \"$(wc -l < ${LOGS_DIR}/nalu-wind-static-analysis.txt | xargs echo -n)\" >> ${LOGS_DIR}/nalu-wind-static-analysis.txt"
     CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${LOGS_DIR}/nalu-wind-static-analysis.txt ${CTEST_ARGS}"
   fi
@@ -422,7 +413,7 @@ main() {
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:cuda'
+    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:cuda'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then

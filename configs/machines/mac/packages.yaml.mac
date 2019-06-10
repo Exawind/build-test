@@ -1,7 +1,7 @@
 packages:
   cmake:
     paths:
-      cmake@3.14.3: /usr/local/Cellar/cmake/3.14.3
+      cmake@3.14.5: /usr/local/Cellar/cmake/3.14.5
     buildable: False
   pkg-config:
     paths:

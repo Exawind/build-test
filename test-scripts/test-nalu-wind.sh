@@ -75,8 +75,8 @@ test_configuration() {
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
-    cmd "module use /opt/compilers/modules"
-    cmd "module use /opt/utilities/modules"
+    cmd "module use /opt/compilers/modules-2019-05-08"
+    cmd "module use /opt/utilities/modules-2019-05-08"
     cmd "module load unzip"
     cmd "module load patch"
     cmd "module load bzip2"
@@ -98,8 +98,8 @@ test_configuration() {
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
-    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
-    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
+    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-2018-11-21"
+    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules-2018-11-21"
     cmd "module load python"
     cmd "module load git"
     cmd "module load cppcheck"

@@ -96,6 +96,22 @@ compilers:
     spec: gcc@8.3.0
     target: x86_64
 - compiler:
+    extra_rpaths:
+     - /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-9.1.0-djxriliqdub3h3t34qe4kqjesxylrfut/lib64
+    flags:
+      cflags: -O2 -march=native -mtune=native
+      cxxflags: -O2 -march=native -mtune=native
+      fflags: -O2 -march=native -mtune=native
+    modules: []
+    operating_system: centos7
+    paths:
+      cc:  /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-9.1.0-djxriliqdub3h3t34qe4kqjesxylrfut/bin/gcc
+      cxx: /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-9.1.0-djxriliqdub3h3t34qe4kqjesxylrfut/bin/g++
+      f77: /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-9.1.0-djxriliqdub3h3t34qe4kqjesxylrfut/bin/gfortran
+      fc:  /opt/compilers/2019-05-08/spack/opt/spack/linux-centos7-x86_64/gcc-4.8.5/gcc-9.1.0-djxriliqdub3h3t34qe4kqjesxylrfut/bin/gfortran
+    spec: gcc@9.1.0
+    target: x86_64
+- compiler:
     environment:
       set:
         INTEL_LICENSE_FILE: 28519@license-1.hpc.nrel.gov

@@ -64,7 +64,7 @@ test_configuration() {
 
   if [ "${MACHINE_NAME}" == 'rhodes' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
     TRILINOS="trilinos"
-  else
+  elif [ "${MACHINE_NAME}" == 'mac' ]; then
     # Define TRILINOS constraints and preferred variants from a single location for all scripts.
     cmd "source ${BUILD_TEST_DIR}/configs/shared-constraints.sh"
   fi
@@ -100,7 +100,7 @@ test_configuration() {
     cmd "module unuse ${MODULEPATH}"
     cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
     cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
-    cmd "module load python/2.7.15"
+    cmd "module load python"
     cmd "module load git"
     cmd "module load cppcheck"
     cmd "module load binutils"
@@ -144,7 +144,8 @@ test_configuration() {
   fi
 
   # Store hash from Trilinos before it's uninstalled
-  TRILINOS_HASH=$(spack --color never find -L ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} | grep trilinos | cut -d " " -f1)
+  #INSTALLED_TRILINOS_HASH=$(spack --color never find -L ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} | grep trilinos | cut -d " " -f1)
+  #printf "\nINSTALLED_TRILINOS_HASH=${INSTALLED_TRILINOS_HASH}\n"
 
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
@@ -156,9 +157,15 @@ test_configuration() {
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating and cleaning Trilinos stage directory (this is fine to error when tests are first run)...\n"
-  # Rather than trying to get the exact spec for `spack cd` to work, we use `spack find` which is more forgiving for finding the hash for the specific trilinos stage we need
-  cmd "spack cd /${TRILINOS_HASH} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
-  #cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf spack-build spack-build.out spack-build.env || true"
+  TRILINOS_STAGE_DIR=$(spack location -s ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS})
+  printf "\nTRILINOS_STAGE_DIR=${TRILINOS_STAGE_DIR}\n"
+  # Update Trilinos using spack location -s stage dir
+  cmd "cd ${TRILINOS_STAGE_DIR} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"
+  # Update Trilinos using the hash from the previous install
+  #cmd "spack cd /${INSTALLED_TRILINOS_HASH} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"
+  # Update Trilinos using spack cd
+  #cmd "spack cd ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"
+
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}" # Change directories to avoid any stale file handles
 
   TPL_VARIANTS=''

@@ -150,12 +150,14 @@ test_configuration() {
   TPLS=(${LIST_OF_TPLS//;/ })
   for TPL in ${TPLS[*]}; do
     TPL_VARIANTS+="+${TPL}"
-    if [ "${TPL}" == 'openfast' ] ; then
-      TPL_CONSTRAINTS="^openfast@develop ${TPL_CONSTRAINTS}"
-    fi
-    if [ "${TPL}" == 'tioga' ] ; then
-      TPL_CONSTRAINTS="^tioga@master ${TPL_CONSTRAINTS}"
-    fi
+    # Currently don't need any extra constraints for openfast
+    #if [ "${TPL}" == 'openfast' ] ; then
+    #  TPL_CONSTRAINTS="^openfast@develop ${TPL_CONSTRAINTS}"
+    #fi
+    # Currently don't need any extra constraints for tioga
+    #if [ "${TPL}" == 'tioga' ] ; then
+    #  TPL_CONSTRAINTS="^tioga@master ${TPL_CONSTRAINTS}"
+    #fi
     # Currently don't need any extra constraints for catalyst
     #if [ "${TPL}" == 'catalyst' ] ; then
     #  TPL_CONSTRAINTS="${TPL_CONSTRAINTS}"

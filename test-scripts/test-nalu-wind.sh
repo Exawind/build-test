@@ -359,7 +359,7 @@ test_configuration() {
   # Set essential arguments for the ctest cmake configure step
   CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DCMAKE_BUILD_TYPE=RelWithDebInfo ${CMAKE_CONFIGURE_ARGS}"
 
-  # Set looser diff tolerance for GCC 7.3.0 cases that have more optimization flags on
+  # Set looser diff tolerance for GCC 7 cases that have more optimization flags on
   if [ "${COMPILER_ID}" == 'gcc@7.4.0' ] && [ "${MACHINE_NAME}" != 'mac' ]; then
     CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.0005 ${CMAKE_CONFIGURE_ARGS}"
   fi
@@ -426,7 +426,7 @@ main() {
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.3.0:false:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:fftw;tioga;hypre;openfast'
     CONFIGURATIONS[1]='clang:9.0.0-apple:false:develop:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else

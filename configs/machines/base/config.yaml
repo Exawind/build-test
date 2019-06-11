@@ -17,7 +17,7 @@ config:
   dirty: false
   build_language: C
   locks: true
-  # build_jobs: 4
+  build_jobs: 32
   ccache: false
   db_lock_timeout: 120
   package_lock_timeout: null

@@ -150,7 +150,7 @@ do
   elif [ "${TYPE}" == 'utilities' ]; then
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling ${TYPE} using ${COMPILER_ID}...\n"
-      for PACKAGE in environment-modules unzip bc patch bzip2 flex bison curl wget cmake emacs vim git tmux screen global python@2.7.16 python@3.7.3 htop makedepend cppcheck texinfo stow zsh strace gdb rsync xterm ninja@kitware gnuplot; do
+      for PACKAGE in environment-modules unzip bc patch bzip2 flex bison curl wget cmake emacs vim git tmux screen global python@2.7.16 python@3.7.3 htop makedepend cppcheck texinfo stow zsh strace gdb rsync xterm ninja@kitware gnuplot pkg-config; do
         cmd "spack install ${PACKAGE} %${COMPILER_ID}"
       done
       cmd "spack install texlive scheme=full %${COMPILER_ID}"

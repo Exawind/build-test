@@ -91,13 +91,11 @@ test_configuration() {
     cmd "module load python"
     cmd "module load git"
     cmd "module load binutils"
+    cmd "module load cuda"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
       cmd "module load ${INTEL_COMPILER_MODULE}"
-    fi
-    if [ "${MACHINE_NAME}" == 'eagle' ]; then
-      cmd "module load cuda"
     fi
   fi
 

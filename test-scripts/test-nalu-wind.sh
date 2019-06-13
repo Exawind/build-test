@@ -135,7 +135,7 @@ test_configuration() {
   printf "\nUpdating and cleaning Trilinos stage directory (this is fine to error when tests are first run)...\n"
   TRILINOS_STAGE_DIR=$(spack location -s ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS})
   printf "\nTRILINOS_STAGE_DIR=${TRILINOS_STAGE_DIR}\n"
-  # Update Trilinos using spack location -s stage dir
+  # Update Trilinos using spack location -s stage dir (This has been updated to spack-src in recent versions of Spack)
   cmd "cd ${TRILINOS_STAGE_DIR}/src && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"
   # Update Trilinos using the hash from the previous install
   #cmd "spack cd /${INSTALLED_TRILINOS_HASH} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"

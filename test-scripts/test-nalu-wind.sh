@@ -87,7 +87,7 @@ test_configuration() {
     cmd "module unuse ${MODULEPATH}"
     cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-2019-05-23"
     cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules-2019-05-23"
-    cmd "module use /nopt/nrel/ecom/hpacf/software/modules-2019-05-23"
+    cmd "module use /nopt/nrel/ecom/hpacf/software/modules-2019-05-23/gcc-7.4.0"
     cmd "module load python"
     cmd "module load git"
     cmd "module load binutils"

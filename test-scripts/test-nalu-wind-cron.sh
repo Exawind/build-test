@@ -26,7 +26,7 @@ LOG_DIR=${NALU_WIND_TESTING_ROOT_DIR}/logs
 TEST_SCRIPT=${NALU_WIND_TESTING_ROOT_DIR}/build-test/test-scripts/test-nalu-wind.sh
  
 if [ "${MACHINE_NAME}" == 'eagle' ]; then
-  cd ${LOG_DIR} && sbatch -J test-nalu-wind -N 1 -t 4:00:00 -A hfm -p standard -o "%x.o%j" --gres=gpu:1 ${TEST_SCRIPT}
+  cd ${LOG_DIR} && sbatch -J test-nalu-wind -N 1 -t 4:00:00 -A hfm -p short -o "%x.o%j" --gres=gpu:1 ${TEST_SCRIPT}
 elif [ "${MACHINE_NAME}" == 'mac' ]; then
   cd ${LOG_DIR} && nice ${TEST_SCRIPT} &> "test-nalu-wind-$(date +%Y-%m-%d).log"
 elif [ "${MACHINE_NAME}" == 'rhodes' ]; then

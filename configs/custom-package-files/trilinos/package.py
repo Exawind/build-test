@@ -28,7 +28,7 @@ class Trilinos(CMakePackage):
     url      = "https://github.com/trilinos/Trilinos/archive/trilinos-release-12-12-1.tar.gz"
     git      = "https://github.com/trilinos/Trilinos.git"
 
-    maintainers = ['aprokop']
+    maintainers = ['aprokop', 'keitat']
 
     # ###################### Versions ##########################
 
@@ -61,6 +61,8 @@ class Trilinos(CMakePackage):
     # Build options
     variant('complex',      default=False,
             description='Enable complex numbers in Trilinos')
+    variant('cuda',         default=False,
+            description='Enable CUDA')
     variant('explicit_template_instantiation',  default=True,
             description='Enable explicit template instantiation (ETI)')
     variant('float',        default=False,
@@ -71,7 +73,7 @@ class Trilinos(CMakePackage):
             description='Enable OpenMP')
     variant('shared',       default=True,
             description='Enables the build of shared libraries')
-    variant('debug',        default=False,
+    variant('debug',       default=False,
             description='Enable runtime safety and debug checks')
     variant('xsdkflags',    default=False,
             description='Compile using the default xSDK configuration')
@@ -81,10 +83,8 @@ class Trilinos(CMakePackage):
             description='Compile with Boost')
     variant('cgns',         default=False,
             description='Enable CGNS')
-    variant('cuda',         default=False,
-            description='Enable CUDA')
-    variant('exodus',       default=True,
-            description='Compile with Exodus from SEACAS')
+    variant('adios2',       default=False,
+            description='Enable ADIOS2')
     variant('gtest',        default=True,
             description='Compile with Gtest')
     variant('hdf5',         default=True,
@@ -121,10 +121,17 @@ class Trilinos(CMakePackage):
             description='Compile with Aztec')
     variant('belos',        default=True,
             description='Compile with Belos')
+    # chaco is disabled by default. As of 12.14.1 libchaco.so
+    # has the global symbol divide (and maybe others) that can
+    # lead to symbol clash.
+    variant('chaco',        default=False,
+            description='Compile with Chaco from SEACAS')
     variant('epetra',       default=True,
             description='Compile with Epetra')
     variant('epetraext',    default=True,
             description='Compile with EpetraExt')
+    variant('exodus',       default=True,
+            description='Compile with Exodus from SEACAS')
     variant('ifpack',       default=True,
             description='Compile with Ifpack')
     variant('ifpack2',      default=True,
@@ -143,8 +150,6 @@ class Trilinos(CMakePackage):
             description='Compile with MiniTensor')
     variant('muelu',        default=True,
             description='Compile with Muelu')
-    variant('ninja',        default=False,
-            description='Use Ninja as CMake generator')
     variant('nox',          default=False,
             description='Compile with NOX')
     variant('piro',         default=False,
@@ -161,6 +166,8 @@ class Trilinos(CMakePackage):
             description='Compile with STK')
     variant('shards',       default=False,
             description='Compile with Shards')
+    variant('shylu',        default=False,
+            description='Compile with ShyLU')
     variant('teko',         default=False,
             description='Compile with Teko')
     variant('tempus',       default=False,
@@ -189,6 +196,7 @@ class Trilinos(CMakePackage):
              git='https://github.com/ornl-cees/DataTransferKit.git',
              branch='master',
              placement='DataTransferKit',
+             submodules=True,
              when='+dtk @develop')
     resource(name='fortrilinos',
              git='https://github.com/trilinos/ForTrilinos.git',
@@ -273,7 +281,9 @@ class Trilinos(CMakePackage):
         '+shared', when='+stk platform=darwin',
         msg='Cannot build Trilinos with STK as a shared library on Darwin.'
     )
-
+    # ADIOS2 was only added after v12.14.1
+    conflicts('+adios2', when='@:12.14.1')
+    conflicts('+adios2', when='@xsdk-0.2.0')
     # ###################### Dependencies ##########################
 
     # Everything should be compiled position independent (-fpic)
@@ -286,8 +296,6 @@ class Trilinos(CMakePackage):
     depends_on('metis@5:', when='+metis')
     depends_on('suite-sparse', when='+suite-sparse')
     depends_on('zlib', when="+zlib")
-    depends_on('ninja@kitware', type='build', when='+ninja')
-    depends_on('cuda', when="+cuda")
 
     # MPI related dependencies
     depends_on('mpi')
@@ -296,6 +304,7 @@ class Trilinos(CMakePackage):
     depends_on('parallel-netcdf', when="+pnetcdf@master,12.12.1:")
     depends_on('parmetis', when='+metis')
     depends_on('cgns', when='+cgns')
+    depends_on('adios2', when='+adios2')
     # Trilinos' Tribits config system is limited which makes it very tricky to
     # link Amesos with static MUMPS, see
     # https://trilinos.org/docs/dev/packages/amesos2/doc/html/classAmesos2_1_1MUMPS.html
@@ -328,13 +337,6 @@ class Trilinos(CMakePackage):
     patch('xlf_tpetra.patch', when='@12.12.1%xl')
     patch('xlf_tpetra.patch', when='@12.12.1%xl_r')
     patch('xlf_tpetra.patch', when='@12.12.1%clang')
-
-    @property
-    def generator(self):
-        if '+ninja' in self.spec:
-            return 'Ninja'
-        else:
-            return 'Unix Makefiles'
 
     def url_for_version(self, version):
         url = "https://github.com/trilinos/Trilinos/archive/trilinos-release-{0}.tar.gz"
@@ -437,6 +439,8 @@ class Trilinos(CMakePackage):
                 'ON' if '+sacado' in spec else 'OFF'),
             '-DTrilinos_ENABLE_Shards=%s' % (
                 'ON' if '+shards' in spec else 'OFF'),
+            '-DTrilinos_ENABLE_ShyLU=%s' % (
+                'ON' if '+shylu' in spec else 'OFF'),
             '-DTrilinos_ENABLE_Teko=%s' % (
                 'ON' if '+teko' in spec else 'OFF'),
             '-DTrilinos_ENABLE_Tempus=%s' % (
@@ -450,9 +454,6 @@ class Trilinos(CMakePackage):
             '-DTrilinos_ENABLE_Zoltan2:BOOL=%s' % (
                 'ON' if '+zoltan2' in spec else 'OFF'),
         ])
-
-        if '+xsdkflags' in spec:
-            options.extend(['-DUSE_XSDK_DEFAULTS=YES'])
 
         if '+cuda' in spec:
             #NREL-specific
@@ -474,6 +475,9 @@ class Trilinos(CMakePackage):
                     '-DTpetra_INST_CUDA:BOOL=ON',
                 ])
 
+        if '+xsdkflags' in spec:
+            options.extend(['-DUSE_XSDK_DEFAULTS=YES'])
+
         if '+stk' in spec:
             options.extend([
                 '-DTrilinos_ENABLE_STK:BOOL=ON'
@@ -490,8 +494,6 @@ class Trilinos(CMakePackage):
             ])
 
         if '+exodus' in spec:
-            # Currently these are fairly specific to the Nalu package
-            # They can likely change when necessary in the future
             options.extend([
                 '-DTrilinos_ENABLE_SEACAS:BOOL=ON',
                 '-DTrilinos_ENABLE_SEACASExodus:BOOL=ON',
@@ -503,8 +505,20 @@ class Trilinos(CMakePackage):
             ])
         else:
             options.extend([
-                '-DTrilinos_ENABLE_SEACAS:BOOL=OFF',
-                '-DTrilinos_ENABLE_SEACASExodus:BOOL=OFF'
+                '-DTrilinos_ENABLE_SEACASExodus:BOOL=OFF',
+                '-DTrilinos_ENABLE_SEACASIoss:BOOL=OFF'
+            ])
+
+        if '+chaco' in spec:
+            options.extend([
+                '-DTrilinos_ENABLE_SEACAS:BOOL=ON'
+                '-DTrilinos_ENABLE_SEACASChaco:BOOL=ON'
+            ])
+        else:
+            # don't disable SEACAS, could be needed elsewhere
+            options.extend([
+                '-DTrilinos_ENABLE_SEACASChaco:BOOL=OFF',
+                '-DTrilinos_ENABLE_SEACASNemslice=OFF'
             ])
 
         # ######################### TPLs #############################
@@ -684,6 +698,7 @@ class Trilinos(CMakePackage):
                 '-DTPL_ENABLE_CGNS:BOOL=OFF'
             ])
 
+        options.append('-DTPL_ENABLE_ADIOS2:BOOL=' + str('+adios2' in spec))
         # ################# Miscellaneous Stuff ######################
 
         # OpenMP

@@ -137,15 +137,12 @@ do
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling ${TYPE} using ${COMPILER_ID}...\n"
       # LLVM 8 requires > GCC 4 and we currently build the compilers with the system GCC 4.8.5
-      for PACKAGE in binutils gcc@9.1.0 gcc@8.3.0 gcc@7.4.0 gcc@6.5.0 gcc@5.5.0 gcc@4.9.4 gcc@4.8.5 llvm llvm@7.0.1 llvm@6.0.1 numactl; do
+      for PACKAGE in binutils gcc@9.1.0 gcc@8.3.0 gcc@7.4.0 gcc@6.5.0 gcc@5.5.0 gcc@4.9.4 gcc@4.8.5 llvm@7.0.1+omp_tsan llvm@6.0.1+omp_tsan pgi@19.4+nvidia pgi@18.10+nvidia numactl; do
         cmd "spack install ${PACKAGE} %${COMPILER_ID}"
       done
       cmd "spack install intel-parallel-studio@cluster.2019.3+advisor+inspector+mkl+mpi+vtune %${COMPILER_ID}"
       cmd "spack install intel-parallel-studio@cluster.2018.4+advisor+inspector+mkl+mpi+vtune %${COMPILER_ID}"
       cmd "spack install intel-parallel-studio@cluster.2017.7+advisor+inspector+mkl+mpi+vtune %${COMPILER_ID}"
-      # The PGI compilers need a libnuma.so.1.0.0 copied into its lib directory and symlinked to libnuma.so and libnuma.so.1
-      cmd "spack install pgi@19.4+nvidia %${COMPILER_ID}"
-      cmd "spack install pgi@18.10+nvidia %${COMPILER_ID}"
     fi
   elif [ "${TYPE}" == 'utilities' ]; then
     if [ ${COMPILER_NAME} == 'gcc' ]; then
@@ -177,8 +174,7 @@ do
       done
       cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_ID} ^python@3.7.3"
       (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_ID} ^/$(spack --color never find -L netcdf@4.6.1 %${COMPILER_ID} ^hdf5+cxx+hl | grep netcdf | cut -d " " -f1))
-      # It seems something has changed in the percept repo, and I need to update percept in spack
-      #cmd "spack install percept %${COMPILER_ID} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
+      # It seems something has changed in the percept repo, and I need to update percept in spack #cmd "spack install percept %${COMPILER_ID} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
       cmd "spack install masa %${COMPILER_ID}"
       cmd "spack install valgrind %${COMPILER_ID}"
       cmd "spack install osu-micro-benchmarks %${COMPILER_ID}"
@@ -223,6 +219,7 @@ printf "\nDone!\n"
 # Edit compilers.yaml.software to point to all compilers this script installed
 # Edit intel-parallel-studio modules to set INTEL_LICENSE_FILE correctly
 # Edit pgi modules to set PGROUPD_LICENSE_FILE correctly
+# It's possible the PGI compiler needs a libnuma.so.1.0.0 copied into its lib directory and symlinked to libnuma.so and libnuma.so.1
 # Copy libnuma.so.1.0.0 into PGI lib directory and symlink to libnuma.so and libnuma.so.1
 # Run makelocalrc for all PGI compilers (I think this sets a GCC to use as a frontend)
 # I did something like:

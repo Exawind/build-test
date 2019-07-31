@@ -154,7 +154,8 @@ do
       # Remove gtkplus dependency from ghostscript
       cmd "spack install image-magick %${COMPILER_ID}"
       cmd "spack install libxml2+python %${COMPILER_ID}"
-      cmd "spack install gnuplot+X ^pango+X %${COMPILER_ID}"
+      #cmd "spack install gnuplot+X ^pango+X %${COMPILER_ID}"
+      cmd "spack install gnuplot+wx ^pango+X %${COMPILER_ID}"
       cmd "module load texinfo"
       cmd "module load texlive"
       cmd "module load flex"

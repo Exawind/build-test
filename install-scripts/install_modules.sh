@@ -176,7 +176,7 @@ do
       done
       cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_ID} ^python@3.7.3"
       (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_ID} ^/$(spack --color never find -L netcdf@4.6.1 %${COMPILER_ID} ^hdf5+cxx+hl | grep netcdf | cut -d " " -f1))
-      # It seems something has changed in the percept repo, and I need to update percept in spack #cmd "spack install percept %${COMPILER_ID} ^${TRILINOS_PERCEPT}@12.12.1 ^netcdf@4.3.3.1 ^hdf5@1.8.16 ^boost@1.60.0 ^parallel-netcdf@1.6.1"
+      cmd "spack install percept %${COMPILER_ID}"
       cmd "spack install masa %${COMPILER_ID}"
       cmd "spack install valgrind %${COMPILER_ID}"
       cmd "spack install osu-micro-benchmarks %${COMPILER_ID}"

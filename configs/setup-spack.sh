@@ -48,6 +48,7 @@ if [ "${MACHINE}" == 'eagle' ] || \
   (set -x; cp machines/base/*.yaml ${SPACK_ROOT}/etc/spack/)
   (set -x; cp custom-package-files/parallel-netcdf/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/parallel-netcdf/package.py)
   (set -x; cp custom-package-files/trilinos-catalyst-ioss-adapter/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos-catalyst-ioss-adapter/package.py)
+  (set -x; cp custom-package-files/percept/* ${SPACK_ROOT}/var/spack/repos/builtin/packages/percept/)
 
   #Extra stuff for eagle
   if [ ${MACHINE} == 'eagle' ]; then

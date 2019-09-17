@@ -299,6 +299,9 @@ test_configuration() {
     CMAKE_CONFIGURE_ARGS="-DENABLE_ALL_WARNINGS:BOOL=TRUE ${CMAKE_CONFIGURE_ARGS}"
   fi
 
+  # Default build type is RelWithDebInfo
+  CMAKE_BUILD_TYPE=RelWithDebInfo
+
   # Turn on address sanitizer for clang build on rhodes
   if [ "${COMPILER_NAME}" == 'clang' ] && [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting up address sanitizer in Clang...\n"
@@ -315,6 +318,8 @@ test_configuration() {
     printf "\nWriting asan.supp file...\n"
     (set -x; printf "leak:libopen-pal\nleak:libmpi\nleak:libnetcdf" > ${NALU_WIND_DIR}/build/asan.supp)
     cmd "export LSAN_OPTIONS=suppressions=${NALU_WIND_DIR}/build/asan.supp"
+    # Can't use optimization with the address sanitizer
+    CMAKE_BUILD_TYPE=Debug
     #CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_FLAGS:STRING=-fsanitize=address\ -fno-omit-frame-pointer ${CMAKE_CONFIGURE_ARGS}"
     #CMAKE_CONFIGURE_ARGS="-DCMAKE_LINKER=clang++ -DCMAKE_CXX_LINK_EXECUTABLE=clang++ -DCMAKE_CXX_FLAGS:STRING=\'-fsanitize=address -fno-omit-frame-pointer\' -DCMAKE_EXE_LINKER_FLAGS:STRING=-fsanitize=address ${CMAKE_CONFIGURE_ARGS}"
   fi
@@ -349,7 +354,7 @@ test_configuration() {
   CTEST_ARGS="-DTESTING_ROOT_DIR=${NALU_WIND_TESTING_ROOT_DIR} -DNALU_DIR=${NALU_WIND_TESTING_ROOT_DIR}/nalu-wind -DTEST_LOG=${LOGS_DIR}/nalu-wind-test-log.txt -DHOST_NAME=${HOST_NAME} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} ${CTEST_ARGS}"
 
   # Set essential arguments for the ctest cmake configure step
-  CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DCMAKE_BUILD_TYPE=RelWithDebInfo ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
 
   # Set looser diff tolerance for GCC 7 cases that have more optimization flags on
   if [ "${COMPILER_ID}" == 'gcc@7.4.0' ] && [ "${MACHINE_NAME}" != 'mac' ]; then

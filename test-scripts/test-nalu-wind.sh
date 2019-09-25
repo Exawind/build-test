@@ -120,8 +120,14 @@ test_configuration() {
   fi
 
   # Store hash from Trilinos before it's uninstalled
-  #INSTALLED_TRILINOS_HASH=$(spack --color never find -L ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS} | grep trilinos | cut -d " " -f1)
-  #printf "\nINSTALLED_TRILINOS_HASH=${INSTALLED_TRILINOS_HASH}\n"
+  INSTALLED_TRILINOS_HASH=$(spack --color never find -L trilinos@${TRILINOS_BRANCH} %${COMPILER_ID} | grep trilinos | cut -d " " -f1)
+  printf "\nINSTALLED_TRILINOS_HASH=${INSTALLED_TRILINOS_HASH}\n"
+  TRILINOS_INSTALL_DIR=$(spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_ID})
+  printf "\nTRILINOS_INSTALL_DIR=${TRILINOS_INSTALL_DIR}\n"
+  TRILINOS_BASENAME=$(basename ${TRILINOS_INSTALL_DIR})
+  printf "\nTRILINOS_BASENAME=${TRILINOS_BASENAME}\n"
+  TRILINOS_STAGE_DIR=$(spack location -S)/${TRILINOS_BASENAME}
+  printf "\nTRILINOS_STAGE_DIR=${TRILINOS_STAGE_DIR}\n"
 
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUninstalling Trilinos (this is fine to error when tests are first run or building Trilinos has previously failed)...\n"
@@ -133,16 +139,7 @@ test_configuration() {
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating and cleaning Trilinos stage directory (this is fine to error when tests are first run)...\n"
-  if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    # FIXME: This is a hack that assumes eagle has only one installation of trilinos and uses the install location to get the hash for the stage location. I don't know why the code in the "else" section doesn't give us the correct stage location of trilinos on eagle.
-    TRILINOS_INSTALL_DIR=$(spack location -i trilinos)
-    TRILINOS_BASENAME=$(basename ${TRILINOS_INSTALL_DIR})
-    TRILINOS_STAGE_DIR=$(spack location -S)/${TRILINOS_BASENAME}
-  else
-    TRILINOS_STAGE_DIR=$(spack location -s ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS})
-  fi
-  printf "\nTRILINOS_STAGE_DIR=${TRILINOS_STAGE_DIR}\n"
-  # Update Trilinos using spack location -s stage dir (This has been updated to spack-src in recent versions of Spack)
+  # Update Trilinos in its stage dir (This has been updated to spack-src in recent versions of Spack)
   cmd "cd ${TRILINOS_STAGE_DIR}/src && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"
   # Update Trilinos using the hash from the previous install
   #cmd "spack cd /${INSTALLED_TRILINOS_HASH} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"
@@ -212,7 +209,7 @@ test_configuration() {
   fi
 
   printf "\nSetting variables to pass to CTest...\n"
-  TRILINOS_DIR=$(spack location -i ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS})
+  TRILINOS_DIR=$(spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_ID})
   YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_ID})
   printf "TRILINOS_DIR=${TRILINOS_DIR}\n"
   printf "YAML_DIR=${YAML_DIR}\n"

@@ -133,7 +133,14 @@ test_configuration() {
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating and cleaning Trilinos stage directory (this is fine to error when tests are first run)...\n"
-  TRILINOS_STAGE_DIR=$(spack location -s ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS})
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    # FIXME: This is a hack that assumes eagle has only one installation of trilinos and uses the install location to get the hash for the stage location. I don't know why the code in the "else" section doesn't give us the correct stage location of trilinos on eagle.
+    TRILINOS_INSTALL_DIR=$(spack location -i trilinos)
+    TRILINOS_BASENAME=$(basename ${TRILINOS_INSTALL_DIR})
+    TRILINOS_STAGE_DIR=$(spack location -S)/${TRILINOS_BASENAME}
+  else
+    TRILINOS_STAGE_DIR=$(spack location -s ${TRILINOS}@${TRILINOS_BRANCH} %${COMPILER_ID} ${GENERAL_CONSTRAINTS})
+  fi
   printf "\nTRILINOS_STAGE_DIR=${TRILINOS_STAGE_DIR}\n"
   # Update Trilinos using spack location -s stage dir (This has been updated to spack-src in recent versions of Spack)
   cmd "cd ${TRILINOS_STAGE_DIR}/src && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"

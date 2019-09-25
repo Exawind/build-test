@@ -91,7 +91,7 @@ test_configuration() {
     cmd "module load python"
     cmd "module load git"
     cmd "module load binutils"
-    cmd "module load cuda"
+    cmd "module load cuda/9.2.88"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then

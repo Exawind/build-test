@@ -6,7 +6,6 @@ config:
   module_roots:
     tcl:    $spack/share/spack/modules
     lmod:   $spack/share/spack/lmod
-    dotkit: $spack/share/spack/dotkit
   build_stage:
     - $spack/var/spack/stage
   source_cache: ~/.spack/downloads

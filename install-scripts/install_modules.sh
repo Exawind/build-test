@@ -2,11 +2,11 @@
 
 # Script for installation of ECP related compilers, utilities, and software on Eagle and Rhodes
 
-TYPE=compilers
+#TYPE=compilers
 #TYPE=utilities
-#TYPE=software
+TYPE=software
 
-DATE=2019-05-08
+DATE=2019-10-08
 
 set -e
 
@@ -168,13 +168,13 @@ do
   elif [ "${TYPE}" == 'software' ]; then
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling ${TYPE} using ${COMPILER_ID}...\n"
-      for PYTHON_VERSION in '2.7.16' '3.7.3'; do
+      for PYTHON_VERSION in '3.7.4'; do
         cmd "spack install python@${PYTHON_VERSION} %${COMPILER_ID}"
         for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf py-scipy py-yt~astropy; do
           cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_ID}"
         done
       done
-      cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_ID} ^python@3.7.3"
+      cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_ID} ^python@3.7.4"
       (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_ID} ^/$(spack --color never find -L netcdf@4.6.1 %${COMPILER_ID} ^hdf5+cxx+hl | grep netcdf | cut -d " " -f1))
       cmd "spack install percept %${COMPILER_ID}"
       cmd "spack install masa %${COMPILER_ID}"
@@ -183,6 +183,7 @@ do
       if [ "${MACHINE}" == 'eagle' ]; then
         cmd "spack install amrvis+mpi dims=3 %${COMPILER_ID}"
         cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_ID}"
+        cmd "spack install cuda@10.1.168 %${COMPILER_ID}"
         cmd "spack install cuda@10.0.130 %${COMPILER_ID}"
         cmd "spack install cuda@9.2.88 %${COMPILER_ID}"
         cmd "spack install cudnn@7.5.1-10.0-x86_64 %${COMPILER_ID}"

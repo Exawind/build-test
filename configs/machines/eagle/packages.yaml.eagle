@@ -3,10 +3,11 @@ packages:
     variants: swr=skx
   slurm:
     paths:
-      slurm@18.08.3: /nopt/slurm/current
+      slurm@19.05.2: /nopt/slurm/current
     buildable: False
   cuda:
     paths:
+      cuda@10.1.168: /nopt/nrel/apps/cuda/10.1.168
       cuda@10.0.130: /nopt/nrel/apps/cuda/10.0.130
       cuda@9.2.88: /nopt/nrel/apps/cuda/9.2.88
     buildable: False

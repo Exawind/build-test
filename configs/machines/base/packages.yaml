@@ -18,7 +18,7 @@ packages:
   openmpi:
     version: [3.1.4]
   mpich:
-    version: [3.3]
+    version: [3.3.1]
   openfast:
     version: [develop]
   intel-mpi:

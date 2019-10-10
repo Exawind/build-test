@@ -7,6 +7,7 @@ config:
     tcl:    $spack/share/spack/modules
     lmod:   $spack/share/spack/lmod
   build_stage:
+    - ~/.spack/stage
     - $spack/var/spack/stage
   source_cache: ~/.spack/downloads
   misc_cache: ~/.spack/cache
@@ -16,7 +17,7 @@ config:
   dirty: false
   build_language: C
   locks: true
-  build_jobs: 32
+  build_jobs: 16
   ccache: false
   db_lock_timeout: 120
   package_lock_timeout: null

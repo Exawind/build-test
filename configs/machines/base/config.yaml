@@ -7,8 +7,9 @@ config:
     tcl:    $spack/share/spack/modules
     lmod:   $spack/share/spack/lmod
   build_stage:
-    - ~/.spack/stage
+    - /scratch/$user/.spack/stage
     - $spack/var/spack/stage
+    - ~/.spack/stage
   source_cache: ~/.spack/downloads
   misc_cache: ~/.spack/cache
   verify_ssl: true

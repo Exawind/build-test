@@ -22,9 +22,9 @@ packages:
   openfast:
     version: [develop]
   intel-mpi:
-    version: [2018.4.274]
+    version: [2019.3.199]
   intel-mkl:
-    version: [2018.4.274]
+    version: [2019.3.199]
   yaml-cpp:
     version: [0.6.2]
   netlib-lapack:

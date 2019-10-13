@@ -12,9 +12,9 @@ packages:
       cuda@9.2.88: /nopt/nrel/apps/cuda/9.2.88
     buildable: False
   openmpi:
-    variants: +pmi +cuda fabrics=verbs schedulers=slurm
+    variants: +pmi +cuda fabrics=ucx schedulers=slurm legacylaunchers=true
   mpich:
-    variants: netmod=mxm +hydra +slurm
+    variants: netmod=ucx device=ch4 +hydra +slurm
   hwloc:
     variants: +cuda ~nvml ~gl
   fftw:

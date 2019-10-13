@@ -79,6 +79,8 @@ spack package at this time.''',
     # Fix SLURM node list parsing
     # See https://github.com/pmodels/mpich/issues/3572
     # and https://github.com/pmodels/mpich/pull/3578
+    # Even though there is no version 3.3.0, we need to specify 3.3:3.3.0 in
+    # the when clause, otherwise the patch will be applied to 3.3.1, too.
     patch('https://github.com/pmodels/mpich/commit/b324d2de860a7a2848dc38aefb8c7627a72d2003.patch',
           sha256='c7d4ecf865dccff5b764d9c66b6a470d11b0b1a5b4f7ad1ffa61079ad6b5dede',
           when='@3.3:3.3.0')
@@ -205,7 +207,6 @@ spack package at this time.''',
             device_config += 'ofi'
         elif 'netmod=mxm' in spec:
             device_config += 'mxm'
-            config_args.append('--with-mxm=/opt/mellanox/mxm')
         elif 'netmod=tcp' in spec:
             device_config += 'tcp'
 

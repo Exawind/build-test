@@ -19,3 +19,5 @@ packages:
     variants: +cuda ~nvml ~gl
   fftw:
     variants: +mpi+fma simd=avx512
+  libfabric:
+    variants: fabrics=mlx

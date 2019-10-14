@@ -203,6 +203,7 @@ spack package at this time.''',
 
         if 'netmod=ucx' in spec:
             device_config += 'ucx'
+            config_args.append('--with-ucx=/nopt/nrel/apps/ucx/c0e2625-gcc730')
         elif 'netmod=ofi' in spec:
             device_config += 'ofi'
         elif 'netmod=mxm' in spec:

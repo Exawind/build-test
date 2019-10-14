@@ -20,4 +20,4 @@ packages:
   fftw:
     variants: +mpi+fma simd=avx512
   libfabric:
-    variants: fabrics=mlx
+    variants: fabrics=verbs

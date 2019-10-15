@@ -92,6 +92,7 @@ spack package at this time.''',
     # The ch3 ofi netmod results in crashes with libfabric 1.7
     # See https://github.com/pmodels/mpich/issues/3665
     depends_on('libfabric@:1.6', when='device=ch3 netmod=ofi')
+    depends_on('ucx', when='netmod=ucx')
 
     depends_on('libpciaccess', when="+pci")
     depends_on('libxml2')
@@ -203,7 +204,7 @@ spack package at this time.''',
 
         if 'netmod=ucx' in spec:
             device_config += 'ucx'
-            config_args.append('--with-ucx=/nopt/nrel/apps/ucx/c0e2625-gcc730')
+            config_args.append('--with-ucx={0}'.format(spec['ucx'].prefix))
         elif 'netmod=ofi' in spec:
             device_config += 'ofi'
         elif 'netmod=mxm' in spec:

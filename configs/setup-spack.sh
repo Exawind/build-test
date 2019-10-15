@@ -54,6 +54,7 @@ if [ "${MACHINE}" == 'eagle' ] || \
     (set -x; mkdir ${SPACK_ROOT}/etc/spack/linux)
     (set -x; cp machines/${MACHINE}/packages.yaml.${MACHINE} ${SPACK_ROOT}/etc/spack/linux/packages.yaml)
     (set -x; cp custom-package-files/mpich/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/mpich/package.py)
+    (set -x; cp custom-package-files/ucx/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/ucx/package.py)
     (set -x; cp custom-package-files/trilinos/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/trilinos/package.py)
     (set -x; cp custom-package-files/nalu-wind/package.py ${SPACK_ROOT}/var/spack/repos/builtin/packages/nalu-wind/package.py)
     (set -x; cp machines/${MACHINE}/compilers.yaml.software ${SPACK_ROOT}/etc/spack/compilers.yaml)

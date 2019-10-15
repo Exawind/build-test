@@ -14,9 +14,9 @@ packages:
   openmpi:
     variants: +pmi +cuda fabrics=ucx schedulers=slurm legacylaunchers=true
   mpich:
-    variants: netmod=ucx device=ch4 +hydra +slurm
+    variants: netmod=ucx device=ch4 +slurm +hydra
   hwloc:
-    variants: +cuda ~nvml ~gl
+    variants: ~cuda ~nvml ~gl
   fftw:
     variants: +mpi+fma simd=avx512
   libfabric:

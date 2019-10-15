@@ -56,9 +56,10 @@ elif [ "${TYPE}" == 'software' ]; then
   GCC_COMPILER_VERSION="7.4.0"
 fi
 GCC_COMPILER_MODULE="gcc/${GCC_COMPILER_VERSION}"
-INTEL_COMPILER_VERSION="18.0.4"
-INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.4"
+INTEL_COMPILER_VERSION="19.0.3"
+INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2019.3"
 CLANG_COMPILER_VERSION="7.0.1"
+CLANG_COMPILER_MODULE="llvm/${CLANG_COMPILER_VERSION}"
 
 BUILD_TEST_DIR=$(pwd)/..
 
@@ -92,7 +93,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc intel
+for COMPILER_NAME in gcc #clang intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -116,12 +117,17 @@ do
   elif [ "${TYPE}" == 'software' ]; then
     cmd "module use ${BASE_DIR}/compilers/modules-${DATE}"
     cmd "module use ${BASE_DIR}/utilities/modules-${DATE}"
-    cmd "module load ${GCC_COMPILER_MODULE}"
-    if [ ${COMPILER_NAME} == 'intel' ]; then
+    if [ ${COMPILER_NAME} == 'gcc' ]; then
+      cmd "module load ${GCC_COMPILER_MODULE}"
+    elif [ ${COMPILER_NAME} == 'intel' ]; then
+      cmd "module load ${GCC_COMPILER_MODULE}"
       cmd "module load ${INTEL_COMPILER_MODULE}"
+    elif [ ${COMPILER_NAME} == 'clang' ]; then
+      cmd "module load ${CLANG_COMPILER_MODULE}"
     fi
   fi
-  for MODULE in unzip patch bzip2 cmake git texinfo flex bison wget bc python; do
+  #for MODULE in unzip patch bzip2 cmake git texinfo flex bison wget bc python; do
+  for MODULE in bzip2 cmake git texinfo flex bison wget python; do
     cmd "module load ${MODULE}"
   done
   cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
@@ -168,32 +174,39 @@ do
   elif [ "${TYPE}" == 'software' ]; then
     if [ ${COMPILER_NAME} == 'gcc' ]; then
       printf "\nInstalling ${TYPE} using ${COMPILER_ID}...\n"
+      cmd "spack install osu-micro-benchmarks %${COMPILER_ID}"
       for PYTHON_VERSION in '3.7.4'; do
         cmd "spack install python@${PYTHON_VERSION} %${COMPILER_ID}"
         for PYTHON_LIBRARY in py-numpy py-matplotlib py-pandas py-nose py-autopep8 py-flake8 py-jedi py-pip py-pyyaml py-rope py-seaborn py-sphinx py-yapf py-scipy py-yt~astropy; do
           cmd "spack install ${PYTHON_LIBRARY} ^python@${PYTHON_VERSION} %${COMPILER_ID}"
         done
       done
-      cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_ID} ^python@3.7.4"
+      cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw+catalyst %${COMPILER_ID} ^python@3.7.4 ^llvm@8.0.0+omp_tsan"
       (set -x; spack install netcdf-fortran@4.4.3 %${COMPILER_ID} ^/$(spack --color never find -L netcdf@4.6.1 %${COMPILER_ID} ^hdf5+cxx+hl | grep netcdf | cut -d " " -f1))
       cmd "spack install percept %${COMPILER_ID}"
       cmd "spack install masa %${COMPILER_ID}"
       cmd "spack install valgrind %${COMPILER_ID}"
-      cmd "spack install osu-micro-benchmarks %${COMPILER_ID}"
       if [ "${MACHINE}" == 'eagle' ]; then
         cmd "spack install amrvis+mpi dims=3 %${COMPILER_ID}"
         cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_ID}"
         cmd "spack install cuda@10.1.168 %${COMPILER_ID}"
         cmd "spack install cuda@10.0.130 %${COMPILER_ID}"
         cmd "spack install cuda@9.2.88 %${COMPILER_ID}"
-        cmd "spack install cudnn@7.5.1-10.0-x86_64 %${COMPILER_ID}"
+        cmd "spack install cudnn@7.5.1-10.1-x86_64 %${COMPILER_ID}"
+        cmd "spack install libfabric %${COMPILER_ID}"
       fi
       #cmd "spack install paraview+mpi+python+osmesa %${COMPILER_ID}"
       #cmd "spack install petsc %${COMPILER_ID}"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       printf "\nInstalling ${TYPE} using ${COMPILER_ID}...\n"
-      cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_ID} ^intel-mpi ^intel-mkl"
-      cmd "spack install osu-micro-benchmarks %${COMPILER_ID} ^intel-mpi"
+      #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_ID} ^intel-mpi ^intel-mkl"
+      #cmd "spack install osu-micro-benchmarks %${COMPILER_ID} ^intel-mpi"
+      cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_ID}"
+      cmd "spack install osu-micro-benchmarks %${COMPILER_ID}"
+    elif [ ${COMPILER_NAME} == 'clang' ]; then
+      printf "\nInstalling ${TYPE} using ${COMPILER_ID}...\n"
+      cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_ID}"
+      cmd "spack install osu-micro-benchmarks %${COMPILER_ID}"
     fi
   fi
 

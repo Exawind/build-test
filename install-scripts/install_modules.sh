@@ -187,8 +187,8 @@ do
       cmd "spack install masa %${COMPILER_ID}"
       cmd "spack install valgrind %${COMPILER_ID}"
       if [ "${MACHINE}" == 'eagle' ]; then
-        #cmd "spack install amrvis+mpi dims=3 %${COMPILER_ID}"
-        #cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_ID}"
+        cmd "spack install amrvis+mpi dims=3 %${COMPILER_ID}"
+        cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_ID}"
         cmd "spack install cuda@10.1.168 %${COMPILER_ID}"
         cmd "spack install cuda@10.0.130 %${COMPILER_ID}"
         cmd "spack install cuda@9.2.88 %${COMPILER_ID}"

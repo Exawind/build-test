@@ -56,8 +56,8 @@ elif [ "${TYPE}" == 'software' ]; then
   GCC_COMPILER_VERSION="7.4.0"
 fi
 GCC_COMPILER_MODULE="gcc/${GCC_COMPILER_VERSION}"
-INTEL_COMPILER_VERSION="19.0.3"
-INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2019.3"
+INTEL_COMPILER_VERSION="18.0.4"
+INTEL_COMPILER_MODULE="intel-parallel-studio/cluster.2018.4"
 CLANG_COMPILER_VERSION="7.0.1"
 CLANG_COMPILER_MODULE="llvm/${CLANG_COMPILER_VERSION}"
 
@@ -93,7 +93,7 @@ fi
 printf "\nLoading Spack...\n"
 cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
 
-for COMPILER_NAME in gcc #clang intel
+for COMPILER_NAME in gcc clang intel
 do
   if [ ${COMPILER_NAME} == 'gcc' ]; then
     COMPILER_VERSION="${GCC_COMPILER_VERSION}"
@@ -187,8 +187,8 @@ do
       cmd "spack install masa %${COMPILER_ID}"
       cmd "spack install valgrind %${COMPILER_ID}"
       if [ "${MACHINE}" == 'eagle' ]; then
-        cmd "spack install amrvis+mpi dims=3 %${COMPILER_ID}"
-        cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_ID}"
+        #cmd "spack install amrvis+mpi dims=3 %${COMPILER_ID}"
+        #cmd "spack install amrvis+mpi+profiling dims=2 %${COMPILER_ID}"
         cmd "spack install cuda@10.1.168 %${COMPILER_ID}"
         cmd "spack install cuda@10.0.130 %${COMPILER_ID}"
         cmd "spack install cuda@9.2.88 %${COMPILER_ID}"
@@ -199,10 +199,8 @@ do
       #cmd "spack install petsc %${COMPILER_ID}"
     elif [ ${COMPILER_NAME} == 'intel' ]; then
       printf "\nInstalling ${TYPE} using ${COMPILER_ID}...\n"
-      #cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_ID} ^intel-mpi ^intel-mkl"
-      #cmd "spack install osu-micro-benchmarks %${COMPILER_ID} ^intel-mpi"
-      cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_ID}"
-      cmd "spack install osu-micro-benchmarks %${COMPILER_ID}"
+      cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_ID} ^intel-mpi ^intel-mkl"
+      cmd "spack install osu-micro-benchmarks %${COMPILER_ID} ^intel-mpi"
     elif [ ${COMPILER_NAME} == 'clang' ]; then
       printf "\nInstalling ${TYPE} using ${COMPILER_ID}...\n"
       cmd "spack install --only dependencies nalu-wind+openfast+tioga+hypre+fftw %${COMPILER_ID}"
@@ -215,18 +213,18 @@ do
   printf "\nDone installing ${TYPE} with ${COMPILER_ID} at $(date).\n"
 done
 
-#printf "\nSetting permissions...\n"
-#if [ "${MACHINE}" == 'eagle' ]; then
-#  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
-#  cmd "chgrp -R n-ecom ${INSTALL_DIR}"
-#elif [ "${MACHINE}" == 'rhodes' ]; then
-#  cmd "chgrp windsim /opt"
-#  cmd "chgrp windsim /opt/${TYPE}"
-#  cmd "chgrp -R windsim ${INSTALL_DIR}"
-#  cmd "chmod a+rX,go-w /opt"
-#  cmd "chmod a+rX,go-w /opt/${TYPE}"
-#  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
-#fi
+printf "\nSetting permissions...\n"
+if [ "${MACHINE}" == 'eagle' ]; then
+  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
+  cmd "chgrp -R n-ecom ${INSTALL_DIR}"
+elif [ "${MACHINE}" == 'rhodes' ]; then
+  cmd "chgrp windsim /opt"
+  cmd "chgrp windsim /opt/${TYPE}"
+  cmd "chgrp -R windsim ${INSTALL_DIR}"
+  cmd "chmod a+rX,go-w /opt"
+  cmd "chmod a+rX,go-w /opt/${TYPE}"
+  cmd "chmod -R a+rX,go-w ${INSTALL_DIR}"
+fi
 
 printf "\n$(date)\n"
 printf "\nDone!\n"

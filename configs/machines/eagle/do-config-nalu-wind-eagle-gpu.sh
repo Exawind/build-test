@@ -1,11 +1,9 @@
 #!/bin/bash -l
 
-# Instructions:
-# Make a directory in the Nalu-Wind directory for building,
-# Copy this script to that directory and edit the
-# options below to your own needs and run it.
+COMPILER=gcc
 
-COMPILER=gcc #intel
+export SPACK_ROOT=/projects/hfm/exawind/nalu-wind-testing/spack
+source ${SPACK_ROOT}/share/spack/setup-env.sh
 
 if [ "${COMPILER}" == 'gcc' ]; then
   export OMPI_MCA_opal_cuda_support=1
@@ -19,11 +17,6 @@ if [ "${COMPILER}" == 'gcc' ]; then
   export CUDACXX=$(which nvcc)
   C_COMPILER=mpicc
   FORTRAN_COMPILER=mpifort
-elif [ "${COMPILER}" == 'intel' ]; then
-  CXX_COMPILER=mpiicpc
-  C_COMPILER=mpiicc
-  FORTRAN_COMPILER=mpiifort
-  FLAGS="-O2 -xSKYLAKE-AVX512"
 fi
   
 set -e
@@ -38,30 +31,16 @@ cmd "module purge"
 cmd "module unuse ${MODULEPATH}"
 cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
 cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
-if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "module use /nopt/nrel/ecom/hpacf/software/modules-2018-11-21/gcc-7.3.0"
-elif [ "${COMPILER}" == 'intel' ]; then
-  cmd "module use /nopt/nrel/ecom/hpacf/software/modules/intel-18.0.4"
-fi
-cmd "module load gcc/7.3.0"
-cmd "module load python/2.7.15"
+cmd "module use ${SPACK_ROOT}/share/spack/modules/linux-centos7-x86_64/gcc-7.4.0"
+cmd "module load gcc"
+cmd "module load python"
 cmd "module load git"
 cmd "module load binutils"
-if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "module load openmpi"
-  cmd "module load netlib-lapack"
-elif [ "${COMPILER}" == 'intel' ]; then
-  cmd "module load intel-parallel-studio/cluster.2018.4"
-  cmd "module load intel-mpi/2018.4.274"
-  cmd "module load intel-mkl/2018.4.274"
-fi
-cmd "module load openfast"
-cmd "module load hypre"
-cmd "module load tioga"
+cmd "module load openmpi"
+cmd "module load netlib-lapack"
 cmd "module load yaml-cpp"
 cmd "module load cmake"
-cmd "module load fftw"
-cmd "module load cuda"
+cmd "module load cuda/9.2.88"
 cmd "module list"
 
 # Set tmpdir to the scratch filesystem so it doesn't run out of space
@@ -75,11 +54,7 @@ cmd "rm -f CMakeCache.txt"
 set -e
 
 cmd "which cmake"
-if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "which orterun"
-elif [ "${COMPILER}" == 'intel' ]; then
-  cmd "which mpirun"
-fi
+cmd "which orterun"
 
 TRILINOS_ROOT_DIR=$(spack location -i trilinos)
 
@@ -87,7 +62,7 @@ TRILINOS_ROOT_DIR=$(spack location -i trilinos)
   -DCMAKE_CXX_COMPILER:PATH=mpic++ \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
   -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
-  -DCMAKE_BUILD_TYPE:STRING=RELEASE \
+  -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
   -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \
   -DENABLE_CUDA:BOOL=ON \
@@ -95,4 +70,4 @@ TRILINOS_ROOT_DIR=$(spack location -i trilinos)
   -DMPIEXEC_NUMPROC_FLAG:STRING="-np" \
   ..)
 
-(set -x; VERBOSE=1 nice make -j 42)
+(set -x; make -j40)

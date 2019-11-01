@@ -361,10 +361,10 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
 
   # Set looser diff tolerance for GCC 7 cases that have more optimization flags on
-  if [ "${COMPILER_ID}" == 'gcc@7.4.0' ] && [ "${MACHINE_NAME}" != 'mac' ]; then
-    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.0005 ${CMAKE_CONFIGURE_ARGS}"
-  elif [ "${MACHINE_NAME}" == 'eagle' ]; then
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
     CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.01 ${CMAKE_CONFIGURE_ARGS}"
+  elif [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
+    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.0005 ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Allow OpenMPI to consider hardware threads as cpus and allow for oversubscription

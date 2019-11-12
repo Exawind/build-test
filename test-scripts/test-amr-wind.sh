@@ -57,6 +57,7 @@ test_configuration() {
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
+    cmd "module load cmake"
     cmd "module load python"
     cmd "module load cppcheck"
     cmd "module load binutils"

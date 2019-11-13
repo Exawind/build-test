@@ -356,7 +356,7 @@ main() {
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:9.1.0:true:false'
+    CONFIGURATIONS[0]='gcc:7.4.0:true:false'
     CONFIGURATIONS[1]='clang:9.0.0-apple:true:false'
     NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else

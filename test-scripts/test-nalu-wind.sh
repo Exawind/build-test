@@ -331,18 +331,15 @@ test_configuration() {
   # Explicitly set compilers to MPI compilers
   if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
     MPI_CXX_COMPILER=mpicxx
-    MPI_C_COMPILER=mpicc
     MPI_FORTRAN_COMPILER=mpifort
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     MPI_CXX_COMPILER=mpiicpc
-    MPI_C_COMPILER=mpiicc
     MPI_FORTRAN_COMPILER=mpiifort
   fi
 
   printf "\nListing cmake and compilers that will be used in ctest...\n"
   cmd "which cmake"
   cmd "which ${MPI_CXX_COMPILER}"
-  cmd "which ${MPI_C_COMPILER}"
   cmd "which ${MPI_FORTRAN_COMPILER}"
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "which orterun"
@@ -352,7 +349,7 @@ test_configuration() {
     cmd "which mpiexec"
   fi
 
-  CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${MPI_C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} -DMPI_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DMPI_C_COMPILER:STRING=${MPI_C_COMPILER} -DMPI_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} -DMPI_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DMPI_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
 
   # Set essential arguments for ctest
   CTEST_ARGS="-DTESTING_ROOT_DIR=${NALU_WIND_TESTING_ROOT_DIR} -DNALU_DIR=${NALU_WIND_TESTING_ROOT_DIR}/nalu-wind -DTEST_LOG=${LOGS_DIR}/nalu-wind-test-log.txt -DHOST_NAME=${HOST_NAME} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} ${CTEST_ARGS}"

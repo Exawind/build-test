@@ -291,9 +291,9 @@ test_configuration() {
     CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${LOGS_DIR}/nalu-wind-static-analysis.txt ${CTEST_ARGS}"
   fi
 
-  # Unset the TMPDIR variable after building but before testing during ctest nightly script
+  # Unset the TMPDIR variable after building but before testing during ctest nightly script and do not overlap running tests
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE ${CTEST_ARGS}"
+    CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE -DCTEST_DISABLE_OVERLAPPING_TESTS:BOOL=TRUE ${CTEST_ARGS}"
   fi
 
   # Turn on all warnings unless we're gcc 4.9.4

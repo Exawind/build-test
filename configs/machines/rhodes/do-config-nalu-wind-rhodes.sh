@@ -79,6 +79,7 @@ cmd "module load hypre"
 cmd "module load openfast"
 cmd "module load fftw"
 cmd "module load trilinos-catalyst-ioss-adapter"
+cmd "module load boost"
 cmd "module list"
 
 # Clean before cmake configure
@@ -111,6 +112,7 @@ cmd "which mpiexec"
   -DMPIEXEC_PREFLAGS:STRING="${OVERSUBSCRIBE_FLAGS}" \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
   -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
+  -DBoost_DIR:PATH=${BOOST_ROOT_DIR} \
   -DENABLE_HYPRE:BOOL=ON \
   -DHYPRE_DIR:PATH=${HYPRE_ROOT_DIR} \
   -DENABLE_TIOGA:BOOL=ON \

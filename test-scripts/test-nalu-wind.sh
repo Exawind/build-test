@@ -211,8 +211,10 @@ test_configuration() {
   printf "\nSetting variables to pass to CTest...\n"
   TRILINOS_DIR=$(spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_ID})
   YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_ID})
+  BOOST_DIR=$(spack location -i boost %${COMPILER_ID})
   printf "TRILINOS_DIR=${TRILINOS_DIR}\n"
   printf "YAML_DIR=${YAML_DIR}\n"
+  printf "BOOST_DIR=${BOOST_DIR}\n"
   CMAKE_CONFIGURE_ARGS=''
   for TPL in ${TPLS[*]}; do
     if [ "${TPL}" == 'openfast' ]; then
@@ -355,7 +357,7 @@ test_configuration() {
   CTEST_ARGS="-DTESTING_ROOT_DIR=${NALU_WIND_TESTING_ROOT_DIR} -DNALU_DIR=${NALU_WIND_TESTING_ROOT_DIR}/nalu-wind -DTEST_LOG=${LOGS_DIR}/nalu-wind-test-log.txt -DHOST_NAME=${HOST_NAME} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} ${CTEST_ARGS}"
 
   # Set essential arguments for the ctest cmake configure step
-  CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DBoost_DIR:PATH=${BOOST_DIR} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
 
   # Set looser diff tolerance for GCC 7 cases that have more optimization flags on
   if [ "${MACHINE_NAME}" == 'eagle' ]; then

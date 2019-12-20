@@ -28,6 +28,7 @@ cmd "module load tioga"
 cmd "module load yaml-cpp"
 cmd "module load cmake"
 cmd "module load trilinos"
+cmd "module load boost"
 cmd "module list"
 
 cmd "which cmake"

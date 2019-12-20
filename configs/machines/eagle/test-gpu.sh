@@ -41,6 +41,7 @@ cmd "module load yaml-cpp"
 cmd "module load cmake"
 cmd "module load fftw"
 cmd "module load cuda"
+cmd "module load boost"
 
 #(set -x; srun -t 00:30:00 -N 1 -A hfm -n 1 --gres=gpu:1 ./unittestX --gtest_filter=*.NGP*)
 (set -x; ctest)

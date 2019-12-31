@@ -361,6 +361,7 @@ test_configuration() {
 
   # Set looser diff tolerance for GCC 7 cases that have more optimization flags on
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    export CXXFLAGS="-Xcudafe --diag_suppress=code_is_unreachable"
     CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.05 ${CMAKE_CONFIGURE_ARGS}"
   elif [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
     CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.0005 ${CMAKE_CONFIGURE_ARGS}"

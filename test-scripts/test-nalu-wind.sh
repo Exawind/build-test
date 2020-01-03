@@ -56,6 +56,9 @@ test_configuration() {
 
   TRILINOS="trilinos"
 
+  #CUDA version used for tests on Eagle
+  CUDA_VERSION="9.2.88"
+
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}"
 
   printf "\nLoading modules...\n"
@@ -91,7 +94,7 @@ test_configuration() {
     cmd "module load python"
     cmd "module load git"
     cmd "module load binutils"
-    cmd "module load cuda/9.2.88"
+    cmd "module load cuda/${CUDA_VERSION}"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
@@ -295,6 +298,7 @@ test_configuration() {
 
   # Unset the TMPDIR variable after building but before testing during ctest nightly script and do not overlap running tests
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    EXTRA_BUILD_NAME="nvcc-${CUDA_VERSION}${EXTRA_BUILD_NAME}"
     CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE -DCTEST_DISABLE_OVERLAPPING_TESTS:BOOL=TRUE ${CTEST_ARGS}"
   fi
 

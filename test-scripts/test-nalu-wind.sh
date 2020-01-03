@@ -298,7 +298,7 @@ test_configuration() {
 
   # Unset the TMPDIR variable after building but before testing during ctest nightly script and do not overlap running tests
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    EXTRA_BUILD_NAME="nvcc-${CUDA_VERSION}${EXTRA_BUILD_NAME}"
+    EXTRA_BUILD_NAME="-nvcc-${CUDA_VERSION}${EXTRA_BUILD_NAME}"
     CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE -DCTEST_DISABLE_OVERLAPPING_TESTS:BOOL=TRUE ${CTEST_ARGS}"
   fi
 

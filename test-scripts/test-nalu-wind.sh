@@ -56,6 +56,9 @@ test_configuration() {
 
   TRILINOS="trilinos"
 
+  #CUDA version used for tests on Eagle
+  CUDA_VERSION="9.2.88"
+
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}"
 
   printf "\nLoading modules...\n"
@@ -91,7 +94,7 @@ test_configuration() {
     cmd "module load python"
     cmd "module load git"
     cmd "module load binutils"
-    cmd "module load cuda/9.2.88"
+    cmd "module load cuda/${CUDA_VERSION}"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
@@ -211,8 +214,10 @@ test_configuration() {
   printf "\nSetting variables to pass to CTest...\n"
   TRILINOS_DIR=$(spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_ID})
   YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_ID})
+  BOOST_DIR=$(spack location -i boost %${COMPILER_ID})
   printf "TRILINOS_DIR=${TRILINOS_DIR}\n"
   printf "YAML_DIR=${YAML_DIR}\n"
+  printf "BOOST_DIR=${BOOST_DIR}\n"
   CMAKE_CONFIGURE_ARGS=''
   for TPL in ${TPLS[*]}; do
     if [ "${TPL}" == 'openfast' ]; then
@@ -293,6 +298,7 @@ test_configuration() {
 
   # Unset the TMPDIR variable after building but before testing during ctest nightly script and do not overlap running tests
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    EXTRA_BUILD_NAME="-nvcc-${CUDA_VERSION}${EXTRA_BUILD_NAME}"
     CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE -DCTEST_DISABLE_OVERLAPPING_TESTS:BOOL=TRUE ${CTEST_ARGS}"
   fi
 
@@ -355,13 +361,16 @@ test_configuration() {
   CTEST_ARGS="-DTESTING_ROOT_DIR=${NALU_WIND_TESTING_ROOT_DIR} -DNALU_DIR=${NALU_WIND_TESTING_ROOT_DIR}/nalu-wind -DTEST_LOG=${LOGS_DIR}/nalu-wind-test-log.txt -DHOST_NAME=${HOST_NAME} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} ${CTEST_ARGS}"
 
   # Set essential arguments for the ctest cmake configure step
-  CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DBoost_DIR:PATH=${BOOST_DIR} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
 
-  # Set looser diff tolerance for GCC 7 cases that have more optimization flags on
+  # Set looser diff tolerance for certain cases
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.01 ${CMAKE_CONFIGURE_ARGS}"
+    export CXXFLAGS="-Xcudafe --diag_suppress=code_is_unreachable -Wimplicit-fallthrough=0"
+    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.05 ${CMAKE_CONFIGURE_ARGS}"
   elif [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
     CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.0005 ${CMAKE_CONFIGURE_ARGS}"
+  elif [ "${MACHINE_NAME}" == 'mac' ]; then
+    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.1 ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Allow OpenMPI to consider hardware threads as cpus and allow for oversubscription

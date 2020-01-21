@@ -41,6 +41,7 @@ cmd "module load netlib-lapack"
 cmd "module load yaml-cpp"
 cmd "module load cmake"
 cmd "module load cuda/9.2.88"
+cmd "module load boost"
 cmd "module list"
 
 # Set tmpdir to the scratch filesystem so it doesn't run out of space
@@ -62,6 +63,7 @@ TRILINOS_ROOT_DIR=$(spack location -i trilinos)
   -DCMAKE_CXX_COMPILER:PATH=mpic++ \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
   -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
+  -DBoost_DIR:PATH=${BOOST_ROOT_DIR} \
   -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
   -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \

@@ -57,6 +57,7 @@ cmd "module load yaml-cpp"
 cmd "module load cmake"
 cmd "module load trilinos"
 cmd "module load fftw"
+cmd "module load boost"
 cmd "module list"
 
 # Set tmpdir to the scratch filesystem so it doesn't run out of space
@@ -103,6 +104,7 @@ fi
   -DMPIEXEC_PREFLAGS:STRING="${OVERSUBSCRIBE_FLAGS}" \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
   -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
+  -DBoost_DIR:PATH=${BOOST_ROOT_DIR} \
   -DENABLE_HYPRE:BOOL=ON \
   -DHYPRE_DIR:PATH=${HYPRE_ROOT_DIR} \
   -DENABLE_TIOGA:BOOL=ON \

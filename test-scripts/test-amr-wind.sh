@@ -170,13 +170,13 @@ test_configuration() {
   #fi
 
   # Run static analysis and let ctest know we have static analysis output
-  #if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
-  #  printf "\nRunning cppcheck static analysis (AMR-Wind not updated until after this step)...\n"
-  #  cmd "rm ${LOGS_DIR}/amr-wind-static-analysis.txt || true"
-  #  cmd "cppcheck --enable=all --quiet -j 32 -DAMREX_SPACEDIM=3 -DBL_SPACEDIM=3 --max-configs=16 --output-file=${LOGS_DIR}/amr-wind-static-analysis.txt ${AMR_WIND_DIR}/Submodules/AMReX/Src/F_Interfaces/Base ${AMR_WIND_DIR}/Submodules/AMReX/Src/EB ${AMR_WIND_DIR}/Source || true"
-  #  cmd "printf \"%s warnings\n\" \"$(wc -l < ${LOGS_DIR}/amr-wind-static-analysis.txt | xargs echo -n)\" >> ${LOGS_DIR}/amr-wind-static-analysis.txt"
-  #  CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${LOGS_DIR}/amr-wind-static-analysis.txt ${CTEST_ARGS}"
-  #fi
+  if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
+    printf "\nRunning cppcheck static analysis (AMR-Wind not updated until after this step)...\n"
+    cmd "rm ${LOGS_DIR}/amr-wind-static-analysis.txt || true"
+    cmd "cppcheck --enable=all --quiet -j 32 -DAMREX_SPACEDIM=3 -DBL_SPACEDIM=3 --max-configs=16 --output-file=${LOGS_DIR}/amr-wind-static-analysis.txt ${AMR_WIND_DIR}/Submodules/AMReX/Src/F_Interfaces/Base ${AMR_WIND_DIR}/Submodules/AMReX/Src/EB ${AMR_WIND_DIR}/Source || true"
+    cmd "printf \"%s warnings\n\" \"$(wc -l < ${LOGS_DIR}/amr-wind-static-analysis.txt | xargs echo -n)\" >> ${LOGS_DIR}/amr-wind-static-analysis.txt"
+    CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${LOGS_DIR}/amr-wind-static-analysis.txt ${CTEST_ARGS}"
+  fi
 
   # Unset the TMPDIR variable after building but before testing during ctest nightly script
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
@@ -242,7 +242,7 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${MPI_C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} -DMPI_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DMPI_C_COMPILER:STRING=${MPI_C_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
 
   # CMake configure arguments testing options
-  CMAKE_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=OFF -DAMR_WIND_TEST_WITH_FEXTREMA:BOOL=OFF ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON -DAMR_WIND_TEST_WITH_FEXTREMA:BOOL=OFF ${CMAKE_CONFIGURE_ARGS}"
 
   # Set essential arguments for ctest
   CTEST_ARGS="-DTESTING_ROOT_DIR=${AMR_WIND_TESTING_ROOT_DIR} -DAMR_WIND_DIR=${AMR_WIND_DIR} -DTEST_LOG=${LOGS_DIR}/amr-wind-test-log.txt -DHOST_NAME=${HOST_NAME} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} ${CTEST_ARGS}"

@@ -20,7 +20,6 @@ test_configuration() {
   printf "************************************************************\n"
   printf "Testing AMR-Wind with:\n"
   printf "${COMPILER_ID}\n"
-  printf "MPI_ENABLED: ${MPI_ENABLED}\n"
   printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
   printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date)\n"
@@ -239,7 +238,7 @@ test_configuration() {
   cmd "which cmake"
 
   # CMake configure arguments for compilers
-  CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${MPI_C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} -DMPI_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DMPI_C_COMPILER:STRING=${MPI_C_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${MPI_C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} -DMPI_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DMPI_C_COMPILER:STRING=${MPI_C_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
 
   # CMake configure arguments testing options
   CMAKE_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON -DAMR_WIND_TEST_WITH_FEXTREMA:BOOL=OFF ${CMAKE_CONFIGURE_ARGS}"
@@ -315,7 +314,6 @@ EOL
   printf "************************************************************\n"
   printf "Done testing AMR-Wind with:\n"
   printf "${COMPILER_ID}\n"
-  printf "MPI_ENABLED: ${MPI_ENABLED}\n"
   printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
   printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date)\n"
@@ -437,7 +435,6 @@ main() {
     CONFIG=(${CONFIGURATION//:/ })
     COMPILER_NAME=${CONFIG[0]}
     COMPILER_VERSION=${CONFIG[1]}
-    MPI_ENABLED=${CONFIG[2]}
     OPENMP_ENABLED=${CONFIG[3]}
     LIST_OF_TPLS=${CONFIG[4]}
 

@@ -39,6 +39,9 @@ test_configuration() {
     BLAS_ID="intel-mkl"
   fi
 
+  #CUDA version used for tests on Eagle
+  CUDA_VERSION="10.0.130"
+
   cmd "cd ${AMR_WIND_TESTING_ROOT_DIR}"
 
   printf "\nLoading modules...\n"
@@ -76,7 +79,7 @@ test_configuration() {
     cmd "module load python"
     cmd "module load git"
     cmd "module load binutils"
-    cmd "module load cuda/10.0.130"
+    cmd "module load cuda/${CUDA_VERSION}"
     cmd "module load cmake"
     cmd "module load rsync"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then

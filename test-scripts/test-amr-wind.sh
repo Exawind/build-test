@@ -263,7 +263,7 @@ test_configuration() {
     printf "\n"
   fi
 
-  if [ "${MACHINE_NAME}" != 'eagle' ]; then
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
     CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_CUDA:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
   fi
 

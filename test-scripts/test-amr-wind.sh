@@ -242,6 +242,12 @@ test_configuration() {
   # CMake configure arguments testing options
   CMAKE_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
 
+  # Set CUDA stuff for Eagle
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    EXTRA_BUILD_NAME="-nvcc-${CUDA_VERSION}${EXTRA_BUILD_NAME}"
+    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_CUDA:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
+  fi
+
   # Set essential arguments for ctest
   CTEST_ARGS="-DTESTING_ROOT_DIR=${AMR_WIND_TESTING_ROOT_DIR} -DAMR_WIND_DIR=${AMR_WIND_DIR} -DTEST_LOG=${LOGS_DIR}/amr-wind-test-log.txt -DHOST_NAME=${HOST_NAME} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} ${CTEST_ARGS}"
 
@@ -261,10 +267,6 @@ test_configuration() {
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "module list"
     printf "\n"
-  fi
-
-  if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_CUDA:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   cmd "cd ${AMR_WIND_DIR}/build"

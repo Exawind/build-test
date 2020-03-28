@@ -27,7 +27,6 @@ test_configuration() {
   printf "\n"
 
   # Logic for building up some constraints for use on Spack commands
-  GENERAL_CONSTRAINTS=''
   MPI_ID=''
   MPI_CONSTRAINTS=''
   BLAS_ID=''
@@ -77,7 +76,7 @@ test_configuration() {
     cmd "module load python"
     cmd "module load git"
     cmd "module load binutils"
-    cmd "module load cuda/9.2.88"
+    cmd "module load cuda/10.0.130"
     cmd "module load cmake"
     cmd "module load rsync"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
@@ -100,7 +99,7 @@ test_configuration() {
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   #printf "\nUpdating MASA (this is fine to error when tests are first run)...\n"
-  #cmd "spack cd masa %${COMPILER_ID} ${GENERAL_CONSTRAINTS} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno || true"
+  #cmd "spack cd masa %${COMPILER_ID} && pwd && git fetch --all && git reset --hard origin/master && git clean -df && git status -uno || true"
 
   cmd "cd ${AMR_WIND_TESTING_ROOT_DIR}" # Change directories to avoid any stale file handles
 
@@ -114,8 +113,8 @@ test_configuration() {
     cmd "module list"
   fi
 
-  #printf "\nInstalling AMR-Wind dependencies using ${COMPILER_ID}...\n"
-  #(set -x; spack install ${MPI_ID} %${COMPILER_ID} ${GENERAL_CONSTRAINTS})
+  printf "\nInstalling AMR-Wind dependencies using ${COMPILER_ID}...\n"
+  (set -x; spack install ${MPI_ID} %${COMPILER_ID})
 
   #STAGE_DIR=$(spack location -S)
   #if [ ! -z "${STAGE_DIR}" ]; then
@@ -262,6 +261,10 @@ test_configuration() {
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "module list"
     printf "\n"
+  fi
+
+  if [ "${MACHINE_NAME}" != 'eagle' ]; then
+    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_CUDA:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   cmd "cd ${AMR_WIND_DIR}/build"

@@ -248,7 +248,7 @@ test_configuration() {
   # Set CUDA stuff for Eagle
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     EXTRA_BUILD_NAME="-nvcc-${CUDA_VERSION}${EXTRA_BUILD_NAME}"
-    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_CUDA:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
+    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_CUDA:BOOL=ON -DCUDA_ARCH:STRING=7.0 ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Set essential arguments for ctest

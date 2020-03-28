@@ -113,8 +113,8 @@ test_configuration() {
     cmd "module list"
   fi
 
-  printf "\nInstalling AMR-Wind dependencies using ${COMPILER_ID}...\n"
-  (set -x; spack install ${MPI_ID} %${COMPILER_ID})
+  #printf "\nInstalling AMR-Wind dependencies using ${COMPILER_ID}...\n"
+  #(set -x; spack install ${MPI_ID} %${COMPILER_ID})
 
   #STAGE_DIR=$(spack location -S)
   #if [ ! -z "${STAGE_DIR}" ]; then

@@ -20,8 +20,6 @@ test_configuration() {
   printf "************************************************************\n"
   printf "Testing AMR-Wind with:\n"
   printf "${COMPILER_ID}\n"
-  printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
-  printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date)\n"
   printf "************************************************************\n"
   printf "\n"
@@ -106,28 +104,13 @@ test_configuration() {
 
   cmd "cd ${AMR_WIND_TESTING_ROOT_DIR}" # Change directories to avoid any stale file handles
 
-  TPL_VARIANTS=''
-  TPLS=(${LIST_OF_TPLS//;/ })
-  for TPL in ${TPLS[*]}; do
-    TPL_VARIANTS+="+${TPL}"
-  done
-
   if [ "${MACHINE_NAME}" != 'mac' ]; then
     cmd "module list"
   fi
 
   #printf "\nInstalling AMR-Wind dependencies using ${COMPILER_ID}...\n"
   #(set -x; spack install ${MPI_ID} %${COMPILER_ID})
-
-  #STAGE_DIR=$(spack location -S)
-  #if [ ! -z "${STAGE_DIR}" ]; then
-  #  #Haven't been able to find another robust way to rm with exclude
-  #  printf "\nRemoving all staged directories except Trilinos...\n"
-  #  cmd "cd ${STAGE_DIR} && rm -rf a* b* c* d* e* f* g* h* i* j* k* l* m* n* o* p* q* r* s* tar* ti* u* v* w* x* y* z*"
-  #  #printf "\nRemoving all staged directories except Trilinos and OpenFAST...\n"
-  #  #cmd "cd ${STAGE_DIR} && rm -rf a* b* c* d* e* f* g* h* i* j* k* l* m* n* openmpi* p* q* r* s* tar* u* v* w* x* y* z*"
-  #  #find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;
-  #fi
+  #(set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
 
   # Refresh available modules (this is only really necessary on the first run of this script
   # because cmake and openmpi will already have been built and module files registered in subsequent runs)
@@ -143,13 +126,11 @@ test_configuration() {
 
   printf "\nSetting variables to pass to CTest...\n"
   CMAKE_CONFIGURE_ARGS=''
-  for TPL in ${TPLS[*]}; do
-    if [ "${TPL}" == 'masa' ]; then
-      MASA_DIR=$(spack location -i masa %${COMPILER_ID})
-      CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MASA:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
-      printf "MASA_DIR=${MASA_DIR}\n"
-    fi
-  done
+
+  # Turn on verification and find MASA
+  #MASA_DIR=$(spack location -i masa %${COMPILER_ID})
+  #CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_VERIFICATION:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
+  #printf "MASA_DIR=${MASA_DIR}\n"
 
   # Set the extra identifiers for CDash build description
   EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}"
@@ -162,6 +143,11 @@ test_configuration() {
     # Update all the submodules recursively in case the previous ctest update failed because of submodule updates
     cmd "cd ${AMR_WIND_DIR} && git submodule update --init --recursive"
     cmd "ln -s ${HOME}/exawind/AMR-WindGoldFiles ${AMR_WIND_DIR}/test/AMR-WindGoldFiles"
+    if [ "${USE_LATEST_AMREX}" == 'true' ]; then
+      printf "\nUsing latest AMReX development branch checkout...\n"
+      cmd "cd ${AMR_WIND_DIR}/submods/amrex && git checkout development && git pull origin development"
+      EXTRA_BUILD_NAME="${EXTRA_BUILD_NAME}-amrex_dev"
+    fi
   fi
 
   #if [ "${OPENMP_ENABLED}" == 'true' ]; then
@@ -243,7 +229,7 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${MPI_C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
 
   # CMake configure arguments testing options
-  CMAKE_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=OFF ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE=${PYTHON_EXE} ${CMAKE_CONFIGURE_ARGS}"
 
   # Set CUDA stuff for Eagle
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
@@ -324,8 +310,6 @@ EOL
   printf "************************************************************\n"
   printf "Done testing AMR-Wind with:\n"
   printf "${COMPILER_ID}\n"
-  printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
-  printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date)\n"
   printf "************************************************************\n"
 }
@@ -351,21 +335,23 @@ main() {
  
   # Set configurations to test for each machine
   declare -a CONFIGURATIONS
-  #CONFIGURATION[n]='compiler_name:compiler_version:mpi_enabled:openmp_enabled'
+  #CONFIGURATION[n]='compiler_name:compiler_version:mpi_enabled:openmp_enabled:use_latest_amrex'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:true:false'
-    CONFIGURATIONS[1]='gcc:4.9.4:true:false'
-    CONFIGURATIONS[2]='intel:18.0.4:true:false'
-    CONFIGURATIONS[3]='clang:7.0.1:true:false'
+    CONFIGURATIONS[0]='gcc:7.4.0:true:false:false'
+    CONFIGURATIONS[1]='gcc:4.9.4:true:false:false'
+    CONFIGURATIONS[2]='intel:18.0.4:true:false:false'
+    CONFIGURATIONS[3]='clang:7.0.1:true:false:false'
+    CONFIGURATIONS[4]='gcc:7.4.0:true:false:true'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:true:false'
+    CONFIGURATIONS[0]='gcc:7.4.0:true:false:false'
+    CONFIGURATIONS[1]='gcc:7.4.0:true:false:true'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:true:false'
-    CONFIGURATIONS[1]='clang:9.0.0-apple:true:false'
+    CONFIGURATIONS[0]='gcc:7.4.0:true:false:false'
+    CONFIGURATIONS[1]='clang:9.0.0-apple:true:false:false'
     NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else
     printf "\nMachine name not recognized.\n"
@@ -446,7 +432,7 @@ main() {
     COMPILER_NAME=${CONFIG[0]}
     COMPILER_VERSION=${CONFIG[1]}
     OPENMP_ENABLED=${CONFIG[3]}
-    LIST_OF_TPLS=${CONFIG[4]}
+    USE_LATEST_AMREX=${CONFIG[4]}
 
     printf "\nRemoving previous test log for uploading to CDash...\n"
     cmd "rm ${LOGS_DIR}/amr-wind-test-log.txt"

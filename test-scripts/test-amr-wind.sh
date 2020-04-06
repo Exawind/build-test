@@ -160,7 +160,7 @@ test_configuration() {
   if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
     printf "\nRunning cppcheck static analysis (AMR-Wind not updated until after this step)...\n"
     cmd "rm ${LOGS_DIR}/amr-wind-static-analysis.txt || true"
-    cmd "cppcheck --enable=all --quiet -j 32 -DAMREX_SPACEDIM=3 -DBL_SPACEDIM=3 --max-configs=16 --output-file=${LOGS_DIR}/amr-wind-static-analysis.txt ${AMR_WIND_DIR}/Submodules/AMReX/Src/F_Interfaces/Base ${AMR_WIND_DIR}/Submodules/AMReX/Src/EB ${AMR_WIND_DIR}/Source || true"
+    cmd "cppcheck --enable=all --quiet -j 32 -DAMREX_SPACEDIM=3 -DBL_SPACEDIM=3 --max-configs=16 --output-file=${LOGS_DIR}/amr-wind-static-analysis.txt ${AMR_WIND_DIR}/src || true"
     cmd "printf \"%s warnings\n\" \"$(wc -l < ${LOGS_DIR}/amr-wind-static-analysis.txt | xargs echo -n)\" >> ${LOGS_DIR}/amr-wind-static-analysis.txt"
     CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${LOGS_DIR}/amr-wind-static-analysis.txt ${CTEST_ARGS}"
   fi

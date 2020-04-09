@@ -145,7 +145,7 @@ test_configuration() {
     cmd "ln -s ${HOME}/exawind/AMR-WindGoldFiles ${AMR_WIND_DIR}/test/AMR-WindGoldFiles"
     if [ "${USE_LATEST_AMREX}" == 'true' ]; then
       printf "\nUsing latest AMReX development branch checkout...\n"
-      cmd "cd ${AMR_WIND_DIR}/submods/amrex && git checkout development && git pull origin development"
+      cmd "cd ${AMR_WIND_DIR}/submods/amrex && git checkout development && git pull origin development && git log -1 --pretty=oneline"
       EXTRA_BUILD_NAME="${EXTRA_BUILD_NAME}-amrex_dev"
     fi
   fi

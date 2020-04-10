@@ -144,8 +144,6 @@ test_configuration() {
     cmd "cd ${AMR_WIND_DIR} && git submodule update --init --recursive"
     cmd "ln -s ${HOME}/exawind/AMR-WindGoldFiles ${AMR_WIND_DIR}/test/AMR-WindGoldFiles"
     if [ "${USE_LATEST_AMREX}" == 'true' ]; then
-      #printf "\nUsing latest AMReX development branch checkout...\n"
-      #cmd "cd ${AMR_WIND_DIR}/submods/amrex && git checkout development && git pull origin development && git log -1 --pretty=oneline"
       CTEST_ARGS="-DUSE_LATEST_AMREX:BOOL=TRUE ${CTEST_ARGS}"
       EXTRA_BUILD_NAME="${EXTRA_BUILD_NAME}-amrex_dev"
     fi
@@ -230,14 +228,12 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${MPI_C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
 
   # CMake configure arguments testing options
-  CMAKE_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE=${PYTHON_EXE} ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON -DPYTHON_EXECUTABLE=${PYTHON_EXE} ${CMAKE_CONFIGURE_ARGS}"
 
   # Set CUDA stuff for Eagle
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     EXTRA_BUILD_NAME="-nvcc-${CUDA_VERSION}${EXTRA_BUILD_NAME}"
-    CMAKE_CONFIGURE_ARGS="-DMPIEXEC_EXECUTABLE:STRING=srun -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=OFF -DAMR_WIND_ENABLE_CUDA:BOOL=ON -DCUDA_ARCH:STRING=7.0 ${CMAKE_CONFIGURE_ARGS}"
-  else
-    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
+    CMAKE_CONFIGURE_ARGS="-DMPIEXEC_EXECUTABLE:STRING=srun -DAMR_WIND_ENABLE_CUDA:BOOL=ON -DCUDA_ARCH:STRING=7.0 ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Set essential arguments for ctest
@@ -245,11 +241,6 @@ test_configuration() {
 
   # Set essential arguments for the ctest cmake configure step
   CMAKE_CONFIGURE_ARGS="-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
-
-  # Set looser diff tolerance for GCC 7 cases that have more optimization flags on
-  #if [ "${COMPILER_ID}" == 'gcc@7.4.0' ] && [ "${MACHINE_NAME}" != 'mac' ]; then
-  #  CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.00001 ${CMAKE_CONFIGURE_ARGS}"
-  #fi
 
   # Allow for oversubscription in OpenMPI
   if [ "${COMPILER_NAME}" != 'intel' ]; then

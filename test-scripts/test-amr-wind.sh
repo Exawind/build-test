@@ -142,7 +142,7 @@ test_configuration() {
     cmd "cd ${AMR_WIND_DIR}/build && rm -rf ${AMR_WIND_DIR}/build/*"
     # Update all the submodules recursively in case the previous ctest update failed because of submodule updates
     cmd "cd ${AMR_WIND_DIR} && git submodule update --init --recursive"
-    cmd "ln -s ${HOME}/exawind/AMR-WindGoldFiles ${AMR_WIND_DIR}/test/AMR-WindGoldFiles"
+    #cmd "ln -s ${HOME}/exawind/AMR-WindGoldFiles ${AMR_WIND_DIR}/test/AMR-WindGoldFiles"
     if [ "${USE_LATEST_AMREX}" == 'true' ]; then
       CTEST_ARGS="-DUSE_LATEST_AMREX:BOOL=TRUE ${CTEST_ARGS}"
       EXTRA_BUILD_NAME="${EXTRA_BUILD_NAME}-amrex_dev"

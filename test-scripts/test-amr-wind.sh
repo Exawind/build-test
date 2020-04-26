@@ -138,6 +138,7 @@ test_configuration() {
   if [ ! -z "${AMR_WIND_DIR}" ]; then
     printf "\nCleaning AMR-Wind directory...\n"
     cmd "cd ${AMR_WIND_DIR} && git reset --hard origin/development && git clean -df && git status -uno"
+    cmd "cd ${AMR_WIND_DIR}/submods/amrex && git reset --hard origin/development && git clean -df && git status -uno"
     cmd "mkdir -p ${AMR_WIND_DIR}/build || true"
     cmd "cd ${AMR_WIND_DIR}/build && rm -rf ${AMR_WIND_DIR}/build/*"
     # Update all the submodules recursively in case the previous ctest update failed because of submodule updates

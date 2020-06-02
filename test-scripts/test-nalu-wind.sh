@@ -367,11 +367,7 @@ test_configuration() {
   # Set looser diff tolerance for certain cases
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     export CXXFLAGS="-Xcudafe --diag_suppress=code_is_unreachable -Wimplicit-fallthrough=0"
-    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.05 ${CMAKE_CONFIGURE_ARGS}"
-  elif [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
-    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.0005 ${CMAKE_CONFIGURE_ARGS}"
-  elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.1 ${CMAKE_CONFIGURE_ARGS}"
+    #CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.05 ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Allow OpenMPI to consider hardware threads as cpus and allow for oversubscription

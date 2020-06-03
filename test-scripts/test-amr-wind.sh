@@ -110,9 +110,7 @@ test_configuration() {
 
   #printf "\nInstalling AMR-Wind dependencies using ${COMPILER_ID}...\n"
   #(set -x; spack install ${MPI_ID} %${COMPILER_ID})
-  if [ "${MACHINE_NAME}" != 'eagle' ]; then
-    (set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
-  fi
+  (set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
 
   # Refresh available modules (this is only really necessary on the first run of this script
   # because cmake and openmpi will already have been built and module files registered in subsequent runs)
@@ -130,11 +128,9 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS=''
 
   # Turn on verification and find MASA
-  if [ "${MACHINE_NAME}" != 'eagle' ]; then
-    MASA_DIR=$(spack location -i masa %${COMPILER_ID})
-    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MASA:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
-    printf "MASA_DIR=${MASA_DIR}\n"
-  fi
+  MASA_DIR=$(spack location -i masa %${COMPILER_ID})
+  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MASA:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
+  printf "MASA_DIR=${MASA_DIR}\n"
 
   # Set the extra identifiers for CDash build description
   EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}"

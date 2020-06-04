@@ -188,11 +188,11 @@ test_configuration() {
   fi
 
   # Turn on all warnings unless we're gcc 4.9.4
-  #if [ "${COMPILER_ID}" == 'gcc@4.9.4' ]; then
-  #  CMAKE_CONFIGURE_ARGS="-DENABLE_ALL_WARNINGS:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
-  #else
-  #  CMAKE_CONFIGURE_ARGS="-DENABLE_ALL_WARNINGS:BOOL=TRUE ${CMAKE_CONFIGURE_ARGS}"
-  #fi
+  if [ "${COMPILER_ID}" == 'gcc@4.9.4' ]; then
+    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_ALL_WARNINGS:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
+  else
+    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_ALL_WARNINGS:BOOL=TRUE ${CMAKE_CONFIGURE_ARGS}"
+  fi
 
   # Default cmake build type
   CMAKE_BUILD_TYPE=RelWithDebInfo

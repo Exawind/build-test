@@ -126,7 +126,7 @@ test_configuration() {
 
   #printf "\nInstalling AMR-Wind dependencies using ${COMPILER_ID}...\n"
   #(set -x; spack install ${MPI_ID} %${COMPILER_ID})
-  #(set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
+  (set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
 
   # Refresh available modules (this is only really necessary on the first run of this script
   # because cmake and openmpi will already have been built and module files registered in subsequent runs)
@@ -144,9 +144,9 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS=''
 
   # Turn on verification and find MASA
-  #MASA_DIR=$(spack location -i masa %${COMPILER_ID})
-  #CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_VERIFICATION:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
-  #printf "MASA_DIR=${MASA_DIR}\n"
+  MASA_DIR=$(spack location -i masa %${COMPILER_ID})
+  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MASA:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
+  printf "MASA_DIR=${MASA_DIR}\n"
 
   # Set the extra identifiers for CDash build description
   EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}"
@@ -176,7 +176,7 @@ test_configuration() {
   if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
     printf "\nRunning cppcheck static analysis (AMR-Wind not updated until after this step)...\n"
     cmd "rm ${LOGS_DIR}/amr-wind-static-analysis.txt || true"
-    cmd "cppcheck --enable=all --quiet -j 32 -DAMREX_SPACEDIM=3 -DBL_SPACEDIM=3 --max-configs=16 --output-file=${LOGS_DIR}/amr-wind-static-analysis.txt ${AMR_WIND_DIR}/src || true"
+    cmd "cppcheck --enable=all --quiet -j 32 -DAMREX_SPACEDIM=3 -DBL_SPACEDIM=3 --max-configs=16 --output-file=${LOGS_DIR}/amr-wind-static-analysis.txt ${AMR_WIND_DIR}/amr-wind || true"
     cmd "printf \"%s warnings\n\" \"$(wc -l < ${LOGS_DIR}/amr-wind-static-analysis.txt | xargs echo -n)\" >> ${LOGS_DIR}/amr-wind-static-analysis.txt"
     CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${LOGS_DIR}/amr-wind-static-analysis.txt ${CTEST_ARGS}"
   fi

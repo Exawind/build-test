@@ -77,6 +77,7 @@ test_configuration() {
     cmd "module load py-setuptools/40.8.0-py3"
     cmd "module load py-kiwisolver/1.0.1-py3"
     cmd "module load py-pyparsing/2.3.1-py3"
+    cmd "module load texlive"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'clang' ]; then

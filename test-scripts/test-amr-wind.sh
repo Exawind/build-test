@@ -96,7 +96,7 @@ test_configuration() {
     cmd "module load cuda/${CUDA_VERSION}"
     cmd "module load cmake"
     cmd "module load rsync"
-    cmd "module load python/3.7.4"
+    cmd "module load python/3.7.3"
     cmd "module load py-matplotlib"
     cmd "module load py-six"
     cmd "module load py-numpy"

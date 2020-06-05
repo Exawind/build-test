@@ -100,6 +100,7 @@ test_configuration() {
     cmd "module load py-matplotlib"
     cmd "module load py-six"
     cmd "module load py-numpy"
+    cmd "module load py-dateutil"
     cmd "module load py-cycler"
     cmd "module load py-bottleneck"
     cmd "module load py-cython"

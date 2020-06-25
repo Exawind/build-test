@@ -187,6 +187,7 @@ test_configuration() {
 
   printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_ID}...\n"
   cmd "spack install --dont-restage --keep-stage --only dependencies nalu-wind ${TPL_VARIANTS} %${COMPILER_ID} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPL_CONSTRAINTS} ${GENERAL_CONSTRAINTS}"
+  cmd "spack install nccmp %${COMPILER_ID}"
 
   STAGE_DIR=$(spack location -S)
   if [ ! -z "${STAGE_DIR}" ]; then
@@ -205,9 +206,11 @@ test_configuration() {
   printf "\nLoading Spack modules into environment for CMake and MPI to use during CTest...\n"
   if [ "${MACHINE_NAME}" == 'mac' ]; then
     cmd "export PATH=$(spack location -i cmake %${COMPILER_ID})/bin:${PATH}"
+    cmd "export PATH=$(spack location -i nccmp %${COMPILER_ID})/bin:${PATH}"
     cmd "export PATH=$(spack location -i ${MPI_ID} %${COMPILER_ID})/bin:${PATH}"
   else
     cmd "spack load cmake %${COMPILER_ID}"
+    cmd "spack load nccmp %${COMPILER_ID}"
     cmd "spack load ${MPI_ID} %${COMPILER_ID}"
   fi
 

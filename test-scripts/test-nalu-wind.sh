@@ -187,7 +187,9 @@ test_configuration() {
 
   printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_ID}...\n"
   cmd "spack install --dont-restage --keep-stage --only dependencies nalu-wind ${TPL_VARIANTS} %${COMPILER_ID} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPL_CONSTRAINTS} ${GENERAL_CONSTRAINTS}"
-  cmd "spack install nccmp %${COMPILER_ID}"
+  if [ "${MACHINE_NAME}" != 'eagle' ]; then
+    cmd "spack install nccmp %${COMPILER_ID}"
+  fi
 
   STAGE_DIR=$(spack location -S)
   if [ ! -z "${STAGE_DIR}" ]; then

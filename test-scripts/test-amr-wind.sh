@@ -240,27 +240,32 @@ test_configuration() {
 
   # Explicitly set compilers to MPI compilers
   if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
-    MPI_CXX_COMPILER=mpicxx
-    MPI_C_COMPILER=mpicc
-    MPI_FORTRAN_COMPILER=mpifort
+    CXX_COMPILER=mpicxx
+    C_COMPILER=mpicc
+    FORTRAN_COMPILER=mpifort
+    if [ "${MACHINE_NAME}" == 'eagle' ]; then
+      CXX_COMPILER=g++
+      C_COMPILER=gcc
+      FORTRAN_COMPILER=gfortran
+    fi
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
-    MPI_CXX_COMPILER=mpiicpc
-    MPI_C_COMPILER=mpiicc
-    MPI_FORTRAN_COMPILER=mpiifort
+    CXX_COMPILER=mpiicpc
+    C_COMPILER=mpiicc
+    FORTRAN_COMPILER=mpiifort
   fi
 
   # Give CMake a hint to find Python3
   PYTHON_EXE=$(which python3)
 
   printf "\nListing cmake and compilers that will be used in ctest...\n"
-  cmd "which ${MPI_CXX_COMPILER}"
-  cmd "which ${MPI_C_COMPILER}"
-  cmd "which ${MPI_FORTRAN_COMPILER}"
+  cmd "which ${CXX_COMPILER}"
+  cmd "which ${C_COMPILER}"
+  cmd "which ${FORTRAN_COMPILER}"
   cmd "which mpiexec"
   cmd "which cmake"
 
   # CMake configure arguments for compilers
-  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${MPI_C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
 
   # CMake configure arguments testing options
   CMAKE_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"

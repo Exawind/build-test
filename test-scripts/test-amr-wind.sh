@@ -243,11 +243,11 @@ test_configuration() {
     CXX_COMPILER=mpicxx
     C_COMPILER=mpicc
     FORTRAN_COMPILER=mpifort
-    if [ "${MACHINE_NAME}" == 'eagle' ]; then
-      CXX_COMPILER=g++
-      C_COMPILER=gcc
-      FORTRAN_COMPILER=gfortran
-    fi
+    #if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    #  CXX_COMPILER=g++
+    #  C_COMPILER=gcc
+    #  FORTRAN_COMPILER=gfortran
+    #fi
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     CXX_COMPILER=mpiicpc
     C_COMPILER=mpiicc

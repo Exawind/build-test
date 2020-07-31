@@ -48,6 +48,7 @@ test_configuration() {
     cmd "module unuse ${MODULEPATH}"
     cmd "module use /opt/compilers/modules-2019-05-08"
     cmd "module use /opt/utilities/modules-2019-05-08"
+    cmd "module use /opt/software/modules-2019-05-08/gcc-7.4.0"
     cmd "module load unzip"
     cmd "module load patch"
     cmd "module load bzip2"

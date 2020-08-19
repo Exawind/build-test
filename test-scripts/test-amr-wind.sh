@@ -146,6 +146,7 @@ test_configuration() {
   #printf "\nInstalling AMR-Wind dependencies using ${COMPILER_ID}...\n"
   #(set -x; spack install ${MPI_ID} %${COMPILER_ID})
   (set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
+  cmd "spack install netcdf %${COMPILER_ID}"
 
   # Refresh available modules (this is only really necessary on the first run of this script
   # because cmake and openmpi will already have been built and module files registered in subsequent runs)
@@ -166,6 +167,10 @@ test_configuration() {
   MASA_DIR=$(spack location -i masa %${COMPILER_ID})
   CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MASA:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
   printf "MASA_DIR=${MASA_DIR}\n"
+
+  NETCDF_DIR=$(spack location -i netcdf %${COMPILER_ID})
+  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_NETCDF:BOOL=ON -DNETCDF_DIR:PATH=${NETCDF_DIR} ${CMAKE_CONFIGURE_ARGS}"
+  printf "NETCDF_DIR=${NETCDF_DIR}\n"
 
   # Set the extra identifiers for CDash build description
   EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}"

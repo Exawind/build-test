@@ -170,7 +170,7 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MASA:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
   printf "MASA_DIR=${MASA_DIR}\n"
 
-  if [ "${MACHINE_NAME}" == 'rhodes' ]; then
+  if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_NAME}" != 'intel' ]; then
     #NETCDF_DIR=$(spack location -i netcdf %${COMPILER_ID})
     NETCDF_DIR=${NETCDF_ROOT_DIR}
     CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_NETCDF:BOOL=ON -DNETCDF_DIR:PATH=${NETCDF_DIR} ${CMAKE_CONFIGURE_ARGS}"

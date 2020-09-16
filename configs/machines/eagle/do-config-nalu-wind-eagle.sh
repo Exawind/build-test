@@ -53,10 +53,12 @@ cmd "module load hypre"
 cmd "module load tioga"
 cmd "module load yaml-cpp"
 cmd "module load cmake"
-cmd "module load trilinos"
+#cmd "module load trilinos"
 cmd "module load fftw"
 cmd "module load boost"
 cmd "module list"
+
+TRILINOS_ROOT_DIR=/projects/hfm/shreyas/exawind/install/gcc/trilinos
 
 # Set tmpdir to the scratch filesystem so it doesn't run out of space
 cmd "mkdir -p ${HOME}/.tmp"

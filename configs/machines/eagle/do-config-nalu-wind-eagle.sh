@@ -9,14 +9,12 @@ COMPILER=gcc #intel
 
 if [ "${COMPILER}" == 'gcc' ]; then
   CXX_COMPILER=mpicxx
-  C_COMPILER=mpicc
-  FORTRAN_COMPILER=mpifort
+  FORTRAN_COMPILER=mpif90
   #FLAGS="-O2 -march=skylake-avx512 -mtune=skylake-avx512"
   FLAGS="-O2 -march=skylake -mtune=skylake"
   OVERSUBSCRIBE_FLAGS="--use-hwthread-cpus --oversubscribe"
 elif [ "${COMPILER}" == 'intel' ]; then
   CXX_COMPILER=mpiicpc
-  C_COMPILER=mpiicc
   FORTRAN_COMPILER=mpiifort
   FLAGS="-O2 -xSKYLAKE-AVX512"
 fi
@@ -31,26 +29,26 @@ cmd() {
 # Set up environment on Eagle
 cmd "module purge"
 cmd "module unuse ${MODULEPATH}"
-cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules"
-cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules"
+cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-2020-07"
+cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules-2020-07"
 if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "module use /nopt/nrel/ecom/hpacf/software/modules/gcc-7.3.0"
+  cmd "module use /nopt/nrel/ecom/hpacf/software/modules-2020-07/gcc-8.4.0"
 elif [ "${COMPILER}" == 'intel' ]; then
-  cmd "module use /nopt/nrel/ecom/hpacf/software/modules/intel-18.0.4"
+  cmd "module use /nopt/nrel/ecom/hpacf/software/modules-2020-07/intel-18.0.4"
 fi
-cmd "module load gcc/7.3.0"
-cmd "module load python/2.7.15"
+cmd "module load gcc"
+cmd "module load python"
 cmd "module load git"
 cmd "module load binutils"
 if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "module load openmpi"
+  cmd "module load mpt"
   cmd "module load netlib-lapack"
 elif [ "${COMPILER}" == 'intel' ]; then
   cmd "module load intel-parallel-studio/cluster.2018.4"
   cmd "module load intel-mpi/2018.4.274"
   cmd "module load intel-mkl/2018.4.274"
 fi
-cmd "module load openfast"
+#cmd "module load openfast"
 cmd "module load hypre"
 cmd "module load tioga"
 cmd "module load yaml-cpp"
@@ -71,11 +69,7 @@ cmd "rm -f CMakeCache.txt"
 set -e
 
 cmd "which cmake"
-if [ "${COMPILER}" == 'gcc' ]; then
-  cmd "which orterun"
-elif [ "${COMPILER}" == 'intel' ]; then
-  cmd "which mpirun"
-fi
+cmd "which mpirun"
 
 # Extra TPLs that can be included in the cmake configure:
 #  -DENABLE_PARAVIEW_CATALYST:BOOL=ON \
@@ -94,12 +88,9 @@ fi
 (set -x; cmake \
   -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
   -DCMAKE_CXX_FLAGS:STRING="${FLAGS}" \
-  -DCMAKE_C_COMPILER:STRING=${C_COMPILER} \
-  -DCMAKE_C_FLAGS:STRING="${FLAGS}" \
   -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
   -DCMAKE_Fortran_FLAGS:STRING="${FLAGS}" \
   -DMPI_CXX_COMPILER:STRING=${CXX_COMPILER} \
-  -DMPI_C_COMPILER:STRING=${C_COMPILER} \
   -DMPI_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
   -DMPIEXEC_PREFLAGS:STRING="${OVERSUBSCRIBE_FLAGS}" \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \

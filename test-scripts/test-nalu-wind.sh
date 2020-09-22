@@ -427,7 +427,7 @@ main() {
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     CONFIGURATIONS[0]='gcc:7.4.0:false:develop:fftw;tioga;hypre;openfast'
     CONFIGURATIONS[1]='gcc:7.4.0:false:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:fftw;tioga;hypre'
     CONFIGURATIONS[3]='intel:18.0.4:false:develop:fftw;tioga;hypre;openfast'
     CONFIGURATIONS[4]='clang:7.0.1:false:develop:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing

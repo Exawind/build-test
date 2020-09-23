@@ -344,8 +344,8 @@ EOL
   (set -x; rsync -avm --include="*/" --include="plt00010**" --exclude="*" ${AMR_WIND_DIR}/build/test/test_files/ ${AMR_WIND_TESTING_ROOT_DIR}/temp_golds/${ID_FILE}/)
   # This only works on Linux
   #(set -x; cd ${AMR_WIND_DIR}/build/test/test_files && find . -type d -name *plt00010* -exec cp -R --parents {} ${AMR_WIND_TESTING_ROOT_DIR}/temp_golds/${ID_FILE}/ \;)
-  printf "\nCopying fextrema golds to organized directory...\n"
-  (set -x; rsync -avm --include="*/" --include="*.ext.gold" --include="*.ext" --exclude="*" ${AMR_WIND_DIR}/build/test/test_files/ ${AMR_WIND_TESTING_ROOT_DIR}/temp_golds/${ID_FILE}/)
+  #printf "\nCopying fextrema golds to organized directory...\n"
+  #(set -x; rsync -avm --include="*/" --include="*.ext.gold" --include="*.ext" --exclude="*" ${AMR_WIND_DIR}/build/test/test_files/ ${AMR_WIND_TESTING_ROOT_DIR}/temp_golds/${ID_FILE}/)
   # This only works on Linux
   #(set -x; cd ${AMR_WIND_DIR}/build/test/test_files && find . -type f -name *.ext -exec cp -R --parents {} ${AMR_WIND_TESTING_ROOT_DIR}/temp_golds/${ID_FILE}/ \;)
 

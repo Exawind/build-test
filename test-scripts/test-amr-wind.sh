@@ -380,16 +380,16 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:mpi_enabled:openmp_enabled:use_latest_amrex'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:true:false:false'
-    CONFIGURATIONS[1]='gcc:4.9.4:true:false:false'
-    CONFIGURATIONS[2]='intel:18.0.4:true:false:false'
-    CONFIGURATIONS[3]='clang:7.0.1:true:false:false'
-    CONFIGURATIONS[4]='gcc:7.4.0:true:false:true'
+    CONFIGURATIONS[0]='gcc:4.9.4:true:false:false'
+    CONFIGURATIONS[1]='intel:18.0.4:true:false:false'
+    CONFIGURATIONS[2]='clang:7.0.1:true:false:false'
+    CONFIGURATIONS[3]='gcc:7.4.0:true:false:true'
+    CONFIGURATIONS[4]='gcc:7.4.0:true:false:false'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:true:false:false'
-    CONFIGURATIONS[1]='gcc:7.4.0:true:false:true'
+    CONFIGURATIONS[0]='gcc:7.4.0:true:false:true'
+    CONFIGURATIONS[1]='gcc:7.4.0:true:false:false'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then

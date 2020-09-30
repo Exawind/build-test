@@ -51,7 +51,7 @@ test_configuration() {
   if [ ! -z "${BLAS_ID}" ]; then
     BLAS_CONSTRAINTS=" ^${BLAS_ID}"
   fi
-  GENERAL_CONSTRAINTS="${MPI_CONSTRAINTS}${BLAS_CONSTRAINTS} ^boost cxxstd=14"
+  GENERAL_CONSTRAINTS="${MPI_CONSTRAINTS}${BLAS_CONSTRAINTS}"
   printf "Using constraints: ${GENERAL_CONSTRAINTS}\n\n"
 
   TRILINOS="trilinos"

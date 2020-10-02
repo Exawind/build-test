@@ -83,6 +83,7 @@ test_configuration() {
     elif [ "${COMPILER_NAME}" == 'clang' ]; then
       cmd "module load llvm/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
+      cmd "module load gcc"
       cmd "module load ${INTEL_COMPILER_MODULE}"
     fi
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then

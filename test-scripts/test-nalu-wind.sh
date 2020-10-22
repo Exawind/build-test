@@ -191,6 +191,7 @@ test_configuration() {
   if [ "${MACHINE_NAME}" != 'eagle' ]; then
     cmd "spack install nccmp %${COMPILER_ID}"
   fi
+  cmd "spack install hypre@develop %${COMPILER_ID}"
 
   STAGE_DIR=$(spack location -S)
   if [ ! -z "${STAGE_DIR}" ]; then

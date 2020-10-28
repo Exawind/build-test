@@ -305,7 +305,7 @@ test_configuration() {
   # Unset the TMPDIR variable after building but before testing during ctest nightly script and do not overlap running tests
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     EXTRA_BUILD_NAME="-nvcc-${CUDA_VERSION}${EXTRA_BUILD_NAME}"
-    CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE -DCTEST_DISABLE_OVERLAPPING_TESTS:BOOL=TRUE ${CTEST_ARGS}"
+    CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE -DMPIEXEC_POSTFLAGS=--kokkos-num-devices=2 -DCTEST_DISABLE_OVERLAPPING_TESTS:BOOL=TRUE ${CTEST_ARGS}"
   fi
 
   # Turn on all warnings unless we're gcc 4.9.4
@@ -436,7 +436,7 @@ main() {
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:cuda;tioga;openfast'
+    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:cuda;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then

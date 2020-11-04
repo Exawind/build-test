@@ -305,7 +305,7 @@ test_configuration() {
   # Unset the TMPDIR variable after building but before testing during ctest nightly script and do not overlap running tests
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     EXTRA_BUILD_NAME="-nvcc-${CUDA_VERSION}${EXTRA_BUILD_NAME}"
-    CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE -DMPIEXEC_POSTFLAGS=--kokkos-num-devices=2 -DCTEST_DISABLE_OVERLAPPING_TESTS:BOOL=TRUE ${CTEST_ARGS}"
+    CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE -DCTEST_DISABLE_OVERLAPPING_TESTS:BOOL=TRUE ${CTEST_ARGS}"
   fi
 
   # Turn on all warnings unless we're gcc 4.9.4
@@ -357,7 +357,7 @@ test_configuration() {
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "which orterun"
     ORTERUN=$(which orterun)
-    CMAKE_CONFIGURE_ARGS="-DMPIEXEC_EXECUTABLE:STRING=${ORTERUN} -DMPIEXEC_NUMPROC_FLAG:STRING=-np ${CMAKE_CONFIGURE_ARGS}"
+    CMAKE_CONFIGURE_ARGS="-DMPIEXEC_POSTFLAGS:STRING=--kokkos-num-devices=2 -DMPIEXEC_EXECUTABLE:STRING=${ORTERUN} -DMPIEXEC_NUMPROC_FLAG:STRING=-np ${CMAKE_CONFIGURE_ARGS}"
   else
     cmd "which mpiexec"
   fi

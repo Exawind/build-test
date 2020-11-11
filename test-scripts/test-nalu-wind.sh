@@ -375,7 +375,7 @@ test_configuration() {
     export CXXFLAGS="-Xcudafe --diag_suppress=code_is_unreachable -Wimplicit-fallthrough=0"
     CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=0.00000001 ${CMAKE_CONFIGURE_ARGS}"
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=10.0 ${CMAKE_CONFIGURE_ARGS}"
+    CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=100000.0 ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Allow OpenMPI to consider hardware threads as cpus and allow for oversubscription

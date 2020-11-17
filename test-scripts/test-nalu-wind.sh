@@ -365,7 +365,7 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} -DMPI_CXX_COMPILER:STRING=${MPI_CXX_COMPILER} -DMPI_Fortran_COMPILER:STRING=${MPI_FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
 
   # Set essential arguments for ctest
-  CTEST_ARGS="-DTESTING_ROOT_DIR=${NALU_WIND_TESTING_ROOT_DIR} -DNALU_DIR=${NALU_WIND_TESTING_ROOT_DIR}/nalu-wind -DTEST_LOG=${LOGS_DIR}/nalu-wind-test-log.txt -DHOST_NAME=${HOST_NAME} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} ${CTEST_ARGS}"
+  CTEST_ARGS="-DTESTING_ROOT_DIR=${NALU_WIND_TESTING_ROOT_DIR} -DNALU_DIR=${NALU_WIND_TESTING_ROOT_DIR}/nalu-wind -DTEST_LOG=${LOGS_DIR}/nalu-wind-test-log.txt -DTEST_NORMS_FILE=${LOGS_DIR}/nalu-wind-norms.txt -DHOST_NAME=${HOST_NAME} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} ${CTEST_ARGS}"
 
   # Set essential arguments for the ctest cmake configure step
   CMAKE_CONFIGURE_ARGS="-DTrilinos_DIR:PATH=${TRILINOS_DIR} -DYAML_DIR:PATH=${YAML_DIR} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
@@ -393,6 +393,8 @@ test_configuration() {
 
   printf "\nSaving norms...\n"
   (set -x; cd ${NALU_WIND_DIR}/build/reg_tests/test_files && find . -type f \( -name "*.norm" -o -name "*.nc" \) | tar -czf ${NORMS_DIR}/norms${EXTRA_BUILD_NAME}-$(date +%Y-%m-%d-%H-%M).tar.gz -T -)
+
+  cmd "grep -E 'PASS:|FAIL:' ${NALU_WIND_DIR}/build/Testing/Temporary/LastTest.log | sort -k4 -g -r > ${LOGS_DIR}/nalu-wind-norms.txt"
 
   printf "\n"
   printf "************************************************************\n"
@@ -526,7 +528,7 @@ main() {
     LIST_OF_TPLS=${CONFIG[4]}
  
     printf "\nRemoving previous test log for uploading to CDash...\n"
-    cmd "rm ${LOGS_DIR}/nalu-wind-test-log.txt"
+    cmd "rm ${LOGS_DIR}/nalu-wind-test-log.txt ${LOGS_DIR}/nalu-wind-norms.txt"
     (test_configuration) 2>&1 | tee -i ${LOGS_DIR}/nalu-wind-test-log.txt
   done
 

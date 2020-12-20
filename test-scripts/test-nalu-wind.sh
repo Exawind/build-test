@@ -140,8 +140,8 @@ test_configuration() {
   #cmd "spack uninstall -a -y openfast %${COMPILER_ID} || true"
   #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
   #cmd "spack uninstall -a -y tioga %${COMPILER_ID} || true"
-  printf "\nUninstalling hypre...\n"
-  cmd "spack uninstall -a -y hypre %${COMPILER_ID} || true"
+  #printf "\nUninstalling hypre...\n"
+  #cmd "spack uninstall -a -y hypre %${COMPILER_ID} || true"
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating and cleaning Trilinos stage directory (this is fine to error when tests are first run)...\n"

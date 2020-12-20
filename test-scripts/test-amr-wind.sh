@@ -241,6 +241,7 @@ test_configuration() {
     # Can't run ASAN with optimization
     CMAKE_BUILD_TYPE=Debug
     #VERIFICATION=OFF
+    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_CLANG_TIDY:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
     #CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_FLAGS:STRING=-fsanitize=address\ -fno-omit-frame-pointer ${CMAKE_CONFIGURE_ARGS}"
     #CMAKE_CONFIGURE_ARGS="-DCMAKE_LINKER=clang++ -DCMAKE_CXX_LINK_EXECUTABLE=clang++ -DCMAKE_CXX_FLAGS:STRING=\'-fsanitize=address -fno-omit-frame-pointer\' -DCMAKE_EXE_LINKER_FLAGS:STRING=-fsanitize=address ${CMAKE_CONFIGURE_ARGS}"
     #printf "Disabling OpenMP in AMR-Wind for address sanitizer...\n"

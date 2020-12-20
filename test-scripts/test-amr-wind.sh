@@ -180,6 +180,22 @@ test_configuration() {
   # Set the extra identifiers for CDash build description
   EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}"
 
+  # Run static analysis and let ctest know we have static analysis output
+  if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
+    cmd "cd ${AMR_WIND_DIR}/build"
+    cmd "rm ${LOGS_DIR}/amr-wind-static-analysis.txt || true"
+    printf "\nRunning cppcheck static analysis (AMR-Wind not updated until after this step)...\n"
+    # Using a working directory for cppcheck makes analysis faster
+    cmd "mkdir cppcheck-wd"
+    # Cppcheck ignores -isystem directories, so we change them to regular -I include directories (with no spaces either)
+    cmd "sed -i '' -e 's/isystem /I/g' compile_commands.json"
+    cmd "cppcheck --template=gcc --inline-suppr --std=c++14 --language=c++ --enable=all --project=compile_commands.json -j 32 --cppcheck-build-dir=cppcheck-wd -i ${AMR_WIND_DIR}/submods/amrex/Src -i ${AMR_WIND_DIR}/submods/googletest --output-file=cppcheck.txt"
+    # Warnings in header files are unavoidable, so we filter out submodule headers after analysis
+    cmd "awk -v nlines=2 '/submods\/amrex/ || /submods\/googletest/ {for (i=0; i<nlines; i++) {getline}; next} 1' < cppcheck.txt > cppcheck-warnings.txt"
+    (set -x; cat cppcheck-warnings.txt | egrep 'information:|error:|performance:|portability:|style:|warning:' | sort | awk 'BEGIN{i=0}{print $0}{i++}END{print "Warnings: "i}' > ${LOGS_DIR}/amr-wind-static-analysis.txt)
+    CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${LOGS_DIR}/amr-wind-static-analysis.txt ${CTEST_ARGS}"
+  fi
+
   if [ ! -z "${AMR_WIND_DIR}" ]; then
     printf "\nCleaning AMR-Wind directory...\n"
     cmd "cd ${AMR_WIND_DIR} && git reset --hard origin/development && git clean -df && git status -uno"
@@ -200,15 +216,6 @@ test_configuration() {
   #  cmd "export OMP_NUM_THREADS=1"
   #  cmd "export OMP_PROC_BIND=false"
   #fi
-
-  # Run static analysis and let ctest know we have static analysis output
-  if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
-    printf "\nRunning cppcheck static analysis (AMR-Wind not updated until after this step)...\n"
-    cmd "rm ${LOGS_DIR}/amr-wind-static-analysis.txt || true"
-    cmd "cppcheck --enable=all --quiet -j 32 -DAMREX_SPACEDIM=3 -DBL_SPACEDIM=3 --max-configs=16 --output-file=${LOGS_DIR}/amr-wind-static-analysis.txt ${AMR_WIND_DIR}/amr-wind || true"
-    cmd "printf \"%s warnings\n\" \"$(wc -l < ${LOGS_DIR}/amr-wind-static-analysis.txt | xargs echo -n)\" >> ${LOGS_DIR}/amr-wind-static-analysis.txt"
-    CTEST_ARGS="-DHAVE_STATIC_ANALYSIS_OUTPUT:BOOL=TRUE -DSTATIC_ANALYSIS_LOG=${LOGS_DIR}/amr-wind-static-analysis.txt ${CTEST_ARGS}"
-  fi
 
   # Unset the TMPDIR variable after building but before testing during ctest nightly script
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
@@ -277,7 +284,7 @@ test_configuration() {
   cmd "which cmake"
 
   # CMake configure arguments for compilers
-  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
 
   # CMake configure arguments testing options
   CMAKE_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"

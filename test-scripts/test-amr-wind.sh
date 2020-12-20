@@ -189,7 +189,7 @@ test_configuration() {
     cmd "mkdir cppcheck-wd"
     # Cppcheck ignores -isystem directories, so we change them to regular -I include directories (with no spaces either)
     cmd "sed -i 's/isystem /I/g' compile_commands.json"
-    cmd "cppcheck --template=gcc --inline-suppr --std=c++14 --language=c++ --enable=all --project=compile_commands.json -j 32 --cppcheck-build-dir=cppcheck-wd -i ${AMR_WIND_DIR}/submods/amrex/Src -i ${AMR_WIND_DIR}/submods/googletest --output-file=cppcheck.txt"
+    cmd "cppcheck --template=gcc --inline-suppr --suppress=unusedFunction --std=c++14 --language=c++ --enable=all --project=compile_commands.json -j 32 --cppcheck-build-dir=cppcheck-wd -i ${AMR_WIND_DIR}/submods/amrex/Src -i ${AMR_WIND_DIR}/submods/googletest --output-file=cppcheck.txt"
     # Warnings in header files are unavoidable, so we filter out submodule headers after analysis
     cmd "awk -v nlines=2 '/submods\/amrex/ || /submods\/googletest/ {for (i=0; i<nlines; i++) {getline}; next} 1' < cppcheck.txt > cppcheck-warnings.txt"
     (set -x; cat cppcheck-warnings.txt | egrep 'information:|error:|performance:|portability:|style:|warning:' | sort | awk 'BEGIN{i=0}{print $0}{i++}END{print "Warnings: "i}' > ${LOGS_DIR}/amr-wind-static-analysis.txt)

@@ -55,7 +55,7 @@ test_configuration() {
   TRILINOS="trilinos"
 
   #CUDA version used for tests on Eagle
-  CUDA_VERSION="cuda/10.2.89"
+  CUDA_VERSION="10.2.89"
 
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}"
 

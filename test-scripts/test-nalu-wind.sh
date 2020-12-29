@@ -4,14 +4,10 @@
 # of machines with a list of configurations for each machine using Spack
 # to satisfy dependencies and submitting results to CDash
 
-# Control over printing and executing commands
-print_cmds=true
-execute_cmds=true
-
 # Function for printing and executing commands
 cmd() {
-  if ${print_cmds}; then echo "+ $@"; fi
-  if ${execute_cmds}; then eval "$@"; fi
+  echo "+ $@"
+  eval "$@"
 }
 
 # Function for testing a single configuration
@@ -20,7 +16,6 @@ test_configuration() {
   printf "************************************************************\n"
   printf "Testing Nalu-Wind with:\n"
   printf "${COMPILER_ID}\n"
-  printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
   printf "trilinos@${TRILINOS_BRANCH}\n"
   printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date)\n"
@@ -40,6 +35,9 @@ test_configuration() {
     MPI_ID="intel-mpi"
     BLAS_ID="intel-mkl"
   fi
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    MPI_ID="mpt@2.22"
+  fi
   if [ ! -z "${MPI_ID}" ]; then
     # Avoid listing plain openmpi without a version number
     if [ "${MPI_ID}" == 'openmpi' ]; then
@@ -57,7 +55,7 @@ test_configuration() {
   TRILINOS="trilinos"
 
   #CUDA version used for tests on Eagle
-  CUDA_VERSION="9.2.88"
+  CUDA_VERSION="cuda/10.2.89"
 
   cmd "cd ${NALU_WIND_TESTING_ROOT_DIR}"
 
@@ -89,26 +87,19 @@ test_configuration() {
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
-    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-2019-05-23"
-    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules-2019-05-23"
-    cmd "module use /nopt/nrel/ecom/hpacf/software/modules-2019-05-23/gcc-7.4.0"
-    cmd "module load python/3.7.3"
+    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-2020-07"
+    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules-2020-07"
+    cmd "module use /nopt/nrel/ecom/hpacf/software/modules-2020-07/gcc-8.4.0"
+    cmd "module load python"
     cmd "module load git"
     cmd "module load binutils"
     cmd "module load cuda/${CUDA_VERSION}"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
+      cmd "module load gcc"
       cmd "module load ${INTEL_COMPILER_MODULE}"
     fi
-  fi
-
-  # Enable or disable OpenMP in Trilinos
-  if [ "${OPENMP_ENABLED}" == 'true' ]; then
-    printf "\nOpenMP is enabled in Trilinos...\n"
-  elif [ "${OPENMP_ENABLED}" == 'false' ]; then
-    printf "\nOpenMP is disabled in Trilinos...\n"
-    TRILINOS="${TRILINOS}~openmp"
   fi
 
   if [ "${MACHINE_NAME}" == 'mac' ] || [ "${MACHINE_NAME}" == 'eagle' ]; then
@@ -190,9 +181,9 @@ test_configuration() {
 
   printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_ID}...\n"
   cmd "spack install --dont-restage --keep-stage --only dependencies nalu-wind ${TPL_VARIANTS} %${COMPILER_ID} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPL_CONSTRAINTS} ${GENERAL_CONSTRAINTS}"
-  if [ "${MACHINE_NAME}" != 'eagle' ]; then
-    cmd "spack install nccmp %${COMPILER_ID}"
-  fi
+  #if [ "${MACHINE_NAME}" != 'eagle' ]; then
+  cmd "spack install nccmp %${COMPILER_ID}"
+  #fi
 
   STAGE_DIR=$(spack location -S)
   if [ ! -z "${STAGE_DIR}" ]; then
@@ -222,10 +213,8 @@ test_configuration() {
   printf "\nSetting variables to pass to CTest...\n"
   TRILINOS_DIR=$(spack location -i trilinos@${TRILINOS_BRANCH} %${COMPILER_ID})
   YAML_DIR=$(spack location -i yaml-cpp %${COMPILER_ID})
-  #BOOST_DIR=$(spack location -i boost %${COMPILER_ID})
   printf "TRILINOS_DIR=${TRILINOS_DIR}\n"
   printf "YAML_DIR=${YAML_DIR}\n"
-  #printf "BOOST_DIR=${BOOST_DIR}\n"
   CMAKE_CONFIGURE_ARGS=''
   for TPL in ${TPLS[*]}; do
     if [ "${TPL}" == 'openfast' ]; then
@@ -272,26 +261,16 @@ test_configuration() {
     cmd "cd ${NALU_WIND_DIR} && git submodule update --init --recursive"
   fi
 
-  if [ "${OPENMP_ENABLED}" == 'true' ]; then
-    printf "\nEnabling and setting OpenMP stuff...\n"
-    CMAKE_CONFIGURE_ARGS="-DENABLE_OPENMP:BOOL=TRUE ${CMAKE_CONFIGURE_ARGS}"
-    cmd "export OMP_NUM_THREADS=1"
-    cmd "export OMP_PROC_BIND=false"
-  elif [ "${OPENMP_ENABLED}" == 'false' ]; then
-    printf "\nDisabling OpenMP in Nalu-Wind...\n"
-    CMAKE_CONFIGURE_ARGS="-DENABLE_OPENMP:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
-  fi
-
   # CUDA stuff for testing on Eagle
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     printf "\nSetting environment variables for Kokkos/CUDA...\n"
-    cmd "export OMPI_MCA_opal_cuda_support=1"
+    #cmd "export OMPI_MCA_opal_cuda_support=1"
     cmd "export EXAWIND_CUDA_WRAPPER=${TRILINOS_DIR}/bin/nvcc_wrapper"
-    cmd "export CUDA_LAUNCH_BLOCKING=1"
-    cmd "export CUDA_MANAGED_FORCE_DEVICE_ALLOC=1"
+    #cmd "export CUDA_LAUNCH_BLOCKING=1"
+    #cmd "export CUDA_MANAGED_FORCE_DEVICE_ALLOC=1"
     cmd "export KOKKOS_ARCH=SKX,Volta70"
-    cmd "export NVCC_WRAPPER_DEFAULT_COMPILER=${CXX}"
-    cmd "export OMPI_CXX=${EXAWIND_CUDA_WRAPPER}"
+    #cmd "export NVCC_WRAPPER_DEFAULT_COMPILER=${CXX}"
+    cmd "export MPICXX_CXX=${EXAWIND_CUDA_WRAPPER}"
     cmd "export CUDACXX=$(which nvcc)"
   fi
 
@@ -339,8 +318,6 @@ test_configuration() {
     cmd "export LSAN_OPTIONS=suppressions=${NALU_WIND_DIR}/build/asan.supp"
     # Can't use optimization with the address sanitizer
     CMAKE_BUILD_TYPE=Debug
-    #CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_FLAGS:STRING=-fsanitize=address\ -fno-omit-frame-pointer ${CMAKE_CONFIGURE_ARGS}"
-    #CMAKE_CONFIGURE_ARGS="-DCMAKE_LINKER=clang++ -DCMAKE_CXX_LINK_EXECUTABLE=clang++ -DCMAKE_CXX_FLAGS:STRING=\'-fsanitize=address -fno-omit-frame-pointer\' -DCMAKE_EXE_LINKER_FLAGS:STRING=-fsanitize=address ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Explicitly set compilers to MPI compilers
@@ -357,9 +334,7 @@ test_configuration() {
   cmd "which ${MPI_CXX_COMPILER}"
   cmd "which ${MPI_FORTRAN_COMPILER}"
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    cmd "which orterun"
-    ORTERUN=$(which orterun)
-    CMAKE_CONFIGURE_ARGS="-DMPIEXEC_POSTFLAGS:STRING=--kokkos-num-devices=2 -DMPIEXEC_EXECUTABLE:STRING=${ORTERUN} -DMPIEXEC_NUMPROC_FLAG:STRING=-np ${CMAKE_CONFIGURE_ARGS}"
+    CMAKE_CONFIGURE_ARGS="-DMPIEXEC_POSTFLAGS:STRING=--kokkos-num-devices=2 -DMPIEXEC_EXECUTABLE:STRING=mpiexec -DMPIEXEC_NUMPROC_FLAG:STRING=-np ${CMAKE_CONFIGURE_ARGS}"
   else
     cmd "which mpiexec"
   fi
@@ -402,7 +377,6 @@ test_configuration() {
   printf "************************************************************\n"
   printf "Done testing Nalu-Wind with:\n"
   printf "${COMPILER_ID}\n"
-  printf "OPENMP_ENABLED: ${OPENMP_ENABLED}\n"
   printf "trilinos@${TRILINOS_BRANCH}\n"
   printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date)\n"
@@ -430,22 +404,22 @@ main() {
  
   # Set configurations to test for each machine
   declare -a CONFIGURATIONS
-  #CONFIGURATION[n]='compiler_name:compiler_version:openmp_enabled:trilinos_branch:list_of_tpls'
+  #CONFIGURATION[n]='compiler_name:compiler_version:trilinos_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[1]='gcc:7.4.0:false:master:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[2]='gcc:4.9.4:false:develop:fftw;tioga;hypre'
-    CONFIGURATIONS[3]='intel:18.0.4:false:develop:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[4]='clang:7.0.1:false:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[0]='gcc:7.4.0:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[1]='gcc:7.4.0:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[2]='gcc:4.9.4:develop:fftw;tioga;hypre'
+    CONFIGURATIONS[3]='intel:18.0.4:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[4]='clang:7.0.1:develop:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:cuda;tioga;hypre;openfast'
+    CONFIGURATIONS[0]='gcc:8.4.0:develop:cuda;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:false:develop:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[1]='clang:9.0.0-apple:false:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[0]='gcc:7.4.0:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[1]='clang:9.0.0-apple:develop:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else
     printf "\nMachine name not recognized.\n"
@@ -453,6 +427,7 @@ main() {
  
   NALU_WIND_DIR=${NALU_WIND_TESTING_ROOT_DIR}/nalu-wind
   BUILD_TEST_DIR=${NALU_WIND_TESTING_ROOT_DIR}/build-test
+  SPACK_CONFIGS_DIR=${NALU_WIND_TESTING_ROOT_DIR}/spack-configs
   LOGS_DIR=${NALU_WIND_TESTING_ROOT_DIR}/logs
   NORMS_DIR=${NALU_WIND_TESTING_ROOT_DIR}/norms
   cmd "export SPACK_ROOT=${NALU_WIND_TESTING_ROOT_DIR}/spack"
@@ -466,7 +441,7 @@ main() {
   printf "NORMS_DIR: ${NORMS_DIR}\n"
   printf "SPACK_ROOT: ${SPACK_ROOT}\n"
   printf "Testing configurations:\n"
-  printf " compiler_name:compiler_version:openmp_enabled:trilinos_branch:list_of_tpls\n"
+  printf " compiler_name:compiler_version:trilinos_branch:list_of_tpls\n"
   for CONFIGURATION in "${CONFIGURATIONS[@]}"; do
     printf " ${CONFIGURATION}\n"
   done
@@ -484,21 +459,16 @@ main() {
  
     printf "\nCloning Spack repo...\n"
     cmd "git clone https://github.com/spack/spack.git ${SPACK_ROOT}"
-    # Nalu-Wind v1.2.0 matching sha-1 for Spack
-    # cmd "cd ${SPACK_ROOT} && git checkout d3e4e88bae2b3ddf71bf56da18fe510e74e020b2"
  
     printf "\nConfiguring Spack...\n"
     cmd "git clone --recursive https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
-    # Nalu-Wind v1.2.0 matching tag for build-test
-    #cmd "cd ${BUILD_TEST_DIR} && git checkout v1.2.0"
-    cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
+    cmd "git clone --recursive https://github.com/jrood-nrel/spack-configs.git ${SPACK_CONFIGS_DIR}"
+    cmd "cd ${SPACK_CONFIGS_DIR}/scripts && ./setup-spack.sh"
  
     # Checkout Nalu-Wind and meshes submodule outside of Spack so ctest can build it itself
     printf "\nCloning Nalu-Wind repo...\n"
     cmd "git clone --recursive https://github.com/exawind/nalu-wind.git ${NALU_WIND_DIR}"
     cmd "mkdir -p ${NALU_WIND_DIR}/build"
-    # Nalu-Wind v1.2.0 tag
-    #cmd "cd ${NALU_WIND_DIR} && git checkout v1.2.0"
  
     printf "\nMaking job output directory...\n"
     cmd "mkdir -p ${LOGS_DIR}"
@@ -525,9 +495,8 @@ main() {
     CONFIG=(${CONFIGURATION//:/ })
     COMPILER_NAME=${CONFIG[0]}
     COMPILER_VERSION=${CONFIG[1]}
-    OPENMP_ENABLED=${CONFIG[2]}
-    TRILINOS_BRANCH=${CONFIG[3]}
-    LIST_OF_TPLS=${CONFIG[4]}
+    TRILINOS_BRANCH=${CONFIG[2]}
+    LIST_OF_TPLS=${CONFIG[3]}
  
     printf "\nRemoving previous test log for uploading to CDash...\n"
     cmd "rm ${LOGS_DIR}/nalu-wind-test-log.txt ${LOGS_DIR}/nalu-wind-norms.txt"

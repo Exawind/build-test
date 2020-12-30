@@ -202,8 +202,8 @@ test_configuration() {
     cmd "export PATH=$(spack location -i nccmp %${COMPILER_ID})/bin:${PATH}"
     cmd "export PATH=$(spack location -i ${MPI_ID} %${COMPILER_ID})/bin:${PATH}"
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    cmd "spack load --first cmake %${COMPILER_ID}"
-    cmd "spack load --first nccmp %${COMPILER_ID}"
+    cmd "spack load cmake %${COMPILER_ID}"
+    cmd "spack load nccmp %${COMPILER_ID}"
     cmd "spack load ${MPI_ID} %${COMPILER_ID}"
   else
     cmd "spack load cmake %${COMPILER_ID}"
@@ -465,6 +465,7 @@ main() {
     cmd "git clone --recursive https://github.com/exawind/build-test.git ${BUILD_TEST_DIR}"
     cmd "git clone --recursive https://github.com/jrood-nrel/spack-configs.git ${SPACK_CONFIGS_DIR}"
     cmd "cd ${SPACK_CONFIGS_DIR}/scripts && ./setup-spack.sh"
+    cmd "rm ${SPACK_ROOT}/etc/spack/upstreams.yaml || true"
  
     # Checkout Nalu-Wind and meshes submodule outside of Spack so ctest can build it itself
     printf "\nCloning Nalu-Wind repo...\n"

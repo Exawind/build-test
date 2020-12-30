@@ -181,9 +181,6 @@ test_configuration() {
 
   printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_ID}...\n"
   cmd "spack install --dont-restage --keep-stage --only dependencies nalu-wind ${TPL_VARIANTS} %${COMPILER_ID} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPL_CONSTRAINTS} ${GENERAL_CONSTRAINTS}"
-  #if [ "${MACHINE_NAME}" != 'eagle' ]; then
-  cmd "spack install nccmp %${COMPILER_ID}"
-  #fi
 
   STAGE_DIR=$(spack location -S)
   if [ ! -z "${STAGE_DIR}" ]; then
@@ -204,6 +201,10 @@ test_configuration() {
     cmd "export PATH=$(spack location -i cmake %${COMPILER_ID})/bin:${PATH}"
     cmd "export PATH=$(spack location -i nccmp %${COMPILER_ID})/bin:${PATH}"
     cmd "export PATH=$(spack location -i ${MPI_ID} %${COMPILER_ID})/bin:${PATH}"
+  elif [ "${MACHINE_NAME}" == 'eagle' ]; then
+    cmd "spack load --first cmake %${COMPILER_ID}"
+    cmd "spack load --first nccmp %${COMPILER_ID}"
+    cmd "spack load ${MPI_ID} %${COMPILER_ID}"
   else
     cmd "spack load cmake %${COMPILER_ID}"
     cmd "spack load nccmp %${COMPILER_ID}"

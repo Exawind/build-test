@@ -84,6 +84,7 @@ test_configuration() {
     elif [ "${COMPILER_NAME}" == 'clang' ]; then
       cmd "module load llvm/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
+      cmd "module load gcc"
       cmd "module load ${INTEL_COMPILER_MODULE}"
     fi
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
@@ -101,7 +102,7 @@ test_configuration() {
     cmd "module load py-matplotlib"
     cmd "module load py-six"
     cmd "module load py-numpy"
-    cmd "module load py-dateutil"
+    cmd "module load py-python-dateutil"
     cmd "module load py-cycler"
     cmd "module load py-bottleneck"
     cmd "module load py-cython"

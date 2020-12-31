@@ -364,11 +364,10 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:use_latest_amrex'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:4.9.4:false'
-    CONFIGURATIONS[1]='intel:18.0.4:false'
-    CONFIGURATIONS[2]='clang:7.0.1:false'
-    CONFIGURATIONS[3]='gcc:7.4.0:true'
-    CONFIGURATIONS[4]='gcc:7.4.0:false'
+    CONFIGURATIONS[0]='intel:18.0.4:false'
+    CONFIGURATIONS[1]='clang:7.0.1:false'
+    CONFIGURATIONS[2]='gcc:7.4.0:true'
+    CONFIGURATIONS[3]='gcc:7.4.0:false'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then

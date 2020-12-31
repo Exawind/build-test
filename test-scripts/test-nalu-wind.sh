@@ -361,7 +361,7 @@ test_configuration() {
   fi
 
   # Allow OpenMPI to consider hardware threads as cpus and allow for oversubscription
-  if [ "${COMPILER_NAME}" != 'intel' ]; then
+  if [ "${COMPILER_NAME}" != 'intel' ] && [ "${MACHINE_NAME}" != 'eagle' ]; then
     CMAKE_CONFIGURE_ARGS="-DMPIEXEC_PREFLAGS:STRING=--oversubscribe ${CMAKE_CONFIGURE_ARGS}"
   fi
 

@@ -4,14 +4,10 @@
 # of machines with a list of configurations for each machine using Spack
 # to satisfy dependencies and submitting results to CDash
 
-# Control over printing and executing commands
-print_cmds=true
-execute_cmds=true
-
 # Function for printing and executing commands
 cmd() {
-  if ${print_cmds}; then echo "+ $@"; fi
-  if ${execute_cmds}; then eval "$@"; fi
+  echo "+ $@"
+  eval "$@"
 }
 
 # Function for testing a single configuration
@@ -31,6 +27,9 @@ test_configuration() {
   BLAS_CONSTRAINTS=''
   if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
     MPI_ID="openmpi"
+    if [ "${MACHINE_NAME}" == 'eagle' ]; then
+      MPI_ID="mpt"
+    fi
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     # For intel, we want to build against intel-mpi and intel-mkl
     MPI_ID="intel-mpi"
@@ -38,7 +37,7 @@ test_configuration() {
   fi
 
   #CUDA version used for tests on Eagle
-  CUDA_VERSION="10.0.130"
+  CUDA_VERSION="10.2.89"
 
   cmd "cd ${AMR_WIND_TESTING_ROOT_DIR}"
 
@@ -90,15 +89,15 @@ test_configuration() {
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
-    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-2019-05-23"
-    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules-2019-05-23"
-    cmd "module use /nopt/nrel/ecom/hpacf/software/modules-2019-05-23/gcc-7.4.0"
+    cmd "module use /nopt/nrel/ecom/hpacf/compilers/modules-2020-07"
+    cmd "module use /nopt/nrel/ecom/hpacf/utilities/modules-2020-07"
+    cmd "module use /nopt/nrel/ecom/hpacf/software/modules-2020-07/gcc-8.4.0"
     cmd "module load git"
     cmd "module load binutils"
     cmd "module load cuda/${CUDA_VERSION}"
     cmd "module load cmake"
     cmd "module load rsync"
-    cmd "module load python/3.7.3"
+    cmd "module load python"
     cmd "module load py-matplotlib"
     cmd "module load py-six"
     cmd "module load py-numpy"
@@ -116,7 +115,7 @@ test_configuration() {
     cmd "module load py-kiwisolver"
     cmd "module load py-pyparsing"
     cmd "module load texlive"
-    cmd "module load netcdf"
+    cmd "module load netcdf-c"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
@@ -211,12 +210,6 @@ test_configuration() {
     fi
   fi
 
-  #if [ "${OPENMP_ENABLED}" == 'true' ]; then
-  #  printf "\nSetting OpenMP stuff...\n"
-  #  cmd "export OMP_NUM_THREADS=1"
-  #  cmd "export OMP_PROC_BIND=false"
-  #fi
-
   # Unset the TMPDIR variable after building but before testing during ctest nightly script
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE ${CTEST_ARGS}"
@@ -231,7 +224,6 @@ test_configuration() {
 
   # Default cmake build type
   CMAKE_BUILD_TYPE=RelWithDebInfo
-  #VERIFICATION=ON
 
   # Turn on address sanitizer for clang build on rhodes
   if [ "${COMPILER_NAME}" == 'clang' ] && [ "${MACHINE_NAME}" == 'rhodes' ]; then
@@ -247,30 +239,20 @@ test_configuration() {
     cmd "export LSAN_OPTIONS=suppressions=${AMR_WIND_DIR}/build/asan.supp"
     # Can't run ASAN with optimization
     CMAKE_BUILD_TYPE=Debug
-    #VERIFICATION=OFF
     CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_CLANG_TIDY:BOOL=OFF ${CMAKE_CONFIGURE_ARGS}"
-    #CMAKE_CONFIGURE_ARGS="-DCMAKE_CXX_FLAGS:STRING=-fsanitize=address\ -fno-omit-frame-pointer ${CMAKE_CONFIGURE_ARGS}"
-    #CMAKE_CONFIGURE_ARGS="-DCMAKE_LINKER=clang++ -DCMAKE_CXX_LINK_EXECUTABLE=clang++ -DCMAKE_CXX_FLAGS:STRING=\'-fsanitize=address -fno-omit-frame-pointer\' -DCMAKE_EXE_LINKER_FLAGS:STRING=-fsanitize=address ${CMAKE_CONFIGURE_ARGS}"
-    #printf "Disabling OpenMP in AMR-Wind for address sanitizer...\n"
-    #CMAKE_CONFIGURE_ARGS="-DENABLE_OPENMP:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
-    #printf "\nTurning off CMA in OpenMPI for Clang to avoid the Read, expected, errno error...\n"
-    #cmd "export OMPI_MCA_btl_vader_single_copy_mechanism=none"
   fi
 
   # Explicitly set compilers to MPI compilers
   if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
     CXX_COMPILER=mpicxx
     C_COMPILER=mpicc
-    FORTRAN_COMPILER=mpifort
     if [ "${MACHINE_NAME}" == 'eagle' ]; then
       CXX_COMPILER=g++
       C_COMPILER=gcc
-      FORTRAN_COMPILER=gfortran
     fi
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     CXX_COMPILER=mpiicpc
     C_COMPILER=mpiicc
-    FORTRAN_COMPILER=mpiifort
   fi
 
   # Give CMake a hint to find Python3
@@ -279,15 +261,11 @@ test_configuration() {
   printf "\nListing cmake and compilers that will be used in ctest...\n"
   cmd "which ${CXX_COMPILER}"
   cmd "which ${C_COMPILER}"
-  cmd "which ${FORTRAN_COMPILER}"
   cmd "which mpiexec"
   cmd "which cmake"
 
-  # CMake configure arguments for compilers
-  CMAKE_CONFIGURE_ARGS="-DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} ${CMAKE_CONFIGURE_ARGS}"
-
   # CMake configure arguments testing options
-  CMAKE_CONFIGURE_ARGS="-DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${C_COMPILER} -DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
 
   # Set CUDA stuff for Eagle
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
@@ -297,9 +275,6 @@ test_configuration() {
 
   # Set essential arguments for ctest
   CTEST_ARGS="-DTESTING_ROOT_DIR=${AMR_WIND_TESTING_ROOT_DIR} -DAMR_WIND_DIR=${AMR_WIND_DIR} -DTEST_LOG=${LOGS_DIR}/amr-wind-test-log.txt -DHOST_NAME=${HOST_NAME} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} ${CTEST_ARGS}"
-
-  # Set essential arguments for the ctest cmake configure step
-  CMAKE_CONFIGURE_ARGS="-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
 
   # Allow for oversubscription in OpenMPI
   if [ "${COMPILER_NAME}" != 'intel' ]; then
@@ -386,23 +361,23 @@ main() {
  
   # Set configurations to test for each machine
   declare -a CONFIGURATIONS
-  #CONFIGURATION[n]='compiler_name:compiler_version:mpi_enabled:openmp_enabled:use_latest_amrex'
+  #CONFIGURATION[n]='compiler_name:compiler_version:use_latest_amrex'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:4.9.4:true:false:false'
-    CONFIGURATIONS[1]='intel:18.0.4:true:false:false'
-    CONFIGURATIONS[2]='clang:7.0.1:true:false:false'
-    CONFIGURATIONS[3]='gcc:7.4.0:true:false:true'
-    CONFIGURATIONS[4]='gcc:7.4.0:true:false:false'
+    CONFIGURATIONS[0]='gcc:4.9.4:false'
+    CONFIGURATIONS[1]='intel:18.0.4:false'
+    CONFIGURATIONS[2]='clang:7.0.1:false'
+    CONFIGURATIONS[3]='gcc:7.4.0:true'
+    CONFIGURATIONS[4]='gcc:7.4.0:false'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:true:false:true'
-    CONFIGURATIONS[1]='gcc:7.4.0:true:false:false'
+    CONFIGURATIONS[0]='gcc:8.4.0:true'
+    CONFIGURATIONS[1]='gcc:8.4.0:false'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:true:false:false'
-    CONFIGURATIONS[1]='clang:9.0.0-apple:true:false:false'
+    CONFIGURATIONS[0]='gcc:7.4.0:false'
+    CONFIGURATIONS[1]='clang:9.0.0-apple:false'
     NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else
     printf "\nMachine name not recognized.\n"
@@ -425,7 +400,7 @@ main() {
   printf "GOLDS_DIR: ${GOLDS_DIR}\n"
   printf "SPACK_ROOT: ${SPACK_ROOT}\n"
   printf "Testing configurations:\n"
-  printf " compiler_name:compiler_version:mpi_enabled:openmp_enabled:list_of_tpls\n"
+  printf " compiler_name:compiler_version:use_latest_amrex\n"
   for CONFIGURATION in "${CONFIGURATIONS[@]}"; do
     printf " ${CONFIGURATION}\n"
   done
@@ -482,8 +457,7 @@ main() {
     CONFIG=(${CONFIGURATION//:/ })
     COMPILER_NAME=${CONFIG[0]}
     COMPILER_VERSION=${CONFIG[1]}
-    OPENMP_ENABLED=${CONFIG[3]}
-    USE_LATEST_AMREX=${CONFIG[4]}
+    USE_LATEST_AMREX=${CONFIG[2]}
 
     printf "\nRemoving previous test log for uploading to CDash...\n"
     cmd "rm ${LOGS_DIR}/amr-wind-test-log.txt"

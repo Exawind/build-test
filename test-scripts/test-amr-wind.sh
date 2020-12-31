@@ -211,18 +211,6 @@ test_configuration() {
     fi
   fi
 
-  # Unset the TMPDIR variable after building but before testing during ctest nightly script
-  if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CTEST_ARGS="-DUNSET_TMPDIR_VAR:BOOL=TRUE ${CTEST_ARGS}"
-  fi
-
-  # Turn on all warnings unless we're gcc 4.9.4
-  if [ "${COMPILER_ID}" == 'gcc@4.9.4' ]; then
-    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_ALL_WARNINGS:BOOL=FALSE ${CMAKE_CONFIGURE_ARGS}"
-  else
-    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_ALL_WARNINGS:BOOL=TRUE ${CMAKE_CONFIGURE_ARGS}"
-  fi
-
   # Default cmake build type
   CMAKE_BUILD_TYPE=RelWithDebInfo
 
@@ -271,14 +259,14 @@ test_configuration() {
   # Set CUDA stuff for Eagle
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     EXTRA_BUILD_NAME="-nvcc-${CUDA_VERSION}${EXTRA_BUILD_NAME}"
-    CMAKE_CONFIGURE_ARGS="-DMPIEXEC_EXECUTABLE:STRING=srun -DAMR_WIND_ENABLE_CUDA:BOOL=ON -DAMReX_CUDA_ARCH:STRING=7.0 -DAMREX_GPUS_PER_NODE:STRING=2 ${CMAKE_CONFIGURE_ARGS}"
+    CMAKE_CONFIGURE_ARGS="-DMPIEXEC_EXECUTABLE:STRING=srun -DAMR_WIND_ENABLE_CUDA:BOOL=ON -DAMReX_CUDA_ARCH:STRING=7.0 -DAMREX_GPUS_PER_NODE:STRING=2 -DUNSET_TMPDIR_VAR:BOOL=TRUE -DCTEST_DISABLE_OVERLAPPING_TESTS:BOOL=TRUE ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Set essential arguments for ctest
   CTEST_ARGS="-DTESTING_ROOT_DIR=${AMR_WIND_TESTING_ROOT_DIR} -DAMR_WIND_DIR=${AMR_WIND_DIR} -DTEST_LOG=${LOGS_DIR}/amr-wind-test-log.txt -DHOST_NAME=${HOST_NAME} -DEXTRA_BUILD_NAME=${EXTRA_BUILD_NAME} ${CTEST_ARGS}"
 
   # Allow for oversubscription in OpenMPI
-  if [ "${COMPILER_NAME}" != 'intel' ]; then
+  if [ "${COMPILER_NAME}" != 'intel' ] && [ "${MACHINE_NAME}" != 'eagle' ]; then
     CMAKE_CONFIGURE_ARGS="-DMPIEXEC_PREFLAGS:STRING=--oversubscribe ${CMAKE_CONFIGURE_ARGS}"
   fi
 

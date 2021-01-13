@@ -219,7 +219,7 @@ test_configuration() {
     printf "\nSetting up address sanitizer in Clang...\n"
     printf "\nSetting up address sanitizer blacklist and compile flags...\n"
     (set -x; printf "src:/opt/compilers/2019-05-08/spack/var/spack/stage/llvm-7.0.1-362a6wfkd7pmjvjpbfd7tpqpgfej7izt/llvm-7.0.1.src/projects/compiler-rt/lib/asan/asan_malloc_linux.cc" > ${AMR_WIND_DIR}/build/asan_blacklist.txt)
-    export CXXFLAGS="-fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer -fsanitize-blacklist=${AMR_WIND_DIR}/build/asan_blacklist.txt"
+    export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer -fsanitize-blacklist=${AMR_WIND_DIR}/build/asan_blacklist.txt"
     printf "export CXXFLAGS=${CXXFLAGS}\n"
     printf "\nCurrently ignoring container overflows...\n"
     cmd "export ASAN_OPTIONS=detect_container_overflow=0"

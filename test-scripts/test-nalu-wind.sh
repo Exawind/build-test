@@ -411,10 +411,10 @@ main() {
     CONFIGURATIONS[0]='gcc:8.4.0:develop:cuda;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
-  elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:develop:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[1]='clang:9.0.0-apple:develop:fftw;tioga;hypre;openfast'
-    NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
+  #elif [ "${MACHINE_NAME}" == 'mac' ]; then
+  #  CONFIGURATIONS[0]='gcc:7.4.0:develop:fftw;tioga;hypre;openfast'
+  #  CONFIGURATIONS[1]='clang:9.0.0-apple:develop:fftw;tioga;hypre;openfast'
+  #  NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else
     printf "\nMachine name not recognized.\n"
   fi

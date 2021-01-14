@@ -364,10 +364,10 @@ main() {
     CONFIGURATIONS[1]='gcc:8.4.0:false'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
-  elif [ "${MACHINE_NAME}" == 'mac' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:false'
-    CONFIGURATIONS[1]='clang:9.0.0-apple:false'
-    NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
+  #elif [ "${MACHINE_NAME}" == 'mac' ]; then
+  #  CONFIGURATIONS[0]='gcc:7.4.0:false'
+  #  CONFIGURATIONS[1]='clang:9.0.0-apple:false'
+  #  NALU_WIND_TESTING_ROOT_DIR=${HOME}/nalu-wind-testing
   else
     printf "\nMachine name not recognized.\n"
     exit 1

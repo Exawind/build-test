@@ -198,8 +198,8 @@ test_configuration() {
 
   if [ ! -z "${AMR_WIND_DIR}" ]; then
     printf "\nCleaning AMR-Wind directory...\n"
-    cmd "cd ${AMR_WIND_DIR} && git reset --hard origin/development && git clean -df && git status -uno"
-    cmd "cd ${AMR_WIND_DIR}/submods/amrex && git reset --hard origin/development && git clean -df && git status -uno"
+    cmd "cd ${AMR_WIND_DIR} && git reset --hard origin/main && git clean -df && git status -uno"
+    cmd "cd ${AMR_WIND_DIR}/submods/amrex && git reset --hard origin/main && git clean -df && git status -uno"
     cmd "mkdir -p ${AMR_WIND_DIR}/build || true"
     cmd "cd ${AMR_WIND_DIR}/build && rm -rf ${AMR_WIND_DIR}/build/*"
     # Update all the submodules recursively in case the previous ctest update failed because of submodule updates
@@ -413,7 +413,7 @@ main() {
     #cmd "cd ${BUILD_TEST_DIR}/configs && ./setup-spack.sh"
  
     printf "\nCloning AMR-Wind repo...\n"
-    cmd "git clone --recursive -b development https://github.com/Exawind/amr-wind.git ${AMR_WIND_DIR}"
+    cmd "git clone --recursive -b main https://github.com/Exawind/amr-wind.git ${AMR_WIND_DIR}"
     cmd "mkdir -p ${AMR_WIND_DIR}/build || true"
 
     #printf "\nMaking job output directory...\n"

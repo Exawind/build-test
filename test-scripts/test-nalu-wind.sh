@@ -209,6 +209,7 @@ test_configuration() {
     cmd "spack load cmake %${COMPILER_ID}"
     cmd "spack load nccmp %${COMPILER_ID}"
     cmd "spack load ${MPI_ID} %${COMPILER_ID}"
+    cmd "module use /opt/utilities/modules-2020-07/cmake/3.17.3; module load vrs4"
   fi
 
   printf "\nSetting variables to pass to CTest...\n"

@@ -181,7 +181,7 @@ test_configuration() {
   EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}"
 
   # Run static analysis and let ctest know we have static analysis output
-  if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
+  if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'clang@10.0.0' ]; then
     cmd "cd ${AMR_WIND_DIR}/build"
     cmd "rm ${LOGS_DIR}/amr-wind-static-analysis.txt || true"
     printf "\nRunning cppcheck static analysis (AMR-Wind not updated until after this step)...\n"

@@ -45,9 +45,9 @@ test_configuration() {
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
-    cmd "module use /opt/compilers/modules-2019-05-08"
-    cmd "module use /opt/utilities/modules-2019-05-08"
-    cmd "module use /opt/software/modules-2019-05-08/gcc-7.4.0"
+    cmd "module use /opt/compilers/modules-2020-07"
+    cmd "module use /opt/utilities/modules-2020-07"
+    cmd "module use /opt/software/modules-2020-07/gcc-8.4.0"
     cmd "module load unzip"
     cmd "module load patch"
     cmd "module load bzip2"
@@ -60,23 +60,23 @@ test_configuration() {
     cmd "module load cppcheck"
     cmd "module load binutils"
     cmd "module load rsync"
-    cmd "module load python/3.7.3"
-    cmd "module load py-matplotlib/2.2.3-py3"
-    cmd "module load py-six/1.12.0-py3"
-    cmd "module load py-numpy/1.16.3-py3"
-    cmd "module load py-cycler/0.10.0-py3"
-    cmd "module load py-dateutil/2.7.5-py3"
-    cmd "module load py-bottleneck/1.2.1-py3"
-    cmd "module load py-cython/0.29.5-py3"
-    cmd "module load py-nose/1.3.7-py3"
-    cmd "module load py-numexpr/2.6.9-py3"
-    cmd "module load py-packaging/17.1-py3"
-    cmd "module load py-pandas/0.24.1-py3"
-    cmd "module load py-pillow/5.4.1-py3"
-    cmd "module load py-pytz/2018.4-py3"
-    cmd "module load py-setuptools/40.8.0-py3"
-    cmd "module load py-kiwisolver/1.0.1-py3"
-    cmd "module load py-pyparsing/2.3.1-py3"
+    cmd "module load python"
+    cmd "module load py-matplotlib"
+    cmd "module load py-six"
+    cmd "module load py-numpy"
+    cmd "module load py-cycler"
+    cmd "module load py-python-dateutil"
+    cmd "module load py-bottleneck"
+    cmd "module load py-cython"
+    cmd "module load py-nose"
+    cmd "module load py-numexpr"
+    cmd "module load py-packaging"
+    cmd "module load py-pandas"
+    cmd "module load py-pillow"
+    cmd "module load py-pytz"
+    cmd "module load py-setuptools"
+    cmd "module load py-kiwisolver"
+    cmd "module load py-pyparsing"
     cmd "module load texlive"
     cmd "module load netcdf"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
@@ -354,9 +354,9 @@ main() {
   #CONFIGURATION[n]='compiler_name:compiler_version:use_latest_amrex'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     CONFIGURATIONS[0]='intel:18.0.4:false'
-    CONFIGURATIONS[1]='clang:7.0.1:false'
-    CONFIGURATIONS[2]='gcc:7.4.0:true'
-    CONFIGURATIONS[3]='gcc:7.4.0:false'
+    CONFIGURATIONS[1]='clang:10.0.0:false'
+    CONFIGURATIONS[2]='gcc:8.4.0:true'
+    CONFIGURATIONS[3]='gcc:8.4.0:false'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then

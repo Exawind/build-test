@@ -29,7 +29,7 @@ test_configuration() {
   BLAS_ID=''
   BLAS_CONSTRAINTS=''
   if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
-    MPI_ID="openmpi@3.1.4"
+    MPI_ID="openmpi"
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     # For intel, we want to build against intel-mpi and intel-mkl
     MPI_ID="intel-mpi"
@@ -63,8 +63,8 @@ test_configuration() {
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
     cmd "module purge"
     cmd "module unuse ${MODULEPATH}"
-    cmd "module use /opt/compilers/modules-2019-05-08"
-    cmd "module use /opt/utilities/modules-2019-05-08"
+    cmd "module use /opt/compilers/modules-2020-07"
+    cmd "module use /opt/utilities/modules-2020-07"
     cmd "module load unzip"
     cmd "module load patch"
     cmd "module load bzip2"
@@ -73,7 +73,7 @@ test_configuration() {
     cmd "module load bison"
     cmd "module load wget"
     cmd "module load bc"
-    cmd "module load python/3.7.3"
+    cmd "module load python"
     cmd "module load cppcheck"
     cmd "module load binutils"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
@@ -131,8 +131,8 @@ test_configuration() {
   #cmd "spack uninstall -a -y openfast %${COMPILER_ID} || true"
   #printf "\nUninstalling TIOGA (this is fine to error when tests are first run or building TIOGA has previously failed)...\n"
   #cmd "spack uninstall -a -y tioga %${COMPILER_ID} || true"
-  printf "\nUninstalling hypre...\n"
-  cmd "spack uninstall -a -y hypre %${COMPILER_ID} || true"
+  #printf "\nUninstalling hypre...\n"
+  #cmd "spack uninstall -a -y hypre %${COMPILER_ID} || true"
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating and cleaning Trilinos stage directory (this is fine to error when tests are first run)...\n"
@@ -209,7 +209,6 @@ test_configuration() {
     cmd "spack load cmake %${COMPILER_ID}"
     cmd "spack load nccmp %${COMPILER_ID}"
     cmd "spack load ${MPI_ID} %${COMPILER_ID}"
-    cmd "module use /opt/utilities/modules-2020-07/cmake/3.17.3; module load vrs4"
   fi
 
   printf "\nSetting variables to pass to CTest...\n"
@@ -402,10 +401,10 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:trilinos_branch:list_of_tpls'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='gcc:7.4.0:develop:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[1]='gcc:7.4.0:master:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[0]='gcc:8.4.0:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[1]='gcc:8.4.0:master:fftw;tioga;hypre;openfast'
     CONFIGURATIONS[2]='intel:18.0.4:develop:fftw;tioga;hypre;openfast'
-    CONFIGURATIONS[3]='clang:7.0.1:develop:fftw;tioga;hypre;openfast'
+    CONFIGURATIONS[3]='clang:10.0.0:develop:fftw;tioga;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then

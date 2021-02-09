@@ -78,7 +78,7 @@ test_configuration() {
     cmd "module load py-kiwisolver"
     cmd "module load py-pyparsing"
     cmd "module load texlive"
-    cmd "module load netcdf"
+    cmd "module load netcdf-c"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'clang' ]; then

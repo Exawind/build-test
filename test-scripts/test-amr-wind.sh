@@ -172,7 +172,7 @@ test_configuration() {
 
   if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_NAME}" != 'intel' ]; then
     #NETCDF_DIR=$(spack location -i netcdf %${COMPILER_ID})
-    NETCDF_DIR=${NETCDF_ROOT_DIR}
+    NETCDF_DIR=${NETCDF_C_ROOT_DIR}
     CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_NETCDF:BOOL=ON -DNETCDF_DIR:PATH=${NETCDF_DIR} ${CMAKE_CONFIGURE_ARGS}"
     printf "NETCDF_DIR=${NETCDF_DIR}\n"
   fi

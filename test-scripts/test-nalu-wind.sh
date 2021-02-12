@@ -136,8 +136,7 @@ test_configuration() {
 
   # Update packages we want to track; it's an error if they don't exist yet, but a soft error
   printf "\nUpdating and cleaning Trilinos stage directory (this is fine to error when tests are first run)...\n"
-  # Update Trilinos in its stage dir (This has been updated to spack-src in recent versions of Spack)
-  cmd "cd ${TRILINOS_STAGE_DIR}/src && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"
+  cmd "cd ${TRILINOS_STAGE_DIR}/spack-src && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"
   # Update Trilinos using the hash from the previous install
   #cmd "spack cd /${INSTALLED_TRILINOS_HASH} && pwd && git fetch --all && git reset --hard origin/${TRILINOS_BRANCH} && git clean -df && git status -uno && rm -rf ../spack-build ../spack-build.out ../spack-build.env || true"
   # Update Trilinos using spack cd
@@ -299,9 +298,9 @@ test_configuration() {
     # Create blacklist for suppressing impl.h file in Yaml-CPP library
     printf "\nWriting source files to blacklist file...\n"
     #(set -x; printf "src:$(spack location -i yaml-cpp %${COMPILER_ID})/include/yaml-cpp/node/impl.h" > ${NALU_WIND_DIR}/build/asan_blacklist.txt)
-    (set -x; printf "src:$(spack location -i yaml-cpp %${COMPILER_ID})/lib/cmake/yaml-cpp/../../../include/yaml-cpp/node/impl.h" > ${NALU_WIND_DIR}/build/asan_blacklist.txt)
-    export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer -fsanitize-blacklist=${NALU_WIND_DIR}/build/asan_blacklist.txt"
-    #export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+    #(set -x; printf "src:$(spack location -i yaml-cpp %${COMPILER_ID})/lib/cmake/yaml-cpp/../../../include/yaml-cpp/node/impl.h" > ${NALU_WIND_DIR}/build/asan_blacklist.txt)
+    #export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer -fsanitize-blacklist=${NALU_WIND_DIR}/build/asan_blacklist.txt"
+    export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer"
     printf "export CXXFLAGS=${CXXFLAGS}\n"
     # Probably should try to solve the Nalu-Wind container overflow errors sometime, but we currently ignore them
     printf "\nIgnoring container overflows...\n"

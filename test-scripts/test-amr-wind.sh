@@ -78,7 +78,6 @@ test_configuration() {
     cmd "module load py-kiwisolver"
     cmd "module load py-pyparsing"
     cmd "module load texlive"
-    cmd "module load netcdf-c"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'clang' ]; then
@@ -116,7 +115,6 @@ test_configuration() {
     cmd "module load py-kiwisolver"
     cmd "module load py-pyparsing"
     cmd "module load texlive"
-    cmd "module load netcdf-c"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
@@ -148,7 +146,7 @@ test_configuration() {
   #printf "\nInstalling AMR-Wind dependencies using ${COMPILER_ID}...\n"
   #(set -x; spack install ${MPI_ID} %${COMPILER_ID})
   (set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
-  #cmd "spack install netcdf %${COMPILER_ID}"
+  #cmd "spack install netcdf-c %${COMPILER_ID}"
 
   # Refresh available modules (this is only really necessary on the first run of this script
   # because cmake and openmpi will already have been built and module files registered in subsequent runs)
@@ -171,8 +169,7 @@ test_configuration() {
   printf "MASA_DIR=${MASA_DIR}\n"
 
   if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_NAME}" != 'intel' ]; then
-    #NETCDF_DIR=$(spack location -i netcdf %${COMPILER_ID})
-    NETCDF_DIR=${NETCDF_C_ROOT_DIR}
+    NETCDF_DIR=$(spack location -i netcdf-c %${COMPILER_ID})
     CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_NETCDF:BOOL=ON -DNETCDF_DIR:PATH=${NETCDF_DIR} ${CMAKE_CONFIGURE_ARGS}"
     printf "NETCDF_DIR=${NETCDF_DIR}\n"
   fi
@@ -199,7 +196,7 @@ test_configuration() {
   if [ ! -z "${AMR_WIND_DIR}" ]; then
     printf "\nCleaning AMR-Wind directory...\n"
     cmd "cd ${AMR_WIND_DIR} && git reset --hard origin/main && git clean -df && git status -uno"
-    cmd "cd ${AMR_WIND_DIR}/submods/amrex && git reset --hard origin/main && git clean -df && git status -uno"
+    cmd "cd ${AMR_WIND_DIR}/submods/amrex && git reset --hard origin/development && git clean -df && git status -uno"
     cmd "mkdir -p ${AMR_WIND_DIR}/build || true"
     cmd "cd ${AMR_WIND_DIR}/build && rm -rf ${AMR_WIND_DIR}/build/*"
     # Update all the submodules recursively in case the previous ctest update failed because of submodule updates

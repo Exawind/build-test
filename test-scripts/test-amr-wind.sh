@@ -182,7 +182,7 @@ test_configuration() {
 
   # Run static analysis and let ctest know we have static analysis output
   if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'clang@10.0.0' ]; then
-    cmd "cd ${AMR_WIND_DIR}/build"
+    cmd "cd ${AMR_WIND_DIR}/build && ln -s ${CPPCHECK_ROOT_DIR}/cfg/std.cfg"
     cmd "rm ${LOGS_DIR}/amr-wind-static-analysis.txt || true"
     printf "\nRunning cppcheck static analysis (AMR-Wind not updated until after this step)...\n"
     # Using a working directory for cppcheck makes analysis faster
@@ -217,12 +217,13 @@ test_configuration() {
   # Turn on address sanitizer for clang build on rhodes
   if [ "${COMPILER_NAME}" == 'clang' ] && [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting up address sanitizer in Clang...\n"
-    printf "\nSetting up address sanitizer blacklist and compile flags...\n"
-    (set -x; printf "src:/opt/compilers/2019-05-08/spack/var/spack/stage/llvm-7.0.1-362a6wfkd7pmjvjpbfd7tpqpgfej7izt/llvm-7.0.1.src/projects/compiler-rt/lib/asan/asan_malloc_linux.cc" > ${AMR_WIND_DIR}/build/asan_blacklist.txt)
-    export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer -fsanitize-blacklist=${AMR_WIND_DIR}/build/asan_blacklist.txt"
+    #printf "\nSetting up address sanitizer blacklist and compile flags...\n"
+    #(set -x; printf "src:/opt/compilers/2019-05-08/spack/var/spack/stage/llvm-7.0.1-362a6wfkd7pmjvjpbfd7tpqpgfej7izt/llvm-7.0.1.src/projects/compiler-rt/lib/asan/asan_malloc_linux.cc" > ${AMR_WIND_DIR}/build/asan_blacklist.txt)
+    #export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer -fsanitize-blacklist=${AMR_WIND_DIR}/build/asan_blacklist.txt"
+    export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer"
     printf "export CXXFLAGS=${CXXFLAGS}\n"
-    printf "\nCurrently ignoring container overflows...\n"
-    cmd "export ASAN_OPTIONS=detect_container_overflow=0"
+    #printf "\nCurrently ignoring container overflows...\n"
+    #cmd "export ASAN_OPTIONS=detect_container_overflow=0"
     printf "\nWriting asan.supp suppressions file...\n"
     (set -x; printf "leak:libopen-pal\nleak:libmpi\nleak:libmasa\nleak:libc++\nleak:hwloc_bitmap_alloc" > ${AMR_WIND_DIR}/build/asan.supp)
     cmd "export LSAN_OPTIONS=suppressions=${AMR_WIND_DIR}/build/asan.supp"

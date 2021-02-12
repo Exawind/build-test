@@ -225,7 +225,7 @@ test_configuration() {
     #printf "\nCurrently ignoring container overflows...\n"
     #cmd "export ASAN_OPTIONS=detect_container_overflow=0"
     printf "\nWriting asan.supp suppressions file...\n"
-    (set -x; printf "leak:libopen-pal\nleak:libmpi\nleak:libmasa\nleak:libc++\nleak:hwloc_bitmap_alloc" > ${AMR_WIND_DIR}/build/asan.supp)
+    (set -x; printf "leak:libstdc++.so\nleak:libopen-pal\nleak:libmpi\nleak:libmasa\nleak:libc++\nleak:hwloc_bitmap_alloc" > ${AMR_WIND_DIR}/build/asan.supp)
     cmd "export LSAN_OPTIONS=suppressions=${AMR_WIND_DIR}/build/asan.supp"
     # Can't run ASAN with optimization
     CMAKE_BUILD_TYPE=Debug

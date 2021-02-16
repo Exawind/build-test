@@ -296,11 +296,10 @@ test_configuration() {
   if [ "${COMPILER_NAME}" == 'clang' ] && [ "${MACHINE_NAME}" == 'rhodes' ]; then
     printf "\nSetting up address sanitizer in Clang...\n"
     # Create blacklist for suppressing impl.h file in Yaml-CPP library
-    printf "\nWriting source files to blacklist file...\n"
-    #(set -x; printf "src:$(spack location -i yaml-cpp %${COMPILER_ID})/include/yaml-cpp/node/impl.h" > ${NALU_WIND_DIR}/build/asan_blacklist.txt)
-    #(set -x; printf "src:$(spack location -i yaml-cpp %${COMPILER_ID})/lib/cmake/yaml-cpp/../../../include/yaml-cpp/node/impl.h" > ${NALU_WIND_DIR}/build/asan_blacklist.txt)
-    #export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer -fsanitize-blacklist=${NALU_WIND_DIR}/build/asan_blacklist.txt"
-    export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+    printf "\nWriting targets to blacklist file...\n"
+    (set -x; printf "fun:YAML::Node::as\n" > ${NALU_WIND_DIR}/build/asan_blacklist.txt)
+    (set -x; printf "src:$(spack location -i yaml-cpp %${COMPILER_ID})/lib/cmake/yaml-cpp/../../../include/yaml-cpp/node/impl.h" >> ${NALU_WIND_DIR}/build/asan_blacklist.txt)
+    export CXXFLAGS="-fsanitize=address -fno-omit-frame-pointer -fsanitize-blacklist=${NALU_WIND_DIR}/build/asan_blacklist.txt"
     printf "export CXXFLAGS=${CXXFLAGS}\n"
     # Probably should try to solve the Nalu-Wind container overflow errors sometime, but we currently ignore them
     printf "\nIgnoring container overflows...\n"

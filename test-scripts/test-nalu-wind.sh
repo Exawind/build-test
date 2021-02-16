@@ -185,7 +185,7 @@ test_configuration() {
   if [ ! -z "${STAGE_DIR}" ]; then
     #Haven't been able to find another robust way to rm with exclude
     printf "\nRemoving all staged directories except Trilinos...\n"
-    cmd "cd ${STAGE_DIR} && rm -rf spack-stage-a* spack-stage-b* spack-stage-c* spack-stage-d* spack-stage-e* spack-stage-f* spack-stage-g* spack-stage-h* spack-stage-i* spack-stage-j* spack-stage-k* spack-stage-l* spack-stage-m* spack-stage-n* spack-stage-o* spack-stage-p* spack-stage-q* spack-stage-r* spack-stage-tar* spack-stage-u* spack-stage-v* spack-stage-w* spack-stage-x* spack-stage-y* spack-stage-z*"
+    cmd "cd ${STAGE_DIR} && rm -rf spack-stage-a* spack-stage-b* spack-stage-c* spack-stage-d* spack-stage-e* spack-stage-f* spack-stage-g* spack-stage-h* spack-stage-i* spack-stage-j* spack-stage-k* spack-stage-l* spack-stage-m* spack-stage-n* spack-stage-o* spack-stage-p* spack-stage-q* spack-stage-r* spack-stage-s* spack-stage-tar* spack-stage-u* spack-stage-v* spack-stage-w* spack-stage-x* spack-stage-y* spack-stage-z*"
     #printf "\nRemoving all staged directories except Trilinos and OpenFAST...\n"
     #cmd "cd ${STAGE_DIR} && rm -rf a* b* c* d* e* f* g* h* i* j* k* l* m* n* openmpi* p* q* r* s* tar* u* v* w* x* y* z*"
     #find ${STAGE_DIR}/ -maxdepth 0 -type d -not -name "trilinos*" -exec rm -r {} \;

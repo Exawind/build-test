@@ -121,7 +121,7 @@ test_configuration() {
   printf "\nTRILINOS_INSTALL_DIR=${TRILINOS_INSTALL_DIR}\n"
   TRILINOS_BASENAME=$(basename ${TRILINOS_INSTALL_DIR})
   printf "\nTRILINOS_BASENAME=${TRILINOS_BASENAME}\n"
-  TRILINOS_STAGE_DIR=spack-stage-$(spack location -S)/spack-stage-${TRILINOS_BASENAME}
+  TRILINOS_STAGE_DIR=$(spack location -S)/spack-stage-${TRILINOS_BASENAME}
   printf "\nTRILINOS_STAGE_DIR=${TRILINOS_STAGE_DIR}\n"
 
   # Uninstall packages we want to track; it's an error if they don't exist yet, but a soft error

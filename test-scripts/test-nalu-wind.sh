@@ -275,7 +275,7 @@ test_configuration() {
   fi
 
   # Run static analysis and let ctest know we have static analysis output
-  if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'gcc@7.4.0' ]; then
+  if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_ID}" == 'clang@10.0.0' ]; then
     printf "\nRunning cppcheck static analysis (Nalu-Wind not updated until after this step)...\n"
     cmd "rm ${LOGS_DIR}/nalu-wind-static-analysis.txt"
     cmd "cppcheck --enable=all --quiet -j 16 --output-file=${LOGS_DIR}/nalu-wind-static-analysis.txt -I ${NALU_WIND_DIR}/include ${NALU_WIND_DIR}/src"

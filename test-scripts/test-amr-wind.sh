@@ -163,10 +163,14 @@ test_configuration() {
   printf "\nSetting variables to pass to CTest...\n"
   CMAKE_CONFIGURE_ARGS=''
 
-  # Turn on verification and find MASA
+  # Turn on TPLs
   MASA_DIR=$(spack location -i masa %${COMPILER_ID})
   CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MASA:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
   printf "MASA_DIR=${MASA_DIR}\n"
+
+  HYPRE_DIR=$(spack location -i hypre %${COMPILER_ID})
+  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_HYPRE:BOOL=ON -DHYPRE_DIR:PATH=${HYPRE_DIR} ${CMAKE_CONFIGURE_ARGS}"
+  printf "HYPRE_DIR=${HYPRE_DIR}\n"
 
   if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_NAME}" != 'intel' ]; then
     NETCDF_DIR=$(spack location -i netcdf-c %${COMPILER_ID})

@@ -12,41 +12,27 @@ cmd() {
 # Copy this script to that directory and edit the
 # options below to your own needs and run it.
 
-#gcc 7.3.0, gcc 4.9.4, intel 18.0.4, clang 6.0.1
+#gcc 8.4.0, intel 18.0.4, clang 10.0.0
 COMPILER=clang
-COMPILER_VERSION=7.0.1
+COMPILER_VERSION=10.0.0
 #For Intel compiler front end
-GCC_COMPILER_VERSION=7.4.0
-
-if [ "${COMPILER}" == 'gcc' ] || [ "${COMPILER}" == 'clang' ]; then
-  CXX_COMPILER=mpicxx
-  C_COMPILER=mpicc
-  FORTRAN_COMPILER=mpifort
-  printf "src:/projects/ecp/exawind/nalu-wind-testing/spack/opt/spack/linux-centos7-x86_64/clang-7.0.1/yaml-cpp-0.6.2-4jpmv5uvxyqo4qfzshvbmxmi357zmemz/include/yaml-cpp/node/impl.h" > /home/jrood/exawind/nalu-wind/build/asan_blacklist.txt
-  export CXXFLAGS="-fsanitize=address -fsanitize-blacklist=/home/jrood/exawind/nalu-wind/build/asan_blacklist.txt -fno-omit-frame-pointer -O2 -march=native -mtune=native"
-  OVERSUBSCRIBE_FLAGS="--use-hwthread-cpus --oversubscribe"
-elif [ "${COMPILER}" == 'intel' ]; then
-  CXX_COMPILER=mpiicpc
-  C_COMPILER=mpiicc
-  FORTRAN_COMPILER=mpiifort
-  FLAGS="-O2 -xCORE-AVX2"
-fi
+GCC_COMPILER_VERSION=8.4.0
 
 # Set up environment on Rhodes
 #Pure modules sans Spack
-export MODULE_PREFIX=/opt/utilities/modules_prefix
+export MODULE_PREFIX=/opt/base/modules_prefix
 export PATH=${MODULE_PREFIX}/bin:${PATH}
 module() { eval $(${MODULE_PREFIX}/bin/modulecmd $(basename ${SHELL}) $*); }
 
 #Load some base modules
 cmd "module purge"
 cmd "module unuse ${MODULEPATH}"
-cmd "module use /opt/compilers/modules"
-cmd "module use /opt/utilities/modules"
+cmd "module use /opt/compilers/modules-2020-07"
+cmd "module use /opt/utilities/modules-2020-07"
 #Use main software stack
-#cmd "module use /opt/software/modules/${COMPILER}-${COMPILER_VERSION}"
+#cmd "module use /opt/software/modules-2020-07/${COMPILER}-${COMPILER_VERSION}"
 #Use testing software stack
-cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/${COMPILER}-${COMPILER_VERSION}"
+cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-broadwell/${COMPILER}-${COMPILER_VERSION}"
 
 cmd "module load unzip"
 cmd "module load patch"
@@ -79,9 +65,23 @@ cmd "module load yaml-cpp"
 cmd "module load hypre"
 cmd "module load openfast"
 cmd "module load fftw"
-cmd "module load trilinos-catalyst-ioss-adapter"
 cmd "module load boost"
+#cmd "module load trilinos-catalyst-ioss-adapter"
 cmd "module list"
+
+if [ "${COMPILER}" == 'gcc' ] || [ "${COMPILER}" == 'clang' ]; then
+  CXX_COMPILER=mpicxx
+  C_COMPILER=mpicc
+  FORTRAN_COMPILER=mpifort
+  printf "fun:*YAML*\n" > ${PWD}/asan_blacklist.txt
+  export CXXFLAGS="-fsanitize=address -fsanitize-blacklist=${PWD}/asan_blacklist.txt -fno-omit-frame-pointer"
+  OVERSUBSCRIBE_FLAGS="--use-hwthread-cpus --oversubscribe"
+elif [ "${COMPILER}" == 'intel' ]; then
+  CXX_COMPILER=mpiicpc
+  C_COMPILER=mpiicc
+  FORTRAN_COMPILER=mpiifort
+  FLAGS="-O2 -xCORE-AVX2"
+fi
 
 # Clean before cmake configure
 set +e
@@ -109,13 +109,13 @@ cmd "which mpiexec"
   -DMPI_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
   -DMPIEXEC_PREFLAGS:STRING="${OVERSUBSCRIBE_FLAGS}" \
   -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
-  -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
   -DBoost_DIR:PATH=${BOOST_ROOT_DIR} \
+  -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
   -DENABLE_HYPRE:BOOL=ON \
   -DHYPRE_DIR:PATH=${HYPRE_ROOT_DIR} \
   -DENABLE_TIOGA:BOOL=ON \
   -DTIOGA_DIR:PATH=${TIOGA_ROOT_DIR} \
-  -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
+  -DCMAKE_BUILD_TYPE:STRING=Debug \
   -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \
   -DCMAKE_SKIP_BUILD_RPATH:BOOL=FALSE \
@@ -128,7 +128,7 @@ cmd "which mpiexec"
 
 #To run with asan use this same script to set up the same environment as building and replace cmake and make with:
 #export ASAN_OPTIONS=detect_container_overflow=0
-#printf "leak:libopen-pal\nleak:libmpi\nleak:libnetcdf" > /home/jrood/exawind/nalu-wind/build/asan.supp
-#export LSAN_OPTIONS=suppressions=/home/jrood/exawind/nalu-wind/build/asan.supp
+#printf "leak:libopen-pal\nleak:libmpi\nleak:libnetcdf" > ${PWD}/asan.supp
+#export LSAN_OPTIONS=suppressions=${PWD}/asan.supp
 #(set -x; ctest -VV -R unit)
 

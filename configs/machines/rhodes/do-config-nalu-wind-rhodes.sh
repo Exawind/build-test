@@ -14,15 +14,16 @@ cmd() {
 
 #gcc 7.3.0, gcc 4.9.4, intel 18.0.4, clang 6.0.1
 COMPILER=gcc
-COMPILER_VERSION=7.4.0
+COMPILER_VERSION=8.4.0
 #For Intel compiler front end
-GCC_COMPILER_VERSION=7.4.0
+GCC_COMPILER_VERSION=8.4.0
 
 if [ "${COMPILER}" == 'gcc' ] || [ "${COMPILER}" == 'clang' ]; then
   CXX_COMPILER=mpicxx
   C_COMPILER=mpicc
-  FORTRAN_COMPILER=mpifort
-  FLAGS="-O2 -march=native -mtune=native"
+  FORTRAN_COMPILER=mpif90
+  #export CXXFLAGS=""
+  #FLAGS="-O2 -march=native -mtune=native -fsanitize=address -fno-omit-frame-pointer -fsanitize-blacklist=${HOME}/exawind/nalu-wind/build/asan_blacklist.txt"
   OVERSUBSCRIBE_FLAGS="--use-hwthread-cpus --oversubscribe"
 elif [ "${COMPILER}" == 'intel' ]; then
   CXX_COMPILER=mpiicpc
@@ -45,7 +46,9 @@ cmd "module use /opt/utilities/modules"
 #Use main software stack
 #cmd "module use /opt/software/modules/${COMPILER}-${COMPILER_VERSION}"
 #Use testing software stack
-cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-x86_64/${COMPILER}-${COMPILER_VERSION}"
+cmd "module use /projects/ecp/exawind/nalu-wind-testing/spack/share/spack/modules/linux-centos7-broadwell/${COMPILER}-${COMPILER_VERSION}"
+#Use home directory software stack
+#cmd "module use /home/jrood/spack/share/spack/modules/linux-centos7-broadwell/${COMPILER}-${COMPILER_VERSION}"
 
 cmd "module load unzip"
 cmd "module load patch"
@@ -67,18 +70,18 @@ elif [ "${COMPILER}" == 'clang' ]; then
   cmd "module load openmpi"
   cmd "module load netlib-lapack"
 elif [ "${COMPILER}" == 'intel' ]; then
-  #cmd "module load gcc/${GCC_COMPILER_VERSION}"
+  cmd "module load gcc/${GCC_COMPILER_VERSION}"
   cmd "module load intel-parallel-studio/cluster.2018.4"
   cmd "module load intel-mpi/2018.4.274"
   cmd "module load intel-mkl/2018.4.274"
 fi
-cmd "module load trilinos"
+#cmd "module load trilinos"
 cmd "module load tioga"
 cmd "module load yaml-cpp"
-cmd "module load hypre"
-cmd "module load openfast"
-cmd "module load fftw"
-cmd "module load trilinos-catalyst-ioss-adapter"
+#cmd "module load hypre"
+#cmd "module load openfast"
+#cmd "module load fftw"
+#cmd "module load trilinos-catalyst-ioss-adapter"
 cmd "module load boost"
 cmd "module list"
 
@@ -88,42 +91,41 @@ cmd "rm -rf CMakeFiles"
 cmd "rm -f CMakeCache.txt"
 set -e
 
-cmd "which mpiexec"
+cmd "which mpicxx"
+cmd "which cmake"
 
 # Extra TPLs that can be included in the cmake configure:
 #  -DENABLE_PARAVIEW_CATALYST:BOOL=ON \
 #  -DPARAVIEW_CATALYST_INSTALL_PATH:PATH=${CATALYST_IOSS_ADAPTER_ROOT_DIR} \
-#  -DENABLE_OPENFAST:BOOL=ON \
-#  -DOpenFAST_DIR:PATH=${OPENFAST_ROOT_DIR} \
+#  -DENABLE_HYPRE:BOOL=ON \
+#  -DHYPRE_DIR:PATH=${HYPRE_ROOT_DIR} \
+#  -DENABLE_TIOGA:BOOL=ON \
+#  -DTIOGA_DIR:PATH=${TIOGA_ROOT_DIR} \
 #  -DENABLE_FFTW:BOOL=ON \
 #  -DFFTW_DIR:PATH=${FFTW_ROOT_DIR} \
-#  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${OPENFAST_ROOT_DIR}/lib;${FFTW_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
+#  -DENABLE_OPENFAST:BOOL=ON \
+#  -DOpenFAST_DIR:PATH=${OPENFAST_ROOT_DIR} \
 
+#HYPRE_ROOT_DIR=/home/jrood/exawind/hypre-exawind/install
+ 
 (set -x; cmake \
   -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} \
-  -DCMAKE_CXX_FLAGS:STRING="${FLAGS}" \
-  -DCMAKE_C_COMPILER:STRING=${C_COMPILER} \
-  -DCMAKE_C_FLAGS:STRING="${FLAGS}" \
   -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
-  -DCMAKE_Fortran_FLAGS:STRING="${FLAGS}" \
   -DMPI_CXX_COMPILER:STRING=${CXX_COMPILER} \
-  -DMPI_C_COMPILER:STRING=${C_COMPILER} \
   -DMPI_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} \
   -DMPIEXEC_PREFLAGS:STRING="${OVERSUBSCRIBE_FLAGS}" \
-  -DTrilinos_DIR:PATH=${TRILINOS_ROOT_DIR} \
+  -DTrilinos_DIR:PATH=/projects/ecp/exawind/nalu-wind-testing/spack/opt/spack/linux-centos7-broadwell/gcc-8.4.0/trilinos-develop-sehknix2oolg6krdmlzx4lft7fcrog7o \
   -DYAML_DIR:PATH=${YAML_CPP_ROOT_DIR} \
   -DBoost_DIR:PATH=${BOOST_ROOT_DIR} \
-  -DENABLE_HYPRE:BOOL=ON \
-  -DHYPRE_DIR:PATH=${HYPRE_ROOT_DIR} \
-  -DENABLE_TIOGA:BOOL=ON \
-  -DTIOGA_DIR:PATH=${TIOGA_ROOT_DIR} \
-  -DCMAKE_BUILD_TYPE:STRING=RELEASE \
+  -DCMAKE_BUILD_TYPE:STRING=Release \
   -DENABLE_DOCUMENTATION:BOOL=OFF \
   -DENABLE_TESTS:BOOL=ON \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON \
   -DCMAKE_SKIP_BUILD_RPATH:BOOL=FALSE \
   -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=FALSE \
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=TRUE \
-  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${TIOGA_ROOT_DIR}/lib;${HYPRE_ROOT_DIR}/lib;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
+  -DENABLE_WIND_UTILS:BOOL=ON \
+  -DCMAKE_BUILD_RPATH:STRING="${NETLIB_LAPACK_ROOT_DIR}/lib64;${YAML_ROOT_DIR}/lib;${TRILINOS_ROOT_DIR}/lib;$(pwd)" \
   ..)
 
-(set -x; nice make -j 64)
+(set -x; make -j32)

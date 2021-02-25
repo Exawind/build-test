@@ -148,7 +148,7 @@ test_configuration() {
   (set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
   #cmd "spack install netcdf-c %${COMPILER_ID}"
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    cmd "spack install hypre+cuda~int64 %${COMPILER_ID}"
+    cmd "spack install hypre+shared+cuda~int64 %${COMPILER_ID}"
   fi
 
   # Refresh available modules (this is only really necessary on the first run of this script
@@ -172,7 +172,7 @@ test_configuration() {
   printf "MASA_DIR=${MASA_DIR}\n"
 
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    HYPRE_DIR=$(spack location -i hypre+cuda~int64 %${COMPILER_ID})
+    HYPRE_DIR=$(spack location -i hypre+shared+cuda~int64 %${COMPILER_ID})
   else
     HYPRE_DIR=$(spack location -i hypre %${COMPILER_ID})
   fi

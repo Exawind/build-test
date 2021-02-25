@@ -147,6 +147,9 @@ test_configuration() {
   #(set -x; spack install ${MPI_ID} %${COMPILER_ID})
   (set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
   #cmd "spack install netcdf-c %${COMPILER_ID}"
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    cmd "spack install hypre+cuda~int64 %${COMPILER_ID}"
+  fi
 
   # Refresh available modules (this is only really necessary on the first run of this script
   # because cmake and openmpi will already have been built and module files registered in subsequent runs)
@@ -168,7 +171,11 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MASA:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
   printf "MASA_DIR=${MASA_DIR}\n"
 
-  HYPRE_DIR=$(spack location -i hypre %${COMPILER_ID})
+  if [ "${MACHINE_NAME}" == 'eagle' ]; then
+    HYPRE_DIR=$(spack location -i hypre+cuda~int64 %${COMPILER_ID})
+  else
+    HYPRE_DIR=$(spack location -i hypre %${COMPILER_ID})
+  fi
   CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_HYPRE:BOOL=ON -DHYPRE_ROOT:PATH=${HYPRE_DIR} ${CMAKE_CONFIGURE_ARGS}"
   printf "HYPRE_DIR=${HYPRE_DIR}\n"
 

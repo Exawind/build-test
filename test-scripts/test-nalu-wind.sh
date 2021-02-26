@@ -236,7 +236,11 @@ test_configuration() {
       printf "CATALYST_ADAPTER_DIR=${CATALYST_ADAPTER_DIR}\n"
     fi
     if [ "${TPL}" == 'hypre' ]; then
-      HYPRE_DIR=$(spack location -i hypre %${COMPILER_ID})
+      if [ "${MACHINE_NAME}" == 'eagle' ]; then
+        HYPRE_DIR=$(spack location -i hypre~shared %${COMPILER_ID})
+      else
+        HYPRE_DIR=$(spack location -i hypre %${COMPILER_ID})
+      fi
       CMAKE_CONFIGURE_ARGS="-DENABLE_HYPRE:BOOL=ON -DHYPRE_DIR:PATH=${HYPRE_DIR} ${CMAKE_CONFIGURE_ARGS}"
       printf "HYPRE_DIR=${HYPRE_DIR}\n"
     fi

@@ -348,6 +348,8 @@ test_configuration() {
   if [ "${MACHINE_NAME}" == 'eagle' ]; then
     export CXXFLAGS="-Xcudafe --diag_suppress=code_is_unreachable -Wimplicit-fallthrough=0"
     CMAKE_CONFIGURE_ARGS="-DTEST_REL_TOL=1.0e-7 -DTEST_TOLERANCE:STRING=1.0e-8 ${CMAKE_CONFIGURE_ARGS}"
+  elif [ "${COMPILER_NAME}" == 'gcc' ]; then
+    CMAKE_CONFIGURE_ARGS="-DTEST_REL_TOL:STRING=1.0e-13 -DTEST_TOLERANCE:STRING=1.0e-15 ${CMAKE_CONFIGURE_ARGS}"
   elif [ "${MACHINE_NAME}" == 'mac' ]; then
     CMAKE_CONFIGURE_ARGS="-DTEST_TOLERANCE:STRING=100000.0 ${CMAKE_CONFIGURE_ARGS}"
   fi

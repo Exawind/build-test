@@ -179,11 +179,11 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_HYPRE:BOOL=ON -DHYPRE_ROOT:PATH=${HYPRE_DIR} ${CMAKE_CONFIGURE_ARGS}"
   printf "HYPRE_DIR=${HYPRE_DIR}\n"
 
-  if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_NAME}" != 'intel' ]; then
+  #if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_NAME}" != 'intel' ]; then
     NETCDF_DIR=$(spack location -i netcdf-c %${COMPILER_ID})
     CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_NETCDF:BOOL=ON -DNETCDF_DIR:PATH=${NETCDF_DIR} ${CMAKE_CONFIGURE_ARGS}"
     printf "NETCDF_DIR=${NETCDF_DIR}\n"
-  fi
+  #fi
 
   # Set the extra identifiers for CDash build description
   EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}"

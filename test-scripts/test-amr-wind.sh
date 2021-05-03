@@ -237,7 +237,7 @@ test_configuration() {
     cmd "export LSAN_OPTIONS=suppressions=${AMR_WIND_DIR}/build/asan.supp"
     # Can't run ASAN with optimization
     CMAKE_BUILD_TYPE=Debug
-    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_CLANG_TIDY:BOOL=OFF ${CMAKE_CONFIGURE_ARGS}"
+    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_CLANG_TIDY:BOOL=ON ${CMAKE_CONFIGURE_ARGS}"
   fi
 
   # Explicitly set compilers to MPI compilers

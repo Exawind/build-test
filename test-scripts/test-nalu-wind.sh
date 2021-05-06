@@ -318,7 +318,7 @@ test_configuration() {
   # Explicitly set compilers to MPI compilers
   if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
     MPI_CXX_COMPILER=mpicxx
-    MPI_C_COMPILER=mpiccc
+    MPI_C_COMPILER=mpicc
     if [ "${MACHINE_NAME}" == 'eagle' ]; then
       MPI_FORTRAN_COMPILER=mpif90
     else

@@ -371,7 +371,7 @@ test_configuration() {
   printf "Returned from CTest at $(date)\n"
 
   printf "\nSaving norms...\n"
-  (set -x; cd ${NALU_WIND_DIR}/build/reg_tests/test_files && find . -type f \( -name "*.norm" -o -name "*.nc" \) | tar -czf ${NORMS_DIR}/norms${EXTRA_BUILD_NAME}-$(date +%Y-%m-%d-%H-%M).tar.gz -T -)
+  (set -x; cd ${NALU_WIND_DIR}/build/reg_tests/test_files && find . -type f \( -name "*.norm" -o -name "*.nc" -o -name "*.dat" \) | tar -czf ${NORMS_DIR}/norms${EXTRA_BUILD_NAME}-$(date +%Y-%m-%d-%H-%M).tar.gz -T -)
 
   cmd "grep -E 'PASS:|FAIL:' ${NALU_WIND_DIR}/build/Testing/Temporary/LastTest_*.log* | sort -k4 -g -r > ${LOGS_DIR}/nalu-wind-norms.txt"
 

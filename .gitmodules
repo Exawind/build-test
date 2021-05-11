@@ -1,4 +1,0 @@
-[submodule "exawind-builder"]
-	path = exawind-builder
-	url = git@github.com:sayerhs/exawind-builder.git
-	branch = master

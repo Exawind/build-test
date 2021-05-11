@@ -117,6 +117,7 @@ test_configuration() {
     cmd "module load texlive"
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
+      cmd "module load mpt"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
       cmd "module load ${INTEL_COMPILER_MODULE}"
     fi

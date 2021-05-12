@@ -16,6 +16,7 @@ test_configuration() {
   printf "************************************************************\n"
   printf "Testing AMR-Wind with:\n"
   printf "${COMPILER_ID}\n"
+  printf "LIST_OF_TPLS: ${LIST_OF_TPLS}\n"
   printf "at $(date)\n"
   printf "************************************************************\n"
   printf "\n"
@@ -144,14 +145,6 @@ test_configuration() {
     cmd "module list"
   fi
 
-  #printf "\nInstalling AMR-Wind dependencies using ${COMPILER_ID}...\n"
-  #(set -x; spack install ${MPI_ID} %${COMPILER_ID})
-  (set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
-  #cmd "spack install netcdf-c %${COMPILER_ID}"
-  if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    cmd "spack install hypre+shared+cuda~int64 %${COMPILER_ID}"
-  fi
-
   # Refresh available modules (this is only really necessary on the first run of this script
   # because cmake and openmpi will already have been built and module files registered in subsequent runs)
   cmd "source ${SPACK_ROOT}/share/spack/setup-env.sh"
@@ -168,23 +161,41 @@ test_configuration() {
   CMAKE_CONFIGURE_ARGS=''
 
   # Turn on TPLs
-  MASA_DIR=$(spack location -i masa %${COMPILER_ID})
-  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MASA:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
-  printf "MASA_DIR=${MASA_DIR}\n"
-
-  if [ "${MACHINE_NAME}" == 'eagle' ]; then
-    HYPRE_DIR=$(spack location -i hypre+shared+cuda~int64 %${COMPILER_ID})
-  else
-    HYPRE_DIR=$(spack location -i hypre %${COMPILER_ID})
-  fi
-  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_HYPRE:BOOL=ON -DHYPRE_ROOT:PATH=${HYPRE_DIR} ${CMAKE_CONFIGURE_ARGS}"
-  printf "HYPRE_DIR=${HYPRE_DIR}\n"
-
-  #if [ "${MACHINE_NAME}" == 'rhodes' ] && [ "${COMPILER_NAME}" != 'intel' ]; then
-    NETCDF_DIR=$(spack location -i netcdf-c %${COMPILER_ID})
-    CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_NETCDF:BOOL=ON -DNETCDF_DIR:PATH=${NETCDF_DIR} ${CMAKE_CONFIGURE_ARGS}"
-    printf "NETCDF_DIR=${NETCDF_DIR}\n"
-  #fi
+  TPLS=(${LIST_OF_TPLS//;/ })
+  for TPL in ${TPLS[*]}; do
+    if [ "${TPL}" == 'openfast' ]; then
+      OPENFAST_DIR=$(spack location -i openfast %${COMPILER_ID})
+      CMAKE_CONFIGURE_ARGS="-DENABLE_OPENFAST:BOOL=ON -DOpenFAST_DIR:PATH=${OPENFAST_DIR} ${CMAKE_CONFIGURE_ARGS}"
+      printf "OPENFAST_DIR=${OPENFAST_DIR}\n"
+    fi
+    if [ "${TPL}" == 'masa' ]; then
+      (set -x; spack install masa %${COMPILER_ID} cxxflags='-std=c++11')
+      MASA_DIR=$(spack location -i masa %${COMPILER_ID})
+      CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MASA:BOOL=ON -DMASA_DIR:PATH=${MASA_DIR} ${CMAKE_CONFIGURE_ARGS}"
+      printf "MASA_DIR=${MASA_DIR}\n"
+    fi
+    if [ "${TPL}" == 'hypre' ]; then
+      if [ "${MACHINE_NAME}" == 'eagle' ]; then
+        cmd "spack install hypre+shared+cuda~int64 %${COMPILER_ID}"
+        HYPRE_DIR=$(spack location -i hypre+shared+cuda~int64 %${COMPILER_ID})
+      else
+        HYPRE_DIR=$(spack location -i hypre %${COMPILER_ID})
+      fi
+      CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_HYPRE:BOOL=ON -DHYPRE_ROOT:PATH=${HYPRE_DIR} ${CMAKE_CONFIGURE_ARGS}"
+      printf "HYPRE_DIR=${HYPRE_DIR}\n"
+    fi
+    if [ "${TPL}" == 'netcdf' ]; then
+      #cmd "spack install netcdf-c %${COMPILER_ID}"
+      NETCDF_DIR=$(spack location -i netcdf-c %${COMPILER_ID})
+      CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_NETCDF:BOOL=ON -DNETCDF_DIR:PATH=${NETCDF_DIR} ${CMAKE_CONFIGURE_ARGS}"
+      printf "NETCDF_DIR=${NETCDF_DIR}\n"
+    fi
+    #if [ "${TPL}" == 'tioga' ]; then
+    #  TIOGA_DIR=$(spack location -i tioga %${COMPILER_ID})
+    #  CMAKE_CONFIGURE_ARGS="-DENABLE_TIOGA:BOOL=ON -DTIOGA_DIR:PATH=${TIOGA_DIR} ${CMAKE_CONFIGURE_ARGS}"
+    #  printf "TIOGA_DIR=${TIOGA_DIR}\n"
+    #fi
+  done
 
   # Set the extra identifiers for CDash build description
   EXTRA_BUILD_NAME="-${COMPILER_NAME}-${COMPILER_VERSION}"
@@ -363,15 +374,15 @@ main() {
   declare -a CONFIGURATIONS
   #CONFIGURATION[n]='compiler_name:compiler_version:use_latest_amrex'
   if [ "${MACHINE_NAME}" == 'rhodes' ]; then
-    CONFIGURATIONS[0]='intel:18.0.4:false'
-    CONFIGURATIONS[1]='clang:10.0.0:false'
-    CONFIGURATIONS[2]='gcc:8.4.0:true'
-    CONFIGURATIONS[3]='gcc:8.4.0:false'
+    CONFIGURATIONS[0]='intel:18.0.4:false:netcdf;hypre;openfast'
+    CONFIGURATIONS[1]='clang:10.0.0:false:netcdf;hypre;openfast;masa'
+    CONFIGURATIONS[2]='gcc:8.4.0:true:netcdf;hypre;openfast;masa'
+    CONFIGURATIONS[3]='gcc:8.4.0:false:netcdf;hypre;openfast;masa'
     NALU_WIND_TESTING_ROOT_DIR=/projects/ecp/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   elif [ "${MACHINE_NAME}" == 'eagle' ]; then
-    CONFIGURATIONS[0]='gcc:8.4.0:true'
-    CONFIGURATIONS[1]='gcc:8.4.0:false'
+    CONFIGURATIONS[0]='gcc:8.4.0:true:netcdf;hypre;openfast'
+    CONFIGURATIONS[1]='gcc:8.4.0:false:netcdf;hypre;openfast'
     NALU_WIND_TESTING_ROOT_DIR=/projects/hfm/exawind/nalu-wind-testing
     INTEL_COMPILER_MODULE=intel-parallel-studio/cluster.2018.4
   #elif [ "${MACHINE_NAME}" == 'mac' ]; then
@@ -457,6 +468,7 @@ main() {
     COMPILER_NAME=${CONFIG[0]}
     COMPILER_VERSION=${CONFIG[1]}
     USE_LATEST_AMREX=${CONFIG[2]}
+    LIST_OF_TPLS=${CONFIG[3]}
 
     printf "\nRemoving previous test log for uploading to CDash...\n"
     cmd "rm ${LOGS_DIR}/amr-wind-test-log.txt"

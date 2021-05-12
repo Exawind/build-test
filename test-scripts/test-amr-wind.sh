@@ -165,7 +165,7 @@ test_configuration() {
   for TPL in ${TPLS[*]}; do
     if [ "${TPL}" == 'openfast' ]; then
       OPENFAST_DIR=$(spack location -i openfast %${COMPILER_ID})
-      CMAKE_CONFIGURE_ARGS="-DENABLE_OPENFAST:BOOL=ON -DOpenFAST_DIR:PATH=${OPENFAST_DIR} ${CMAKE_CONFIGURE_ARGS}"
+      CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_OPENFAST:BOOL=ON -DOpenFAST_DIR:PATH=${OPENFAST_DIR} ${CMAKE_CONFIGURE_ARGS}"
       printf "OPENFAST_DIR=${OPENFAST_DIR}\n"
     fi
     if [ "${TPL}" == 'masa' ]; then

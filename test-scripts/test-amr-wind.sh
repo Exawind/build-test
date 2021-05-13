@@ -82,6 +82,7 @@ test_configuration() {
     if [ "${COMPILER_NAME}" == 'gcc' ]; then
       cmd "module load ${COMPILER_NAME}/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'clang' ]; then
+      cmd "module load gcc"
       cmd "module load llvm/${COMPILER_VERSION}"
     elif [ "${COMPILER_NAME}" == 'intel' ]; then
       cmd "module load gcc"

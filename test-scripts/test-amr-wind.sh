@@ -257,13 +257,16 @@ test_configuration() {
   if [ "${COMPILER_NAME}" == 'gcc' ] || [ "${COMPILER_NAME}" == 'clang' ]; then
     CXX_COMPILER=mpicxx
     C_COMPILER=mpicc
+    FORTRAN_COMPILER=mpifort
     if [ "${MACHINE_NAME}" == 'eagle' ]; then
       CXX_COMPILER=g++
       C_COMPILER=gcc
+      FORTRAN_COMPILER=gfortran
     fi
   elif [ "${COMPILER_NAME}" == 'intel' ]; then
     CXX_COMPILER=mpiicpc
     C_COMPILER=mpiicc
+    FORTRAN_COMPILER=mpiifort
   fi
 
   # Give CMake a hint to find Python3
@@ -272,11 +275,12 @@ test_configuration() {
   printf "\nListing cmake and compilers that will be used in ctest...\n"
   cmd "which ${CXX_COMPILER}"
   cmd "which ${C_COMPILER}"
+  cmd "which ${FORTRAN_COMPILER}"
   cmd "which mpiexec"
   cmd "which cmake"
 
   # CMake configure arguments testing options
-  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${C_COMPILER} -DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
+  CMAKE_CONFIGURE_ARGS="-DAMR_WIND_ENABLE_MPI:BOOL=ON -DCMAKE_CXX_COMPILER:STRING=${CXX_COMPILER} -DCMAKE_C_COMPILER:STRING=${C_COMPILER} -DCMAKE_Fortran_COMPILER:STRING=${FORTRAN_COMPILER} -DPYTHON_EXECUTABLE=${PYTHON_EXE} -DAMR_WIND_TEST_WITH_FCOMPARE:BOOL=ON -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${CMAKE_CONFIGURE_ARGS}"
 
   # Set CUDA stuff for Eagle
   if [ "${MACHINE_NAME}" == 'eagle' ]; then

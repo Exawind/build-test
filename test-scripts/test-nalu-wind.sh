@@ -179,7 +179,7 @@ test_configuration() {
   fi
 
   printf "\nInstalling Nalu-Wind dependencies using ${COMPILER_ID}...\n"
-  cmd "spack install --dont-restage --keep-stage --only dependencies nalu-wind ${TPL_VARIANTS} %${COMPILER_ID} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPL_CONSTRAINTS} ${GENERAL_CONSTRAINTS}"
+  cmd "spack install --dont-restage --keep-stage --only dependencies nalu-wind ${TPL_VARIANTS} %${COMPILER_ID} ^${TRILINOS}@${TRILINOS_BRANCH} ${TPL_CONSTRAINTS} ${GENERAL_CONSTRAINTS} ^hypre+debug"
 
   STAGE_DIR=$(spack location -S)
   if [ ! -z "${STAGE_DIR}" ]; then

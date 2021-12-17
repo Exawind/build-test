@@ -29,11 +29,11 @@ AMR_WIND_TEST_SCRIPT=${NALU_WIND_TESTING_ROOT_DIR}/build-test/test-scripts/test-
  
 if [ "${MACHINE_NAME}" == 'eagle' ]; then
   cd ${LOG_DIR} && sbatch -J test-nalu-wind -N 1 -t 4:00:00 -A hfm -p short -o "%x.o%j" --gres=gpu:2 ${NALU_WIND_TEST_SCRIPT}
-  cd ${LOG_DIR} && sbatch -J test-amr-wind -N 1 -t 1:00:00 -A hfm -p debug -o "%x.o%j" --gres=gpu:2 ${AMR_WIND_TEST_SCRIPT}
+  #cd ${LOG_DIR} && sbatch -J test-amr-wind -N 1 -t 1:00:00 -A hfm -p debug -o "%x.o%j" --gres=gpu:2 ${AMR_WIND_TEST_SCRIPT}
 elif [ "${MACHINE_NAME}" == 'mac' ]; then
   cd ${LOG_DIR} && nice ${NALU_WIND_TEST_SCRIPT} &> "test-nalu-wind-$(date +%Y-%m-%d).log"
-  cd ${LOG_DIR} && nice ${AMR_WIND_TEST_SCRIPT} &> "test-amr-wind-$(date +%Y-%m-%d).log"
+  #cd ${LOG_DIR} && nice ${AMR_WIND_TEST_SCRIPT} &> "test-amr-wind-$(date +%Y-%m-%d).log"
 elif [ "${MACHINE_NAME}" == 'rhodes' ]; then
   cd ${LOG_DIR} && nice -n19 ionice -c3 ${NALU_WIND_TEST_SCRIPT} &> "test-nalu-wind-$(date +%Y-%m-%d).log"
-  cd ${LOG_DIR} && nice -n19 ionice -c3 ${AMR_WIND_TEST_SCRIPT} &> "test-amr-wind-$(date +%Y-%m-%d).log"
+  #cd ${LOG_DIR} && nice -n19 ionice -c3 ${AMR_WIND_TEST_SCRIPT} &> "test-amr-wind-$(date +%Y-%m-%d).log"
 fi
